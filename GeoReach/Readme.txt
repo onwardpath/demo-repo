@@ -42,6 +42,12 @@ Download MySQL Connector/J Platform Independent Version(https://dev.mysql.com/do
 
 Optional Install GitBash (Git-2.21.0-64-bit from https://git-scm.com/download/win)
 
+DEVELOPER TUTORIALS:
+Java SE 8: Creating a Web App with Bootstrap and Tomcat Embedded
+https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/basic_app_embedded_tomcat/basic_app-tomcat-embedded.html
+
+
+
 DATABASE SCHEMA:
 
 ORGANIZATION

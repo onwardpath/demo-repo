@@ -28,7 +28,7 @@ function submitform()
 <ul>
 <li>Home</li>
 <li><a href="segments.jsp">Segments</a></li>
-<li><a href="experience.jsp">Experiences</a></li>
+<li><a href="experiences.jsp">Experiences</a></li>
 </ul>
 
 <!-- Body Content -->

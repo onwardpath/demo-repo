@@ -15,6 +15,7 @@ function submitform()
   document.logout.submit();
 }
 
+//FOR MAP <START>
 var selected_states = "";
 
 $(document).ready(function() {
@@ -29,6 +30,9 @@ $(document).ready(function() {
   	  }
     });       
 });
+//FOR MAP <END>
+
+
 
 </script>
 
@@ -50,7 +54,7 @@ $(document).ready(function() {
 <ul>
 <li><a href="home.jsp">Home</a></li>
 <li>Segments</li>
-<li><a href="experience.jsp">Experiences</a></li>
+<li><a href="experiences.jsp">Experiences</a></li>
 </ul>
 
 <!-- Body Content -->
@@ -62,6 +66,27 @@ $(document).ready(function() {
 <li>Name the Segment and Save it</li>
 </ol>
 <hr>
+
+<form>
+<table>
+<tr>
+	<td>
+		<select name="segment-type">
+   		<option value="country">Country</option>
+   		<option value="state">State</option>
+   		<option value="city">City</option>   
+ 		</select>
+	</td>
+	<td>
+		<input type="text">
+	</td>
+	<td>
+		<input type="button" value="Add" onclick="addGeo();" />
+	</td>
+</tr>
+</table>
+</form>
+
 
 <!-- https://newsignature.github.io/us-map/#demo -->
 <div id="map" style="width: 500px; height: 500px;"></div>
