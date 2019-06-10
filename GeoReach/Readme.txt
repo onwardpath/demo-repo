@@ -2,9 +2,36 @@ Read-me file for GeoReach project
 
 DEVELOPER SETUP:
 
-Install JDK 1.8 to C:\Java\ (jdk-8u211-windows-x64)
-Install Eclipse (eclipse-inst-win64)
-Install Tomcat (apache-tomcat-8.0.9-windows-x64)
+1. Install JDK 8 to C:\Java\
+	https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+	jdk-8u211-windows-x64.exe
+	Install JDK to C:\Java\jdk1.8.0_211 and JRE to C:\Java\jre1.8.0_211
+	Confirm installation from CMD prompt:
+	C:\Users\pandyan>java -fullversion
+	java full version "1.8.0_211-b12"
+
+2. Install Eclipse to C:\Eclipse
+	Eclipse JEE Neon
+
+3. Install Tomcat to C:\Tomcat
+	Version 9.0.20 (64 bit Windows Zip)
+	apache-tomcat-9.0.20-windows-x64.zip
+	Configure Tomcat Server in Eclipse
+
+4: Configure GIT
+http://www.geo.uzh.ch/microsite/reproducible_research/post/rr-eclipse-git/
+
+At this point your installations should looks like this:
+C:\Java\
+	jdk1.8.0_211\
+	jre1.8.0_211\
+C:\Eclipse\
+	jee-neon\
+	workspace\
+C:\Tomcat\
+	apache-tomcat-9.0.20\
+
+Optional:
 Install MySQL Server (mysql-installer-web-community-8.0.16.0)
 	TCP/IP Port: 3306
 	X Protocol Port: 33060
@@ -12,7 +39,8 @@ Install MySQL Server (mysql-installer-web-community-8.0.16.0)
 	User Name: onwardDev
 	Password: onwardDev1
 Download MySQL Connector/J Platform Independent Version(https://dev.mysql.com/downloads/connector/j/)
-Install Git (Git-2.21.0-64-bit from https://git-scm.com/download/win)
+
+Optional Install GitBash (Git-2.21.0-64-bit from https://git-scm.com/download/win)
 
 DATABASE SCHEMA:
 
@@ -48,6 +76,7 @@ SEGMENT
 	
 
 SQL SCRIPTS:
+CREATE SCHEMA `georeachdb` ;
 
 CREATE TABLE `georeachdb`.`organization` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -77,7 +106,7 @@ ADD INDEX `org_id` (`org_id` ASC) VISIBLE;
 ALTER TABLE `georeachdb`.`user` 
 ADD CONSTRAINT `org_id_fk`
   FOREIGN KEY (`org_id`)
-  REFERENCES `hello_world`.`organization` (`id`)
+  REFERENCES `georeachdb`.`organization` (`id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
@@ -88,25 +117,13 @@ CREATE TABLE `georeachdb`.`role` (
 
 ALTER TABLE `georeachdb`.`user` 
 ADD INDEX `role_id` (`role_id` ASC) VISIBLE;
-;
 
 ALTER TABLE `georeachdb`.`user` 
 ADD CONSTRAINT `role_id_fk`
   FOREIGN KEY (`role_id`)
-  REFERENCES `hello_world`.`role` (`id`)
+  REFERENCES `georeachdb`.`role` (`id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
-
-POPULATE TEST DATA:
-
-INSERT INTO ORGANIZATION (name,domain,logo) VALUES ('ACME INC','acmeinc.com','http://acmeinc.com/logo.gif');
-INSERT INTO ROLE (name) VALUES ('Administrator');
-INSERT INTO ROLE (name) VALUES ('User');
-INSERT INTO USER (org_id,firstname,lastname,gender,email,phone1,phone2,login,password,role_id) VALUES (1,'Mark','Antony','M','mark.antony@acmeinc.com','9205300006','','mantony','pass123',1);
-
-select * from organization;
-select * from role;
-select * from user;
 
 CREATE TABLE `georeachdb`.`segment` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -116,13 +133,20 @@ CREATE TABLE `georeachdb`.`segment` (
   `org_id` INT NOT NULL,
   PRIMARY KEY (`id`));
   
- 
+INSERT INTO ORGANIZATION (name,domain,logo) VALUES ('ACME INC','acmeinc.com','http://acmeinc.com/logo.gif');
+INSERT INTO ROLE (name) VALUES ('Administrator');
+INSERT INTO ROLE (name) VALUES ('User');
+INSERT INTO USER (org_id,firstname,lastname,gender,email,phone1,phone2,login,password,role_id) VALUES (1,'Mark','Antony','M','mark.antony@acmeinc.com','9205300006','','mantony','pass123',1);
 
+select * from organization;
+select * from role;
+select * from user;
+select * from segment;
 
 GIT:
 
 Signin to GitHub.com with your onwardpath email
-Install Git (Git-2.21.0-64-bit from https://git-scm.com/download/win)
+Install GitBash (Git-2.21.0-64-bit from https://git-scm.com/download/win)
 
 Start GitBash
 $ git config --global user.name "pandyan"
