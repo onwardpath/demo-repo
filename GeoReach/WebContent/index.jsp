@@ -4,16 +4,18 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>GeoReach</title>
 </head>
 <body>
-<h1>Hello World</h1>
+<a href="signup.jsp">Sign Up</a>
+<hr>
 
 <form action="UserController" method="post">
 <input type="hidden" name="pageName" value="login">
-<input type="text" name="userName" id="userNameInput" placeholder="User Name" /><br>
-<input type="password" name="password" id="passwordInput" placeholder="Password" /><br>
+Login ID: <input type="text" name="userName" id="userNameInput" placeholder="User Name" /><br>
+Password: <input type="password" name="password" id="passwordInput" placeholder="Password" /><br>
 <input type="submit" value="Login">
 </form>
+
 </body>
 </html>

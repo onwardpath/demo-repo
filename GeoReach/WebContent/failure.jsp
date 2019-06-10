@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+<a href="index.jsp">Back</a>
+<hr>
 <h1>Login Failed!</h1>
 </body>
 </html>
