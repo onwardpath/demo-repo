@@ -146,8 +146,28 @@ $ git push
 
 More info: https://readwrite.com/2013/09/30/understanding-github-a-journey-for-beginners-part-1/
 
-GEO IP SERVICES:
+NOTES:
 
+GEO IP SERVICES:
 https://dev.maxmind.com/geoip/geoip2/downloadable/
+https://ipinfo.io/
+https://geoip-db.com/
+https://www.geojs.io/ (Free)
+
+https://neilpatel.com/blog/geo-targeting/ (Increase Conversions with Geo Targeting)
+https://www.youtube.com/watch?v=zQbMmzXclik (Get users ip, city, country, location etc using javascript and ipinfo.io)
+https://stackoverflow.com/questions/391979/how-to-get-clients-ip-address-using-javascript (How to get client's IP address using JavaScript)
+
+GeoLocation: JavaScript can detect users geo location. This works for Smart Phone users. 
+Hybrid (Uses Google GeoLocation and fallsback to IP Address based):
+https://onury.io/geolocator/
+
+Testing:
+https://www.geoscreenshot.com/
+
+Competition:
+https://geotargetly.com/
+https://geofli.com
+
 
 
