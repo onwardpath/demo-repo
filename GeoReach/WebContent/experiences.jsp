@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
 <script type="text/javascript">
 function submitform()
 {
@@ -16,33 +16,36 @@ function submitform()
 </head>
 <body>
 
-<form name="logout" action="UserController" method="post">
-<input type="hidden" name="pageName" value="logout">
-</form>
+<div class="container-fluid">
 
-<!-- Top Menu -->
-<ul>
-<li><a href="settings.jsp">Settings</a></li>
-<li><a href="javascript:submitform()">Logout</a></li>
-</ul>
-<hr>
-<!-- Side Menu -->
-<ul>
-<li><a href="home.jsp">Home</a></li>
-<li><a href="segments.jsp">Segments</a></li>
-<li>Experiences</li>
-</ul>
+	<form name="logout" action="UserController" method="post">
+	<input type="hidden" name="pageName" value="logout">
+	</form>
+	
+	<!-- Top Menu -->
+	<ul>
+	<li><a href="settings.jsp">Settings</a></li>
+	<li><a href="javascript:submitform()">Logout</a></li>
+	</ul>
+	<hr>
+	<!-- Side Menu -->
+	<ul>
+	<li><a href="home.jsp">Home</a></li>
+	<li><a href="segments.jsp">Segments</a></li>
+	<li>Experiences</li>
+	</ul>
+	
+	<!-- Body Content -->
+	<h1>Experiences</h1>
+	<p>You can build unique experiences to your segments here.</p>
+	<h2>Steps:</h2>
+	<ol>
+	<li>Select the segments for which you wish to create unique experience</li>
+	<li>Create and save the experience</li>
+	</ol>
+	<hr>
 
-<!-- Body Content -->
-<h1>Experiences</h1>
-<p>You can build unique experiences to your segments here.</p>
-<h2>Steps:</h2>
-<ol>
-<li>Select the segments for which you wish to create unique experience</li>
-<li>Create and save the experience</li>
-</ol>
-<hr>
-
+</div><!-- container-fluid -->
 
 </body>
 </html>

@@ -29,19 +29,21 @@ function submitform()
 	<hr>
 	<!-- Side Menu -->
 	<ul>
-	<li>Home</li>
+	<li><a href="home.jsp">Home</a></li>
 	<li><a href="segments.jsp">Segments</a></li>
 	<li><a href="experiences.jsp">Experiences</a></li>
 	<li><a href="">Assets</a></li>
-	<li><a href="insights.jsp">Insights</a></li>
-	<li><a href="team.jsp">Team</a></li>
+	<li>Insight</li>
+	<li><a href="">Team</a></li>
 	</ul>
 	
 	<!-- Body Content -->
-	<h1>Home</h1>
-	<p>Start by crating segments (of your visitors). Then you can create unique experiences for each of your segments.</p>
+	<h1>Insights</h1>
 	
-	<a href="segments.jsp">Create Segment</a>
+	<h2>Visitors</h2>
+	
+	<h2>Top Segments</h2>
+	
 	
 </div><!-- container-fluid -->
 </body>

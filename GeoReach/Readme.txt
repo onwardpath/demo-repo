@@ -144,7 +144,7 @@ CREATE TABLE `georeachdb`.`segment` (
 INSERT INTO georeachdb.ORGANIZATION (name,domain,logo) VALUES ('ACME INC','acmeinc.com','http://acmeinc.com/logo.gif');
 INSERT INTO georeachdb.ROLE (name) VALUES ('Administrator');
 INSERT INTO georeachdb.ROLE (name) VALUES ('User');
-INSERT INTO georeachdb.USER (org_id,firstname,lastname,gender,email,phone1,phone2,login,password,role_id) VALUES (1,'Mark','Antony','M','mark.antony@acmeinc.com','9205300006','','mantony','pass123',1);
+INSERT INTO georeachdb.USER (org_id,firstname,lastname,gender,email,phone1,phone2,login,password,role_id) VALUES (1,'Mark','Antony','M','mantony@acmeinc.com','9205300006','','mantony@acmeinc.com','pass123',1);
 
 select * from georeachdb.organization;
 select * from georeachdb.role;
