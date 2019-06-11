@@ -197,5 +197,17 @@ https://onury.io/geolocator/
 Testing:
 https://www.geoscreenshot.com/
 
+OTHER PRODUCTS:
+https://optimize.google.com/optimize/home/#/accounts
+
+UI FRAMEWORK:
+REACT: 
+http://react-material.fusetheme.com/
+
+BOOTSTRAP: 
+https://keenthemes.com/keen/preview/demo5/rtl/index.html
+https://themes.getbootstrap.com/preview/?theme_id=6063&show_new=
+
+
 
 
