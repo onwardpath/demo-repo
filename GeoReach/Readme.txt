@@ -107,7 +107,6 @@ CREATE TABLE `georeachdb`.`user` (
 
 ALTER TABLE `georeachdb`.`user` 
 ADD INDEX `org_id` (`org_id` ASC) VISIBLE;
-;
 
 ALTER TABLE `georeachdb`.`user` 
 ADD CONSTRAINT `org_id_fk`
@@ -139,15 +138,15 @@ CREATE TABLE `georeachdb`.`segment` (
   `org_id` INT NOT NULL,
   PRIMARY KEY (`id`));
   
-INSERT INTO ORGANIZATION (name,domain,logo) VALUES ('ACME INC','acmeinc.com','http://acmeinc.com/logo.gif');
-INSERT INTO ROLE (name) VALUES ('Administrator');
-INSERT INTO ROLE (name) VALUES ('User');
-INSERT INTO USER (org_id,firstname,lastname,gender,email,phone1,phone2,login,password,role_id) VALUES (1,'Mark','Antony','M','mark.antony@acmeinc.com','9205300006','','mantony','pass123',1);
+INSERT INTO georeachdb.ORGANIZATION (name,domain,logo) VALUES ('ACME INC','acmeinc.com','http://acmeinc.com/logo.gif');
+INSERT INTO georeachdb.ROLE (name) VALUES ('Administrator');
+INSERT INTO georeachdb.ROLE (name) VALUES ('User');
+INSERT INTO georeachdb.USER (org_id,firstname,lastname,gender,email,phone1,phone2,login,password,role_id) VALUES (1,'Mark','Antony','M','mark.antony@acmeinc.com','9205300006','','mantony','pass123',1);
 
-select * from organization;
-select * from role;
-select * from user;
-select * from segment;
+select * from georeachdb.organization;
+select * from georeachdb.role;
+select * from georeachdb.user;
+select * from georeachdb.segment;
 
 GIT:
 
