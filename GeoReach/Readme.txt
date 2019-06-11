@@ -50,6 +50,9 @@ https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/basic_app_embedd
 
 DATABASE SCHEMA:
 
+MySQL Reference:
+https://chartio.com/resources/tutorials/understanding-strorage-sizes-for-mysql-text-data-types/
+
 ORGANIZATION
 	id (PK)
 	name
