@@ -197,9 +197,5 @@ https://onury.io/geolocator/
 Testing:
 https://www.geoscreenshot.com/
 
-Competition:
-https://geotargetly.com/
-https://geofli.com
-
 
 
