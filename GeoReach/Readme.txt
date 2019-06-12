@@ -151,6 +151,8 @@ select * from georeachdb.role;
 select * from georeachdb.user;
 select * from georeachdb.segment;
 
+insert into georeachdb.segment(name, geography, user_id, org_id) values ('PackerFans','in:city:Green Bay|in:city:Appleton',1,1);
+
 GIT:
 
 Signin to GitHub.com with your onwardpath email
