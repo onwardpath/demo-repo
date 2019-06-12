@@ -13,10 +13,10 @@ import com.onwardpath.georeach.repository.UserRepository;
 public class UserController extends HttpServlet {
 	private UserRepository userRepository;
 
-	  private static String USER_SIGNUP = "signup.jsp";
-	  private static String USER_LOGIN = "index.jsp";	  
-	  private static String LOGIN_SUCCESS = "home.jsp";
-	  private static String LOGIN_FAILURE = "failure.jsp";
+	private static String USER_SIGNUP = "signup.jsp";
+	private static String USER_LOGIN = "index.jsp";	  
+	private static String LOGIN_SUCCESS = "home.jsp";
+	private static String LOGIN_FAILURE = "failure.jsp";
 
 	  /**
 	   * @see HttpServlet#HttpServlet()
@@ -60,9 +60,12 @@ public class UserController extends HttpServlet {
 	                      request.getParameter("emailAddress"));
 	              forward = USER_LOGIN;
 	          } else if (pageName.equals("login")) {
-	              boolean result = userRepository.findByLogin( request.getParameter("userName"), request.getParameter("password"));
-	              if (result == true) {
-	                  forward = LOGIN_SUCCESS;
+	              boolean result = userRepository.findByLogin( request.getParameter("userName"), request.getParameter("password"));	               
+	              if (result == true) {	            	  	            	  
+	            	  int org_id = userRepository.findOrgId(request.getParameter("userName"));
+	            	  request.setAttribute("user_id", request.getParameter("userName"));
+	            	  request.setAttribute("org_id", org_id);
+	                  forward = LOGIN_SUCCESS;	                  
 	              } else {
 	                  forward = LOGIN_FAILURE;
 	              }

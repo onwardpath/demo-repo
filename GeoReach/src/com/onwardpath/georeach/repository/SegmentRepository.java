@@ -16,30 +16,31 @@ public class SegmentRepository {
 	      dbConnection = DbUtil.getConnection();
 	  }
 	  
-	  //TODO: Update SQL query appropriately
-	  public void save(String userName, String password, String firstName, String lastName, String dateOfBirth, String emailAddress) {
+	  
+	  public void save(String name, String geography, int user_id, int org_id) {
 	      try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("insert into user(userName, password, firstName, lastName, dateOfBirth, emailAddress) values (?, ?, ?, ?, ?, ?)");
-	          prepStatement.setString(1, userName);
-	          prepStatement.setString(2, password);
-	          prepStatement.setString(3, firstName);
-	          prepStatement.setString(4, lastName);
-	          prepStatement.setDate(5, new java.sql.Date(new SimpleDateFormat("MM/dd/yyyy")
-	          .parse(dateOfBirth.substring(0, 10)).getTime()));
-	          prepStatement.setString(6, emailAddress);
-	          
+	          PreparedStatement prepStatement = dbConnection.prepareStatement("insert into segment(name, geography, user_id, org_id) values (?,?,?,?)");
+	          	        	       
+	          prepStatement.setString(1, name);
+	          prepStatement.setString(2, geography);
+	          prepStatement.setInt(3, user_id);
+	          prepStatement.setInt(4, org_id);
+	          	          
 	          prepStatement.executeUpdate();
 	      } catch (SQLException e) {
 	          e.printStackTrace();
-	      } catch (ParseException e) {            
-	          e.printStackTrace();
-	      }
+	      } 
 	  }
 	  
-	  public boolean findBySegmentName(String login) {
+	  /**
+	   * Method to find a Segment by Name
+	   * @param name
+	   * @return true if Segment exists, false otherwise
+	   */
+	  public boolean findBySegmentName(String name) {
 	      try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from user where login = ?");
-	          prepStatement.setString(1, login);   
+	          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from segment where name = ?");
+	          prepStatement.setString(1, name);   
 	                      
 	          ResultSet result = prepStatement.executeQuery();
 	          if (result != null) {   
@@ -55,19 +56,20 @@ public class SegmentRepository {
 	      return false;
 	  }
 	  
-	  public boolean findBySegment(String login, String password) {
+	  
+	  /**
+	   * Method to find all segments of an organization that user belongs to 
+	   * 
+	   * @param user_id
+	   * @return list of Segments
+	   */
+	  public boolean findAllSegment(int user_id) {
 	      try {
 	          PreparedStatement prepStatement = dbConnection.prepareStatement("select password from user where login = ?");
-	          prepStatement.setString(1, login);           
-	          
+	          prepStatement.setInt(1, user_id);
+	                     	          
 	          ResultSet result = prepStatement.executeQuery();
-	          if (result != null) {
-	              while (result.next()) {
-	                  if (result.getString(1).equals(password)) {
-	                      return true;
-	                  }
-	              }               
-	          }           
+	             
 	      } catch (Exception e) {
 	          e.printStackTrace();
 	      }

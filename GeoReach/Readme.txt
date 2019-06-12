@@ -154,7 +154,7 @@ select * from georeachdb.segment;
 GIT:
 
 Signin to GitHub.com with your onwardpath email
-Install GitBash (Git-2.21.0-64-bit from https://git-scm.com/download/win)
+Optional: Install GitBash (Git-2.21.0-64-bit from https://git-scm.com/download/win)
 
 Start GitBash
 $ git config --global user.name "pandyan"
@@ -208,6 +208,9 @@ BOOTSTRAP:
 https://keenthemes.com/keen/preview/demo5/rtl/index.html
 https://themes.getbootstrap.com/preview/?theme_id=6063&show_new=
 
+DMA (DESIGNATED MARKET AREAS)
+https://www.nielsen.com/intl-campaigns/us/dma-maps.html
+http://bl.ocks.org/simzou/6459889
 
 
 

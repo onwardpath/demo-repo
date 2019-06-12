@@ -73,5 +73,26 @@ public class UserRepository {
 	      }
 	      return false;
 	  }
-
+	  
+	  /**
+	   * To be called after user is successfully authenticated
+	   * 
+	   * @param login
+	   * @return org_id
+	   */
+	  public int findOrgId(String login) {
+		  int org_id = 0;
+		  try {
+	          PreparedStatement prepStatement = dbConnection.prepareStatement("select org_id from user where login = ?");
+	          prepStatement.setString(1, login);           
+	          
+	          ResultSet result = prepStatement.executeQuery();
+	          if (result != null && result.next()) {	              
+	              org_id = result.getInt(1);	                             
+	          }           
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	      }
+	      return org_id;
+	  }
 	}

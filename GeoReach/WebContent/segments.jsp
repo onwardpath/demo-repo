@@ -89,10 +89,10 @@ function  saveSegment() {
 		<div id="geobucket" style="display: none;">
 			<form id="segment-form">
 				<input type="hidden" name="pageName" value="segments">
-				<select id="dynamic-select" name="segment-rules" size="2"></select>
+				<select id="dynamic-select" name="segmentRules" size="2"></select>
 				<button class="btn btn-outline-secondary btn-sm" onclick="removeOption()">remove</button>&nbsp;<button class="btn btn-outline-secondary btn-sm" onclick="removeAllOptions()">remove all</button>
 				<br><br>
-				Segment Name: <input id="segment-name" type="text">&nbsp;
+				Segment Name: <input name="segmentName" id="segment-name" type="text">&nbsp;
 				<button class="btn btn-primary" onclick="saveSegment();">Save</button>							
 			</form>
 		</div>

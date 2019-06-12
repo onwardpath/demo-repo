@@ -11,5 +11,13 @@
   <servlet-mapping>
     <servlet-name>userJDBCServlet</servlet-name>
     <url-pattern>/UserController</url-pattern>
+  </servlet-mapping>   
+  <servlet>
+    <servlet-name>segmentJDBCServlet</servlet-name>
+    <servlet-class>com.onwardpath.georeach.controller.SegmentController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>segmentJDBCServlet</servlet-name>
+    <url-pattern>/SegmentController</url-pattern>
   </servlet-mapping>
 </web-app>
