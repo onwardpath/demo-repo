@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1"%>    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
 <!-- bootstrap cdn -->
-<!-- link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" -->
-<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+<!-- link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css" -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script type="text/javascript">
 function submitform()
 {
@@ -43,11 +43,24 @@ function removeAllOptions(){
 	x.style.display = "none";	
 }
 
-function  saveSegment() {		
+function  saveSegment() {			
+	var x = document.getElementById("dynamic-select");
+    var txt = "";
+    var i;
+    for (i = 0; i < x.length; i++) {
+    	if (i == 0) {
+    		txt = x.options[i].text;
+    	} else {
+    		txt = txt + "|" + x.options[i].text;	
+    	}    	        
+    }
+    
+	document.getElementById("segmentRules").value=txt;	
 	document.getElementById("segment-form").method = "post";
 	document.getElementById("segment-form").action = "SegmentController";
 	document.getElementById("segment-form").submit();
 }
+
 
 </script>
 <title>GeoReach</title>
@@ -81,6 +94,7 @@ function  saveSegment() {
 			<li>Name the Segment and Save it</li>
 		</ol>
 		<hr>	
+					
 		<select id="geotype"><option>City</option><option>State</option><option>Country</option></select>&nbsp;
 		<select id="rule"><option value="include">Equals</option><option value="exclude">Not Equals</option></select>&nbsp;
 		<input type="text" id="geolocation">&nbsp;<button class="btn btn-outline-secondary btn-sm" onclick="addOption()">add</button>		
@@ -89,17 +103,31 @@ function  saveSegment() {
 		<div id="geobucket" style="display: none;">
 			<form id="segment-form">
 				<input type="hidden" name="pageName" value="segments">
-				<select id="dynamic-select" name="segmentRules" size="2"></select>
+				<input type="hidden" id = "segmentRules" name="segmentRules" >
+				<select id="dynamic-select" size="2"></select>
 				<button class="btn btn-outline-secondary btn-sm" onclick="removeOption()">remove</button>&nbsp;<button class="btn btn-outline-secondary btn-sm" onclick="removeAllOptions()">remove all</button>
 				<br><br>
 				Segment Name: <input name="segmentName" id="segment-name" type="text">&nbsp;
 				<button class="btn btn-primary" onclick="saveSegment();">Save</button>							
 			</form>
 		</div>
-																					       	
+		
+		<!-- Message Display Area -->
+		<div id="messages">
+			<p style="color:red;">
+				<%
+				String message = (String) session.getAttribute("message");
+				if (message != null) {
+					out.print(message);
+					session.setAttribute("message", "");
+				}																
+				%>	
+			</p>
+		</div>
+		
 </div><!--Container-->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

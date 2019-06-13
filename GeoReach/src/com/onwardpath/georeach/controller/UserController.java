@@ -61,10 +61,13 @@ public class UserController extends HttpServlet {
 	              forward = USER_LOGIN;
 	          } else if (pageName.equals("login")) {
 	              boolean result = userRepository.findByLogin( request.getParameter("userName"), request.getParameter("password"));	               
-	              if (result == true) {	            	  	            	  
+	              if (result == true) {	    
+	            	  int user_id = userRepository.findUserId(request.getParameter("userName"));	            	  	            	  
 	            	  int org_id = userRepository.findOrgId(request.getParameter("userName"));
-	            	  request.setAttribute("user_id", request.getParameter("userName"));
-	            	  request.setAttribute("org_id", org_id);
+	            	  //TODO: Store user and org details in a session object
+	            	  HttpSession session = request.getSession();
+	            	  session.setAttribute("user_id", user_id);
+	            	  session.setAttribute("org_id", org_id);	            	  	            	  	            	  
 	                  forward = LOGIN_SUCCESS;	                  
 	              } else {
 	                  forward = LOGIN_FAILURE;

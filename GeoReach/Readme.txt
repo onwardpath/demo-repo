@@ -52,6 +52,7 @@ DATABASE SCHEMA:
 
 MySQL Reference:
 https://chartio.com/resources/tutorials/understanding-strorage-sizes-for-mysql-text-data-types/
+https://www.youtube.com/watch?v=0kaUwiygcfw
 
 ORGANIZATION
 	id (PK)
@@ -60,7 +61,7 @@ ORGANIZATION
 	logo
 
 USER
-	id
+	id (PK)
 	org_id (FK)
 	firstname
 	lastname
@@ -73,16 +74,37 @@ USER
 	role_id (FK)
 
 ROLES
-	id
+	id (PK)
 	role
 	
 SEGMENT
-	id
+	id (PPK)
 	name
 	geography (format: "in-city:San Jose|in-city:Santa Clara|in-State:NV|ex-city:Las Vegas-NV")
 	user_id (FK - creator of this segment)
 	org_id (FK - org this segment will be used and be visible)
 	
+EXPERIENCE
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ID(PK) 	Name			Header-Code		Body-Code	Type		User_id(FK)		Org_id(FK)	Create-Time					Status			Schedule_start					Schedule_end
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+001		Team-Aff-Img	<js src...		<div id..	Image		002				001			12-jun-2019 5:00 am CST		ON		
+002		Team-Aff-Txt	<js src...		<div id..	Text		002				001			12-jun-2019 5:15 am CST		SC				21-Jun-2019 9:00 AM CST		21-Jun-2019 5:00 PM CST
+
+IMAGE
+----------------------------------------------------------------------------------
+ID(PK)	E-ID(FK)	Segment(FK)		URL								Create-Time
+----------------------------------------------------------------------------------
+001		001			004				abc.com/gbpackers.jpg
+002		001			005				abc.com/vikings.jpg
+
+CONTENT
+----------------------------------------------------------------------------------
+ID(PK)	E-ID(FK)	Segment(PK)		Content							Create-Time
+----------------------------------------------------------------------------------
+001		002			004				Hello from Green Bay...
+002		002			005				Hello from Minnieapolis...
+
 
 SQL SCRIPTS:
 CREATE SCHEMA `georeachdb` ;
@@ -93,6 +115,10 @@ CREATE TABLE `georeachdb`.`organization` (
   `domain` VARCHAR(45) NULL,
   `logo` VARCHAR(45) NULL,
   PRIMARY KEY (`id`));
+
+ALTER TABLE `georeachdb`.`organization` 
+ADD INDEX `id` (`id` ASC) VISIBLE;
+;
 
 CREATE TABLE `georeachdb`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -110,6 +136,7 @@ CREATE TABLE `georeachdb`.`user` (
 
 ALTER TABLE `georeachdb`.`user` 
 ADD INDEX `org_id` (`org_id` ASC) VISIBLE;
+;
 
 ALTER TABLE `georeachdb`.`user` 
 ADD CONSTRAINT `org_id_fk`
@@ -117,6 +144,7 @@ ADD CONSTRAINT `org_id_fk`
   REFERENCES `georeachdb`.`organization` (`id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
+  ;
 
 CREATE TABLE `georeachdb`.`role` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -141,18 +169,124 @@ CREATE TABLE `georeachdb`.`segment` (
   `org_id` INT NOT NULL,
   PRIMARY KEY (`id`));
   
+ALTER TABLE `georeachdb`.`segment` 
+ADD INDEX `user_id` (`user_id` ASC) INVISIBLE,
+ADD INDEX `org_id` (`org_id` ASC) VISIBLE;
+
+ALTER TABLE `georeachdb`.`segment` 
+ALTER TABLE `georeachdb`.`segment` 
+ADD CONSTRAINT `s_org_id_fk`
+  FOREIGN KEY (`org_id`)
+  REFERENCES `georeachdb`.`organization` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE,
+ADD CONSTRAINT `s_user_id_fk`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `georeachdb`.`user` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+CREATE TABLE `georeachdb`.`experience` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `segment_id` VARCHAR(45) NOT NULL,
+  `url` VARCHAR(45) NULL,
+  `code` VARCHAR(5000) NULL,
+  `user_id` INT NULL,
+  `org_id` INT NULL,
+  `status` VARCHAR(45) NULL,
+  `schedule_start` DATE NULL,
+  `schedule_end` DATE NULL,
+  PRIMARY KEY (`id`));
+  
+ALTER TABLE `georeachdb`.`experience` 
+ADD INDEX `user_id` (`user_id` ASC) INVISIBLE,
+ADD INDEX `org_id` (`org_id` ASC) VISIBLE;
+;
+  
+ALTER TABLE `georeachdb`.`experience` 
+ADD CONSTRAINT `e_org_id_fk`
+  FOREIGN KEY (`org_id`)
+  REFERENCES `georeachdb`.`organization` (`id`),
+ADD CONSTRAINT `e_user_id_fk`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `georeachdb`.`user` (`id`);
+
+
+ALTER TABLE `georeachdb`.`experience` 
+DROP COLUMN `segment_id`,
+ADD COLUMN `type` VARCHAR(45) NULL AFTER `name`,
+ADD COLUMN `create_time` DATETIME NULL AFTER `user_id`,
+CHANGE COLUMN `status` `status` VARCHAR(45) NULL DEFAULT NULL AFTER `type`,
+CHANGE COLUMN `schedule_start` `schedule_start` DATETIME NULL DEFAULT NULL AFTER `status`,
+CHANGE COLUMN `schedule_end` `schedule_end` DATETIME NULL DEFAULT NULL AFTER `schedule_start`,
+CHANGE COLUMN `org_id` `org_id` INT(11) NULL DEFAULT NULL AFTER `body_code`,
+CHANGE COLUMN `url` `header_code` VARCHAR(5000) NULL DEFAULT NULL ,
+CHANGE COLUMN `code` `body_code` VARCHAR(100) NULL DEFAULT NULL ;
+
+ALTER TABLE `georeachdb`.`experience` 
+DROP FOREIGN KEY `e_org_id_fk`,
+DROP FOREIGN KEY `e_user_id_fk`;
+ALTER TABLE `georeachdb`.`experience` 
+ADD CONSTRAINT `e_org_id_fk`
+  FOREIGN KEY (`org_id`)
+  REFERENCES `georeachdb`.`organization` (`id`)
+  ON UPDATE CASCADE,
+ADD CONSTRAINT `e_user_id_fk`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `georeachdb`.`user` (`id`)
+  ON DELETE CASCADE;
+
+CREATE TABLE `georeachdb`.`image` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `experience_id` INT NOT NULL,
+  `segment_id` INT NOT NULL,
+  `url` VARCHAR(500) NULL,
+  `create_time` DATETIME NULL,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `georeachdb`.`content` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `experience_id` INT NOT NULL,
+  `segment_id` INT NOT NULL,
+  `content` TEXT(5000) NULL,
+  `create_time` DATETIME NULL,
+  PRIMARY KEY (`id`));
+
+ALTER TABLE `georeachdb`.`image` 
+ADD INDEX `i-experience-id-fk` (`experience_id` ASC) VISIBLE;
+;
+
+ALTER TABLE `georeachdb`.`image` 
+ADD INDEX `i-segment-id-fk` (`segment_id` ASC) VISIBLE;
+
+ALTER TABLE `georeachdb`.`image` 
+ADD CONSTRAINT `i_exp_id`
+  FOREIGN KEY (`experience_id`)
+  REFERENCES `georeachdb`.`experience` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+  
+ALTER TABLE `georeachdb`.`image` 
+ADD CONSTRAINT `i_seg_id`
+  FOREIGN KEY (`segment_id`)
+  REFERENCES `georeachdb`.`segment` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+
+-----------------------------------------------------------------------------------------------
 INSERT INTO georeachdb.ORGANIZATION (name,domain,logo) VALUES ('ACME INC','acmeinc.com','http://acmeinc.com/logo.gif');
 INSERT INTO georeachdb.ROLE (name) VALUES ('Administrator');
 INSERT INTO georeachdb.ROLE (name) VALUES ('User');
 INSERT INTO georeachdb.USER (org_id,firstname,lastname,gender,email,phone1,phone2,login,password,role_id) VALUES (1,'Mark','Antony','M','mantony@acmeinc.com','9205300006','','mantony@acmeinc.com','pass123',1);
-
 select * from georeachdb.organization;
 select * from georeachdb.role;
 select * from georeachdb.user;
 select * from georeachdb.segment;
-
 insert into georeachdb.segment(name, geography, user_id, org_id) values ('PackerFans','in:city:Green Bay|in:city:Appleton',1,1);
-
+-----------------------------------------------------------------------------------------------
 GIT:
 
 Signin to GitHub.com with your onwardpath email

@@ -16,7 +16,7 @@ public class SegmentController extends HttpServlet {
 	private SegmentRepository segmentRepository;
 		 
 	private static String SAVE_SUCCESS = "segments.jsp";
-	private static String SAVE_FAILURE = "failure.jsp";
+	private static String SAVE_FAILURE = "segments.jsp";
 
 	  /**
 	   * @see HttpServlet#HttpServlet()
@@ -44,22 +44,28 @@ public class SegmentController extends HttpServlet {
 	      
 	      if (segmentRepository != null) {
 	          if (pageName.equals("segments")) {
+	        	  HttpSession session = request.getSession();
+	        	  
 	              if (segmentRepository.findBySegmentName(request .getParameter("segmentName"))) {
-	                  request.setAttribute("message", "Segment Name exists. Try another name");
+	                  //request.setAttribute("message", "Segment Name exists. Try another name");
+	                  session.setAttribute("message", "Segment Name exists. Try another name.");
 	                  forward = SAVE_FAILURE;
 	                  RequestDispatcher view = request .getRequestDispatcher(forward);
 	                  view.forward(request, response);
 	                  return;
 	              }
-	              //String name, String geography, int user_id, int org_id
-	              HttpSession session = request.getSession();
-	              int userId = Integer.parseInt((String)session.getAttribute("user_id"));
-	              int orgId = Integer.parseInt((String)session.getAttribute("org_id"));
+
+	              	              
+	              int userId = (Integer)session.getAttribute("user_id");	              
+	              int orgId = (Integer)session.getAttribute("org_id");
 	              
-	              segmentRepository.save(request.getParameter("segmentName"),
-	                      request.getParameter("segmentRules"),
-	                      userId,
-	                      orgId);
+	              String segmentName = request.getParameter("segmentName");
+	              String segmentRules = request.getParameter("segmentRules");
+	              //System.out.println("segmentRules: "+segmentRules);
+	              
+	              segmentRepository.save(segmentName, segmentRules, userId, orgId);
+	              session.setAttribute("message", "Segment "+segmentName+" Saved.");
+	              //request.setAttribute("message", "Segment Saved.");
 	              forward = SAVE_SUCCESS;
 	          }          
 	      }

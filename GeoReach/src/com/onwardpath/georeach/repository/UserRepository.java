@@ -95,4 +95,27 @@ public class UserRepository {
 	      }
 	      return org_id;
 	  }
+	  
+	  /**
+	   * To be called after user is successfully authenticated
+	   * 
+	   * @param login
+	   * @return user_id
+	   */
+	  public int findUserId(String login) {
+		  int user_id = 0;
+		  try {
+	          PreparedStatement prepStatement = dbConnection.prepareStatement("select id from user where login = ?");
+	          prepStatement.setString(1, login);           
+	          
+	          ResultSet result = prepStatement.executeQuery();
+	          if (result != null && result.next()) {	              
+	        	  user_id = result.getInt(1);	                             
+	          }           
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	      }
+	      return user_id;
+	  }
+	  
 	}
