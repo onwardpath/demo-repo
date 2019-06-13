@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import com.onwardpath.georeach.repository.SegmentRepository;
-import com.onwardpath.georeach.repository.UserRepository;
 
 @SuppressWarnings("serial")
 public class SegmentController extends HttpServlet {
@@ -46,16 +45,14 @@ public class SegmentController extends HttpServlet {
 	          if (pageName.equals("segments")) {
 	        	  HttpSession session = request.getSession();
 	        	  
-	              if (segmentRepository.findBySegmentName(request .getParameter("segmentName"))) {
-	                  //request.setAttribute("message", "Segment Name exists. Try another name");
+	              if (segmentRepository.findBySegmentName(request .getParameter("segmentName"))) {	                  
 	                  session.setAttribute("message", "Segment Name exists. Try another name.");
 	                  forward = SAVE_FAILURE;
 	                  RequestDispatcher view = request .getRequestDispatcher(forward);
 	                  view.forward(request, response);
 	                  return;
 	              }
-
-	              	              
+	              	             
 	              int userId = (Integer)session.getAttribute("user_id");	              
 	              int orgId = (Integer)session.getAttribute("org_id");
 	              
@@ -65,7 +62,7 @@ public class SegmentController extends HttpServlet {
 	              
 	              segmentRepository.save(segmentName, segmentRules, userId, orgId);
 	              session.setAttribute("message", "Segment "+segmentName+" Saved.");
-	              //request.setAttribute("message", "Segment Saved.");
+	              
 	              forward = SAVE_SUCCESS;
 	          }          
 	      }

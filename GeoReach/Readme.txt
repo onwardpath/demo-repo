@@ -51,6 +51,7 @@ https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/basic_app_embedd
 DATABASE SCHEMA:
 
 MySQL Reference:
+http://www.mysqltutorial.org/basic-mysql-tutorial.aspx
 https://chartio.com/resources/tutorials/understanding-strorage-sizes-for-mysql-text-data-types/
 https://www.youtube.com/watch?v=0kaUwiygcfw
 
@@ -274,8 +275,6 @@ ADD CONSTRAINT `i_seg_id`
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
-
-
 -----------------------------------------------------------------------------------------------
 INSERT INTO georeachdb.ORGANIZATION (name,domain,logo) VALUES ('ACME INC','acmeinc.com','http://acmeinc.com/logo.gif');
 INSERT INTO georeachdb.ROLE (name) VALUES ('Administrator');
@@ -286,6 +285,9 @@ select * from georeachdb.role;
 select * from georeachdb.user;
 select * from georeachdb.segment;
 insert into georeachdb.segment(name, geography, user_id, org_id) values ('PackerFans','in:city:Green Bay|in:city:Appleton',1,1);
+insert into georeachdb.experience (name, type, status, org_id, user_id, create_time) values ('Team Affinity Image','Image','on',1,1,now()) ;
+insert into georeachdb.image (experience_id, segment_id, url, create_time) values (1,10,'https://www.associatedbank.com/content/image/brewers-cc-slide-btn',now());
+insert into georeachdb.image (experience_id, segment_id, url, create_time) values (1,11,'https://www.associatedbank.com/content/image/wild-cc-slide-btn',now());
 -----------------------------------------------------------------------------------------------
 GIT:
 
