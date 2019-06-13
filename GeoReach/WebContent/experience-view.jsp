@@ -10,6 +10,11 @@ function submitform()
 {
   document.logout.submit();
 }
+function  saveExperience() {				
+	document.getElementById("experience-form").method = "post";
+	document.getElementById("experience-form").action = "ExperienceController";
+	document.getElementById("experience-form").submit();
+}
 </script>
 
 <title>GeoReach</title>
@@ -17,7 +22,6 @@ function submitform()
 <body>
 
 <div class="container-fluid">
-
 	<form name="logout" action="UserController" method="post">
 	<input type="hidden" name="pageName" value="logout">
 	</form>
@@ -42,8 +46,8 @@ function submitform()
 	<!-- https://cdn.oectours.com/media/cds/banks/5231/81461.png -->
 	<!-- https://www.associatedbank.com/content/image/OLB_LP_Image -->
 	<!-- https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png -->
-	<h1>Experiences</h1>
-		
+	<h1>Experiences</h1>	
+	<a href="experience-wiz1.jsp">Create New</a><br>	
 		<table class="table table-bordered table-striped">		  
 		  <tbody>
 		    <tr>
@@ -149,7 +153,7 @@ function submitform()
 		      </tr>
 		  </tbody>
 		</table>
-		    								
+	
 </div><!-- container-fluid -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

@@ -31,10 +31,10 @@ function submitform()
 	<ul>
 	<li>Home</li>
 	<li><a href="segments.jsp">Segments</a></li>
-	<li><a href="experiences.jsp">Experiences</a></li>
-	<li><a href="">Assets</a></li>
-	<li><a href="insights.jsp">Insights</a></li>
-	<li><a href="team.jsp">Team</a></li>
+	<li><a href="experience-view.jsp">Experiences</a></li>
+	<li><a href="#">Assets</a></li>
+	<li><a href="#">Insights</a></li>
+	<li><a href="#">Team</a></li>
 	</ul>
 	
 	<!-- Body Content -->

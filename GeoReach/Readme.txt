@@ -46,8 +46,6 @@ DEVELOPER TUTORIALS:
 Java SE 8: Creating a Web App with Bootstrap and Tomcat Embedded
 https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/basic_app_embedded_tomcat/basic_app-tomcat-embedded.html
 
-
-
 DATABASE SCHEMA:
 
 MySQL Reference:

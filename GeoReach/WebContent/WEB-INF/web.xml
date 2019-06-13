@@ -19,5 +19,13 @@
   <servlet-mapping>
     <servlet-name>segmentJDBCServlet</servlet-name>
     <url-pattern>/SegmentController</url-pattern>
+  </servlet-mapping>   
+  <servlet>
+    <servlet-name>experienceJDBCServlet</servlet-name>
+    <servlet-class>com.onwardpath.georeach.controller.ExperienceController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>experienceJDBCServlet</servlet-name>
+    <url-pattern>/ExperienceController</url-pattern>
   </servlet-mapping>
 </web-app>

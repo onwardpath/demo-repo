@@ -82,7 +82,7 @@ function  saveSegment() {
 		<ul>
 			<li><a href="home.jsp">Home</a></li>
 			<li>Segments</li>
-			<li><a href="experiences.jsp">Experiences</a></li>
+			<li><a href="experience-view.jsp">Experiences</a></li>
 		</ul>
 	
 		<!-- Content -->
