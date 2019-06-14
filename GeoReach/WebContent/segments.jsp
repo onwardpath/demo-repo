@@ -97,7 +97,7 @@ function  saveSegment() {
 					
 		<select id="geotype"><option>City</option><option>State</option><option>Country</option></select>&nbsp;
 		<select id="rule"><option value="include">Equals</option><option value="exclude">Not Equals</option></select>&nbsp;
-		<input type="text" id="geolocation">&nbsp;<button class="btn btn-outline-secondary btn-sm" onclick="addOption()">add</button>		
+		<input type="text" id="geolocation">&nbsp;<button class="btn btn-outline-secondary btn-sm" onclick="addOption()">Add</button>		
 		<br>					
 		
 		<div id="geobucket" style="display: none;">
@@ -105,7 +105,8 @@ function  saveSegment() {
 				<input type="hidden" name="pageName" value="segments">
 				<input type="hidden" id = "segmentRules" name="segmentRules" >
 				<select id="dynamic-select" size="2"></select>
-				<button class="btn btn-outline-secondary btn-sm" onclick="removeOption()">remove</button>&nbsp;<button class="btn btn-outline-secondary btn-sm" onclick="removeAllOptions()">remove all</button>
+				<button class="btn btn-outline-secondary btn-sm" onclick="removeOption()">Remove</button>&nbsp;
+				<button class="btn btn-outline-secondary btn-sm" onclick="removeAllOptions()">Remove All</button>
 				<br><br>
 				Segment Name: <input name="segmentName" id="segment-name" type="text">&nbsp;
 				<button class="btn btn-primary" onclick="saveSegment();">Save</button>							
