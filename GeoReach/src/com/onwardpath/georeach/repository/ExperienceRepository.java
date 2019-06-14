@@ -55,21 +55,44 @@ public class ExperienceRepository {
           prepStatement.executeUpdate();
           prepStatement = dbConnection.prepareStatement("select last_insert_id()");
           ResultSet result = prepStatement.executeQuery();
+          result.next();
           return result.getInt(1);                  
 	  }
 	  
-	  public void edit(int experience_id) {	
-		  //TODO
+	  
+	  //Pass columnType = 0 for int value
+	  public void update (int id, int columnType, String colunmName, String value) throws SQLException {
+		  String updateSql = "update experience set "+colunmName+" = ";
+		  if (columnType == 0) {
+			  updateSql+= value+", where id = "+id;
+		  } else
+			  updateSql+= "'"+value+"' where id = "+id;	
+		  //System.out.println("updateSql: "+updateSql);
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement(updateSql);          	          
+          prepStatement.executeUpdate();                  
 	  }
 	  
+	  
+	  public void  saveImage(int experience_id, int segment_id, String url) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.image (experience_id, segment_id, url, create_time) values (?,?,?,now())");                    
+          prepStatement.setInt(1, experience_id);
+          prepStatement.setInt(2, segment_id);
+          prepStatement.setString(3, url);          	          	         
+          prepStatement.executeUpdate();                          
+	  }	
+	  
+	  public void saveCode(int experience_id, int org_id) {
+		  
+	  }
+	  	  	 
 	  /**
 	   * To be called after checking experience exists by id
 	   * 
 	   * @param id
 	   * @return
 	   */
-	  public Experience load(int id) throws SQLException {	
-		  Experience experience = new Experience();
+	  public Experience get(int id) throws SQLException {	
+		  Experience experience = new Experience(id);
           PreparedStatement prepStatement = dbConnection.prepareStatement("select * from experience where id = ?");
           prepStatement.setInt(1, id);                     
           ResultSet result = prepStatement.executeQuery();

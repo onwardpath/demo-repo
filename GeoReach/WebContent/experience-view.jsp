@@ -47,7 +47,7 @@ function  saveExperience() {
 	<!-- https://www.associatedbank.com/content/image/OLB_LP_Image -->
 	<!-- https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png -->
 	<h1>Experiences</h1>	
-	<a href="experience-wiz1.jsp">Create New</a><br>	
+	<a href="experience-create.jsp">Create New</a><br>	
 		<table class="table table-bordered table-striped">		  
 		  <tbody>
 		    <tr>

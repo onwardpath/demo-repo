@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.onwardpath.georeach.util.DbUtil;
 
@@ -58,22 +60,27 @@ public class SegmentRepository {
 	  
 	  
 	  /**
-	   * Method to find all segments of an organization that user belongs to 
+	   * Method to get all segments of an organization 
 	   * 
-	   * @param user_id
+	   * @param org_id
 	   * @return list of Segments
 	   */
-	  public boolean findAllSegment(int user_id) {
+	  public Map<Integer,String> getOrgSegments(int org_id) {
+		  Map<Integer, String> segments = new HashMap<Integer, String>();
 	      try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select password from user where login = ?");
-	          prepStatement.setInt(1, user_id);
+	          PreparedStatement prepStatement = dbConnection.prepareStatement("select id, name from segment where org_id = ?");
+	          prepStatement.setInt(1, org_id);
 	                     	          
 	          ResultSet result = prepStatement.executeQuery();
-	             
-	      } catch (Exception e) {
+	          if (result != null) {   
+	              while (result.next()) {
+	            	  segments.put(result.getInt("id"), result.getString("name"));	           	                      	                              
+	              }
+	          }	          	          
+	      } catch (SQLException e) {
 	          e.printStackTrace();
 	      }
-	      return false;
+	      return segments;
 	  }
 
 	}

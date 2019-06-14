@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ page import="com.onwardpath.georeach.repository.SegmentRepository" %>
+    <%@ page import="java.util.Map" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,57 +38,43 @@ function saveExperience() {
 	<ul>
 	<li><a href="home.jsp">Home</a></li>
 	<li><a href="segments.jsp">Segments</a></li>
-	<li>Experiences</li>
+	<li>
+		<a href="experience-view.jsp">Experiences</a>
+		<ul>
+			<li>New</li>
+		</ul>
+	</li>
 	</ul>
-		
+	
 	<h1>Experiences</h1>		
 		
 	<h2>Create New</h2>
-	
-	<!--
-	EXPERIENCE
-	--id
-	name
-	type
-	-status
-	schedule_start
-	schedule_end
-	-header_code
-	-body_code
-	org_id
-	user_id
-	--create_time
-	
-	IMAGE
-	--id
-	experience_id
-	segment_id
-	url
-	--create_time  
-	-->
-	
+		
 	<form id = "experience-form">
-	<input type="hidden" name="pageName" value="create-wizard1">
+	<input type="hidden" name="pageName" value="create-experience">
 	<table>	
 	<tr><td>Name</td><td><input type="text" name="name"></td></tr>
-	<tr><td>Type</td><td><select name="type"><option value="image">Image</option><option value="content">Content</option></select></td></tr>
-		
-	<tr><td colspan="2">IMAGE</td></tr>
-	<tr><td>Segment</td><td><input type="text" name="segment_id"></td></tr>
-	<tr><td>URL</td><td><input type="text" name="url"></td></tr>
-	
-	
+	<tr><td>Type</td><td><select name="type"><option value="image">Image</option><option value="content">Content</option></select></td></tr>		
+	<tr><td>Segment</td><td><select name="segment_id">	
+	<%
+	SegmentRepository segmentRepository = new SegmentRepository();
+	int org_id = (Integer)session.getAttribute("org_id");
+	Map<Integer,String> segments = segmentRepository.getOrgSegments(org_id);
+	for ( Map.Entry<Integer, String> entry : segments.entrySet()) {
+		Integer key = entry.getKey();
+	    String val = entry.getValue();	     	   
+	    out.println("<option value="+key+">"+val+"</option>");
+	}	
+	%>
+	</select>		
+	</td></tr>
+	<tr><td>URL</td><td><input type="text" name="url"></td></tr>		
 	<tr><td>Schedule Start</td><td><input type="text" name="schedule_start"></td></tr>
-	<tr><td>Schedule End</td><td><input type="text" name="schedule_end"></td></tr>
-	
-	<tr><td>Status</td><td><input type="text" name="status"></td></tr>
-		
+	<tr><td>Schedule End</td><td><input type="text" name="schedule_end"></td></tr>	
+	<tr><td>Status</td><td><input type="text" name="status"></td></tr>		
 	</table>
-	<input type="hidden" name="header_code"><br>
-	<input type="hidden" name="body_code"><br>
-				
-	</table>	
-	<input type="button" value="Next" onclick="saveExperience();">
+					
+	<input type="button" value="Save" onclick="saveExperience();">
 	</form>
 		
 	<!-- Message Display Area -->
