@@ -60,7 +60,8 @@ public class ExperienceController extends HttpServlet {
 	              try {
 	            	  	            	  	            	  	            	  	            	   	           
 	            	  //1. Save to Experience table, get the id (name, type, org_id, user_id, create_time)
-	            	  int experience_id = experienceRepository.save(name, request.getParameter("type"), request.getParameter("status"), null, null, null, null, org_id, user_id);
+	            	  int experience_id = experienceRepository.save(name, request.getParameter("type"), "off", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
+	            			  request.getParameter("header_code"), request.getParameter("body_code"), org_id, user_id);
 	            	  
 	            	  //2. Save multiple entries to Image table (experience_id, segment_id, url, create_time)
 	            	  experienceRepository.saveImage(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("url"));
@@ -73,18 +74,18 @@ public class ExperienceController extends HttpServlet {
 	            	  experienceRepository.update(experience_id, 1, "body_code", body_code);
 	            	  
 	            	  //4. Save schedule_start, schedule_start & status
-	              	  String schedule_start = request.getParameter("schedule_start");
-		        	  String schedule_end = request.getParameter("schedule_end");
-		        	  if (schedule_start != "")
-		        		  experienceRepository.update(experience_id, 1, "schedule_start", schedule_start);
+	              	  //String schedule_start = request.getParameter("schedule_start");
+		        	  //String schedule_end = request.getParameter("schedule_end");
+		        	  //if (schedule_start != "")
+		        		  //experienceRepository.update(experience_id, 1, "schedule_start", schedule_start);
 		        	  
-		        	  if (schedule_end != "")
-		        		  experienceRepository.update(experience_id, 1, "schedule_end", schedule_end);
+		        	  //if (schedule_end != "")
+		        		  //experienceRepository.update(experience_id, 1, "schedule_end", schedule_end);
 	            	  	            	  
 		              session.setAttribute("message", "Experience "+name+" Saved.");	              
 		              forward = SAVE_SUCCESS;
 	              } catch (SQLException e) {
-	            	  session.setAttribute("message", e.getMessage()+" Please try later or contact the administrator.");
+	            	  session.setAttribute("message", e.getMessage()+". Please try later or contact the administrator.");
 	                  forward = SAVE_FAILURE;
 	              }	              
 	          } else if (pageName.equals("create-wizard2")) {	        	  

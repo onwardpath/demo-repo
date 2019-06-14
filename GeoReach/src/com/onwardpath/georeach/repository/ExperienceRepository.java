@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -41,16 +42,16 @@ public class ExperienceRepository {
 	   * @return id
 	   */
 	  public int save(String name, String type, String status, String schedule_start, String schedule_end, String header_code, String body_code, int org_id, int user_id) throws SQLException {	      	         
-    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.experience (name, type, status, schedule_start, schedule_end, header_code, body_code, org_id, user_id, create_time) values (?,?,?,?,?,?,?,?,?,now())");
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.experience (name, type, status, schedule_start, schedule_end, header_code, body_code, org_id, user_id, create_time) values (?,?,?,now(),now(),?,?,?,?,now())");
           prepStatement.setString(1, name);
           prepStatement.setString(2, type);
-          prepStatement.setString(3, status);
-          prepStatement.setString(4, schedule_start);
-          prepStatement.setString(5, schedule_end);
-          prepStatement.setString(6, header_code);
-          prepStatement.setString(7, body_code);
-          prepStatement.setInt(8, org_id);
-          prepStatement.setInt(9, user_id);
+          prepStatement.setString(3, status);          
+          //prepStatement.setNull(4, java.sql.Types.DATE);//TODO: INSERT RECIEVED DATE
+          //prepStatement.setNull(5, java.sql.Types.DATE);//TODO: INSERT RECIEVED DATE
+          prepStatement.setString(4, header_code);
+          prepStatement.setString(5, body_code);
+          prepStatement.setInt(6, org_id);
+          prepStatement.setInt(7, user_id);
           //prepStatement.setDate(5, new java.sql.Date(new SimpleDateFormat("MM/dd/yyyy").parse(dateOfBirth.substring(0, 10)).getTime()));	          	          
           prepStatement.executeUpdate();
           prepStatement = dbConnection.prepareStatement("select last_insert_id()");

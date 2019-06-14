@@ -12,40 +12,51 @@ function submitform()
 {
   document.logout.submit();
 }
-function addOption(){
-	alert("1");
-	var segment = document.getElementById("segment").value;
-	var url = document.getElementById("url").value;
-		
-	var select = document.getElementById("dynamic-select");
+//https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
+function addRow () 
+{
+	var el = document.getElementById('segment');	
+	var segment_id = el.value;
+	var segment_name = el.options[el.selectedIndex].innerHTML;	
+	var url = document.getElementById("url").value;		
+  	document.querySelector('#content').insertAdjacentHTML(
+    	'afterbegin',
+    	`<div class="row">\	    
+    		<div class="card-body">\
+				<h5 class="card-title">`+segment_name+`</h5>\					    	
+				<img src="`+url+`" alt="wild card" class="rounded">\
+				<input type="button" value="-" onclick="removeRow(this)">\
+			</div>\						
+    	</div>`        
+  )  	  		
+}
+function removeRow (input) 
+{
+  input.parentNode.remove()
+}
+function saveExperience() 
+{	
+	var name = document.getElementById('name').value;
+	var type = document.getElementById('type').value;
+	var el = document.getElementById('segment');	
+	var segment_id = el.value;
+	//var segment_name = el.options[el.selectedIndex].innerHTML;		
+	var url = document.getElementById("url").value;	
+	//alert("name: "+name);
+	//alert("type: "+type);
+	//alert("segment_id: "+segment_id);
+	//alert("segment_name: "+segment_name);
+	//alert("url: "+url);
 	
-	select.options[select.options.length] = new Option(segment, url);
-	document.getElementById("url").value = "";
-	
-	alert("2");
-	var x = document.getElementById("geobucket");	
-	x.style.display = "block";
-	alert("3");
-}
-function removeOption(){
-	var select = document.getElementById("dynamic-select");
-	select.options[select.options.length - 1] = null;
-	if (select.options.length == 0) {
-		var x = document.getElementById("geobucket");
-		x.style.display = "none";		
-	}	
-}
-function removeAllOptions(){
-	var select = document.getElementById("dynamic-select");
-	select.options.length = 0;
-	var x = document.getElementById("geobucket");
-	x.style.display = "none";	
-}
-function saveExperience() {	
+	document.getElementById("experience-form").name.value=name;
+	document.getElementById("experience-form").type.value=type;
+	document.getElementById("experience-form").segment_id.value=segment_id;
+	document.getElementById("experience-form").url.value=url;	
 	document.getElementById("experience-form").method = "post";
 	document.getElementById("experience-form").action = "ExperienceController";
 	document.getElementById("experience-form").submit();
 }
+
 </script>
 
 <title>GeoReach</title>
@@ -79,12 +90,12 @@ function saveExperience() {
 		
 	<h2>Create New</h2>
 		
-	<form id = "experience-form">
-	<input type="hidden" name="pageName" value="create-experience">
+	
+	
 	<table>	
-	<tr><td>Name</td><td><input type="text" id="name" name="name"></td></tr>
-	<tr><td>Type</td><td><select name="type" id="type"><option value="image">Image</option><option value="content">Content</option></select></td></tr>		
-	<tr><td>Segment</td><td><select name="segment" id="segment">	
+	<tr><td>Name</td><td><input type="text" id="name"></td></tr>
+	<tr><td>Type</td><td><select id="type"><option value="image">Image</option><option value="content">Content</option></select></td></tr>		
+	<tr><td>Segment</td><td><select id="segment">	
 	<%
 	SegmentRepository segmentRepository = new SegmentRepository();
 	int org_id = (Integer)session.getAttribute("org_id");
@@ -97,23 +108,24 @@ function saveExperience() {
 	%>
 	</select>		
 	</td></tr>
-	<tr><td>URL</td><td><input type="text" id="url" name="url"></td></tr>		
-	<tr><td colspan="2" align="right"><button class="btn btn-outline-secondary btn-sm" onclick="addOption()">Add</button></td></tr>
-	
+	<tr><td>URL</td><td><input type="text" id="url""></td></tr>		
+	<tr><td colspan="2" align="right"><button class="btn btn-outline-secondary btn-sm" onclick="addRow();">Add</button></td></tr>	
 	<tr><td colspan="2">
-		<div id="geobucket" style="display: none;">
-			<select id="dynamic-select" size="2"></select>
-			<button class="btn btn-outline-secondary btn-sm" onclick="removeOption()">Remove</button>&nbsp;
-			<button class="btn btn-outline-secondary btn-sm" onclick="removeAllOptions()">Remove All</button>		
-		</div>
-	</td>
-	
-	<tr><td>Schedule Start</td><td><input type="text" name="schedule_start"></td></tr>
-	<tr><td>Schedule End</td><td><input type="text" name="schedule_end"></td></tr>	
-	<tr><td>Status</td><td><input type="text" name="status"></td></tr>		
+	<div id="content"></div>
+	</td>	
+	<tr><td>Schedule Start</td><td><input type="text"></td></tr>
+	<tr><td>Schedule End</td><td><input type="text"></td></tr>	
+	<tr><td>Status</td><td><input type="text"></td></tr>		
 	</table>
 					
 	<input type="button" value="Save" onclick="saveExperience();">
+	
+	<form id = "experience-form">
+	<input type="hidden" name="pageName" value="create-experience">
+	<input type="hidden" name="name">
+	<input type="hidden" name="type">
+	<input type="hidden" name="segment_id">
+	<input type="hidden" name="url">
 	</form>
 		
 	<!-- Message Display Area -->
