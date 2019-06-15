@@ -40,7 +40,7 @@ function submitform()
 	<!-- Body Content -->
 	<h1>Image Gallery</h1>
 	<p>Select an image from the gallery</p>
-	<h2>Hello Images 2!</h2>
+	<h2>Hello Images 3!</h2>
 			
 </div><!-- container-fluid -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
