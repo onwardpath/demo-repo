@@ -21,7 +21,8 @@ function  saveExperience() {
 </head>
 <body>
 
-<div class="container-fluid">
+<!--div class="container-fluid"-->
+<div class="container">
 	<form name="logout" action="UserController" method="post">
 	<input type="hidden" name="pageName" value="logout">
 	</form>
@@ -39,13 +40,7 @@ function  saveExperience() {
 	<li>Experiences</li>
 	</ul>
 	
-	<!-- Body Content -->
-	<!-- https://www.associatedbank.com/content/image/mobile_upgrade_img_banking -->
-	<!-- https://www.associatedbank.com/content/image/mobile_upgrade_img_mobile -->
-	<!-- https://cdn.oectours.com/media/cds/banks/5231/59750.png -->
-	<!-- https://cdn.oectours.com/media/cds/banks/5231/81461.png -->
-	<!-- https://www.associatedbank.com/content/image/OLB_LP_Image -->
-	<!-- https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png -->
+	<!-- Body Content -->	
 	<h1>Experiences</h1>	
 	<a href="experience-create.jsp">Create New</a><br>	
 		<table class="table table-bordered table-striped">		  
@@ -54,9 +49,12 @@ function  saveExperience() {
 		      <th scope="row">1</th>
 		      <td>
 					<h3>Team Affinity Image</h3>
-					<strong><mark>Image Experience</mark></strong>
-					<br>
-					<a href="#">ON/OFF</a>&nbsp;|&nbsp;<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a>&nbsp;|&nbsp;<a href="#">Add Segment</a>&nbsp;|&nbsp;<a href="#">View Code</a>										
+					<strong><mark>Image Experience</mark></strong>									
+					<div class="custom-control custom-switch">
+					  <input type="checkbox" class="custom-control-input" id="customSwitch1">
+					  <label class="custom-control-label" for="customSwitch1">On/Off</label>
+					</div>
+					<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a>&nbsp;|&nbsp;<a href="#">Add Segment</a>&nbsp;|&nbsp;<a href="#">View Code</a>										
 					<div><!-- Cards Container Start -->
 						<!-- 1st card start -->
 						<div class="d-inline-block">	
@@ -106,8 +104,11 @@ function  saveExperience() {
 		      	<td>
 		      			<h3>Team Affinity Text</h3>	
 						<strong><mark>Text Experience</mark></strong>
-						<br>
-						<a href="#">ON/OFF</a>&nbsp;|&nbsp;<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a>&nbsp;|&nbsp;<a href="#">Add Segment</a>&nbsp;|&nbsp;<a href="#">View Code</a>									
+						<div class="custom-control custom-switch">
+						  <input type="checkbox" class="custom-control-input" id="customSwitch2">
+						  <label class="custom-control-label" for="customSwitch2">On/Off</label>
+						</div>
+						<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a>&nbsp;|&nbsp;<a href="#">Add Segment</a>&nbsp;|&nbsp;<a href="#">View Code</a>									
 						<div><!-- Cards Container Start -->
 							<!-- 1st card start -->
 							<div class="d-inline-block">	

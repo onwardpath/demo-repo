@@ -5,7 +5,6 @@
 <head>
 <meta charset="ISO-8859-1">
 <!-- bootstrap cdn -->
-<!-- link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css" -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script type="text/javascript">
 function submitform()
@@ -67,7 +66,7 @@ function  saveSegment() {
 </head>
 <body>
 
-<div class="container-fluid">	
+<div class="container">	
       	<!-- Side Menu -->
       	<form name="logout" action="UserController" method="post">
 		<input type="hidden" name="pageName" value="logout">

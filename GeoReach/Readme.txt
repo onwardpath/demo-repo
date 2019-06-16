@@ -296,7 +296,7 @@ Start GitBash
 $ git config --global user.name "pandyan"
 $ git config --global user.email "pandyans@onwardpath.com"
 
-From Eclipse, specify your GIT Repository as follows:
+From Eclipse, specify your GIT Local Repository as follows:
 Eclipse> Project > Team > Share
 C:\Users\Pandyan\git\repository
 
@@ -330,8 +330,9 @@ GeoLocation: JavaScript can detect users geo location. This works for Smart Phon
 Hybrid (Uses Google GeoLocation and fallsback to IP Address based):
 https://onury.io/geolocator/
 
-Testing:
+TESTING:
 https://www.geoscreenshot.com/
+http://lab01.onwardpath.com/geosmart/
 
 OTHER PRODUCTS:
 https://optimize.google.com/optimize/home/#/accounts
@@ -347,6 +348,5 @@ https://themes.getbootstrap.com/preview/?theme_id=6063&show_new=
 DMA (DESIGNATED MARKET AREAS)
 https://www.nielsen.com/intl-campaigns/us/dma-maps.html
 http://bl.ocks.org/simzou/6459889
-
 
 

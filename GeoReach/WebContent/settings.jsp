@@ -15,7 +15,7 @@ function submitform()
 <title>GeoReach</title>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container">
 	<form name="logout" action="UserController" method="post">
 	<input type="hidden" name="pageName" value="logout">
 	</form>

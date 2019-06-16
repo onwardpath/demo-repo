@@ -12,58 +12,80 @@ function submitform()
 {
   document.logout.submit();
 }
+
+//https://stackoverflow.com/questions/208105/how-do-i-remove-a-property-from-a-javascript-object?rq=1
+var expDetailsObj = {};
+
 //https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
 function addRow () 
 {
 	var el = document.getElementById('segment');	
 	var segment_id = el.value;
 	var segment_name = el.options[el.selectedIndex].innerHTML;	
-	var url = document.getElementById("url").value;		
-  	document.querySelector('#content').insertAdjacentHTML(
-    	'afterbegin',
-    	`<div class="row">\	    
-    		<div class="card-body">\
-				<h5 class="card-title">`+segment_name+`</h5>\					    	
-				<img src="`+url+`" alt="wild card" class="rounded">\
-				<input type="button" value="-" onclick="removeRow(this)">\
-			</div>\						
-    	</div>`        
-  )  	  		
+	var type = document.getElementById('type').value;
+	
+	if (type == "image") {
+		var url = document.getElementById("url").value;	 
+		document.getElementById("url").value = "";
+		expDetailsObj[segment_id] = url;	
+		document.querySelector('#content').insertAdjacentHTML(
+		    	'afterbegin',
+		    	`<div class="row">\	    
+		    		<div class="card-body">\
+						<h5 class="card-title">`+segment_name+`</h5>\					    	
+						<img src="`+url+`" alt="wild card" class="rounded">\
+						<input type="button" value="-" onclick="removeRow(this,`+segment_id+`)">\
+					</div>\						
+		    	</div>`        
+		  ) 
+	} else if (type == "content") {
+		alert("Not supported yet");
+	}			  	 	  	
 }
-function removeRow (input) 
-{
-  input.parentNode.remove()
+function removeRow (input, segment_id) 
+{	
+	delete expDetailsObj[segment_id];
+  	input.parentNode.remove();  
+	console.log(imageExpObj);
 }
 function saveExperience() 
 {	
 	var name = document.getElementById('name').value;
 	var type = document.getElementById('type').value;
 	var el = document.getElementById('segment');	
-	var segment_id = el.value;
-	//var segment_name = el.options[el.selectedIndex].innerHTML;		
+	var segment_id = el.value;		
 	var url = document.getElementById("url").value;	
+	
 	//alert("name: "+name);
 	//alert("type: "+type);
 	//alert("segment_id: "+segment_id);
 	//alert("segment_name: "+segment_name);
 	//alert("url: "+url);
+	//alert("experienceDetails: "+JSON.stringify(expDetailsObj));
 	
 	document.getElementById("experience-form").name.value=name;
-	document.getElementById("experience-form").type.value=type;
-	document.getElementById("experience-form").segment_id.value=segment_id;
-	document.getElementById("experience-form").url.value=url;	
+	document.getElementById("experience-form").type.value=type;	
+	document.getElementById("experience-form").experienceDetails.value=JSON.stringify(expDetailsObj);	
 	document.getElementById("experience-form").method = "post";
 	document.getElementById("experience-form").action = "ExperienceController";
 	document.getElementById("experience-form").submit();
 }
-
 </script>
 
 <title>GeoReach</title>
 </head>
 <body>
 
-<div class="container-fluid">
+<!-- 
+https://www.associatedbank.com/content/image/mobile_upgrade_img_banking
+https://www.associatedbank.com/content/image/mobile_upgrade_img_mobile
+https://cdn.oectours.com/media/cds/banks/5231/59750.png
+https://cdn.oectours.com/media/cds/banks/5231/81461.png
+https://www.associatedbank.com/content/image/OLB_LP_Image
+https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
+ -->	
+	
+<div class="container">
 	<form name="logout" action="UserController" method="post">
 	<input type="hidden" name="pageName" value="logout">
 	</form>
@@ -90,8 +112,6 @@ function saveExperience()
 		
 	<h2>Create New</h2>
 		
-	
-	
 	<table>	
 	<tr><td>Name</td><td><input type="text" id="name"></td></tr>
 	<tr><td>Type</td><td><select id="type"><option value="image">Image</option><option value="content">Content</option></select></td></tr>		
@@ -119,11 +139,12 @@ function saveExperience()
 	</table>
 					
 	<input type="button" value="Save" onclick="saveExperience();">
-	
+		
 	<form id = "experience-form">
 	<input type="hidden" name="pageName" value="create-experience">
 	<input type="hidden" name="name">
 	<input type="hidden" name="type">
+	<input type="hidden" name="experienceDetails">
 	<input type="hidden" name="segment_id">
 	<input type="hidden" name="url">
 	</form>

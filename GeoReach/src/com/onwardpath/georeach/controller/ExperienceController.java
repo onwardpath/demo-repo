@@ -7,8 +7,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.sql.SQLException;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onwardpath.georeach.repository.ExperienceRepository;
 
 @SuppressWarnings("serial")
@@ -60,13 +63,31 @@ public class ExperienceController extends HttpServlet {
 	              try {
 	            	  	            	  	            	  	            	  	            	   	           
 	            	  //1. Save to Experience table, get the id (name, type, org_id, user_id, create_time)
-	            	  int experience_id = experienceRepository.save(name, request.getParameter("type"), "off", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
+	            	  String type = request.getParameter("type");
+	            	  int experience_id = experienceRepository.save(name, type, "off", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
 	            			  request.getParameter("header_code"), request.getParameter("body_code"), org_id, user_id);
 	            	  
 	            	  //2. Save multiple entries to Image table (experience_id, segment_id, url, create_time)
-	            	  experienceRepository.saveImage(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("url"));
-	            	  //TODO: NEED TO RECEIVE AND STORE MULTIPLE IMAGE EXPERIENCE
-	            	  
+	            	  if (type.contentEquals("image")) {
+	            		  
+	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
+	            		  ObjectMapper mapper = new ObjectMapper();	            		  
+	            		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+	            		  System.out.println(map);	            		  
+	            		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+	            			  int segment_id = Integer.parseInt(entry.getKey());
+	            			  String url = entry.getValue();
+	            			  System.out.println("Segment ID = " + segment_id + ", URL = " + url);
+	            			  experienceRepository.saveImage(experience_id, segment_id, url);	            			  	            			 
+	            		  }
+	            		   	            		  
+	            		  //experienceRepository.saveImage(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("url"));
+		            	  //TODO: NEED TO RECEIVE AND STORE MULTIPLE IMAGE EXPERIENCE  
+	            	  } else if (type.equals("content")) {
+		            	  //TODO: NEED TO RECEIVE AND STORE MULTIPLE CONTENTE EXPERIENCE
+	            		  //experienceRepository.saveContent(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("content"));
+	            	  }
+	            	  	            	  
 	            	  //3. Generate header_code & body_code and save to Experience table
 	            	  String header_code = "<javascript></javascript>";
 	            	  String body_code = "<div id=''></div>";	            	  
