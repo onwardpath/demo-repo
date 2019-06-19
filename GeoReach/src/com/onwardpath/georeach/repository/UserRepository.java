@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.onwardpath.georeach.util.DbUtil;
+import com.onwardpath.georeach.model.User;
 
 public class UserRepository {
 	  private Connection dbConnection;
@@ -161,6 +162,31 @@ public class UserRepository {
 	          e.printStackTrace();
 	      }
 	      return false;
+	  }
+	  
+	  public User getUser(int id) {
+		  User user = new User();
+		  try {
+	          PreparedStatement prepStatement = dbConnection.prepareStatement("select * from user where id = ?");
+	          prepStatement.setInt(1, id);           
+	          
+	          ResultSet result = prepStatement.executeQuery();
+	          if (result != null && result.next()) {
+	              String firstname = result.getString("firstname");
+	              String lastname = result.getString("lastname");
+	              String email = result.getString("email");
+	              int organization_id = Integer.parseInt(result.getString("org_id"));
+	              String phone1 = result.getString("phone1");
+                  user.setFirstname(firstname);
+                  user.setLastname(lastname);
+                  user.setEmail(email);
+                  user.setOrganization_id(organization_id);
+                  user.setPhone1(phone1);                  	                            
+	          }           
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	      }
+	      return user;
 	  }
 	  
 	  /**

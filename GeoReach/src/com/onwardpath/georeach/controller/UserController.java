@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.sql.SQLException;
+
+import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.repository.UserRepository;
 
 @SuppressWarnings("serial")
@@ -16,8 +18,8 @@ public class UserController extends HttpServlet {
 	private UserRepository userRepository;
 
 	private static String USER_SIGNUP = "signup.jsp";
-	private static String USER_LOGIN = "index.jsp";	  
-	private static String LOGIN_SUCCESS = "home.jsp";
+	private static String USER_LOGIN = "login.jsp";	  
+	private static String LOGIN_SUCCESS = "index.jsp";
 	private static String LOGIN_FAILURE = "failure.jsp";
 
 	  /**
@@ -42,6 +44,7 @@ public class UserController extends HttpServlet {
 	   */
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	      String pageName = request.getParameter("pageName");
+	      System.out.println("pageName: "+pageName);
 	      String forward = "";        
 	      
 	      if (userRepository != null) {
@@ -57,17 +60,23 @@ public class UserController extends HttpServlet {
 	              
 	              try {	
 	            	  //Check if the domain already exist. If so, add user to existing Organization
-	            	  if (userRepository.orgExists(request.getParameter("domain"))) {
+	            	  String orgDomain = request.getParameter("domain");
+	            	  if (userRepository.orgExists(orgDomain)) {
+	            		  System.out.println("orgDomain already exist: "+orgDomain);
 	            		  userRepository.saveUserInOrg(request.getParameter("domain"), request.getParameter("firstName"), request.getParameter("lastName"), 
 	            				  request.getParameter("email"), request.getParameter("phone"), request.getParameter("password"), Integer.parseInt(request.getParameter("role"))); 
+	            		  System.out.println("New User from existing organization");
 	            	  } else {
+	            		  System.out.println("orgDomain is new: "+orgDomain);
 	            		  //If domain does not exist, create a new Organization and add user
 	            		  userRepository.saveUserandOrg(request.getParameter("orgName"), request.getParameter("domain"), request.getParameter("logoUrl"), 
 			            		  request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("email"), request.getParameter("phone"), 
-			            		  request.getParameter("password"), Integer.parseInt(request.getParameter("role")));  
+			            		  request.getParameter("password"), Integer.parseInt(request.getParameter("role")));
+	            		  System.out.println("New User from new organization");
 	            	  }	            	  	            	  		            
 		              forward = USER_LOGIN;		              
 	              } catch (SQLException e) {
+	            	  System.out.println(e.getMessage());;
 	            	  request.setAttribute("message", e.getMessage()+" Unexpected error!. Please try again later or contact the administrator");
 	                  forward = USER_SIGNUP;
 	              }	              	             
@@ -76,8 +85,9 @@ public class UserController extends HttpServlet {
 	              if (result == true) {	    
 	            	  int user_id = userRepository.findUserId(request.getParameter("userName"));	            	  	            	  
 	            	  int org_id = userRepository.findOrgId(request.getParameter("userName"));
-	            	  
+	            	  User user = userRepository.getUser(user_id);
 	            	  HttpSession session = request.getSession();
+	            	  session.setAttribute("user", user);
 	            	  session.setAttribute("user_id", user_id);
 	            	  session.setAttribute("org_id", org_id);	            	  	            	  	            	  
 	                  forward = LOGIN_SUCCESS;	                  

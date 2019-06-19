@@ -349,4 +349,19 @@ DMA (DESIGNATED MARKET AREAS)
 https://www.nielsen.com/intl-campaigns/us/dma-maps.html
 http://bl.ocks.org/simzou/6459889
 
+FEATURES WISHLIST
+1. Since we are not storing the URL for the experience, we need a way to list all pages where the experience is being used (Embed Code is present)
+2. New Feature: Search for JavaScript code in web-pages. Client is unable to search and locate a code they placed earlier.
+3. Feature: Roll-back Experiences to an earlier version
+4. Archive/Delete/Purge features
+5. Switch CSS based on visitor location: https://www.w3schools.com/css/css_intro.asp
+
+DEMO ENVIROMENT:
+Web Application --  Configure Experience (lab01.onwardpath.com/georeach)
+Web Services -- Called from clients Website (lab01.onwardpath.com/geoservice)
+Client Website  -- Webpage with geo enabled content (www.onwardpath.com/geodemo)
+	
+	
+	
+
 

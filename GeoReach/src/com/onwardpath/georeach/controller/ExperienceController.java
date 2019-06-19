@@ -79,10 +79,7 @@ public class ExperienceController extends HttpServlet {
 	            			  String url = entry.getValue();
 	            			  System.out.println("Segment ID = " + segment_id + ", URL = " + url);
 	            			  experienceRepository.saveImage(experience_id, segment_id, url);	            			  	            			 
-	            		  }
-	            		   	            		  
-	            		  //experienceRepository.saveImage(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("url"));
-		            	  //TODO: NEED TO RECEIVE AND STORE MULTIPLE IMAGE EXPERIENCE  
+	            		  }	            		   	            		  	            		  		            	  
 	            	  } else if (type.equals("content")) {
 		            	  //TODO: NEED TO RECEIVE AND STORE MULTIPLE CONTENTE EXPERIENCE
 	            		  //experienceRepository.saveContent(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("content"));
@@ -95,23 +92,17 @@ public class ExperienceController extends HttpServlet {
 	            	  experienceRepository.update(experience_id, 1, "body_code", body_code);
 	            	  
 	            	  //4. Save schedule_start, schedule_start & status
-	              	  //String schedule_start = request.getParameter("schedule_start");
-		        	  //String schedule_end = request.getParameter("schedule_end");
-		        	  //if (schedule_start != "")
-		        		  //experienceRepository.update(experience_id, 1, "schedule_start", schedule_start);
-		        	  
-		        	  //if (schedule_end != "")
-		        		  //experienceRepository.update(experience_id, 1, "schedule_end", schedule_end);
+	              	  //TODO: Save schedule
 	            	  	            	  
-		              session.setAttribute("message", "Experience "+name+" Saved.");	              
+		              //session.setAttribute("message", "Experience "+name+" Saved. <a href=\"viewcode.jsp?n="+name+"&e="+experience_id+"&o="+org_id+"\">View Code</a>");			              
+	            	  //<a href="#" onClick="MyWindow=window.open('http://www.google.com','MyWindow',width=600,height=300); return false;">Click Here</a>
+		              session.setAttribute("message", "Experience "+name+" Saved <a href=\"#\" onClick=\"MyWindow=window.open('viewcode.jsp?n="+name+"&e="+experience_id+"&o="+org_id+"','MyWindow',width=600,height=300); return false;\">View Code</a>");		              		              		            
 		              forward = SAVE_SUCCESS;
 	              } catch (SQLException e) {
 	            	  session.setAttribute("message", e.getMessage()+". Please try later or contact the administrator.");
 	                  forward = SAVE_FAILURE;
 	              }	              
-	          } else if (pageName.equals("create-wizard2")) {	        	  
-	        	  
-	          }
+	          } 
 	      }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
