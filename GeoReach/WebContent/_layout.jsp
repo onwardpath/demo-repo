@@ -12,7 +12,7 @@ String view = request.getParameter("view");
             <jsp:include page="partials/_header-base.jsp" />
             <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
                 <jsp:include page="partials/_subheader-subheader-v1.jsp" />                
-                <jsp:include page="partials/_content-base.jsp" />                
+                <!-- jsp:include page="partials/_content-base.jsp" / -->                
                 <% if(view != null && !view.equals("index")) { %>      
                 	<jsp:include page="<%=view%>" />   
                 <% } %>             	
