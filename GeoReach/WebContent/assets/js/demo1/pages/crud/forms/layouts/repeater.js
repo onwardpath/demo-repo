@@ -5,7 +5,7 @@
 var KTRepeaterDemo = function () {
     
     // Private functions
-    var demo = function () {
+    var demo = function () {    	
         $('.kt-repeater').each(function(){
             $(this).repeater({
                 show: function () {

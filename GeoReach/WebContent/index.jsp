@@ -84,6 +84,8 @@
         <!--end::Page Vendors -->
         <!--begin::Page Scripts(used by this page) -->
         <script src="./assets/js/demo1/pages/dashboard.js" type="text/javascript"></script>
+        <script src="./assets/js/demo1/pages/crud/forms/layouts/repeater.js" type="text/javascript"></script>
+        <script src="./assets/js/demo1/pages/crud/forms/widgets/bootstrap-select.js" type="text/javascript"></script>
         <!--end::Page Scripts -->
     </body>
     <!-- end::Body -->
