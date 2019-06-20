@@ -54,6 +54,8 @@ function  saveSegment() {
 </script>
 
 <!--begin::Content-->
+
+//this is the latest version. Trust me.
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
 	<div class="row">
 	    <div class="col">
