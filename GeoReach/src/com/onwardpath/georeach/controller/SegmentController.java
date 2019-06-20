@@ -38,14 +38,17 @@ public class SegmentController extends HttpServlet {
 	   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	   */
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	      String pageName = request.getParameter("pageName");
+		  		  		 
+	      String pageName = request.getParameter("pageName");	      
+	      System.out.println("@SegmentController.doPost::pageName="+pageName);
+	      	      
 	      String forward = "";        
 	      
 	      if (segmentRepository != null) {
-	          if (pageName.equals("segments")) {
+	          if (pageName.equals("segment-create")) {
 	        	  HttpSession session = request.getSession();
-	        	  
-	              if (segmentRepository.findBySegmentName(request .getParameter("segmentName"))) {	                  
+	        	  System.out.println("@SegmentController.doPost called from page:segment-create");
+	              if (segmentRepository.findBySegmentName(request.getParameter("segmentName"))) {	                  
 	                  session.setAttribute("message", "Segment Name exists. Try another name.");
 	                  forward = SAVE_FAILURE;
 	                  RequestDispatcher view = request .getRequestDispatcher(forward);
@@ -58,7 +61,9 @@ public class SegmentController extends HttpServlet {
 	              
 	              String segmentName = request.getParameter("segmentName");
 	              String segmentRules = request.getParameter("segmentRules");
-	              //System.out.println("segmentRules: "+segmentRules);
+	              
+	              System.out.println("segmentName: "+segmentName);
+	              System.out.println("segmentRules: "+segmentRules);
 	              
 	              segmentRepository.save(segmentName, segmentRules, userId, orgId);
 	              session.setAttribute("message", "Segment "+segmentName+" Saved.");

@@ -1,46 +1,45 @@
 <script type="text/javascript">
-function submitform()
-{
-  document.logout.submit();
-}
-
-function addOption(){
+function add(){
 	var geotype = document.getElementById("geotype").value;
 	var georule = document.getElementById("georule").value;
-	var geoloc = document.getElementById("geoloc").value;	
+	var geoloc = document.getElementById("geoloc").value;		
 	var geocondition = georule+":"+geotype+":"+geoloc;
 		
 	var select = document.getElementById("dynamic-select");
-	select.options[select.options.length] = new Option(geocondition, geocondition);
-	document.getElementById("geoloc").value = "";
-			
-	//<button type="button" class="btn btn-outline-danger btn-pill">Wisconsin <i class="la la-remove"></i></button>&nbsp;										
+	var index = select.options.length;
+	select.options[index] = new Option(geocondition, geocondition);
+	document.getElementById("geoloc").value = ""; //Clear the Text Field
+				
 	var x = document.getElementById("geobucket");
-	if(georule == "include") {		
-		x.innerHTML += '<button type="button" class="btn btn-outline-info btn-pill">'+geoloc+'<i class="la la-remove"></i></button>&nbsp;';
+	//Remove white space before displaying. Note: We are using the name as-is while saving the locations to segment table.
+	geoloc = geoloc.replace(/\s+/g, '');
+	
+	if(georule == "include") {	
+		//alert('<button id="'+geoloc+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;');
+		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
 	} else {
-		x.innerHTML += '<button type="button" class="btn btn-outline-danger btn-pill">'+geoloc+'<i class="la la-remove"></i></button>&nbsp;';
+		//alert('<button id="'+geoloc+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;');
+		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
 	}	
 	x.style.display = "block";	
 }
 
-function removeOption(){
+function remove(element, index){
+	//alert(element);
 	var select = document.getElementById("dynamic-select");
-	select.options[select.options.length - 1] = null;
-	if (select.options.length == 0) {
-		var x = document.getElementById("geobucket");
-		x.style.display = "none";		
-	}	
+	select.remove(index);		
+	element.style.display = "none";		
 }
 
-function removeAllOptions(){
+function removeAll(){
 	var select = document.getElementById("dynamic-select");
 	select.options.length = 0;
 	var x = document.getElementById("geobucket");
 	x.style.display = "none";	
 }
 
-function  saveSegment() {			
+function  saveSegment() {		
+	alert("going to submit....");
 	var x = document.getElementById("dynamic-select");
     var txt = "";
     var i;
@@ -50,9 +49,9 @@ function  saveSegment() {
     	} else {
     		txt = txt + "|" + x.options[i].text;	
     	}    	        
-    }
-    
-	document.getElementById("segmentRules").value=txt;	
+    }    
+    alert(txt);
+	document.getElementById("segmentRules").value = txt;	
 	document.getElementById("segment-form").method = "post";
 	document.getElementById("segment-form").action = "SegmentController";
 	document.getElementById("segment-form").submit();
@@ -121,7 +120,7 @@ function  saveSegment() {
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																					
-						<button type="reset" class="btn btn-accent" onclick="javascript:addOption()">Add</button>
+						<button type="reset" class="btn btn-accent" onclick="javascript:add()">Add</button>
 					</div>
 				</div>
 				
@@ -130,127 +129,27 @@ function  saveSegment() {
 				
 				
 				<div id="geobucket" style="display: none;">																					
-					<div class="kt-section__content kt-section__content--border">																			
-																					
+					<div class="kt-section__content kt-section__content--border">																																						
 					</div>																																							
 				</div>
 																	
 			</div>
 			
-			<div class="kt-portlet__body">
-			
+			<div class="kt-portlet__body">			
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12"></label>
+					<form id="segment-form">
 					<div class="col-lg-4 col-md-9 col-sm-12">
-						<div id="hidden-form" style="display: none;">
-							<form id="segment-form">
-								<input type="hidden" name="pageName" value="segments">
-								<input type="hidden" id = "segmentRules" name="segmentRules" >
-								<select id="dynamic-select" size="2"></select>																																				
-							</form>										
+						<div id="hidden-form" style="display: none;">							
+							<input type="hidden" name="pageName" value="segment-create">
+							<input type="hidden" id = "segmentRules" name="segmentRules" >
+							<select id="dynamic-select" size="2"></select>																																																					
 						</div>											
-						<button type="reset" class="btn btn-primary" onclick="saveSegment();">Save Segment</button>
+						<button type="reset" class="btn btn-primary" onclick="saveSegment();">Save</button>
 						<button type="reset" class="btn btn-secondary">Cancel</button>
 					</div>
-				</div>
-				
-				<!-- 
-				<div class="kt-repeater">
-						<div class="kt-repeater__data-set">
-							<div data-repeater-list="demo3-list2">
-								<div data-repeater-item="" class="kt-repeater__item">
-									<div class="kt-repeater__close kt-repeater__close--align-right form-group">
-										
-									</div>
-									<div class="form-group row">
-										<label class="col-lg-3 col-form-label">Holder:</label>
-										<div class="col-lg-6">
-											<input type="email" class="form-control" placeholder="Enter full name">
-											<span class="form-text text-muted">Please enter your account holder</span>
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-lg-3 col-form-label">Contact</label>
-										<div class="col-lg-6">
-											<div class="input-group">
-												<div class="input-group-prepend"><span class="input-group-text"><i class="la la-chain"></i></span></div>
-												<input type="text" class="form-control" placeholder="Phone number">
-											</div>	
-										</div>
-									</div>							
-									<div class="form-group row">
-										<label class="col-lg-3 col-form-label">Communication:</label>
-										<div class="col-lg-6">
-											<div class="kt-checkbox-inline">
-												<label class="kt-checkbox">
-						                           	<input type="checkbox"> Email 
-						                            <span></span>
-						                        </label>
-						                        <label class="kt-checkbox">
-						                           	<input type="checkbox"> SMS 
-						                            <span></span>
-						                        </label>
-						                        <label class="kt-checkbox">
-						                           	<input type="checkbox"> Phone 
-						                            <span></span>
-						                        </label>
-						                    </div>
-					                   </div>
-					                </div>
-									<div class="kt-separator kt-separator--border-dashed"></div>
-									<div class="kt-separator kt-separator--height-sm"></div>
-								</div>
-							</div>
-						</div>
-						<div class="kt-repeater__add-data">
-							<span data-repeater-create="" class="btn btn-info btn-sm">
-								<i class="la la-plus"></i> Add Customer Account
-							</span>
-						</div>
-					</div>
-				
-				
-				
-				<div class="kt-repeater">
-						<div class="kt-repeater__data-set">
-							<div data-repeater-list="demo3-list2">
-								<div data-repeater-item="" class="kt-repeater__item">
-									<div class="kt-repeater__close kt-repeater__close--align-right form-group">										
-									</div>
-									<div class="form-group row">
-									<label class="col-form-label col-lg-3 col-sm-12">Location Criteria & Type</label>
-										<div class="col-lg-4 col-md-9 col-sm-12">						
-											<select class="form-control form-control--fixed kt_selectpicker" data-width="100">
-												<option>Include</option>
-												<option>Exclude</option>							
-											</select>											
-											<select class="form-control form-control--fixed kt_selectpicker" data-width="150">
-												<option>City</option>
-												<option>State</option>
-												<option>Country</option>							
-											</select>																
-										</div>
-									</div>																
-									<div class="form-group row">
-									<label class="col-form-label col-lg-3 col-sm-12">Location Name</label>
-										<div class="col-lg-4 col-md-9 col-sm-12">																				
-											<input type="text" class="form-control col-lg-3 col-sm-12" aria-describedby="emailHelp" placeholder="Name">											
-										</div>
-									</div>
-									<div class="kt-separator kt-separator--border-dashed"></div>
-									<div class="kt-separator kt-separator--height-sm"></div>
-								</div>
-							</div>
-						</div>
-						<div class="kt-repeater__add-data">
-							<span data-repeater-create="" class="btn btn-info btn-sm">
-								<i class="la la-plus"></i> Add Location
-							</span>
-						</div>
-					</div>
-				
-				-->
-				
+					</form>
+				</div>										
 			</div>
 		</form>
 		
