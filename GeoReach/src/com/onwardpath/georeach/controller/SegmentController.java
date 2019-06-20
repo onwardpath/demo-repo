@@ -14,8 +14,11 @@ import com.onwardpath.georeach.repository.SegmentRepository;
 public class SegmentController extends HttpServlet {
 	private SegmentRepository segmentRepository;
 		 
-	private static String SAVE_SUCCESS = "segments.jsp";
-	private static String SAVE_FAILURE = "segments.jsp";
+	//private static String SAVE_SUCCESS = "pages/segment-create.jsp";
+	//private static String SAVE_FAILURE = "pages/segment-create.jsp";
+	private static String SAVE_SUCCESS = "?view=pages/segment-create.jsp";
+	private static String SAVE_FAILURE = "?view=pages/segment-create.jsp";
+	
 
 	  /**
 	   * @see HttpServlet#HttpServlet()
@@ -49,10 +52,10 @@ public class SegmentController extends HttpServlet {
 	        	  HttpSession session = request.getSession();
 	        	  System.out.println("@SegmentController.doPost called from page:segment-create");
 	              if (segmentRepository.findBySegmentName(request.getParameter("segmentName"))) {	                  
-	                  session.setAttribute("message", "Segment Name exists. Try another name.");
+	                  session.setAttribute("message", "Error: Segment name already exist. Try another name.");
 	                  forward = SAVE_FAILURE;
 	                  RequestDispatcher view = request .getRequestDispatcher(forward);
-	                  view.forward(request, response);
+	                  view.forward(request, response);	      
 	                  return;
 	              }
 	              	             
@@ -66,12 +69,13 @@ public class SegmentController extends HttpServlet {
 	              System.out.println("segmentRules: "+segmentRules);
 	              
 	              segmentRepository.save(segmentName, segmentRules, userId, orgId);
-	              session.setAttribute("message", "Segment "+segmentName+" Saved.");
+	              session.setAttribute("message", "Info: Segment <b>"+segmentName+"</b> Saved.");
 	              
 	              forward = SAVE_SUCCESS;
 	          }          
 	      }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
+	      
 	  }
 }

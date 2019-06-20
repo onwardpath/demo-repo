@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <script type="text/javascript">
 function add(){
 	var geotype = document.getElementById("geotype").value;
@@ -23,23 +24,21 @@ function add(){
 	}	
 	x.style.display = "block";	
 }
-
 function remove(element, index){
 	//alert(element);
 	var select = document.getElementById("dynamic-select");
 	select.remove(index);		
 	element.style.display = "none";		
 }
-
 function removeAll(){
 	var select = document.getElementById("dynamic-select");
 	select.options.length = 0;
 	var x = document.getElementById("geobucket");
 	x.style.display = "none";	
 }
-
 function  saveSegment() {		
-	alert("going to submit....");
+	//alert("going to submit....");
+	var segment = document.getElementById("segment-name").value;
 	var x = document.getElementById("dynamic-select");
     var txt = "";
     var i;
@@ -50,7 +49,9 @@ function  saveSegment() {
     		txt = txt + "|" + x.options[i].text;	
     	}    	        
     }    
-    alert(txt);
+    //alert(txt);
+    //alert(document.getElementById("segment-form"));
+    document.getElementById("segmentName").value = segment;    
 	document.getElementById("segmentRules").value = txt;	
 	document.getElementById("segment-form").method = "post";
 	document.getElementById("segment-form").action = "SegmentController";
@@ -61,18 +62,31 @@ function  saveSegment() {
 <!--begin::Content-->
 
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-	<div class="row">
-	    <div class="col">
-	        <div class="alert alert-light alert-elevate fade show" role="alert">
-	            <div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
-	            <div class="alert-text">
-	                The jQuery plugin that brings select elements into the 21st century with intuitive multiselection, searching, and much more.
-	                <br>
-	                For more info please visit the plugin's <a class="kt-link kt-font-bold" href="https://developer.snapappointments.com/bootstrap-select/examples/" target="_blank">Demo Page</a> or <a class="kt-link kt-font-bold" href="https://github.com/snapappointments/bootstrap-select" target="_blank">Github Repo</a>.
-	            </div>
-	        </div>
-	    </div>
-	</div>
+	
+	<%
+	String message = (String) session.getAttribute("message");	
+	if (message != null) {
+		String icon = "flaticon-placeholder-3"; 
+		if (message.startsWith("Error"))
+			icon = "flaticon-warning";
+		%>
+		<div class="row">
+		    <div class="col">
+		        <div class="alert alert-light alert-elevate fade show" role="alert">
+		            <div class="alert-icon"><i class="<%=icon%> kt-font-brand"></i></div>
+		            
+		            
+		            <div class="alert-text">
+		                <%=message%>
+		            </div>
+		        </div>
+		    </div>
+		</div>	
+		<%
+		session.setAttribute("message", "");
+	}																
+	%>	
+	
 	
 	<!--begin::Portlet-->
 	<div class="kt-portlet">
@@ -81,8 +95,7 @@ function  saveSegment() {
 				<h3 class="kt-portlet__head-title">Create Segment</h3>
 			</div>
 		</div>
-		
-		
+				
 		<!--begin::Form-->
 		<form class="kt-form kt-form--label-right">
 			<div class="kt-portlet__body">
@@ -134,21 +147,23 @@ function  saveSegment() {
 				</div>
 																	
 			</div>
-			
+		</form>
+		
+		<form class="kt-form kt-form--label-right" id="segment-form">
 			<div class="kt-portlet__body">			
 				<div class="form-group row">
-					<label class="col-form-label col-lg-3 col-sm-12"></label>
-					<form id="segment-form">
-					<div class="col-lg-4 col-md-9 col-sm-12">
-						<div id="hidden-form" style="display: none;">							
-							<input type="hidden" name="pageName" value="segment-create">
-							<input type="hidden" id = "segmentRules" name="segmentRules" >
-							<select id="dynamic-select" size="2"></select>																																																					
-						</div>											
-						<button type="reset" class="btn btn-primary" onclick="saveSegment();">Save</button>
-						<button type="reset" class="btn btn-secondary">Cancel</button>
-					</div>
-					</form>
+					<label class="col-form-label col-lg-3 col-sm-12"></label>					
+						<div class="col-lg-4 col-md-9 col-sm-12">
+							<div id="hidden-form" style="display: none;">							
+								<input type="hidden" name="pageName" value="segment-create">
+								<input type="hidden" id = "segmentName" name="segmentName" >
+								<input type="hidden" id = "segmentRules" name="segmentRules" >
+								<select id="dynamic-select" size="2"></select>																																																					
+							</div>											
+							<button type="reset" class="btn btn-primary" onclick="saveSegment();">Save</button>
+							<button type="reset" class="btn btn-secondary">Cancel</button>
+						</div>
+					
 				</div>										
 			</div>
 		</form>
