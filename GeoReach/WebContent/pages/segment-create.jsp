@@ -6,15 +6,21 @@ function submitform()
 
 function addOption(){
 	var geotype = document.getElementById("geotype").value;
-	var rule = document.getElementById("rule").value;
-	var geolocation = document.getElementById("geolocation").value;	
-	var geocondition = rule+":"+geotype+":"+geolocation;
+	var georule = document.getElementById("georule").value;
+	var geoloc = document.getElementById("geoloc").value;	
+	var geocondition = georule+":"+geotype+":"+geoloc;
 		
 	var select = document.getElementById("dynamic-select");
 	select.options[select.options.length] = new Option(geocondition, geocondition);
-	document.getElementById("geolocation").value = "";
-	
-	var x = document.getElementById("geobucket");	
+	document.getElementById("geoloc").value = "";
+			
+	//<button type="button" class="btn btn-outline-danger btn-pill">Wisconsin <i class="la la-remove"></i></button>&nbsp;										
+	var x = document.getElementById("geobucket");
+	if(georule == "include") {		
+		x.innerHTML += '<button type="button" class="btn btn-outline-info btn-pill">'+geoloc+'<i class="la la-remove"></i></button>&nbsp;';
+	} else {
+		x.innerHTML += '<button type="button" class="btn btn-outline-danger btn-pill">'+geoloc+'<i class="la la-remove"></i></button>&nbsp;';
+	}	
 	x.style.display = "block";	
 }
 
@@ -55,7 +61,6 @@ function  saveSegment() {
 
 <!--begin::Content-->
 
-//this is the latest version. Trust me.
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
 	<div class="row">
 	    <div class="col">
@@ -86,61 +91,70 @@ function  saveSegment() {
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Segment Name</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">															
-						<input type="text" class="form-control col-lg-3 col-sm-12" aria-describedby="emailHelp" placeholder="Name">	
+						<input name="segmentName" id="segment-name" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Name">	
 						<span class="form-text text-muted">Give a name for this segment</span>					
 					</div>
 				</div>
 							 						
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Criteria & Location Type</label>
-					<div class="col-lg-4 col-md-9 col-sm-12">						
-						<select class="form-control form-control--fixed kt_selectpicker" data-width="100">
-							<option>Include</option>
-							<option>Exclude</option>							
+					<div class="col-lg-4 col-md-9 col-sm-12">											
+						<select id="georule" class="form-control form-control--fixed kt_selectpicker" data-width="100">
+							<option value="include">Include</option>
+							<option value="exclude">Exclude</option>							
 						</select>											
-						<select class="form-control form-control--fixed kt_selectpicker" data-width="150">
-							<option>City</option>
-							<option>State</option>
-							<option>Country</option>							
-						</select>																
+						<select id="geotype" class="form-control form-control--fixed kt_selectpicker" data-width="120">
+							<option value="city">City</option>
+							<option value="state">State</option>
+							<option value="country">Country</option>							
+						</select>																															
 					</div>
 				</div>
 											
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Location Name</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">															
-						<input type="text" class="form-control col-lg-3 col-sm-12" aria-describedby="emailHelp" placeholder="Name">						
+						<input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name">						
 					</div>
 				</div>
 				
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																					
-						<button type="reset" class="btn btn-accent">Add</button>
+						<button type="reset" class="btn btn-accent" onclick="javascript:addOption()">Add</button>
 					</div>
 				</div>
 				
 				<div class="kt-separator kt-separator--border-dashed"></div>
 				<div class="kt-separator kt-separator--height-sm"></div>
 				
-				<p>Added Locations to appear here</p>
 				
-				<div class="kt-separator kt-separator--border-dashed"></div>
-				<div class="kt-separator kt-separator--height-sm"></div>						
-				
+				<div id="geobucket" style="display: none;">																					
+					<div class="kt-section__content kt-section__content--border">																			
+																					
+					</div>																																							
+				</div>
+																	
 			</div>
 			
 			<div class="kt-portlet__body">
 			
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12"></label>
-					<div class="col-lg-4 col-md-9 col-sm-12">																					
-						<button type="reset" class="btn btn-primary">Save Segment</button>
+					<div class="col-lg-4 col-md-9 col-sm-12">
+						<div id="hidden-form" style="display: none;">
+							<form id="segment-form">
+								<input type="hidden" name="pageName" value="segments">
+								<input type="hidden" id = "segmentRules" name="segmentRules" >
+								<select id="dynamic-select" size="2"></select>																																				
+							</form>										
+						</div>											
+						<button type="reset" class="btn btn-primary" onclick="saveSegment();">Save Segment</button>
 						<button type="reset" class="btn btn-secondary">Cancel</button>
 					</div>
 				</div>
-				<!-- begin::research>
 				
+				<!-- 
 				<div class="kt-repeater">
 						<div class="kt-repeater__data-set">
 							<div data-repeater-list="demo3-list2">
@@ -195,9 +209,7 @@ function  saveSegment() {
 						</div>
 					</div>
 				
-				<end::research -->
 				
-				<!-- begin::test 
 				
 				<div class="kt-repeater">
 						<div class="kt-repeater__data-set">
@@ -237,7 +249,7 @@ function  saveSegment() {
 						</div>
 					</div>
 				
-				end::test -->
+				-->
 				
 			</div>
 		</form>
