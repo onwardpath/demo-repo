@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <script type="text/javascript">
 function add(){
+	//var segmentName = document.getElementById("segment-name").value;
+	//alert(segmentName);
+	
 	var geotype = document.getElementById("geotype").value;
 	var georule = document.getElementById("georule").value;
 	var geoloc = document.getElementById("geoloc").value;		
@@ -15,14 +18,15 @@ function add(){
 	//Remove white space before displaying. Note: We are using the name as-is while saving the locations to segment table.
 	geoloc = geoloc.replace(/\s+/g, '');
 	
-	if(georule == "include") {	
-		//alert('<button id="'+geoloc+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;');
+	if(georule == "include") {			
 		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
-	} else {
-		//alert('<button id="'+geoloc+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;');
+	} else {		
 		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
 	}	
 	x.style.display = "block";	
+	//alert(segmentName);	
+	document.getElementById("geoloc").focus();
+	//document.getElementById("segment-name").value = segmentName;
 }
 function remove(element, index){
 	//alert(element);
@@ -38,7 +42,7 @@ function removeAll(){
 }
 function  saveSegment() {		
 	//alert("going to submit....");
-	var segment = document.getElementById("segment-name").value;
+	//var segment = document.getElementById("segment-name").value;
 	var x = document.getElementById("dynamic-select");
     var txt = "";
     var i;
@@ -51,7 +55,7 @@ function  saveSegment() {
     }    
     //alert(txt);
     //alert(document.getElementById("segment-form"));
-    document.getElementById("segmentName").value = segment;    
+    //document.getElementById("segmentName").value = segment;    
 	document.getElementById("segmentRules").value = txt;	
 	document.getElementById("segment-form").method = "post";
 	document.getElementById("segment-form").action = "SegmentController";
@@ -65,7 +69,7 @@ function  saveSegment() {
 	
 	<%
 	String message = (String) session.getAttribute("message");	
-	if (message != null) {
+	if (message != null && !message.equals("")) {
 		String icon = "flaticon-placeholder-3"; 
 		if (message.startsWith("Error"))
 			icon = "flaticon-warning";
@@ -73,9 +77,7 @@ function  saveSegment() {
 		<div class="row">
 		    <div class="col">
 		        <div class="alert alert-light alert-elevate fade show" role="alert">
-		            <div class="alert-icon"><i class="<%=icon%> kt-font-brand"></i></div>
-		            
-		            
+		            <div class="alert-icon"><i class="<%=icon%> kt-font-brand"></i></div>		            		           
 		            <div class="alert-text">
 		                <%=message%>
 		            </div>
@@ -99,17 +101,9 @@ function  saveSegment() {
 		<!--begin::Form-->
 		<form class="kt-form kt-form--label-right">
 			<div class="kt-portlet__body">
-								
+																			 				
 				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12">Segment Name</label>
-					<div class="col-lg-4 col-md-9 col-sm-12">															
-						<input name="segmentName" id="segment-name" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Name">	
-						<span class="form-text text-muted">Give a name for this segment</span>					
-					</div>
-				</div>
-							 						
-				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12">Criteria & Location Type</label>
+				<label class="col-form-label col-lg-3 col-sm-12">Criteria</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">											
 						<select id="georule" class="form-control form-control--fixed kt_selectpicker" data-width="100">
 							<option value="include">Include</option>
@@ -124,9 +118,9 @@ function  saveSegment() {
 				</div>
 											
 				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12">Location Name</label>
+				<label class="col-form-label col-lg-3 col-sm-12">Area Name</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">															
-						<input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name">						
+						<input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name" autofocus>						
 					</div>
 				</div>
 				
@@ -150,13 +144,22 @@ function  saveSegment() {
 		</form>
 		
 		<form class="kt-form kt-form--label-right" id="segment-form">
-			<div class="kt-portlet__body">			
+			<div class="kt-portlet__body">	
+						
+				<div class="form-group row">
+					<label class="col-form-label col-lg-3 col-sm-12">Segment Name</label>
+						<div class="col-lg-4 col-md-9 col-sm-12">															
+							<input name="segmentName" id="segmentName" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Name">	
+							<span class="form-text text-muted">Give a name for this segment</span>					
+						</div>
+				</div>
+						
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12"></label>					
 						<div class="col-lg-4 col-md-9 col-sm-12">
 							<div id="hidden-form" style="display: none;">							
 								<input type="hidden" name="pageName" value="segment-create">
-								<input type="hidden" id = "segmentName" name="segmentName" >
+								<!-- input type="hidden" id = "segmentName" name="segmentName"  -->
 								<input type="hidden" id = "segmentRules" name="segmentRules" >
 								<select id="dynamic-select" size="2"></select>																																																					
 							</div>											
