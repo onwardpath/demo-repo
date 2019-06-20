@@ -361,7 +361,9 @@ Web Application --  Configure Experience (lab01.onwardpath.com/georeach)
 Web Services -- Called from clients Website (lab01.onwardpath.com/geoservice)
 Client Website  -- Webpage with geo enabled content (www.onwardpath.com/geodemo)
 	
-	
+JavaScript file with error
+footer-callback.js
+ro-grouping.js
 	
 
 
