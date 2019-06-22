@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.onwardpath.georeach.util.DbUtil;
+import com.onwardpath.georeach.model.Segment;
 
 public class SegmentRepository {
 	  private Connection dbConnection;
@@ -17,12 +18,10 @@ public class SegmentRepository {
 	  public SegmentRepository() {
 	      dbConnection = DbUtil.getConnection();
 	  }
-	  
-	  
+	  	  
 	  public void save(String name, String geography, int user_id, int org_id) {
 	      try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("insert into segment(name, geography, user_id, org_id) values (?,?,?,?)");
-	          	        	       
+	          PreparedStatement prepStatement = dbConnection.prepareStatement("insert into segment(name, geography, user_id, org_id) values (?,?,?,?)");	          	        	       
 	          prepStatement.setString(1, name);
 	          prepStatement.setString(2, geography);
 	          prepStatement.setInt(3, user_id);
@@ -82,5 +81,24 @@ public class SegmentRepository {
 	      }
 	      return segments;
 	  }
-
-	}
+	  
+	  public Map<Integer, Segment> loadOrgSegments(int org_id) throws SQLException {
+		  Map<Integer, Segment> orgSegments = new HashMap<Integer, Segment>();
+		  PreparedStatement prepStatement = dbConnection.prepareStatement("select * from segment where org_id = ?");
+          prepStatement.setInt(1, org_id);
+                     	          
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {   
+              while (result.next()) {
+            	  Segment segment = new Segment();
+            	  segment.setId(result.getInt("id"));
+            	  segment.setName(result.getString("name"));
+            	  segment.setGeography(result.getString("geography"));
+            	  segment.setUser_id(result.getInt("user_id"));             	  
+            	  segment.setOrg_id(result.getInt("org_id"));
+            	  orgSegments.put(result.getInt("id"), segment);
+              }
+          }	
+          return orgSegments;
+	  }
+}

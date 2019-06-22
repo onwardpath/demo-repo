@@ -66,9 +66,9 @@
 					<!--begin::Heade-->
 					<div class="kt-login-v1__head">
 						<div class="kt-login-v1__logo">
-							<a href="#">
+							<a href="/GeoReach/login.jsp">
 								<!-- img src="./GeoReach/assets/media/logos/logo-4.png" alt="" / -->
-								<h2>Geo</h2>
+								<h2>Chameleon</h2>
 							</a>
 						</div>
 						<div class="kt-login-v1__signup">
@@ -92,7 +92,7 @@
 						<div class="kt-login-v1__section">
 							<div class="kt-login-v1__info">
 								<h3 class="kt-login-v1__intro">Create Unique Experiences</h3>
-								<p>Do things that matter.</p>
+								<p>Relevant to your audience</p>
 							</div>
 						</div>
 
@@ -107,9 +107,22 @@
 						<div class="kt-login-v1__wrapper">
 							<div class="kt-login-v1__container">
 								<h3 class="kt-login-v1__title">
-									Sign To Account
+									Welcome
 								</h3>
-
+								<%
+								String message = (String) session.getAttribute("message");
+								if (message != null && !message.equals("")) {
+									String icon = "flaticon-placeholder-3"; 
+									if (message.startsWith("Error"))
+										icon = "flaticon-warning";
+									%>																	    		            		          
+						            <div class="alert-text">
+						                <font color="#ffffff"><%=message%></font>
+						            </div>								    						
+									<%
+									session.setAttribute("message", "");
+								}								
+								%>
 								<!--begin::Form-->
 								<form class="kt-login-v1__form kt-form" action="GeoReach/UserController" method="post" autocomplete="off">								
 									<input type="hidden" name="pageName" value="login">

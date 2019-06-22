@@ -111,7 +111,39 @@ public class ExperienceRepository {
             	  experience.setCreate_time(result.getString("create_time"));            	              	              	  	               
               }               
           }
+          
+          //Load image experiences
+          prepStatement = dbConnection.prepareStatement("select * from image where id = ?");
           return experience;		   	     
+	  }
+	  
+	  public void getOrgExperience (int org_id) throws SQLException {
+		  String query = "select experience.id as experienceid, experience.name as experiencename, experience.type as experiencetype, "
+		  		+ "experience.create_time as experiencecreatedon, segment.name as segmentname, image.url as url, image.create_time as imagecreatedon "
+		  		+ "from"
+		  		+ "	experience, segment, image"
+		  		+ "where"		  		
+		  		+ "experience.id = image.experience_id and"
+		  		+ "image.segment_id = segment.id and"
+		  		+ "experience.org_id = ?";
+		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
+		  prepStatement.setInt(1, org_id);                     
+          ResultSet result = prepStatement.executeQuery();
+                    
+          //EXP.ID	EXP.NAME				EXP.YPE	EXP.CREATEDATA			SEGMENT.NAME	IMAGE.URL															IMAGE.CREATEDATA
+          //1		Team Affinity Image		Image	2019-06-12 18:40:45		Wisconsin		https://www.associatedbank.com/content/image/brewers-cc-slide-btn	2019-06-12 18:48:24
+          //1		Team Affinity Image		Image	2019-06-12 18:40:45		Minnesota		https://www.associatedbank.com/content/image/wild-cc-slide-btn		2019-06-12 18:49:26
+          //9		Home5					image	2019-06-13 18:49:16		Wisconsin		https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png				2019-06-13 18:49:16
+          //10		Home6					image	2019-06-13 18:50:49		Wisconsin		https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png				2019-06-13 18:50:49
+        		  
+          
+          if (result != null) {
+              while (result.next()) {	            	              	  
+            	  //Construct the Experience object with Map of Image objects
+              }               
+          }
+		  
+		  
 	  }
 	  	  	 
 	  /**

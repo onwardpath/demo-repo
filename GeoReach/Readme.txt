@@ -362,8 +362,8 @@ Web Services -- Called from clients Website (lab01.onwardpath.com/geoservice)
 Client Website  -- Webpage with geo enabled content (www.onwardpath.com/geodemo)
 	
 JavaScript file with error
-footer-callback.js
-ro-grouping.js
+WebContent/assets/js/demo1/pages/crud/datatables/advanced/footer-callback.js
+WebContent/assets/js/demo1/pages/crud/datatables/advanced/row-grouping.js
 	
 
 

@@ -1,5 +1,8 @@
 package com.onwardpath.georeach.model;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class Experience {
 	private int id;
 	private String name;
@@ -12,6 +15,8 @@ public class Experience {
 	private int org_id;	
 	private int user_id;
 	private String create_time;		//TODO: Need to convert to appropriate date type/format
+	private Map<Integer, Image> images;
+	
 	
 	public Experience (int id, String name, String type, String status, String schedule_start, String schedule_end, String header_code, String body_code, int org_id, int user_id, String create_time) {
 		this.id = id;
@@ -25,6 +30,7 @@ public class Experience {
 		this.org_id = org_id;
 		this.user_id = user_id;
 		this.create_time = create_time;
+		images = new HashMap<Integer, Image>();
 	}
 	
 	public Experience (int id) {
@@ -186,5 +192,13 @@ public class Experience {
 	 */
 	public void setCreate_time(String create_time) {
 		this.create_time = create_time;
-	}	
+	}
+	
+	public void addImage(int id, Image image) {
+		images.put(id, image);
+	}
+	
+	public Map<Integer, Image> getImages() {
+		return images;
+	}
 }

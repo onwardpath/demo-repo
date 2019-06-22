@@ -20,7 +20,7 @@ public class UserController extends HttpServlet {
 	private static String USER_SIGNUP = "signup.jsp";
 	private static String USER_LOGIN = "login.jsp";	  
 	private static String LOGIN_SUCCESS = "index.jsp";
-	private static String LOGIN_FAILURE = "failure.jsp";
+	private static String LOGIN_FAILURE = "login.jsp";
 
 	  /**
 	   * @see HttpServlet#HttpServlet()
@@ -43,15 +43,18 @@ public class UserController extends HttpServlet {
 	   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	   */
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	      String pageName = request.getParameter("pageName");
+	      
+		  String pageName = request.getParameter("pageName");
 	      System.out.println("pageName: "+pageName);
 	      String forward = "";        
+	      HttpSession session = request.getSession();
 	      
 	      if (userRepository != null) {
 	          if (pageName.equals("signup")) {
 	        	  String emailName = request.getParameter("email");	        	  
 	              if (userRepository.findByUserName(emailName)) {
-	                  request.setAttribute("message", "User "+emailName+" alredy exist. <a href='index.jsp'>Click here</a> to login");
+	                  //request.setAttribute("message", "User "+emailName+" alredy exist. <a href='index.jsp'>Click here</a> to login");
+	                  session.setAttribute("message", "Error. User "+emailName+" alredy exist. <a href='index.jsp'>Click here</a> to login");
 	                  forward = USER_SIGNUP;
 	                  RequestDispatcher view = request .getRequestDispatcher(forward);
 	                  view.forward(request, response);
@@ -77,7 +80,8 @@ public class UserController extends HttpServlet {
 		              forward = USER_LOGIN;		              
 	              } catch (SQLException e) {
 	            	  System.out.println(e.getMessage());;
-	            	  request.setAttribute("message", e.getMessage()+" Unexpected error!. Please try again later or contact the administrator");
+	            	  //request.setAttribute("message", "Error: "+e.getMessage()+" Please try again later or contact the administrator");
+	            	  session.setAttribute("message", "Error: "+e.getMessage()+" Please try again later or contact the administrator");
 	                  forward = USER_SIGNUP;
 	              }	              	             
 	          } else if (pageName.equals("login")) {
@@ -85,21 +89,20 @@ public class UserController extends HttpServlet {
 	              if (result == true) {	    
 	            	  int user_id = userRepository.findUserId(request.getParameter("userName"));	            	  	            	  
 	            	  int org_id = userRepository.findOrgId(request.getParameter("userName"));
-	            	  User user = userRepository.getUser(user_id);
-	            	  HttpSession session = request.getSession();
+	            	  User user = userRepository.getUser(user_id);	            	  
 	            	  session.setAttribute("user", user);
 	            	  session.setAttribute("user_id", user_id);
 	            	  session.setAttribute("org_id", org_id);	            	  	            	  	            	  
 	                  forward = LOGIN_SUCCESS;	                  
 	              } else {
+	            	  session.setAttribute("message", "Error: Login failed. Try again with valid login & password.");
 	                  forward = LOGIN_FAILURE;
 	              }
-	          } else if (pageName.equals("logout")) {
-	        	  HttpSession session = request.getSession(false);
+	          } else if (pageName.equals("logout")) {	        	  
 	        	  if(session != null)
 	        	      session.invalidate();
 	              forward = USER_LOGIN;	              
-	          }	         
+	          }       
 	      }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);

@@ -1,35 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <script type="text/javascript">
-function add(){
-	//var segmentName = document.getElementById("segment-name").value;
-	//alert(segmentName);
-	
+function add(){	
 	var geotype = document.getElementById("geotype").value;
 	var georule = document.getElementById("georule").value;
 	var geoloc = document.getElementById("geoloc").value;		
-	var geocondition = georule+":"+geotype+":"+geoloc;
-		
+	var geocondition = georule+":"+geotype+":"+geoloc;		
 	var select = document.getElementById("dynamic-select");
 	var index = select.options.length;
 	select.options[index] = new Option(geocondition, geocondition);
-	document.getElementById("geoloc").value = ""; //Clear the Text Field
-				
-	var x = document.getElementById("geobucket");
-	//Remove white space before displaying. Note: We are using the name as-is while saving the locations to segment table.
-	geoloc = geoloc.replace(/\s+/g, '');
-	
+	document.getElementById("geoloc").value = ""; //Clear the Text Field				
+	var x = document.getElementById("geobucket");	
+	geoloc = geoloc.replace(/\s+/g, ''); //Remove white space before displaying. Note: We are using the name as-is while saving the locations to segment table.	
 	if(georule == "include") {			
 		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
 	} else {		
 		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
 	}	
-	x.style.display = "block";	
-	//alert(segmentName);	
-	document.getElementById("geoloc").focus();
-	//document.getElementById("segment-name").value = segmentName;
+	x.style.display = "block";			
+	document.getElementById("geoloc").focus();	
 }
-function remove(element, index){
-	//alert(element);
+function remove(element, index){	
 	var select = document.getElementById("dynamic-select");
 	select.remove(index);		
 	element.style.display = "none";		
@@ -40,9 +30,7 @@ function removeAll(){
 	var x = document.getElementById("geobucket");
 	x.style.display = "none";	
 }
-function  saveSegment() {		
-	//alert("going to submit....");
-	//var segment = document.getElementById("segment-name").value;
+function  saveSegment() {			
 	var x = document.getElementById("dynamic-select");
     var txt = "";
     var i;
@@ -52,10 +40,7 @@ function  saveSegment() {
     	} else {
     		txt = txt + "|" + x.options[i].text;	
     	}    	        
-    }    
-    //alert(txt);
-    //alert(document.getElementById("segment-form"));
-    //document.getElementById("segmentName").value = segment;    
+    }            
 	document.getElementById("segmentRules").value = txt;	
 	document.getElementById("segment-form").method = "post";
 	document.getElementById("segment-form").action = "SegmentController";
@@ -64,9 +49,7 @@ function  saveSegment() {
 </script>
 
 <!--begin::Content-->
-
-<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-	
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 	<%
 	String message = (String) session.getAttribute("message");	
 	if (message != null && !message.equals("")) {
@@ -87,9 +70,7 @@ function  saveSegment() {
 		<%
 		session.setAttribute("message", "");
 	}																
-	%>	
-	
-	
+	%>			
 	<!--begin::Portlet-->
 	<div class="kt-portlet">
 		<div class="kt-portlet__head">
@@ -99,7 +80,7 @@ function  saveSegment() {
 		</div>
 				
 		<!--begin::Form-->
-		<form class="kt-form kt-form--label-right">
+		<form class="kt-form kt-form--label-right" id="dummy-form"> 
 			<div class="kt-portlet__body">
 																			 				
 				<div class="form-group row">
@@ -120,7 +101,7 @@ function  saveSegment() {
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Area Name</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">															
-						<input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name" autofocus>						
+						<input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name">						
 					</div>
 				</div>
 				
@@ -133,8 +114,7 @@ function  saveSegment() {
 				
 				<div class="kt-separator kt-separator--border-dashed"></div>
 				<div class="kt-separator kt-separator--height-sm"></div>
-				
-				
+								
 				<div id="geobucket" style="display: none;">																					
 					<div class="kt-section__content kt-section__content--border">																																						
 					</div>																																							
@@ -142,7 +122,9 @@ function  saveSegment() {
 																	
 			</div>
 		</form>
+		<!--end::Form-->
 		
+		<!--begin::Form-->
 		<form class="kt-form kt-form--label-right" id="segment-form">
 			<div class="kt-portlet__body">	
 						
@@ -170,8 +152,8 @@ function  saveSegment() {
 				</div>										
 			</div>
 		</form>
-		
+		<!--end::Form-->		
 	</div>
-
+	<!--begin::Portlet-->
 </div>
 <!--end::Content-->

@@ -81,11 +81,16 @@
         <!--end::Global Theme Bundle -->
         <!--begin::Page Vendors(used by this page) -->
         <script src="./assets/vendors/custom/fullcalendar/fullcalendar.bundle.js" type="text/javascript"></script>
+        <!-- using below causes issues with bootstrap-select components -->
+        <!-- script src="./assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script -->        
         <!--end::Page Vendors -->
         <!--begin::Page Scripts(used by this page) -->
         <script src="./assets/js/demo1/pages/dashboard.js" type="text/javascript"></script>
         <script src="./assets/js/demo1/pages/crud/forms/layouts/repeater.js" type="text/javascript"></script>
         <script src="./assets/js/demo1/pages/crud/forms/widgets/bootstrap-select.js" type="text/javascript"></script>
+        <!-- using below causes issues with bootstrap-select components -->        
+        <!-- script src="./assets/js/demo1/pages/crud/datatables/data-sources/html.js" type="text/javascript"></script>        
+        <script src="./assets/js/demo1/pages/crud/datatables/advanced/multiple-controls.js" type="text/javascript"></script -->
         <!--end::Page Scripts -->
     </body>
     <!-- end::Body -->

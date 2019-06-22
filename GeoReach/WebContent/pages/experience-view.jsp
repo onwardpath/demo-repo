@@ -1,101 +1,80 @@
-<div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">		
 
-	<h1>Team Affinity Image</h1>
-	<strong><mark>Image Experience</mark></strong>									
-	<div class="custom-control custom-switch">
-	  <input type="checkbox" class="custom-control-input" id="customSwitch1">
-	  <label class="custom-control-label" for="customSwitch1">On/Off</label>
-	</div>
-	<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a>&nbsp;|&nbsp;<a href="#">Add Segment</a>&nbsp;|&nbsp;<a href="#">View Code</a>										
-	<div><!-- Cards Container Start -->
-		<!-- 1st card start -->
-		<div class="d-inline-block">	
-			<div class="card" style="width: 18rem;">
-				<div class="card-body">
-					<h5 class="card-title">Segment: Minnesota</h5>
-					<!--h6 class="card-subtitle mb-2 text-muted">Image</h6-->			    		
-		    		<img src="https://www.associatedbank.com/content/image/wild-cc-slide-btn" alt="wild card" class="rounded">			    					    	
-		  		</div>
-		  		<div class="card-footer">
-			      <small class="text-muted">Last updated 3 mins ago</small>
-			    </div>
-			</div>		
-	  	</div><!-- 1st card end -->
-	  	<!-- 2nd card start -->
-	  	<div class="d-inline-block">  		
-	  		<div class="card" style="width: 18rem;">
-	  			<div class="card-body">
-	    			<h5 class="card-title">Segment: Wisconsin</h5>
-	    			<!--h6 class="card-subtitle mb-2 text-muted">Image</h6-->		    			
-	    			<img src="https://www.associatedbank.com/content/image/brewers-cc-slide-btn" alt="brewers card" class="rounded">		    					    				  
-	  			</div>
-	  			<div class="card-footer">
-			      <small class="text-muted">Last updated 5 mins ago</small>
-			    </div>
-			</div>    		
-	  	</div><!-- 2nd card end -->  		  	
-	  	<!-- 3rd card start -->
-	  	<div class="d-inline-block">  		
-	  		<div class="card" style="width: 18rem;">
-	  			<div class="card-body">
-	    			<h5 class="card-title">Others</h5>
-	    			<!--h6 class="card-subtitle mb-2 text-muted">Image</h6-->		    			
-	    			<img src="https://www.associatedbank.com/content/image/visa-platinum-credit-card" alt="default card" class="img-thumbnail">		    					    				  
-	  			</div>
-	  			<div class="card-footer">
-			      <small class="text-muted">Last updated 5 mins ago</small>
-			    </div>
-			</div>    		
-	  	</div><!-- 3rd card end -->
-	</div><!-- Cards Container End -->      
-		      
-		      
-   	<h1>Team Affinity Text</h1>	
-	<strong><mark>Text Experience</mark></strong>
-	<div class="custom-control custom-switch">
-	  <input type="checkbox" class="custom-control-input" id="customSwitch2">
-	  <label class="custom-control-label" for="customSwitch2">On/Off</label>
-	</div>
-	<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a>&nbsp;|&nbsp;<a href="#">Add Segment</a>&nbsp;|&nbsp;<a href="#">View Code</a>									
-	<div><!-- Cards Container Start -->
-		<!-- 1st card start -->
-		<div class="d-inline-block">	
-			<div class="card" style="width: 18rem;">
-				<div class="card-body">
-					<h5 class="card-title">Segment: Minnesota</h5>
-					<!--h6 class="card-subtitle mb-2 text-muted">Text</h6-->
-		    		<p class="card-text">Don't forget to select the Minnesota Wilds branded Visa Platinum card</p>			    		
-		  		</div>
-		  		<div class="card-footer">
-			      <small class="text-muted">Last updated 10 mins ago</small>
-			    </div>
-			</div>		
-	  	</div><!-- 1st card end -->
-	  	<!-- 2nd card start -->
-	  	<div class="d-inline-block">  		
-	  		<div class="card" style="width: 18rem;">
-	  			<div class="card-body">
-	    			<h5 class="card-title">Segment: Wisconsin</h5>
-	    			<!--h6 class="card-subtitle mb-2 text-muted">Text</h6-->
-	    			<p class="card-text">Don't forget to select the Milwaukee Brewers branded Visa Platinum card</p>		    					    		   
-	  			</div>
-	  			<div class="card-footer">
-			      <small class="text-muted">Last updated 10 mins ago</small>
-			    </div>
-			</div>    		
-	  	</div><!-- 2nd card end -->  
-	  	<!-- 3rd card start -->
-	  	<div class="d-inline-block">  		
-	  		<div class="card" style="width: 18rem;">
-	  			<div class="card-body">
-	    			<h5 class="card-title">Default</h5>
-	    			<!--h6 class="card-subtitle mb-2 text-muted">Text</h6-->
-	    			<p class="card-text">Order your Visa Platinum Cards in two colors Blue and Grey</p>		    					    		   
-	  			</div>
-	  			<div class="card-footer">
-			      <small class="text-muted">Last updated 10 mins ago</small>
-			    </div>
-			</div>    		
-	  	</div><!-- 3rd card end -->  
-	</div><!-- Cards Container End -->		      	
-</div><!-- container -->
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
+<%@ page import="java.util.Map" %>
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
+		<%
+			//TODO: Resolve DataTable issue -- https://datatables.net/forums/discussion/32575/uncaught-typeerror-cannot-set-property-dt-cellindex-of-undefined
+			SegmentRepository segmentRepository = new SegmentRepository();
+			UserRepository userRepository = new UserRepository();
+			int org_id = (Integer)session.getAttribute("org_id");
+			Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegments(org_id);
+			
+			if (orgSegments.size() == 0) {
+				%>
+				<div class="alert alert-light alert-elevate" role="alert">
+					<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
+						<div class="alert-text">
+						No Segments Available for your Organization. Create a new segment <a class="kt-link kt-font-bold" href="?view=segment-create.jsp">here</a>.
+					</div>
+				</div>
+				<%
+					
+			} else {
+				%>
+				<div class="kt-portlet kt-portlet--mobile">
+						<div class="kt-portlet__head">
+							<div class="kt-portlet__head-label">
+								<h3 class="kt-portlet__head-title">
+									Your Segments
+								</h3>
+							</div>
+						</div>
+						
+						<div class="kt-portlet__body">			
+							<!--begin: Datatable -->
+							<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Geography</th>
+										<th>Created By</th>
+										<th>Create Date</th>
+										<th>Last Updated By</th>
+										<th>Last Updated Date</th>										
+										<th>Status</th>										
+										<th>Actions</th>
+									</tr>
+								</thead>								
+								<%
+								for ( Map.Entry<Integer, Segment> entry : orgSegments.entrySet()) {
+									Integer key = entry.getKey();
+									Segment val = entry.getValue();
+									User user = userRepository.getUser(val.getUser_id());
+								    %>
+				    			<tbody>
+									<tr>
+										<td><%=val.getName()%></td>
+										<td><%=val.getGeography()%></td>
+										<td><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></td>
+										<td>1/2/2019</td>
+										<td>123</td>
+										<td>123</td>
+										<td>Active</td>
+										<td nowrap></td>
+									</tr>
+								</tbody>
+								<%
+								}
+								%>																				
+							</table>
+							<!--end: Datatable -->
+						</div>
+					</div>
+				    <%				    				   					
+			}			
+		%>
+	
+</div>
+<!-- end:: Content -->	

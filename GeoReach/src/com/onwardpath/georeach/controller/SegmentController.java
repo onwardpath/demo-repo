@@ -12,14 +12,11 @@ import com.onwardpath.georeach.repository.SegmentRepository;
 
 @SuppressWarnings("serial")
 public class SegmentController extends HttpServlet {
-	private SegmentRepository segmentRepository;
-		 
-	//private static String SAVE_SUCCESS = "pages/segment-create.jsp";
-	//private static String SAVE_FAILURE = "pages/segment-create.jsp";
+	
+	private SegmentRepository segmentRepository;		 	
 	private static String SAVE_SUCCESS = "?view=pages/segment-create.jsp";
 	private static String SAVE_FAILURE = "?view=pages/segment-create.jsp";
 	
-
 	  /**
 	   * @see HttpServlet#HttpServlet()
 	   */

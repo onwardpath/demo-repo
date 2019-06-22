@@ -18,9 +18,9 @@ import com.onwardpath.georeach.repository.ExperienceRepository;
 public class ExperienceController extends HttpServlet {
 	private ExperienceRepository experienceRepository;	
 		 
-	private static String SAVE_SUCCESS = "experience-create.jsp";
-	private static String SAVE_FAILURE = "experience-create.jsp";
-
+	private static String SAVE_SUCCESS = "?view=pages/experience-create.jsp";
+	private static String SAVE_FAILURE = "?view=pages/experience-create.jsp";
+		
 	  /**
 	   * @see HttpServlet#HttpServlet()
 	   */
@@ -60,8 +60,7 @@ public class ExperienceController extends HttpServlet {
 	                  return;
 	              }	              	             	              	              	              	           	             
 	              	              	   
-	              try {
-	            	  	            	  	            	  	            	  	            	   	           
+	              try {	            	  	            	  	            	  	            	  	            	   	         
 	            	  //1. Save to Experience table, get the id (name, type, org_id, user_id, create_time)
 	            	  String type = request.getParameter("type");
 	            	  int experience_id = experienceRepository.save(name, type, "off", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
@@ -96,7 +95,7 @@ public class ExperienceController extends HttpServlet {
 	            	  	            	  
 		              //session.setAttribute("message", "Experience "+name+" Saved. <a href=\"viewcode.jsp?n="+name+"&e="+experience_id+"&o="+org_id+"\">View Code</a>");			              
 	            	  //<a href="#" onClick="MyWindow=window.open('http://www.google.com','MyWindow',width=600,height=300); return false;">Click Here</a>
-		              session.setAttribute("message", "Experience "+name+" Saved <a href=\"#\" onClick=\"MyWindow=window.open('viewcode.jsp?n="+name+"&e="+experience_id+"&o="+org_id+"','MyWindow',width=600,height=300); return false;\">View Code</a>");		              		              		            
+		              session.setAttribute("message", "Experience <b>"+name+"</b> saved. <a href=\"#\" onClick=\"MyWindow=window.open('viewcode.jsp?n="+name+"&e="+experience_id+"&o="+org_id+"','MyWindow',width=600,height=300); return false;\">View Code</a>");		              		              		            
 		              forward = SAVE_SUCCESS;
 	              } catch (SQLException e) {
 	            	  session.setAttribute("message", e.getMessage()+". Please try later or contact the administrator.");
