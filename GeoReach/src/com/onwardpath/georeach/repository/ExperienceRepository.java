@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+import java.util.Map;
+import java.util.HashMap;
 import com.onwardpath.georeach.model.Experience;
+import com.onwardpath.georeach.model.Image;
 import com.onwardpath.georeach.util.DbUtil;
 
 /**
@@ -110,40 +112,67 @@ public class ExperienceRepository {
             	  experience.setUser_id(result.getInt("user_id"));            	  
             	  experience.setCreate_time(result.getString("create_time"));            	              	              	  	               
               }               
-          }
-          
-          //Load image experiences
-          prepStatement = dbConnection.prepareStatement("select * from image where id = ?");
+          }                   
           return experience;		   	     
 	  }
 	  
-	  public void getOrgExperience (int org_id) throws SQLException {
-		  String query = "select experience.id as experienceid, experience.name as experiencename, experience.type as experiencetype, "
-		  		+ "experience.create_time as experiencecreatedon, segment.name as segmentname, image.url as url, image.create_time as imagecreatedon "
-		  		+ "from"
-		  		+ "	experience, segment, image"
-		  		+ "where"		  		
-		  		+ "experience.id = image.experience_id and"
-		  		+ "image.segment_id = segment.id and"
-		  		+ "experience.org_id = ?";
+	  public Map<Integer,Experience> getOrgImageExperiences (int org_id) throws SQLException {
+		  Map<Integer,Experience> orgImageExp = new HashMap<Integer,Experience>();
+		  
+		  String query = "select experience.id as id, experience.name as name, experience.type as type, experience.status as status, "
+		  		+ "experience.schedule_start as schedule_start, experience.schedule_end as schedule_end, experience.user_id as user_id, experience.create_time as create_time, "
+		  		+ "segment.name as segmentname, image.id as image_id, image.url as url "
+		  		+ "from "
+		  		+ "experience, segment, image "
+		  		+ "where "		  		
+		  		+ "experience.id = image.experience_id and "
+		  		+ "image.segment_id = segment.id and "
+		  		+ "experience.org_id = ? "
+		  		+ "order by experience.id";
+		  System.out.println("@ExperienceRepository.getOrgImageExperiences>query: "+query);
 		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
 		  prepStatement.setInt(1, org_id);                     
           ResultSet result = prepStatement.executeQuery();
-                    
-          //EXP.ID	EXP.NAME				EXP.YPE	EXP.CREATEDATA			SEGMENT.NAME	IMAGE.URL															IMAGE.CREATEDATA
-          //1		Team Affinity Image		Image	2019-06-12 18:40:45		Wisconsin		https://www.associatedbank.com/content/image/brewers-cc-slide-btn	2019-06-12 18:48:24
-          //1		Team Affinity Image		Image	2019-06-12 18:40:45		Minnesota		https://www.associatedbank.com/content/image/wild-cc-slide-btn		2019-06-12 18:49:26
-          //9		Home5					image	2019-06-13 18:49:16		Wisconsin		https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png				2019-06-13 18:49:16
-          //10		Home6					image	2019-06-13 18:50:49		Wisconsin		https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png				2019-06-13 18:50:49
-        		  
           
-          if (result != null) {
+          /**
+          ID		NAME					TYPE		STATUS	START		END		USER_ID		EXP.CREATEDATA			SEGMENTNAME		IMAGE_ID	URL															
+          1			Team Affinity Image		Image		on							1			2019-06-12 18:40:45		Wisconsin		1			https://www.associatedbank.com/content/image/brewers-cc-slide-btn
+          1			Team Affinity Image		Image		on							1			2019-06-12 18:40:45		Minnesota		2			https://www.associatedbank.com/content/image/wild-cc-slide-btn	
+          9			Home5					image		off							1			2019-06-13 18:49:16		Wisconsin		3			https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png			
+          10		Home6					image		off							1			2019-06-13 18:50:49		Wisconsin		4			https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png			
+          */
+          
+          if (result != null) {        	  
               while (result.next()) {	            	              	  
             	  //Construct the Experience object with Map of Image objects
+            	  int experience_id = result.getInt("id");
+            	  if (orgImageExp.containsKey(experience_id)) {
+            		  //Add Image object to Experience object from the HashMap            		  
+            		  int image_id = result.getInt("image_id");
+                	  Image image = new Image(image_id);
+                	  image.setUrl(result.getString("url"));
+                	  image.setSegmentName(result.getString("segmentname"));
+                	  orgImageExp.get(experience_id).addImage(image_id, image);                	  
+            	  } else {
+            		  //Create new Experience Object;
+            		  Experience experience = new Experience(experience_id);
+            		  experience.setName(result.getString("name"));            	  
+                	  experience.setType(result.getString("type"));            	  
+                	  experience.setStatus(result.getString("status"));            	  
+                	  experience.setSchedule_start(result.getString("schedule_start"));            	  
+                	  experience.setSchedule_end(result.getString("schedule_end"));            	                  	  	 
+                	  experience.setUser_id(result.getInt("user_id"));            	  
+                	  experience.setCreate_time(result.getString("create_time"));
+                	  int image_id = result.getInt("image_id");
+                	  Image image = new Image(image_id);
+                	  image.setUrl(result.getString("url"));
+                	  image.setSegmentName(result.getString("segmentname"));
+                	  experience.addImage(image_id, image);                	  
+            		  orgImageExp.put(experience_id, experience);
+            	  }
               }               
-          }
-		  
-		  
+          }		  		 
+          return orgImageExp;
 	  }
 	  	  	 
 	  /**

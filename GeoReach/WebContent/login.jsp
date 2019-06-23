@@ -67,8 +67,7 @@
 					<div class="kt-login-v1__head">
 						<div class="kt-login-v1__logo">
 							<a href="/GeoReach/login.jsp">
-								<!-- img src="./GeoReach/assets/media/logos/logo-4.png" alt="" / -->
-								<h2>Chameleon</h2>
+								<img src="./GeoReach/assets/media/logos/logo-4.png" alt="" />								
 							</a>
 						</div>
 						<div class="kt-login-v1__signup">

@@ -4,8 +4,16 @@ public class Image {
 	private int id;
 	private int experience_id;
 	private int segment_id;
+	private String segment_name;
 	private String url;
 	private String create_time;	//TODO: Need to convert to appropriate date type/format
+	
+	public Image() {		
+	}
+	
+	public Image(int id) {
+		this.id = id;
+	}
 	/**
 	 * @return the id
 	 */
@@ -41,6 +49,18 @@ public class Image {
 	 */
 	public void setSegment_id(int segment_id) {
 		this.segment_id = segment_id;
+	}
+	/**
+	 * @return the segment_name
+	 */
+	public String getSegmentName() {
+		return segment_name;
+	}
+	/**
+	 * @param segment_name the segment_name to set
+	 */
+	public void setSegmentName(String segment_name) {
+		this.segment_name = segment_name;
 	}
 	/**
 	 * @return the url

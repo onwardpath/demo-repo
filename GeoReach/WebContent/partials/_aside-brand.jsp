@@ -2,7 +2,7 @@
 <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
     <div class="kt-aside__brand-logo">
         <a href="/GeoReach?view=index">
-            <!-- img alt="Logo" src="./assets/media/logos/logo-1.png"/ -->                                            
+            <img alt="Logo" src="./assets/media/logos/logo-1.png"/>                                            
             <!-- TODO replace with a logo image -->
         </a>
     </div>

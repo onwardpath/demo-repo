@@ -20,7 +20,7 @@
                 <a href="/GeoReach?view=pages/experience-create.jsp" class="kt-menu__link"><i class="kt-menu__link-icon la la-motorcycle"></i><span class="kt-menu__link-text">Create</span></a>
             </li>
             <li class="kt-menu__item " aria-haspopup="true" >                
-                <a href="/GeoReach?view=pages/experience-view-legacy.jsp" class="kt-menu__link"><i class="kt-menu__link-icon la la-puzzle-piece"></i><span class="kt-menu__link-text">View</span></a>
+                <a href="/GeoReach?view=pages/experience-view.jsp" class="kt-menu__link"><i class="kt-menu__link-icon la la-puzzle-piece"></i><span class="kt-menu__link-text">View</span></a>
             </li>            
         </ul>
     </div>

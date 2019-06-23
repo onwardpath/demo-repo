@@ -355,6 +355,13 @@ FEATURES WISHLIST
 3. Feature: Roll-back Experiences to an earlier version
 4. Archive/Delete/Purge features
 5. Switch CSS based on visitor location: https://www.w3schools.com/css/css_intro.asp
+6. Feature to support ABM. Detect Organization IP Address and allow segments for accounts - Ex: Schneider
+6. Support Demography(age, gender etc..) in Segments. Google Analytics API can be used to get demography information real-time
+	https://segment.com/partners/developer-center/
+	https://segment.com/catalog/
+	Facebook Graph API 
+	https://useproof.com/experiences?ref=segment
+	https://www.mutinyhq.com/
 
 DEMO ENVIROMENT:
 Web Application --  Configure Experience (lab01.onwardpath.com/georeach)

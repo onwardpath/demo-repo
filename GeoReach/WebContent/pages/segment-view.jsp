@@ -1,7 +1,6 @@
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
-<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Map, com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
 <!-- begin:: Content -->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 		<%
@@ -16,7 +15,7 @@
 				<div class="alert alert-light alert-elevate" role="alert">
 					<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
 						<div class="alert-text">
-						No Segments Available for your Organization. Create a new segment <a class="kt-link kt-font-bold" href="?view=segment-create.jsp">here</a>.
+						No Segments Available for your Organization. Create a new segment <a class="kt-link kt-font-bold" href="?view=pages/segment-create.jsp">here</a>.
 					</div>
 				</div>
 				<%
