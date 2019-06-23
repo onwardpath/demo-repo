@@ -39,29 +39,44 @@
 										<th>Name</th>
 										<th>Geography</th>
 										<th>Created By</th>
-										<th>Create Date</th>
-										<th>Last Updated By</th>
-										<th>Last Updated Date</th>										
-										<th>Status</th>										
+										<th>Created On</th>																
 										<th>Actions</th>
 									</tr>
 								</thead>								
 								<%
 								for ( Map.Entry<Integer, Segment> entry : orgSegments.entrySet()) {
 									Integer key = entry.getKey();
-									Segment val = entry.getValue();
-									User user = userRepository.getUser(val.getUser_id());
+									Segment segment = entry.getValue();
+									User user = userRepository.getUser(segment.getUser_id());
 								    %>
 				    			<tbody>
 									<tr>
-										<td><%=val.getName()%></td>
-										<td><%=val.getGeography()%></td>
+										<td><%=segment.getName()%></td>
+										<td>
+										<%										
+										String segmentRules = segment.getGeography(); 
+										String [] rule = segmentRules.split("\\|"); 
+										for(String a:rule) {
+											String[] criteria = a.split(":");
+											String display = "";
+											if (criteria[0].startsWith("include")) {												
+												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-info btn-pill'>"+criteria[2]+"&nbsp;<i class='fa fa-map-marker-alt'></i></button>";	
+											} else {
+												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-danger btn-pill'>"+criteria[2]+"&nbsp;<i class='fa fa-map-marker-alt'></i></button>";
+											}																				
+											%>											
+											<%=display%>
+										<%}%>
+										<!-- 
+										include:City:Test2|include:City:Test3										
+										 -->										
+										</td>
 										<td><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></td>
-										<td>1/2/2019</td>
-										<td>123</td>
-										<td>123</td>
-										<td>Active</td>
-										<td nowrap></td>
+										<td>1/2/2019</td>										
+										<td nowrap>																				
+										<button type='button' class="btn btn-outline-brand btn-icon"><i class="fa fa-tools"></i></button>&nbsp;
+										<button type='button' class="btn btn-outline-danger btn-icon"><i class="fa fa-trash-alt"></i></button>										
+										</td>
 									</tr>
 								</tbody>
 								<%

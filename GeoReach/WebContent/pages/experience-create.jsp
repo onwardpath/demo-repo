@@ -6,17 +6,25 @@ var expDetailsObj = {};
 
 function add(){		
 	var segment = document.getElementById("segment");	
-	var segment_id = segment.value; 
+	var segment_id = segment.value;	
 	var segment_name = segment.options[segment.selectedIndex].innerHTML;
-	var url = document.getElementById("url").value;				
-	expDetailsObj[segment_id] = url;				
-	var stage = document.getElementById("stage");	
-	stage.innerHTML += '<div id="'+segment_name+'" class="card-body"><img src="'+url+'" class="rounded">&nbsp;<button type="button" class="btn btn-outline-info btn-pill" onclick="remove('+segment_name+','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button></div>';
-	stage.style.display = "block";	
+	if (segment_id in expDetailsObj) {
+		alert("Segment "+segment_name+" already added. Select a different segment.");	
+	} else {
+		var url = document.getElementById("url").value;				
+		expDetailsObj[segment_id] = url;				
+		var stage = document.getElementById("stage");	
+		stage.innerHTML += '<div id="'+segment_name+'" class="card-body"><img src="'+url+'" class="rounded">&nbsp;<button type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+segment_name+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button></div>';
+		stage.style.display = "block";		
+	}	
 }
 function remove(element, segment_id){	
+	//alert(element);
+	var displayElement = document.getElementById(element);
+	//alert(displayElement);
+	//alert(segment_id);
 	delete expDetailsObj[segment_id];	
-	element.style.display = "none";		
+	displayElement.style.display = "none";		
 }
 function saveExperience() 
 {	
@@ -57,18 +65,78 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 	if (message != null && !message.equals("")) {
 		String icon = "flaticon-placeholder-3"; 
 		if (message.startsWith("Error"))
-			icon = "flaticon-warning";
+			icon = "flaticon-warning";		
+		
+		String name = "";
+		String experience = "";
+		String organization = "";		
+		if (message.contains("#")) {			
+			String codeConstructor = message.substring(message.indexOf("#")+1);
+			
+			message = message.substring(0,message.indexOf("#"));
+			String[] decoder = codeConstructor.split("#");
+			name = decoder[0].substring(decoder[0].indexOf("=")+1);
+			experience = decoder[1].substring(decoder[0].indexOf("=")+1);
+			organization = decoder[2].substring(decoder[0].indexOf("=")+1);
+		}			 							 							 					
 		%>
 		<div class="row">
 		    <div class="col">
 		        <div class="alert alert-light alert-elevate fade show" role="alert">
 		            <div class="alert-icon"><i class="<%=icon%> kt-font-brand"></i></div>		            		           
 		            <div class="alert-text">
-		                <%=message%>
-		            </div>
+		                <%=message%>		            
+			            <!-- Button trigger modal -->
+						<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter">
+							View Code
+						</button>
+					</div>
 		        </div>
 		    </div>
 		</div>	
+		
+		<!-- begin::modal -->		
+		<div class="kt-section__content kt-section__content--border">			
+			<!-- Modal -->
+			<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display: none;">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">						
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalCenterTitle">Embed Code for: <%=name%></h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div class="modal-body">														 
+							 <h3>Header</h3>
+							 <code>
+								&lt;!-- GeoSmart --&gt;
+								&lt;script&gt;
+								(function(i,s,o,g,r,a,m){i['GeoSmartObject']=r;i[r]=i[r]||function(){
+								(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+								m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+								})(window,document,'script','https://lab01.onwardpath.com/geoservice?e=<%=experience%>&o=<%=organization%>','ga');								
+								ga('create', 'UA-XXXXX-Y', 'auto');
+								ga('send', 'pageview');
+								&lt;/script&gt;
+								&lt;!-- End GeoSmart --&gt;
+							</code>
+							<h3>Body</h3>
+							<code>
+								&lt;!-- GeoSmart --&gt;
+								&lt;div id="Geo-<%=name%>-<%=experience%>"&gt;&lt;/div&gt;
+								&lt;!-- End GeoSmart --&gt;
+							</code>
+						</div>
+						<div class="modal-footer">							
+							<button type="button" class="btn btn-outline-brand">Copy</button>
+							<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+		<!-- end::modal -->						
 		<%
 		session.setAttribute("message", "");
 	}																
@@ -88,7 +156,7 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Segment</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">											
-						<select id="segment" class="form-control form-control--fixed kt_selectpicker" data-width="100">
+						<select id="segment" class="form-control form-control--fixed kt_selectpicker" data-width="300">
 							<%
 							for ( Map.Entry<Integer, String> entry : segments.entrySet()) {
 								Integer key = entry.getKey();

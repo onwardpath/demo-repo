@@ -76,7 +76,7 @@ public class ExperienceRepository {
 	  }
 	  
 	  
-	  public void  saveImage(int experience_id, int segment_id, String url) throws SQLException {	      	         
+	  public void saveImage(int experience_id, int segment_id, String url) throws SQLException {	      	         
     	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.image (experience_id, segment_id, url, create_time) values (?,?,?,now())");                    
           prepStatement.setInt(1, experience_id);
           prepStatement.setInt(2, segment_id);
@@ -128,20 +128,12 @@ public class ExperienceRepository {
 		  		+ "experience.id = image.experience_id and "
 		  		+ "image.segment_id = segment.id and "
 		  		+ "experience.org_id = ? "
-		  		+ "order by experience.id";
-		  System.out.println("@ExperienceRepository.getOrgImageExperiences>query: "+query);
+		  		+ "order by experience.id desc";
+		  System.out.println("@ExperienceRepository.getOrgImageExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
 		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
 		  prepStatement.setInt(1, org_id);                     
           ResultSet result = prepStatement.executeQuery();
-          
-          /**
-          ID		NAME					TYPE		STATUS	START		END		USER_ID		EXP.CREATEDATA			SEGMENTNAME		IMAGE_ID	URL															
-          1			Team Affinity Image		Image		on							1			2019-06-12 18:40:45		Wisconsin		1			https://www.associatedbank.com/content/image/brewers-cc-slide-btn
-          1			Team Affinity Image		Image		on							1			2019-06-12 18:40:45		Minnesota		2			https://www.associatedbank.com/content/image/wild-cc-slide-btn	
-          9			Home5					image		off							1			2019-06-13 18:49:16		Wisconsin		3			https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png			
-          10		Home6					image		off							1			2019-06-13 18:50:49		Wisconsin		4			https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png			
-          */
-          
+                            
           if (result != null) {        	  
               while (result.next()) {	            	              	  
             	  //Construct the Experience object with Map of Image objects
