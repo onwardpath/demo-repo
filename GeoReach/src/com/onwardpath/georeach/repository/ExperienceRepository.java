@@ -128,7 +128,7 @@ public class ExperienceRepository {
 		  		+ "experience.id = image.experience_id and "
 		  		+ "image.segment_id = segment.id and "
 		  		+ "experience.org_id = ? "
-		  		+ "order by experience.id desc";
+		  		+ "order by create_time desc";
 		  System.out.println("@ExperienceRepository.getOrgImageExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
 		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
 		  prepStatement.setInt(1, org_id);                     
