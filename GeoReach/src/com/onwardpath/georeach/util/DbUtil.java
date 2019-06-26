@@ -18,8 +18,8 @@ public class DbUtil {
 		              String dbDriver = properties.getProperty("dbDriver");
 		              String connectionUrl = properties.getProperty("connectionUrl");
 		              String userName = properties.getProperty("userName");
-		              String password = properties.getProperty("password");		
-		              Class.forName(dbDriver).newInstance();
+		              String password = properties.getProperty("password");			              
+		              Class.forName(dbDriver).newInstance(); 		              		              
 		              dbConnection = DriverManager.getConnection(connectionUrl, userName, password);
 		          }	           
 			  }		      			 

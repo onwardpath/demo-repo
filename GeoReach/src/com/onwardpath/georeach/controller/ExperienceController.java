@@ -19,8 +19,7 @@ public class ExperienceController extends HttpServlet {
 	private ExperienceRepository experienceRepository;	
 		 
 	private static String SAVE_SUCCESS = "?view=pages/experience-content-create.jsp";
-	private static String SAVE_FAILURE = "?view=pages/experience-content-create.jsp";	
-	//private static String SAVE_SUCCESS = "?view=pages/experience-image-create.jsp";
+	private static String SAVE_FAILURE = "?view=pages/experience-content-create.jsp";		
 		
 	  /**
 	   * @see HttpServlet#HttpServlet()
@@ -80,10 +79,7 @@ public class ExperienceController extends HttpServlet {
 	            			  System.out.println("Segment ID = " + segment_id + ", URL = " + url);
 	            			  experienceRepository.saveImage(experience_id, segment_id, url);	            			  	            			 
 	            		  }		            		  
-	            	  } else if (type.equals("content")) {
-		            	  //TODO: NEED TO RECEIVE AND STORE MULTIPLE CONTENTE EXPERIENCE
-	            		  //experienceRepository.saveContent(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("content"));
-	            		  
+	            	  } else if (type.equals("content")) {		            	  	            		 
 	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
 	            		  ObjectMapper mapper = new ObjectMapper();	            		  
 	            		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
