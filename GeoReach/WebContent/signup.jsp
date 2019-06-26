@@ -48,7 +48,7 @@
 		<link href="./GeoReach/assets/css/demo1/skins/aside/navy.css" rel="stylesheet" type="text/css" />
 
 		<!--end::Layout Skins -->
-		<link rel="shortcut icon" href="./GeoReach/assets/media/logos/favicon.ico" />
+		<!-- link rel="shortcut icon" href="./GeoReach/assets/media/logos/favicon.ico" / -->
 	</head>
 
 	<!-- end::Head -->
@@ -67,8 +67,7 @@
 					<div class="kt-login-v1__head">
 						<div class="kt-login-v1__logo">
 							<!-- a href="#">
-								<img src="./GeoReach/assets/media/logos/logo-4.png" alt="" / -->
-								<h2>Geo</h2>
+								<img src="./GeoReach/assets/media/logos/logo-4.png" alt="" / -->								
 							<!-- /a-->
 						</div>
 						<div class="kt-login-v1__signup">

@@ -16,6 +16,7 @@ public class Experience {
 	private int user_id;
 	private String create_time;		//TODO: Need to convert to appropriate date type/format
 	private Map<Integer, Image> images;
+	private Map<Integer, Content> contents;
 		
 	public Experience (int id, String name, String type, String status, String schedule_start, String schedule_end, String header_code, String body_code, int org_id, int user_id, String create_time) {
 		this.id = id;
@@ -30,15 +31,18 @@ public class Experience {
 		this.user_id = user_id;
 		this.create_time = create_time;
 		images = new HashMap<Integer, Image>();
+		contents = new HashMap<Integer, Content>();
 	}
 	
 	public Experience (int id) {
 		this.id = id;
 		images = new HashMap<Integer, Image>();
+		contents = new HashMap<Integer, Content>();
 	}
 	
 	public Experience() {
 		images = new HashMap<Integer, Image>();
+		contents = new HashMap<Integer, Content>();
 	}
 
 	/**
@@ -201,5 +205,13 @@ public class Experience {
 	
 	public Map<Integer, Image> getImages() {
 		return images;
+	}
+	
+	public void addContent(int id, Content content) {
+		contents.put(id, content);
+	}
+	
+	public Map<Integer, Content> getContents() {
+		return contents;
 	}
 }

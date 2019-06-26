@@ -18,8 +18,9 @@ import com.onwardpath.georeach.repository.ExperienceRepository;
 public class ExperienceController extends HttpServlet {
 	private ExperienceRepository experienceRepository;	
 		 
-	private static String SAVE_SUCCESS = "?view=pages/experience-create.jsp";
-	private static String SAVE_FAILURE = "?view=pages/experience-create.jsp";
+	private static String SAVE_SUCCESS = "?view=pages/experience-content-create.jsp";
+	private static String SAVE_FAILURE = "?view=pages/experience-content-create.jsp";	
+	//private static String SAVE_SUCCESS = "?view=pages/experience-image-create.jsp";
 		
 	  /**
 	   * @see HttpServlet#HttpServlet()
@@ -78,10 +79,23 @@ public class ExperienceController extends HttpServlet {
 	            			  String url = entry.getValue();
 	            			  System.out.println("Segment ID = " + segment_id + ", URL = " + url);
 	            			  experienceRepository.saveImage(experience_id, segment_id, url);	            			  	            			 
-	            		  }	            		   	            		  	            		  		            	  
+	            		  }		            		  
 	            	  } else if (type.equals("content")) {
 		            	  //TODO: NEED TO RECEIVE AND STORE MULTIPLE CONTENTE EXPERIENCE
 	            		  //experienceRepository.saveContent(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("content"));
+	            		  
+	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
+	            		  ObjectMapper mapper = new ObjectMapper();	            		  
+	            		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+	            		  System.out.println(map);	            		  
+	            		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+	            			  int segment_id = Integer.parseInt(entry.getKey());
+	            			  String content = entry.getValue();
+	            			  System.out.println("Segment ID = " + segment_id + ", Content = " + content);
+	            			  experienceRepository.saveContent(experience_id, segment_id, content);	            			  	            			 
+	            		  }	
+	            		  SAVE_SUCCESS = "?view=pages/experience-content-create.jsp";
+	            		  SAVE_FAILURE = "?view=pages/experience-content-create.jsp";
 	            	  }
 	            	  	            	  
 	            	  //3. Generate header_code & body_code and save to Experience table
@@ -92,8 +106,7 @@ public class ExperienceController extends HttpServlet {
 	            	  
 	            	  //4. Save schedule_start, schedule_start & status
 	              	  //TODO: Save schedule
-	            	  	            	  			              	            	  
-		              //session.setAttribute("message", "Experience <b>"+name+"</b> saved. <a href=\"#\" onClick=\"MyWindow=window.open('viewcode.jsp?n="+name+"&e="+experience_id+"&o="+org_id+"','MyWindow',width=600,height=300); return false;\">View Code</a>");
+	            	  	            	  			              	            	  		              
 		              session.setAttribute("message", "Experience <b>"+name+"</b> saved.#n="+name+"#e="+experience_id+"#o="+org_id); 
 		              forward = SAVE_SUCCESS;
 	              } catch (SQLException e) {
@@ -105,4 +118,13 @@ public class ExperienceController extends HttpServlet {
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
 	  }
+	  
+	  /**
+	   * No need to close the connection. Its better to validate if the connection is still open and use it rather than closing after every interaction.
+	   */
+	  /*public void destroy() {
+		  if (experienceRepository != null) {
+			  experienceRepository.close();		  
+		  }
+	  }*/
 }

@@ -35,7 +35,7 @@
         <link href="./assets/css/demo1/skins/brand/brand.css" rel="stylesheet" type="text/css" />
         <link href="./assets/css/demo1/skins/aside/navy.css" rel="stylesheet" type="text/css" />
         <!--end::Layout Skins -->
-        <link rel="shortcut icon" href="./assets/media/logos/favicon.ico" />
+        <!-- link rel="shortcut icon" href="./assets/media/logos/favicon.ico" / -->
     </head>
     <!-- end::Head -->
     <!-- begin::Body -->

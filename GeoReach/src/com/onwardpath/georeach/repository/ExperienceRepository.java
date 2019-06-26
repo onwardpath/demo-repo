@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.HashMap;
 import com.onwardpath.georeach.model.Experience;
 import com.onwardpath.georeach.model.Image;
+import com.onwardpath.georeach.model.Content;
 import com.onwardpath.georeach.util.DbUtil;
 
 /**
@@ -26,7 +27,7 @@ public class ExperienceRepository {
 	  public ExperienceRepository() {
 	      dbConnection = DbUtil.getConnection();
 	  }
-	  
+	  	  
 	  /**
 	   * Save the experience to Experience table
 	   * 
@@ -84,10 +85,16 @@ public class ExperienceRepository {
           prepStatement.executeUpdate();                          
 	  }	
 	  
-	  public void saveCode(int experience_id, int org_id) {
-		  
+	  //experienceRepository.saveContent(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("content"));
+	  public void saveContent(int experience_id, int segment_id, String content) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.content (experience_id, segment_id, content, create_time) values (?,?,?,now())");                    
+          prepStatement.setInt(1, experience_id);
+          prepStatement.setInt(2, segment_id);
+          prepStatement.setString(3, content);          	          	         
+          prepStatement.executeUpdate();                          
 	  }
-	  	  	 
+	  
+	  	  	  	  
 	  /**
 	   * To be called after checking experience exists by id
 	   * 
@@ -166,6 +173,57 @@ public class ExperienceRepository {
           }		  		 
           return orgImageExp;
 	  }
+	  
+	  public Map<Integer,Experience> getOrgContentExperiences (int org_id) throws SQLException {
+		  Map<Integer,Experience> orgContentExp = new HashMap<Integer,Experience>();
+		  
+		  String query = "select experience.id as id, experience.name as name, experience.type as type, experience.status as status, "
+		  		+ "experience.schedule_start as schedule_start, experience.schedule_end as schedule_end, experience.user_id as user_id, experience.create_time as create_time, "
+		  		+ "segment.name as segmentname, content.id as content_id, content.content as content "
+		  		+ "from "
+		  		+ "experience, segment, content "
+		  		+ "where "		  		
+		  		+ "experience.id = content.experience_id and "
+		  		+ "content.segment_id = segment.id and "
+		  		+ "experience.org_id = ? "
+		  		+ "order by create_time desc";
+		  System.out.println("@ExperienceRepository.getOrgContentExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
+		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
+		  prepStatement.setInt(1, org_id);                     
+          ResultSet result = prepStatement.executeQuery();
+                            
+          if (result != null) {        	  
+              while (result.next()) {	            	              	  
+            	  //Construct the Experience object with Map of Image objects
+            	  int experience_id = result.getInt("id");
+            	  if (orgContentExp.containsKey(experience_id)) {
+            		  //Add Content object to Experience object from the HashMap            		  
+            		  int content_id = result.getInt("content_id");
+                	  Content content = new Content(content_id);
+                	  content.setContent(result.getString("content"));
+                	  content.setSegmentName(result.getString("segmentname"));
+                	  orgContentExp.get(experience_id).addContent(content_id, content);                	  
+            	  } else {
+            		  //Create new Experience Object;
+            		  Experience experience = new Experience(experience_id);
+            		  experience.setName(result.getString("name"));            	  
+                	  experience.setType(result.getString("type"));            	  
+                	  experience.setStatus(result.getString("status"));            	  
+                	  experience.setSchedule_start(result.getString("schedule_start"));            	  
+                	  experience.setSchedule_end(result.getString("schedule_end"));            	                  	  	 
+                	  experience.setUser_id(result.getInt("user_id"));            	  
+                	  experience.setCreate_time(result.getString("create_time"));
+                	  int content_id = result.getInt("content_id");
+                	  Content content = new Content(content_id);
+                	  content.setContent(result.getString("content"));
+                	  content.setSegmentName(result.getString("segmentname"));
+                	  experience.addContent(content_id, content);                	  
+                	  orgContentExp.put(experience_id, experience);
+            	  }
+              }               
+          }		  		 
+          return orgContentExp;
+	  }
 	  	  	 
 	  /**
 	   * Check weather an experience exists
@@ -217,4 +275,13 @@ public class ExperienceRepository {
 	      }
 	      return false;
 	  }
+	  
+	  /**
+	   * Close the database connection
+	   * 
+	   * No need to close the connection. Its better to validate if the connection is still open and use it rather than closing after every interaction.
+	   */
+	  /*public void close() {
+		  DbUtil.closeConnection();
+	  }*/
 	}

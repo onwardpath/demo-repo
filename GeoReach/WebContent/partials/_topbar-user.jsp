@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="com.onwardpath.georeach.model.User" %>
 <!--begin: User Bar -->
 <div class="kt-header__topbar-item kt-header__topbar-item--user">

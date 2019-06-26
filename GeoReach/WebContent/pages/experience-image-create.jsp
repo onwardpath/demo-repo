@@ -63,7 +63,7 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 	}
 				
 	if (message != null && !message.equals("")) {
-		String icon = "flaticon-placeholder-3"; 
+		String icon = "flaticon-paper-plane"; 
 		if (message.startsWith("Error"))
 			icon = "flaticon-warning";		
 		
@@ -87,6 +87,7 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 		            <div class="alert-text">
 		                <%=message%>		            
 			            <!-- Button trigger modal -->
+			            &nbsp;&nbsp;
 						<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter">
 							View Code
 						</button>
@@ -119,7 +120,7 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 								ga('create', 'UA-XXXXX-Y', 'auto');
 								ga('send', 'pageview');
 								&lt;/script&gt;
-								&lt;!-- End GeoSmart --&gt;
+								&lt;!-- End GeoSmart --&gt
 							</code>
 							<h3>Body</h3>
 							<code>
