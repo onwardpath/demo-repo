@@ -74,8 +74,8 @@
 										<td><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></td>
 										<td>1/2/2019</td>										
 										<td nowrap>																				
-										<button type='button' class="btn btn-outline-brand btn-icon"><i class="fa fa-tools"></i></button>&nbsp;
-										<button type='button' class="btn btn-outline-danger btn-icon"><i class="fa fa-trash-alt"></i></button>										
+										<button type='button' class="btn btn-outline-secondary btn-icon"><i class="fa fa-tools"></i></button>&nbsp;
+										<button type='button' class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>																																					
 										</td>
 									</tr>
 								</tbody>

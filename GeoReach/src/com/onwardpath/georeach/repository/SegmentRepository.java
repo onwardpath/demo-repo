@@ -101,4 +101,11 @@ public class SegmentRepository {
           }	
           return orgSegments;
 	  }
+	  
+	  /**
+	   * Close the database connection
+	   */
+	  public void close() {
+		  DbUtil.closeConnection();
+	  }
 }

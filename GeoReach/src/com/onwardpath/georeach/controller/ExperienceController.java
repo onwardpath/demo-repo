@@ -18,8 +18,8 @@ import com.onwardpath.georeach.repository.ExperienceRepository;
 public class ExperienceController extends HttpServlet {
 	private ExperienceRepository experienceRepository;	
 		 
-	private static String SAVE_SUCCESS = "?view=pages/experience-content-create.jsp";
-	private static String SAVE_FAILURE = "?view=pages/experience-content-create.jsp";		
+	private static String SAVE_SUCCESS = "?view=pages/experience-create-content.jsp";
+	private static String SAVE_FAILURE = "?view=pages/experience-create-content.jsp";		
 		
 	  /**
 	   * @see HttpServlet#HttpServlet()
@@ -90,8 +90,8 @@ public class ExperienceController extends HttpServlet {
 	            			  System.out.println("Segment ID = " + segment_id + ", Content = " + content);
 	            			  experienceRepository.saveContent(experience_id, segment_id, content);	            			  	            			 
 	            		  }	
-	            		  SAVE_SUCCESS = "?view=pages/experience-content-create.jsp";
-	            		  SAVE_FAILURE = "?view=pages/experience-content-create.jsp";
+	            		  SAVE_SUCCESS = "?view=pages/experience-create-content.jsp";
+	            		  SAVE_FAILURE = "?view=pages/experience-create-content.jsp";
 	            	  }
 	            	  	            	  
 	            	  //3. Generate header_code & body_code and save to Experience table
@@ -109,18 +109,10 @@ public class ExperienceController extends HttpServlet {
 	            	  session.setAttribute("message", e.getMessage()+". Please try later or contact the administrator.");
 	                  forward = SAVE_FAILURE;
 	              }	              
-	          } 
+	          }
+	          //experienceRepository.close();
 	      }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
-	  }
-	  
-	  /**
-	   * No need to close the connection. Its better to validate if the connection is still open and use it rather than closing after every interaction.
-	   */
-	  /*public void destroy() {
-		  if (experienceRepository != null) {
-			  experienceRepository.close();		  
-		  }
-	  }*/
+	  }	  	 
 }

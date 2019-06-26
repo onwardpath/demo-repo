@@ -281,7 +281,7 @@ public class ExperienceRepository {
 	   * 
 	   * No need to close the connection. Its better to validate if the connection is still open and use it rather than closing after every interaction.
 	   */
-	  /*public void close() {
+	  public void close() {
 		  DbUtil.closeConnection();
-	  }*/
+	  }
 	}

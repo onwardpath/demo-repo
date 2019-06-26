@@ -48,12 +48,12 @@
 									<span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
 										<li class="kt-menu__item " aria-haspopup="true">
-											<a href="/GeoReach?view=pages/experience-content-create.jsp" class="kt-menu__link ">
+											<a href="/GeoReach?view=pages/experience-create-content.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Content</span>
 											</a>
 										</li>
 										<li class="kt-menu__item " aria-haspopup="true">
-											<a href="/GeoReach?view=pages/experience-image-create.jsp" class="kt-menu__link ">
+											<a href="/GeoReach?view=pages/experience-create-image.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Image</span>
 											</a>
 										</li>
@@ -80,12 +80,12 @@
 									<span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
 										<li class="kt-menu__item " aria-haspopup="true">
-											<a href="/GeoReach?view=pages/experience-content-view.jsp" class="kt-menu__link ">
+											<a href="/GeoReach?view=pages/experience-view-content.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Content</span>
 											</a>
 										</li>
 										<li class="kt-menu__item " aria-haspopup="true">
-											<a href="/GeoReach?view=pages/experience-image-view.jsp" class="kt-menu__link ">
+											<a href="/GeoReach?view=pages/experience-view-image.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Image</span>
 											</a>
 										</li>

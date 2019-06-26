@@ -167,26 +167,43 @@ public class UserRepository {
 	  public User getUser(int id) {
 		  User user = new User();
 		  try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select * from user where id = ?");
+			  
+			  String query = "select user.org_id as org_id, user.firstname as firstname, user.lastname as lastname, " +
+			  		"user.login as login, user.email as email, user.phone1 as phone1, organization.name as orgname " + 
+			  		"from user, organization " + 
+			  		"where user.org_id = organization.id and " + 
+			  		"user.id = ?;";
+			  
+			  System.out.println("@UserRepository.getUser>query: "+query);
+			  
+	          //PreparedStatement prepStatement = dbConnection.prepareStatement("select * from user where id = ?");
+			  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
 	          prepStatement.setInt(1, id);           
 	          
 	          ResultSet result = prepStatement.executeQuery();
 	          if (result != null && result.next()) {
 	              String firstname = result.getString("firstname");
 	              String lastname = result.getString("lastname");
+	              String login = result.getString("login");
 	              String email = result.getString("email");
-	              int organization_id = Integer.parseInt(result.getString("org_id"));
 	              String phone1 = result.getString("phone1");
+	              int organization_id = Integer.parseInt(result.getString("org_id"));
+	              String organization_name = result.getString("orgname");
                   user.setFirstname(firstname);
                   user.setLastname(lastname);
                   user.setEmail(email);
                   user.setOrganization_id(organization_id);
+                  user.setOrganization_name(organization_name);
                   user.setPhone1(phone1);                  	                            
 	          }           
 	      } catch (Exception e) {
 	          e.printStackTrace();
 	      }
 	      return user;
+	  }
+	  
+	  public void getOrgName(int org_id) {
+		  
 	  }
 	  
 	  /**
@@ -233,4 +250,10 @@ public class UserRepository {
 	      return user_id;
 	  }
 	  
+	  /**
+	   * Close the database connection	   
+	   */
+	  public void close() {
+		  DbUtil.closeConnection();
+	  }	  
 	}

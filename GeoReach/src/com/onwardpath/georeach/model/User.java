@@ -3,6 +3,7 @@ package com.onwardpath.georeach.model;
 public class User {
 	private int id; 
 	private int organization_id;
+	private String organization_name;
 	private String firstname;
 	private String lastname;
 	private String gender;
@@ -27,6 +28,12 @@ public class User {
 	}
 	public void setOrganization_id(int organization_id) {
 		this.organization_id = organization_id;
+	}
+	public String getOrganization_name() {
+		return organization_name;
+	}
+	public void setOrganization_name(String organization_name) {
+		this.organization_name = organization_name;
 	}
 	public String getFirstname() {
 		return firstname;

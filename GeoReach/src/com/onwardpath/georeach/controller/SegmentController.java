@@ -69,10 +69,10 @@ public class SegmentController extends HttpServlet {
 	              session.setAttribute("message", "Info: Segment <b>"+segmentName+"</b> Saved.");
 	              
 	              forward = SAVE_SUCCESS;
-	          }          
+	          } 
+	          //segmentRepository.close();
 	      }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
-	      view.forward(request, response);
-	      
-	  }
+	      view.forward(request, response);	     
+	  }	  	 
 }

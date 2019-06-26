@@ -1,14 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%
+String currentView = (String) session.getAttribute("view");	 
+if (currentView == null) {
+	currentView = "";
+} else {
+	//TODO: Construct the Breadcrumb elements
+}
+%>
 <!-- begin:: Subheader -->
 <div class="kt-subheader kt-grid__item" id="kt_subheader">
     <div class="kt-subheader__main">
-        <h3 class="kt-subheader__title">
+        <!-- h3 class="kt-subheader__title">
             Dashboard
-        </h3>
+        </h3 -->
         <span class="kt-subheader__separator kt-hidden"></span> 
         <div class="kt-subheader__breadcrumbs">
             <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
-            <span class="kt-subheader__breadcrumbs-separator"></span> <a href="" class="kt-subheader__breadcrumbs-link"> Dashboards </a> <span class="kt-subheader__breadcrumbs-separator"></span> <a href="" class="kt-subheader__breadcrumbs-link"> Navy Aside </a> 
-            <!-- <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Active link</span> -->
+            <span class="kt-subheader__breadcrumbs-separator"></span> 
+            	<a href="" class="kt-subheader__breadcrumbs-link"> Dashboards </a> 
+            	<span class="kt-subheader__breadcrumbs-separator"></span> 
+            	<a href="" class="kt-subheader__breadcrumbs-link"> Navy Aside </a> 
+            	<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
+            	>> <%=currentView %>
+            	</span>
         </div>
     </div>
     <div class="kt-subheader__toolbar">

@@ -82,7 +82,7 @@ public class UserController extends HttpServlet {
 	            	  System.out.println(e.getMessage());;
 	            	  //request.setAttribute("message", "Error: "+e.getMessage()+" Please try again later or contact the administrator");
 	            	  session.setAttribute("message", "Error: "+e.getMessage()+" Please try again later or contact the administrator");
-	                  forward = USER_SIGNUP;
+	                  forward = USER_SIGNUP;	                  
 	              }	              	             
 	          } else if (pageName.equals("login")) {
 	              boolean result = userRepository.findByLogin( request.getParameter("userName"), request.getParameter("password"));	               
@@ -102,9 +102,10 @@ public class UserController extends HttpServlet {
 	        	  if(session != null)
 	        	      session.invalidate();
 	              forward = USER_LOGIN;	              
-	          }       
+	          }
+	          //userRepository.close();
 	      }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
-	  }
+	  }	  	 
 }
