@@ -200,11 +200,7 @@ public class UserRepository {
 	          e.printStackTrace();
 	      }
 	      return user;
-	  }
-	  
-	  public void getOrgName(int org_id) {
-		  
-	  }
+	  }	 	 
 	  
 	  /**
 	   * Find a users org_id. To be called after user is successfully authenticated
@@ -248,12 +244,5 @@ public class UserRepository {
 	          e.printStackTrace();
 	      }
 	      return user_id;
-	  }
-	  
-	  /**
-	   * Close the database connection	   
-	   */
-	  public void close() {
-		  DbUtil.closeConnection();
-	  }	  
+	  }	  	 
 	}

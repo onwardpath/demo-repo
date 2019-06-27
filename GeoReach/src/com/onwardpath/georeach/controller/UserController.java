@@ -99,11 +99,11 @@ public class UserController extends HttpServlet {
 	                  forward = LOGIN_FAILURE;
 	              }
 	          } else if (pageName.equals("logout")) {	        	  
-	        	  if(session != null)
-	        	      session.invalidate();
+	        	  if(session != null) {
+	        		  session.invalidate();
+	        	  }	        	      
 	              forward = USER_LOGIN;	              
-	          }
-	          //userRepository.close();
+	          }	          
 	      }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
