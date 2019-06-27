@@ -330,6 +330,10 @@ GeoLocation: JavaScript can detect users geo location. This works for Smart Phon
 Hybrid (Uses Google GeoLocation and fallsback to IP Address based):
 https://onury.io/geolocator/
 
+HTML5 EDITORS:
+https://rawgit.com/alohaeditor/Aloha-Editor/hotfix/src/demo/boilerplate/
+https://www.froala.com/wysiwyg-editor/pricing
+
 TESTING:
 https://www.geoscreenshot.com/
 http://lab01.onwardpath.com/geosmart/
@@ -362,6 +366,7 @@ FEATURES WISHLIST
 	Facebook Graph API 
 	https://useproof.com/experiences?ref=segment
 	https://www.mutinyhq.com/
+7. Geo Capability in E-Mails
 
 DEMO ENVIROMENT:
 Web Application --  Configure Experience (lab01.onwardpath.com/georeach)
