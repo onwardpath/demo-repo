@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%
 String currentView = (String) session.getAttribute("view");	 
-if (currentView == null) {
-	currentView = "";
-} else {
-	//TODO: Construct the Breadcrumb elements
+boolean showBreadCrumbs = false;
+String[] breadCrumbs = {"","",""};
+
+if (currentView != null) {		
+	String breadCrumb = currentView.substring(currentView.indexOf("/")+1, currentView.indexOf("."));
+	breadCrumbs = breadCrumb.split("-");
+	showBreadCrumbs = true;
 }
 %>
 <!-- begin:: Subheader -->
@@ -14,16 +17,25 @@ if (currentView == null) {
             Dashboard
         </h3 -->
         <span class="kt-subheader__separator kt-hidden"></span> 
+        <%if (showBreadCrumbs) {%>
         <div class="kt-subheader__breadcrumbs">
             <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
             <span class="kt-subheader__breadcrumbs-separator"></span> 
-            	<a href="" class="kt-subheader__breadcrumbs-link"> Dashboards </a> 
+            	<a href="" class="kt-subheader__breadcrumbs-link"> 	       
+	            		<%=breadCrumbs[0].substring(0, 1).toUpperCase() + breadCrumbs[0].substring(1)%>
+	            		 
+            	</a> 
             	<span class="kt-subheader__breadcrumbs-separator"></span> 
-            	<a href="" class="kt-subheader__breadcrumbs-link"> Navy Aside </a> 
-            	<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
-            	>> <%=currentView %>
-            	</span>
+            	<a href="" class="kt-subheader__breadcrumbs-link">            	 	
+	            		<%=breadCrumbs[1].substring(0, 1).toUpperCase() + breadCrumbs[1].substring(1)%>
+            	</a>
+            	<%if (breadCrumbs.length > 2) {%> 
+            		<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">            		
+	            		>> <%=breadCrumbs[2].substring(0, 1).toUpperCase() + breadCrumbs[2].substring(1)%>            	
+            		</span>
+            	<%}%>
         </div>
+        <%}%>
     </div>
     <div class="kt-subheader__toolbar">
         <div class="kt-subheader__wrapper">
