@@ -26,6 +26,11 @@ function remove(element, segment_id){
 	delete expDetailsObj[segment_id];	
 	displayElement.style.display = "none";		
 }
+function showLibrary() {
+	alert("Going to show library");
+	var displayElement = document.getElementById("library");
+	displayElement.style.display = "block";	
+}
 function saveExperience() 
 {	
 	var name = document.getElementById('name').value;
@@ -173,7 +178,13 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 				<label class="col-form-label col-lg-3 col-sm-12">Image</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">															
 						<input id="url" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="URL" data-width="100">	
-						Enter Image URL or <a href="image-gallery.jsp">Pick from library</a>					
+						Enter Image URL or <a href="#" onclick="javascipt:showLibrary();">Pick from library</a>					
+					</div>
+				</div>
+				
+				<div class="kt-section__content kt-section__content--border">				
+					<div id="library" style="display: none;">
+					<img src="https://www.associatedbank.com/content/image/mobile_upgrade_img_banking" />																																																																																																									
 					</div>
 				</div>
 				

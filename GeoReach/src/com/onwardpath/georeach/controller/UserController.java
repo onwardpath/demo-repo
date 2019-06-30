@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.repository.UserRepository;
+import com.onwardpath.georeach.util.DbUtil;
 
 @SuppressWarnings("serial")
 public class UserController extends HttpServlet {
@@ -42,26 +43,23 @@ public class UserController extends HttpServlet {
 	  /**
 	   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	   */
-	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	      
-		  String pageName = request.getParameter("pageName");
-	      System.out.println("pageName: "+pageName);
+	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	      
+		  String pageName = request.getParameter("pageName");	      
+	      System.out.println(DbUtil.getTimestamp()+" @UserController.doPost>pageName: "+pageName);
 	      String forward = "";        
-	      HttpSession session = request.getSession();
-	      
+	      HttpSession session = request.getSession();	      
 	      if (userRepository != null) {
-	          if (pageName.equals("signup")) {
-	        	  String emailName = request.getParameter("email");	        	  
-	              if (userRepository.findByUserName(emailName)) {
-	                  //request.setAttribute("message", "User "+emailName+" alredy exist. <a href='index.jsp'>Click here</a> to login");
-	                  session.setAttribute("message", "Error. User "+emailName+" alredy exist. <a href='index.jsp'>Click here</a> to login");
-	                  forward = USER_SIGNUP;
-	                  RequestDispatcher view = request .getRequestDispatcher(forward);
-	                  view.forward(request, response);
-	                  return;
-	              }	              
-	              
-	              try {	
+	    	  try {
+	    		  if (pageName.equals("signup")) {
+		        	  String emailName = request.getParameter("email");	        	  
+		              if (userRepository.findByUserName(emailName)) {
+		                  //request.setAttribute("message", "User "+emailName+" alredy exist. <a href='index.jsp'>Click here</a> to login");
+		                  session.setAttribute("message", "Error. User "+emailName+" alredy exist. <a href='index.jsp'>Click here</a> to login");
+		                  forward = USER_SIGNUP;
+		                  RequestDispatcher view = request .getRequestDispatcher(forward);
+		                  view.forward(request, response);
+		                  return;
+		              }	              		              		              
 	            	  //Check if the domain already exist. If so, add user to existing Organization
 	            	  String orgDomain = request.getParameter("domain");
 	            	  if (userRepository.orgExists(orgDomain)) {
@@ -77,33 +75,35 @@ public class UserController extends HttpServlet {
 			            		  request.getParameter("password"), Integer.parseInt(request.getParameter("role")));
 	            		  System.out.println("New User from new organization");
 	            	  }	            	  	            	  		            
-		              forward = USER_LOGIN;		              
-	              } catch (SQLException e) {
-	            	  System.out.println(e.getMessage());;
-	            	  //request.setAttribute("message", "Error: "+e.getMessage()+" Please try again later or contact the administrator");
-	            	  session.setAttribute("message", "Error: "+e.getMessage()+" Please try again later or contact the administrator");
-	                  forward = USER_SIGNUP;	                  
-	              }	              	             
-	          } else if (pageName.equals("login")) {
-	              boolean result = userRepository.findByLogin( request.getParameter("userName"), request.getParameter("password"));	               
-	              if (result == true) {	    
-	            	  int user_id = userRepository.findUserId(request.getParameter("userName"));	            	  	            	  
-	            	  int org_id = userRepository.findOrgId(request.getParameter("userName"));
-	            	  User user = userRepository.getUser(user_id);	            	  
-	            	  session.setAttribute("user", user);
-	            	  session.setAttribute("user_id", user_id);
-	            	  session.setAttribute("org_id", org_id);	            	  	            	  	            	  
-	                  forward = LOGIN_SUCCESS;	                  
-	              } else {
-	            	  session.setAttribute("message", "Error: Login failed. Try again with valid login & password.");
-	                  forward = LOGIN_FAILURE;
-	              }
-	          } else if (pageName.equals("logout")) {	        	  
-	        	  if(session != null) {
-	        		  session.invalidate();
-	        	  }	        	      
-	              forward = USER_LOGIN;	              
-	          }	          
+		              forward = USER_LOGIN;		              	              	             
+		          } else if (pageName.equals("login")) {
+		              boolean result = userRepository.findByLogin( request.getParameter("userName"), request.getParameter("password"));	               
+		              if (result == true) {	    
+		            	  int user_id = userRepository.findUserId(request.getParameter("userName"));	            	  	            	  
+		            	  int org_id = userRepository.findOrgId(request.getParameter("userName"));
+		            	  User user = userRepository.getUser(user_id);	            	  
+		            	  session.setAttribute("user", user);
+		            	  session.setAttribute("user_id", user_id);
+		            	  session.setAttribute("org_id", org_id);	            	  	            	  	            	  
+		                  forward = LOGIN_SUCCESS;	                  
+		              } else {
+		            	  session.setAttribute("message", "Error: Login failed. Try again with valid login & password.");
+		                  forward = LOGIN_FAILURE;
+		              }
+		          } else if (pageName.equals("logout")) {	        	  
+		        	  if(session != null) {
+		        		  session.invalidate();
+		        	  }	        	      
+		              forward = USER_LOGIN;	              
+		          }		    		  
+	    	  } catch (SQLException e) {
+	    		  System.out.println(e.getMessage());;            	  
+            	  session.setAttribute("message", "Error: "+e.getMessage()+" Please try again later or contact the administrator");
+            	  if (pageName.equals("signup")) 
+            		  forward = USER_LOGIN;
+            	  else if (pageName.equals("login") || pageName.equals("login"))
+            		  forward = LOGIN_FAILURE;            	             		 
+	    	  }	    	  	    	  	    	  	    	  	    	  	    	  	    	  	             
 	      }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);

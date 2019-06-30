@@ -8,11 +8,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onwardpath.georeach.repository.ExperienceRepository;
+import com.onwardpath.georeach.util.DbUtil;
 
 @SuppressWarnings("serial")
 public class ExperienceController extends HttpServlet {
@@ -43,32 +43,31 @@ public class ExperienceController extends HttpServlet {
 	   */
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	      String pageName = request.getParameter("pageName");
-	      String forward = "";        
-	      
+	      System.out.println(DbUtil.getTimestamp()+" @ExperienceController.doPost>pageName: "+pageName);
+	      String forward = "";        	      
 	  	  HttpSession session = request.getSession();
 	      int org_id = (Integer)session.getAttribute("org_id");
     	  int user_id = (Integer)session.getAttribute("user_id");
     	  
 	      if (experienceRepository != null) {
-	          if (pageName.equals("create-experience")) {	      	        	 
-	        	  String name = request.getParameter("name");	        	  	        	  	        	 
-	              if (experienceRepository.nameExists(name, org_id)) {	                  
-	                  session.setAttribute("message", "Experience Name exists. Try another name.");
-	                  forward = SAVE_FAILURE;
-	                  RequestDispatcher view = request .getRequestDispatcher(forward);
-	                  view.forward(request, response);
-	                  return;
-	              }	              	             	              	              	              	           	             
-	              	              	   
-	              try {	            	  	            	  	            	  	            	  	            	   	         
-	            	  //1. Save to Experience table, get the id (name, type, org_id, user_id, create_time)
+	          if (pageName.equals("create-experience")) {		        	  	        	 
+	        	  try {
+	        		  String name = request.getParameter("name");	        	  	        	  	        	 
+		              if (experienceRepository.nameExists(name, org_id)) {	                  
+		                  session.setAttribute("message", "Experience Name exists. Try another name.");
+		                  forward = SAVE_FAILURE;
+		                  RequestDispatcher view = request .getRequestDispatcher(forward);
+		                  view.forward(request, response);
+		                  return;
+		              }	
+		              
+		              //1. Save to Experience table, get the id (name, type, org_id, user_id, create_time)
 	            	  String type = request.getParameter("type");
 	            	  int experience_id = experienceRepository.save(name, type, "off", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
 	            			  request.getParameter("header_code"), request.getParameter("body_code"), org_id, user_id);
 	            	  
-	            	  //2. Save multiple entries to Image table (experience_id, segment_id, url, create_time)
-	            	  if (type.contentEquals("image")) {
-	            		  
+	            	  //2. Save multiple entries to Image/Content table (experience_id, segment_id, url/content, create_time)
+	            	  if (type.contentEquals("image")) {	            		  
 	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
 	            		  ObjectMapper mapper = new ObjectMapper();	            		  
 	            		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
@@ -104,13 +103,12 @@ public class ExperienceController extends HttpServlet {
 	              	  //TODO: Save schedule
 	            	  	            	  			              	            	  		              
 		              session.setAttribute("message", "Experience <b>"+name+"</b> saved.#n="+name+"#e="+experience_id+"#o="+org_id); 
-		              forward = SAVE_SUCCESS;
-	              } catch (SQLException e) {
-	            	  session.setAttribute("message", e.getMessage()+". Please try later or contact the administrator.");
+		              forward = SAVE_SUCCESS;	        		  
+	        	  } catch (SQLException e) {
+	        		  session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");
 	                  forward = SAVE_FAILURE;
-	              }	              
-	          }
-	          //experienceRepository.close();
+	        	  }        	                	             	              	              	              	           	             	              	              	   	                         
+	          }	          
 	      }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);

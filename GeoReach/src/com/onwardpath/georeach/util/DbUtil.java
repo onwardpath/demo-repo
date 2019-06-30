@@ -3,6 +3,7 @@ package com.onwardpath.georeach.util;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Timestamp;
 import java.util.Properties;
 
 public class DbUtil {
@@ -38,5 +39,10 @@ public class DbUtil {
 				  e.printStackTrace();
 			  }			  
 	      }
+	 }
+	 
+	 public static String getTimestamp() {
+		 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+	     return timestamp.toString();	 
 	 }
 }

@@ -55,43 +55,49 @@ public class ExperienceRepository {
           prepStatement.setString(5, body_code);
           prepStatement.setInt(6, org_id);
           prepStatement.setInt(7, user_id);
-          //prepStatement.setDate(5, new java.sql.Date(new SimpleDateFormat("MM/dd/yyyy").parse(dateOfBirth.substring(0, 10)).getTime()));	          	          
+          //prepStatement.setDate(5, new java.sql.Date(new SimpleDateFormat("MM/dd/yyyy").parse(dateOfBirth.substring(0, 10)).getTime()));	
+          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.save>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement = dbConnection.prepareStatement("select last_insert_id()");
-          ResultSet result = prepStatement.executeQuery();
+          ResultSet result = prepStatement.executeQuery();          
           result.next();
-          return result.getInt(1);                  
+          int id = result.getInt(1);           
+          prepStatement.close();
+          result.close();
+          return id;                           
 	  }
-	  
-	  
+	  	  
 	  //Pass columnType = 0 for int value
 	  public void update (int id, int columnType, String colunmName, String value) throws SQLException {
 		  String updateSql = "update experience set "+colunmName+" = ";
 		  if (columnType == 0) {
 			  updateSql+= value+", where id = "+id;
 		  } else
-			  updateSql+= "'"+value+"' where id = "+id;	
-		  //System.out.println("updateSql: "+updateSql);
-    	  PreparedStatement prepStatement = dbConnection.prepareStatement(updateSql);          	          
-          prepStatement.executeUpdate();                  
+			  updateSql+= "'"+value+"' where id = "+id;			  
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement(updateSql); 
+    	  System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.update>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
 	  }
-	  
-	  
+	  	  
 	  public void saveImage(int experience_id, int segment_id, String url) throws SQLException {	      	         
     	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.image (experience_id, segment_id, url, create_time) values (?,?,?,now())");                    
           prepStatement.setInt(1, experience_id);
           prepStatement.setInt(2, segment_id);
-          prepStatement.setString(3, url);          	          	         
-          prepStatement.executeUpdate();                          
+          prepStatement.setString(3, url);
+          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.saveImage>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
 	  }	
-	  
-	  //experienceRepository.saveContent(experience_id, Integer.parseInt(request.getParameter("segment_id")),request.getParameter("content"));
+	  	  
 	  public void saveContent(int experience_id, int segment_id, String content) throws SQLException {	      	         
     	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.content (experience_id, segment_id, content, create_time) values (?,?,?,now())");                    
           prepStatement.setInt(1, experience_id);
           prepStatement.setInt(2, segment_id);
-          prepStatement.setString(3, content);          	          	         
-          prepStatement.executeUpdate();                          
+          prepStatement.setString(3, content);   
+          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.saveContent>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
 	  }
 	  
 	  	  	  	  
@@ -104,7 +110,8 @@ public class ExperienceRepository {
 	  public Experience get(int id) throws SQLException {	
 		  Experience experience = new Experience(id);
           PreparedStatement prepStatement = dbConnection.prepareStatement("select * from experience where id = ?");
-          prepStatement.setInt(1, id);                     
+          prepStatement.setInt(1, id);  
+          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.get>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {
               while (result.next()) {	            	              	  
@@ -120,12 +127,13 @@ public class ExperienceRepository {
             	  experience.setCreate_time(result.getString("create_time"));            	              	              	  	               
               }               
           }                   
+          prepStatement.close();
+          result.close();
           return experience;		   	     
 	  }
 	  
 	  public Map<Integer,Experience> getOrgImageExperiences (int org_id) throws SQLException {
-		  Map<Integer,Experience> orgImageExp = new HashMap<Integer,Experience>();
-		  
+		  Map<Integer,Experience> orgImageExp = new HashMap<Integer,Experience>();		  
 		  String query = "select experience.id as id, experience.name as name, experience.type as type, experience.status as status, "
 		  		+ "experience.schedule_start as schedule_start, experience.schedule_end as schedule_end, experience.user_id as user_id, experience.create_time as create_time, "
 		  		+ "segment.name as segmentname, image.id as image_id, image.url as url "
@@ -136,11 +144,11 @@ public class ExperienceRepository {
 		  		+ "image.segment_id = segment.id and "
 		  		+ "experience.org_id = ? "
 		  		+ "order by create_time desc";
-		  System.out.println("@ExperienceRepository.getOrgImageExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
+		  //System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.getOrgImageExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
 		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
-		  prepStatement.setInt(1, org_id);                     
-          ResultSet result = prepStatement.executeQuery();
-                            
+		  prepStatement.setInt(1, org_id);   
+		  System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.getOrgImageExperiences>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();                            
           if (result != null) {        	  
               while (result.next()) {	            	              	  
             	  //Construct the Experience object with Map of Image objects
@@ -171,12 +179,13 @@ public class ExperienceRepository {
             	  }
               }               
           }		  		 
+          prepStatement.close();
+          result.close();
           return orgImageExp;
 	  }
 	  
 	  public Map<Integer,Experience> getOrgContentExperiences (int org_id) throws SQLException {
-		  Map<Integer,Experience> orgContentExp = new HashMap<Integer,Experience>();
-		  
+		  Map<Integer,Experience> orgContentExp = new HashMap<Integer,Experience>();		  
 		  String query = "select experience.id as id, experience.name as name, experience.type as type, experience.status as status, "
 		  		+ "experience.schedule_start as schedule_start, experience.schedule_end as schedule_end, experience.user_id as user_id, experience.create_time as create_time, "
 		  		+ "segment.name as segmentname, content.id as content_id, content.content as content "
@@ -187,11 +196,11 @@ public class ExperienceRepository {
 		  		+ "content.segment_id = segment.id and "
 		  		+ "experience.org_id = ? "
 		  		+ "order by create_time desc";
-		  System.out.println("@ExperienceRepository.getOrgContentExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
+		  //System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.getOrgContentExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
 		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
 		  prepStatement.setInt(1, org_id);                     
-          ResultSet result = prepStatement.executeQuery();
-                            
+		  System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.getOrgContentExperiences>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();                           
           if (result != null) {        	  
               while (result.next()) {	            	              	  
             	  //Construct the Experience object with Map of Image objects
@@ -222,6 +231,8 @@ public class ExperienceRepository {
             	  }
               }               
           }		  		 
+          prepStatement.close();
+          result.close();
           return orgContentExp;
 	  }
 	  	  	 
@@ -230,22 +241,20 @@ public class ExperienceRepository {
 	   * @param id
 	   * @return true if exists, false otherwise
 	   */
-	  public boolean exists(int id) {
-	      try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where id = ?");
-	          prepStatement.setInt(1, id);   
-	                      
-	          ResultSet result = prepStatement.executeQuery();
-	          if (result != null) {   
-	              while (result.next()) {
-	                  if (result.getInt(1) == 1) {
-	                      return true;
-	                  }               
-	              }
-	          }
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	      }
+	  public boolean exists(int id) throws SQLException {		  	     
+		  PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where id = ?");
+          prepStatement.setInt(1, id);  
+          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.exists>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {   
+              while (result.next()) {
+                  if (result.getInt(1) == 1) {
+                      return true;
+                  }               
+              }
+          }      
+    	  prepStatement.close();
+          result.close();	      	      
 	      return false;
 	  }	
 	  
@@ -256,32 +265,21 @@ public class ExperienceRepository {
 	   * @param org_id
 	   * @return
 	   */
-	  public boolean nameExists (String name, int org_id) {
-		  try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where name = ? and org_id = ?");
-	          prepStatement.setString(1, name);
-	          prepStatement.setInt(2, org_id);
-	                      
-	          ResultSet result = prepStatement.executeQuery();
-	          if (result != null) {   
-	              while (result.next()) {
-	                  if (result.getInt(1) == 1) {
-	                      return true;
-	                  }               
-	              }
-	          }
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	      }
+	  public boolean nameExists(String name, int org_id) throws SQLException {
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where name = ? and org_id = ?");
+          prepStatement.setString(1, name);
+          prepStatement.setInt(2, org_id); 
+          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.nameExists>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {   
+              while (result.next()) {
+                  if (result.getInt(1) == 1) {
+                      return true;
+                  }               
+              }
+          }	      
+          prepStatement.close();
+          result.close();	    
 	      return false;
-	  }
-	  
-	  /**
-	   * Close the database connection
-	   * 
-	   * No need to close the connection. Its better to validate if the connection is still open and use it rather than closing after every interaction.
-	   */
-	  public void close() {
-		  DbUtil.closeConnection();
-	  }
+	  }	  	 
 	}

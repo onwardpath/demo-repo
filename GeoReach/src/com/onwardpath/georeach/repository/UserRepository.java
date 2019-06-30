@@ -34,13 +34,14 @@ public class UserRepository {
 		  prepStatement.setString(1, orgName);
           prepStatement.setString(2, domain);
           prepStatement.setString(3, logoUrl);
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement1: "+prepStatement.toString());                   
           prepStatement.executeUpdate();
           //Get the org_id
           prepStatement = dbConnection.prepareStatement("select last_insert_id()");
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement2: "+prepStatement.toString());
           ResultSet orgResult = prepStatement.executeQuery();
           orgResult.next();
-          int org_id = orgResult.getInt(1);
-          
+          int org_id = orgResult.getInt(1);                    
           //2. Save User
           prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id) values (?, ?, ?, ?, ?, ?, ?, ?)");
           prepStatement.setInt(1, org_id);
@@ -51,7 +52,10 @@ public class UserRepository {
           prepStatement.setString(6, email);
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
-          prepStatement.executeUpdate();          	        		  	        				  
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement3: "+prepStatement.toString());
+          prepStatement.executeUpdate();              
+          prepStatement.close();
+          orgResult.close();
 	  }
 	  
 	  /**
@@ -70,10 +74,10 @@ public class UserRepository {
 		  //1. Find Organization ID from given domain name		  		                     		          	                                                                                                    
           PreparedStatement prepStatement = dbConnection.prepareStatement("select id from organization where domain = ?");
           prepStatement.setString(1, domain);
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement1: "+prepStatement.toString());
           ResultSet orgResult = prepStatement.executeQuery();
           orgResult.next();
-          int org_id = orgResult.getInt(1);
-          
+          int org_id = orgResult.getInt(1);                   
           //2. Save User
           prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id) values (?, ?, ?, ?, ?, ?, ?, ?)");
           prepStatement.setInt(1, org_id);
@@ -84,7 +88,10 @@ public class UserRepository {
           prepStatement.setString(6, email);
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
-          prepStatement.executeUpdate();                    	        		  	        				 
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
+          prepStatement.executeUpdate(); 
+          prepStatement.close();
+          orgResult.close();
 	  }
 	  
 	  
@@ -94,23 +101,23 @@ public class UserRepository {
 	   * @param domain
 	   * @return
 	   */
-	  public boolean orgExists (String domain) {
-		  try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from organization where domain = ?");
-	          prepStatement.setString(1, domain);   
-	                      
-	          ResultSet result = prepStatement.executeQuery();
-	          if (result != null) {   
-	              while (result.next()) {
-	                  if (result.getInt(1) == 1) {
-	                      return true;
-	                  }               
-	              }
-	          }
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	      }
-	      return false;
+	  public boolean orgExists (String domain) throws SQLException {	
+		  boolean orgExist = false;
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from organization where domain = ?");
+          prepStatement.setString(1, domain);   
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.orgExists>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {   
+              while (result.next()) {
+                  if (result.getInt(1) == 1) {
+                	  orgExist = true;
+                	  break;                			                       
+                  }               
+              }
+          }
+          prepStatement.close();
+          result.close();          
+	      return orgExist;
 	  }
 	  	  
 	  /**
@@ -119,23 +126,24 @@ public class UserRepository {
 	   * @param login
 	   * @return
 	   */
-	  public boolean findByUserName(String login) {
-	      try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from user where login = ?");
-	          prepStatement.setString(1, login);   
-	                      
-	          ResultSet result = prepStatement.executeQuery();
-	          if (result != null) {   
-	              while (result.next()) {
-	                  if (result.getInt(1) == 1) {
-	                      return true;
-	                  }               
-	              }
-	          }
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	      }
-	      return false;
+	  public boolean findByUserName(String login) throws SQLException {
+		  boolean userExist = false;
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from user where login = ?");
+          prepStatement.setString(1, login);    
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.findByUserName>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {   
+              while (result.next()) {
+                  if (result.getInt(1) == 1) {
+                	  userExist = true;
+                	  break;
+                      
+                  }               
+              }
+          }
+          prepStatement.close();
+          result.close(); 
+	      return userExist;
 	  }
 	  
 	  /**
@@ -145,60 +153,54 @@ public class UserRepository {
 	   * @param password
 	   * @return
 	   */
-	  public boolean findByLogin(String login, String password) {
-	      try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select password from user where login = ?");
-	          prepStatement.setString(1, login);           
-	          
-	          ResultSet result = prepStatement.executeQuery();
-	          if (result != null) {
-	              while (result.next()) {
-	                  if (result.getString(1).equals(password)) {
-	                      return true;
-	                  }
-	              }               
-	          }           
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	      }
-	      return false;
+	  public boolean findByLogin(String login, String password) throws SQLException {
+		  boolean userAuthenticated = false;	      
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select password from user where login = ?");
+          prepStatement.setString(1, login);  
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.findByLogin>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {
+              while (result.next()) {
+                  if (result.getString(1).equals(password)) {
+                	  userAuthenticated = true;
+                	  break;
+                      
+                  }
+              }               
+          }
+          prepStatement.close();
+          result.close(); 
+	      return userAuthenticated;
 	  }
 	  
-	  public User getUser(int id) {
-		  User user = new User();
-		  try {
-			  
-			  String query = "select user.org_id as org_id, user.firstname as firstname, user.lastname as lastname, " +
-			  		"user.login as login, user.email as email, user.phone1 as phone1, organization.name as orgname " + 
-			  		"from user, organization " + 
-			  		"where user.org_id = organization.id and " + 
-			  		"user.id = ?;";
-			  
-			  System.out.println("@UserRepository.getUser>query: "+query);
-			  
-	          //PreparedStatement prepStatement = dbConnection.prepareStatement("select * from user where id = ?");
-			  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
-	          prepStatement.setInt(1, id);           
-	          
-	          ResultSet result = prepStatement.executeQuery();
-	          if (result != null && result.next()) {
-	              String firstname = result.getString("firstname");
-	              String lastname = result.getString("lastname");
-	              String login = result.getString("login");
-	              String email = result.getString("email");
-	              String phone1 = result.getString("phone1");
-	              int organization_id = Integer.parseInt(result.getString("org_id"));
-	              String organization_name = result.getString("orgname");
-                  user.setFirstname(firstname);
-                  user.setLastname(lastname);
-                  user.setEmail(email);
-                  user.setOrganization_id(organization_id);
-                  user.setOrganization_name(organization_name);
-                  user.setPhone1(phone1);                  	                            
-	          }           
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	      }
+	  public User getUser(int id) throws SQLException {
+		  User user = new User();		  			  
+		  String query = "select user.org_id as org_id, user.firstname as firstname, user.lastname as lastname, " +
+		  		"user.login as login, user.email as email, user.phone1 as phone1, organization.name as orgname " + 
+		  		"from user, organization " + 
+		  		"where user.org_id = organization.id and " + 
+		  		"user.id = ?";		  		  		          
+		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
+          prepStatement.setInt(1, id); 
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.getUser>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null && result.next()) {
+              String firstname = result.getString("firstname");
+              String lastname = result.getString("lastname");
+              String login = result.getString("login");
+              String email = result.getString("email");
+              String phone1 = result.getString("phone1");
+              int organization_id = Integer.parseInt(result.getString("org_id"));
+              String organization_name = result.getString("orgname");
+              user.setFirstname(firstname);
+              user.setLastname(lastname);
+              user.setEmail(email);
+              user.setOrganization_id(organization_id);
+              user.setOrganization_name(organization_name);
+              user.setPhone1(phone1);                  	                            
+          }           
+          prepStatement.close();
+          result.close(); 
 	      return user;
 	  }	 	 
 	  
@@ -208,19 +210,17 @@ public class UserRepository {
 	   * @param login
 	   * @return org_id
 	   */
-	  public int findOrgId(String login) {
+	  public int findOrgId(String login) throws SQLException {
 		  int org_id = 0;
-		  try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select org_id from user where login = ?");
-	          prepStatement.setString(1, login);           
-	          
-	          ResultSet result = prepStatement.executeQuery();
-	          if (result != null && result.next()) {	              
-	              org_id = result.getInt(1);	                             
-	          }           
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	      }
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select org_id from user where login = ?");
+          prepStatement.setString(1, login);           
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.findOrgId>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null && result.next()) {	              
+              org_id = result.getInt(1);	                             
+          }       
+          prepStatement.close();
+          result.close(); 
 	      return org_id;
 	  }
 	  
@@ -230,19 +230,17 @@ public class UserRepository {
 	   * @param login
 	   * @return user_id
 	   */
-	  public int findUserId(String login) {
-		  int user_id = 0;
-		  try {
-	          PreparedStatement prepStatement = dbConnection.prepareStatement("select id from user where login = ?");
-	          prepStatement.setString(1, login);           
-	          
-	          ResultSet result = prepStatement.executeQuery();
-	          if (result != null && result.next()) {	              
-	        	  user_id = result.getInt(1);	                             
-	          }           
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	      }
+	  public int findUserId(String login) throws SQLException {
+		  int user_id = 0;		  
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select id from user where login = ?");
+          prepStatement.setString(1, login);  
+          System.out.println(DbUtil.getTimestamp()+" @UserRepository.findUserId>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null && result.next()) {	              
+        	  user_id = result.getInt(1);	                             
+          }
+          prepStatement.close();
+          result.close();
 	      return user_id;
 	  }	  	 
 	}
