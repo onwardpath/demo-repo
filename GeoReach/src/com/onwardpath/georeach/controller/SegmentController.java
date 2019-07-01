@@ -46,22 +46,21 @@ public class SegmentController extends HttpServlet {
 	      HttpSession session = request.getSession();	      
 	      if (segmentRepository != null) {
 	          if (pageName.equals("segment-create")) {
+	        	  System.out.println("@SegmentController.doPost called from page:segment-create");
 	        	  try {
-	        		  
-		        	  System.out.println("@SegmentController.doPost called from page:segment-create");
-		              if (segmentRepository.findBySegmentName(request.getParameter("segmentName"))) {	                  
-		                  session.setAttribute("message", "Error: Segment name already exist. Try another name.");
+	        		  int userId = (Integer)session.getAttribute("user_id");	              
+		              int orgId = (Integer)session.getAttribute("org_id");
+		              String segmentName = request.getParameter("segmentName");
+		              String segmentRules = request.getParameter("segmentRules");		              
+		              System.out.println("segmentName: "+segmentName);
+		              System.out.println("segmentRules: "+segmentRules);
+		              if (segmentRepository.findBySegmentNameInOrg(segmentName ,orgId)) {	                  
+		                  session.setAttribute("message", "Error: Segment name "+segmentName+" already exist. Try another name.");
 		                  forward = SAVE_FAILURE;
 		                  RequestDispatcher view = request .getRequestDispatcher(forward);
 		                  view.forward(request, response);	      
 		                  return;
-		              }		              	             
-		              int userId = (Integer)session.getAttribute("user_id");	              
-		              int orgId = (Integer)session.getAttribute("org_id");		              
-		              String segmentName = request.getParameter("segmentName");
-		              String segmentRules = request.getParameter("segmentRules");		              
-		              System.out.println("segmentName: "+segmentName);
-		              System.out.println("segmentRules: "+segmentRules);		              
+		              }		              	             		              		              		              		              		           		              		              
 		              segmentRepository.save(segmentName, segmentRules, userId, orgId);
 		              session.setAttribute("message", "Info: Segment <b>"+segmentName+"</b> Saved.");		              
 		              forward = SAVE_SUCCESS;  
@@ -71,7 +70,6 @@ public class SegmentController extends HttpServlet {
 	        	  }	        	  
 	          } 
 	      }
-	      //segmentRepository.close();//Is this required?
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);	     
 	  }	  	 

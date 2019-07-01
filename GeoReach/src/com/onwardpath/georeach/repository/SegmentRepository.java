@@ -50,6 +50,32 @@ public class SegmentRepository {
           result.close();
 	      return segmentExist;
 	  }
+	  
+	  /**
+	   * Method to find a Segment by Name
+	   * @param name
+	   * @return true if Segment exists, false otherwise
+	   */
+	  public boolean findBySegmentNameInOrg(String name, int org_id) throws SQLException {
+	      boolean segmentExist = false;
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from segment where name = ? and org_id = ?");
+          prepStatement.setString(1, name);   
+          prepStatement.setInt(2, org_id);
+          System.out.println(Database.getTimestamp()+" @SegmentRepository.findBySegmentNameInOrg>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {   
+              while (result.next()) {
+                  if (result.getInt(1) == 1) {
+                	  segmentExist = true;
+                	  break;
+                  }               
+              }
+          }	      
+          prepStatement.close();
+          result.close();
+	      return segmentExist;
+	  }
+	  
 	  	  
 	  /**
 	   * Method to get id and name of all segments of an organization 

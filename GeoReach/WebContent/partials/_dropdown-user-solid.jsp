@@ -1,7 +1,14 @@
 <%@ page import="com.onwardpath.georeach.model.User" %>
 <%
-	String fname = ((User) session.getAttribute("user")).getFirstname();
-	String lname = ((User) session.getAttribute("user")).getLastname();
+String fname = "";
+String lname = "";
+String pic = "";
+	
+if (session.getAttribute("user") != null) {
+	fname = ((User) session.getAttribute("user")).getFirstname();
+	lname = ((User) session.getAttribute("user")).getLastname();
+	pic = ((User) session.getAttribute("user")).getProfile_pic();
+}
 %>
 <script type="text/javascript">
 function submitform()
@@ -12,10 +19,18 @@ function submitform()
 <div class="kt-user-card kt-margin-b-40 kt-margin-b-30-tablet-and-mobile" style="background-image: url(./assets/media/misc/head_bg_sm.jpg)">
     <div class="kt-user-card__wrapper">
         <div class="kt-user-card__pic">
-            <img alt="Pic" src="./assets/media/users/300_21.jpg" />
+        	<%
+        	if (!pic.equals("")) {%>
+        		<img alt="Pic" src="<%=pic%>" />
+        	<%}%>            
         </div>
         <div class="kt-user-card__details">
-            <div class="kt-user-card__name"><%=fname%> <%=lname%></div>
+            <div class="kt-user-card__name">
+            <%
+        	if (!fname.equals("") && !lname.equals("")) {%>
+        		<%=fname%> <%=lname%>
+        	<%}%>                                   
+            </div>
             <div class="kt-user-card__position"></div>
         </div>
     </div>

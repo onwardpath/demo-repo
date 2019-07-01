@@ -9,7 +9,7 @@
     		<a href="javascript:;" class="kt-menu__link kt-menu__toggle">
     			<span class="kt-menu__link-text">
     			<%
-	            if (session != null) {
+	            if (session.getAttribute("user") != null) {
 	            	String orgName = ((User) session.getAttribute("user")).getOrganization_name();
 	                if (orgName != null) {%>
 	                	<%=orgName%>	                            

@@ -64,7 +64,7 @@ public class ExperienceController extends HttpServlet {
 		              
 		              //1. Save to Experience table, get the id (name, type, org_id, user_id, create_time)
 	            	  String type = request.getParameter("type");
-	            	  int experience_id = experienceRepository.save(name, type, "off", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
+	            	  int experience_id = experienceRepository.save(name, type, "on", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
 	            			  request.getParameter("header_code"), request.getParameter("body_code"), org_id, user_id);
 	            	  
 	            	  //2. Save multiple entries to Image/Content table (experience_id, segment_id, url/content, create_time)
@@ -78,7 +78,9 @@ public class ExperienceController extends HttpServlet {
 	            			  String url = entry.getValue();
 	            			  System.out.println("Segment ID = " + segment_id + ", URL = " + url);
 	            			  experienceRepository.saveImage(experience_id, segment_id, url);	            			  	            			 
-	            		  }		            		  
+	            		  }	
+	            		  SAVE_SUCCESS = "?view=pages/experience-create-image.jsp";
+	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
 	            	  } else if (type.equals("content")) {		            	  	            		 
 	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
 	            		  ObjectMapper mapper = new ObjectMapper();	            		  
@@ -90,8 +92,7 @@ public class ExperienceController extends HttpServlet {
 	            			  System.out.println("Segment ID = " + segment_id + ", Content = " + content);
 	            			  experienceRepository.saveContent(experience_id, segment_id, content);	            			  	            			 
 	            		  }	
-	            		  SAVE_SUCCESS = "?view=pages/experience-create-content.jsp";
-	            		  SAVE_FAILURE = "?view=pages/experience-create-content.jsp";
+	            		  
 	            	  }
 	            	  	            	  
 	            	  //3. Generate header_code & body_code and save to Experience table

@@ -66,14 +66,14 @@ public class UserController extends HttpServlet {
 	            	  if (userRepository.orgExists(orgDomain)) {
 	            		  System.out.println("orgDomain already exist: "+orgDomain);
 	            		  userRepository.saveUserInOrg(request.getParameter("domain"), request.getParameter("firstName"), request.getParameter("lastName"), 
-	            				  request.getParameter("email"), request.getParameter("phone"), request.getParameter("password"), Integer.parseInt(request.getParameter("role"))); 
+	            				  request.getParameter("email"), request.getParameter("phone"), request.getParameter("password"), Integer.parseInt(request.getParameter("role")),""); 
 	            		  System.out.println("New User from existing organization");
 	            	  } else {
 	            		  System.out.println("orgDomain is new: "+orgDomain);
 	            		  //If domain does not exist, create a new Organization and add user
 	            		  userRepository.saveUserandOrg(request.getParameter("orgName"), request.getParameter("domain"), request.getParameter("logoUrl"), 
 			            		  request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("email"), request.getParameter("phone"), 
-			            		  request.getParameter("password"), Integer.parseInt(request.getParameter("role")));
+			            		  request.getParameter("password"), Integer.parseInt(request.getParameter("role")),"");
 	            		  System.out.println("New User from new organization");
 	            	  }	            	  	            	  		            
 		              forward = USER_LOGIN;		              	              	             

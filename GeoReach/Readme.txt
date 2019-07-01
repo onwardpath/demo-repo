@@ -123,6 +123,9 @@ FEATURES WISHLIST
 	https://useproof.com/experiences?ref=segment
 	https://www.mutinyhq.com/
 7. Geo Capability in E-Mails
+8. Create segments based on Visitor Behaviour. 
+	Example: If user has visited "www.acmeinc.com/greenbay-packers.html" they can be segmented as "PackerFans".
+	Example: New Visitor, Repeat Visitor
 
 DEMO ENVIROMENT:
 Web Application --  Configure Experience (lab01.onwardpath.com/georeach)

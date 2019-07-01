@@ -30,7 +30,7 @@ public class UserRepository {
 	   * @param role
 	   * @throws SQLException
 	   */
-	  public void saveUserandOrg (String orgName, String domain, String logoUrl, String firstName, String lastName, String email, String phone, String password, int role) throws SQLException {		  		 
+	  public void saveUserandOrg (String orgName, String domain, String logoUrl, String firstName, String lastName, String email, String phone, String password, int role, String profile_pic) throws SQLException {		  		 
 		  //1. Save Organization
 		  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into organization (name, domain, logo) values (?, ?, ?)");
 		  prepStatement.setString(1, orgName);
@@ -45,7 +45,7 @@ public class UserRepository {
           orgResult.next();
           int org_id = orgResult.getInt(1);                    
           //2. Save User
-          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id) values (?, ?, ?, ?, ?, ?, ?, ?)");
+          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
           prepStatement.setInt(1, org_id);
           prepStatement.setString(2, firstName);
           prepStatement.setString(3, lastName);
@@ -54,6 +54,7 @@ public class UserRepository {
           prepStatement.setString(6, email);
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
+          prepStatement.setString(9, profile_pic);
           System.out.println(Database.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement3: "+prepStatement.toString());
           prepStatement.executeUpdate();              
           prepStatement.close();
@@ -72,7 +73,7 @@ public class UserRepository {
 	   * @param role
 	   * @throws SQLException
 	   */
-	  public void saveUserInOrg (String domain, String firstName, String lastName, String email, String phone, String password, int role) throws SQLException {			 		  
+	  public void saveUserInOrg (String domain, String firstName, String lastName, String email, String phone, String password, int role, String profile_pic) throws SQLException {			 		  
 		  //1. Find Organization ID from given domain name		  		                     		          	                                                                                                    
           PreparedStatement prepStatement = dbConnection.prepareStatement("select id from organization where domain = ?");
           prepStatement.setString(1, domain);
@@ -81,7 +82,7 @@ public class UserRepository {
           orgResult.next();
           int org_id = orgResult.getInt(1);                   
           //2. Save User
-          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id) values (?, ?, ?, ?, ?, ?, ?, ?)");
+          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
           prepStatement.setInt(1, org_id);
           prepStatement.setString(2, firstName);
           prepStatement.setString(3, lastName);
@@ -90,6 +91,7 @@ public class UserRepository {
           prepStatement.setString(6, email);
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
+          prepStatement.setString(9, profile_pic);
           System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
           prepStatement.executeUpdate(); 
           prepStatement.close();
@@ -177,8 +179,8 @@ public class UserRepository {
 	  
 	  public User getUser(int id) throws SQLException {
 		  User user = new User();		  			  
-		  String query = "select user.org_id as org_id, user.firstname as firstname, user.lastname as lastname, " +
-		  		"user.login as login, user.email as email, user.phone1 as phone1, organization.name as orgname " + 
+		  String query = "select user.org_id as org_id, user.firstname as firstname, user.lastname as lastname, user.login as login, " +
+		  		"user.email as email, user.phone1 as phone1, user.profile_pic as pic, organization.name as orgname " + 
 		  		"from user, organization " + 
 		  		"where user.org_id = organization.id and " + 
 		  		"user.id = ?";		  		  		          
@@ -192,6 +194,7 @@ public class UserRepository {
               String login = result.getString("login");
               String email = result.getString("email");
               String phone1 = result.getString("phone1");
+              String pic = result.getString("pic");
               int organization_id = Integer.parseInt(result.getString("org_id"));
               String organization_name = result.getString("orgname");
               user.setFirstname(firstname);
@@ -199,7 +202,8 @@ public class UserRepository {
               user.setEmail(email);
               user.setOrganization_id(organization_id);
               user.setOrganization_name(organization_name);
-              user.setPhone1(phone1);                  	                            
+              user.setPhone1(phone1);
+              user.setProfile_pic(pic);
           }           
           prepStatement.close();
           result.close(); 

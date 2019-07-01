@@ -13,6 +13,7 @@ public class User {
 	private String login;
 	private String password;
 	private int role_id;
+	private String profile_pic;
 	
 	public User() {		
 	}
@@ -88,5 +89,11 @@ public class User {
 	}
 	public void setRole_id(int role_id) {
 		this.role_id = role_id;
+	}
+	public String getProfile_pic() {
+		return profile_pic;
+	}
+	public void setProfile_pic(String profile_pic) {
+		this.profile_pic = profile_pic;
 	}
 }

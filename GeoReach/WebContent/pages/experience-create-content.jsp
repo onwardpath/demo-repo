@@ -110,22 +110,37 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 						<div class="modal-body">														 
 							 <h3>Header</h3>
 							 <code>
-								&lt;!-- GeoSmart --&gt;
-								&lt;script&gt;
-								(function(i,s,o,g,r,a,m){i['GeoSmartObject']=r;i[r]=i[r]||function(){
-								(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-								m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-								})(window,document,'script','https://lab01.onwardpath.com/geoservice?e=<%=experience%>&o=<%=organization%>','ga');								
-								ga('create', 'UA-XXXXX-Y', 'auto');
-								ga('send', 'pageview');
-								&lt;/script&gt;
-								&lt;!-- End GeoSmart --&gt;
+								&lt;!-- Begin::GeoSmart-Header --&gt; 
+								&lt;script&gt; 
+								function geo() 
+								{ 
+									var serviceURL = "http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=experience%>&org_id=<%=org_id%>&s="; 
+									var geoElement = document.getElementById("Geo-<%=name%>-<%=experience%>"); 	
+									var url = new URL(window.location.href); 
+									var c = url.searchParams.get("s"); 
+									serviceURL += c; 
+									console.log(serviceURL); 
+									var xhttp = new XMLHttpRequest(); 
+									xhttp.responseType = 'json'; 
+									xhttp.onreadystatechange = function () { 
+										if (this.readyState == 4 && this.status == 200) 
+										{ 
+											var locationbasedImage_element = geoElement.getElementsByTagName('img')[0]; 
+											let data = this.response; 
+											locationbasedImage_element.src = data[1].url; 
+											locationbasedImage_element.parentElement.href = data[1].url; 
+										} 
+									}; xhttp.open("GET", serviceURL); 
+									xhttp.send(); 
+								} window.onload = geo; 
+								&lt;/script&gt; 
+								&lt;!-- End::GeoSmart-Header --&gt;
 							</code>
 							<h3>Body</h3>
 							<code>
-								&lt;!-- GeoSmart --&gt;
+								&lt;!-- Begin::GeoSmart-Body --&gt;
 								&lt;div id="Geo-<%=name%>-<%=experience%>"&gt;&lt;/div&gt;
-								&lt;!-- End GeoSmart --&gt;
+								&lt;!-- End::GeoSmart-Body --&gt;
 							</code>
 						</div>
 						<div class="modal-footer">							
