@@ -6,15 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
-
-import com.onwardpath.georeach.util.DbUtil;
+import com.onwardpath.georeach.util.Database;
 import com.onwardpath.georeach.model.Segment;
 
 public class SegmentRepository {
 	  private Connection dbConnection;
 	  
 	  public SegmentRepository() {
-	      dbConnection = DbUtil.getConnection();
+	      dbConnection = Database.getConnection();
 	  }
 	  	  
 	  public void save(String name, String geography, int user_id, int org_id) throws SQLException {
@@ -23,7 +22,7 @@ public class SegmentRepository {
           prepStatement.setString(2, geography);
           prepStatement.setInt(3, user_id);
           prepStatement.setInt(4, org_id);
-          System.out.println(DbUtil.getTimestamp()+" @SegmentRepository.save>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @SegmentRepository.save>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();
 	  }
@@ -37,7 +36,7 @@ public class SegmentRepository {
 	      boolean segmentExist = false;
           PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from segment where name = ?");
           prepStatement.setString(1, name);   
-          System.out.println(DbUtil.getTimestamp()+" @SegmentRepository.findBySegmentName>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @SegmentRepository.findBySegmentName>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {   
               while (result.next()) {
@@ -62,7 +61,7 @@ public class SegmentRepository {
 		  Map<Integer, String> segments = new HashMap<Integer, String>();	      
           PreparedStatement prepStatement = dbConnection.prepareStatement("select id, name from segment where org_id = ?");
           prepStatement.setInt(1, org_id); 
-          System.out.println(DbUtil.getTimestamp()+" @SegmentRepository.getOrgSegments>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @SegmentRepository.getOrgSegments>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {   
               while (result.next()) {
@@ -84,7 +83,7 @@ public class SegmentRepository {
 		  Map<Integer, Segment> orgSegments = new HashMap<Integer, Segment>();
 		  PreparedStatement prepStatement = dbConnection.prepareStatement("select * from segment where org_id = ?");
           prepStatement.setInt(1, org_id); 
-          System.out.println(DbUtil.getTimestamp()+" @SegmentRepository.loadOrgSegments>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @SegmentRepository.loadOrgSegments>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {   
               while (result.next()) {
@@ -100,5 +99,15 @@ public class SegmentRepository {
           prepStatement.close();
           result.close();
           return orgSegments;
-	  }	  	 
+	  }	
+	  
+	  public void close() {
+		  System.out.println(Database.getTimestamp()+" @SegmentRepository.close>Closing Database Connection");
+		  Database.closeConnection();
+	  }
+	  
+	  public void finalize() {
+		  System.out.println(Database.getTimestamp()+" @SegmentRepository.finalize>Closing Database Connection");
+		  Database.closeConnection();
+	  }
 }

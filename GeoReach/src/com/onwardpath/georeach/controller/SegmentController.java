@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.sql.SQLException;
 import com.onwardpath.georeach.repository.SegmentRepository;
-import com.onwardpath.georeach.util.DbUtil;
+import com.onwardpath.georeach.util.Database;
 
 @SuppressWarnings("serial")
 public class SegmentController extends HttpServlet {
@@ -22,8 +22,7 @@ public class SegmentController extends HttpServlet {
 	   * @see HttpServlet#HttpServlet()
 	   */
 	  public SegmentController() {
-	      super();
-	      segmentRepository = new SegmentRepository();
+	      super();	      
 	  }
 
 	  /**
@@ -38,9 +37,11 @@ public class SegmentController extends HttpServlet {
 	  /**
 	   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	   */
-	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		  		  		 
+	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+		  segmentRepository = new SegmentRepository();
+		  
 	      String pageName = request.getParameter("pageName");	      	      
-	      System.out.println(DbUtil.getTimestamp()+" @SegmentController.doPost>pageName: "+pageName);
+	      System.out.println(Database.getTimestamp()+" @SegmentController.doPost>pageName: "+pageName);
 	      String forward = "";
 	      HttpSession session = request.getSession();	      
 	      if (segmentRepository != null) {
@@ -70,6 +71,7 @@ public class SegmentController extends HttpServlet {
 	        	  }	        	  
 	          } 
 	      }
+	      //segmentRepository.close();//Is this required?
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);	     
 	  }	  	 

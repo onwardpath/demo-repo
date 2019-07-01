@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.repository.UserRepository;
-import com.onwardpath.georeach.util.DbUtil;
+import com.onwardpath.georeach.util.Database;
 
 @SuppressWarnings("serial")
 public class UserController extends HttpServlet {
@@ -27,8 +27,7 @@ public class UserController extends HttpServlet {
 	   * @see HttpServlet#HttpServlet()
 	   */
 	  public UserController() {
-	      super();
-	      userRepository = new UserRepository();
+	      super();	      
 	  }
 
 	  /**
@@ -43,9 +42,11 @@ public class UserController extends HttpServlet {
 	  /**
 	   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	   */
-	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	      
+	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		  userRepository = new UserRepository();
+		  
 		  String pageName = request.getParameter("pageName");	      
-	      System.out.println(DbUtil.getTimestamp()+" @UserController.doPost>pageName: "+pageName);
+	      System.out.println(Database.getTimestamp()+" @UserController.doPost>pageName: "+pageName);
 	      String forward = "";        
 	      HttpSession session = request.getSession();	      
 	      if (userRepository != null) {
@@ -105,6 +106,7 @@ public class UserController extends HttpServlet {
             		  forward = LOGIN_FAILURE;            	             		 
 	    	  }	    	  	    	  	    	  	    	  	    	  	    	  	    	  	             
 	      }
+	      //userRepository.close();
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
 	  }	  	 

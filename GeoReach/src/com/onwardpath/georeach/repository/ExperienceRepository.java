@@ -4,15 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.HashMap;
 import com.onwardpath.georeach.model.Experience;
 import com.onwardpath.georeach.model.Image;
 import com.onwardpath.georeach.model.Content;
-import com.onwardpath.georeach.util.DbUtil;
+import com.onwardpath.georeach.util.Database;
+
 
 /**
  * Allows Insert, Update and Select queries to Save, Edit and Load Experience Details. Will use Experience bean object.
@@ -25,7 +23,7 @@ public class ExperienceRepository {
 	  private Connection dbConnection;
 	  
 	  public ExperienceRepository() {
-	      dbConnection = DbUtil.getConnection();
+	      dbConnection = Database.getConnection();
 	  }
 	  	  
 	  /**
@@ -56,7 +54,7 @@ public class ExperienceRepository {
           prepStatement.setInt(6, org_id);
           prepStatement.setInt(7, user_id);
           //prepStatement.setDate(5, new java.sql.Date(new SimpleDateFormat("MM/dd/yyyy").parse(dateOfBirth.substring(0, 10)).getTime()));	
-          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.save>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.save>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement = dbConnection.prepareStatement("select last_insert_id()");
           ResultSet result = prepStatement.executeQuery();          
@@ -75,7 +73,7 @@ public class ExperienceRepository {
 		  } else
 			  updateSql+= "'"+value+"' where id = "+id;			  
     	  PreparedStatement prepStatement = dbConnection.prepareStatement(updateSql); 
-    	  System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.update>prepStatement: "+prepStatement.toString());
+    	  System.out.println(Database.getTimestamp()+" @ExperienceRepository.update>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();          
 	  }
@@ -85,7 +83,7 @@ public class ExperienceRepository {
           prepStatement.setInt(1, experience_id);
           prepStatement.setInt(2, segment_id);
           prepStatement.setString(3, url);
-          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.saveImage>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveImage>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();          
 	  }	
@@ -95,12 +93,11 @@ public class ExperienceRepository {
           prepStatement.setInt(1, experience_id);
           prepStatement.setInt(2, segment_id);
           prepStatement.setString(3, content);   
-          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.saveContent>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveContent>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();          
 	  }
-	  
-	  	  	  	  
+	  	  	  	  	  
 	  /**
 	   * To be called after checking experience exists by id
 	   * 
@@ -111,7 +108,7 @@ public class ExperienceRepository {
 		  Experience experience = new Experience(id);
           PreparedStatement prepStatement = dbConnection.prepareStatement("select * from experience where id = ?");
           prepStatement.setInt(1, id);  
-          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.get>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.get>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {
               while (result.next()) {	            	              	  
@@ -144,10 +141,10 @@ public class ExperienceRepository {
 		  		+ "image.segment_id = segment.id and "
 		  		+ "experience.org_id = ? "
 		  		+ "order by create_time desc";
-		  //System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.getOrgImageExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
+		  //System.out.println(Database.getTimestamp()+" @ExperienceRepository.getOrgImageExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
 		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
 		  prepStatement.setInt(1, org_id);   
-		  System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.getOrgImageExperiences>prepStatement: "+prepStatement.toString());
+		  System.out.println(Database.getTimestamp()+" @ExperienceRepository.getOrgImageExperiences>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();                            
           if (result != null) {        	  
               while (result.next()) {	            	              	  
@@ -196,10 +193,10 @@ public class ExperienceRepository {
 		  		+ "content.segment_id = segment.id and "
 		  		+ "experience.org_id = ? "
 		  		+ "order by create_time desc";
-		  //System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.getOrgContentExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
+		  //System.out.println(Database.getTimestamp()+" @ExperienceRepository.getOrgContentExperiences>query: "+query);//TODO: ORDER_BY DESC IS NOT WORKING.
 		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
 		  prepStatement.setInt(1, org_id);                     
-		  System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.getOrgContentExperiences>prepStatement: "+prepStatement.toString());
+		  System.out.println(Database.getTimestamp()+" @ExperienceRepository.getOrgContentExperiences>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();                           
           if (result != null) {        	  
               while (result.next()) {	            	              	  
@@ -244,7 +241,7 @@ public class ExperienceRepository {
 	  public boolean exists(int id) throws SQLException {		  	     
 		  PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where id = ?");
           prepStatement.setInt(1, id);  
-          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.exists>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.exists>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {   
               while (result.next()) {
@@ -269,7 +266,7 @@ public class ExperienceRepository {
           PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where name = ? and org_id = ?");
           prepStatement.setString(1, name);
           prepStatement.setInt(2, org_id); 
-          System.out.println(DbUtil.getTimestamp()+" @ExperienceRepository.nameExists>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.nameExists>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {   
               while (result.next()) {
@@ -281,5 +278,15 @@ public class ExperienceRepository {
           prepStatement.close();
           result.close();	    
 	      return false;
-	  }	  	 
-	}
+	  }
+	  
+	  public void close() {
+		  System.out.println(Database.getTimestamp()+" @ExperienceRepository.close>Closing Database Connection");
+		  Database.closeConnection();
+	  }
+	  
+	  public void finalize() {
+		  System.out.println(Database.getTimestamp()+" @ExperienceRepository.finalize>Closing Database Connection");
+		  Database.closeConnection();
+	  }
+}

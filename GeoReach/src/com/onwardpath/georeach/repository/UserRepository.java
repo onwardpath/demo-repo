@@ -4,14 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.onwardpath.georeach.util.DbUtil;
+//import com.onwardpath.georeach.util.DbUtil;
+import com.onwardpath.georeach.util.Database;
 import com.onwardpath.georeach.model.User;
 
 public class UserRepository {
 	  private Connection dbConnection;
 	  
 	  public UserRepository() {
-	      dbConnection = DbUtil.getConnection();
+	      //dbConnection = DbUtil.getConnection();
+		  dbConnection = Database.getConnection();
 	  }
 	  
 	  /**
@@ -34,11 +36,11 @@ public class UserRepository {
 		  prepStatement.setString(1, orgName);
           prepStatement.setString(2, domain);
           prepStatement.setString(3, logoUrl);
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement1: "+prepStatement.toString());                   
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement1: "+prepStatement.toString());                   
           prepStatement.executeUpdate();
           //Get the org_id
           prepStatement = dbConnection.prepareStatement("select last_insert_id()");
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement2: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement2: "+prepStatement.toString());
           ResultSet orgResult = prepStatement.executeQuery();
           orgResult.next();
           int org_id = orgResult.getInt(1);                    
@@ -52,7 +54,7 @@ public class UserRepository {
           prepStatement.setString(6, email);
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement3: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement3: "+prepStatement.toString());
           prepStatement.executeUpdate();              
           prepStatement.close();
           orgResult.close();
@@ -74,7 +76,7 @@ public class UserRepository {
 		  //1. Find Organization ID from given domain name		  		                     		          	                                                                                                    
           PreparedStatement prepStatement = dbConnection.prepareStatement("select id from organization where domain = ?");
           prepStatement.setString(1, domain);
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement1: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement1: "+prepStatement.toString());
           ResultSet orgResult = prepStatement.executeQuery();
           orgResult.next();
           int org_id = orgResult.getInt(1);                   
@@ -88,7 +90,7 @@ public class UserRepository {
           prepStatement.setString(6, email);
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
           prepStatement.executeUpdate(); 
           prepStatement.close();
           orgResult.close();
@@ -105,7 +107,7 @@ public class UserRepository {
 		  boolean orgExist = false;
           PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from organization where domain = ?");
           prepStatement.setString(1, domain);   
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.orgExists>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.orgExists>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {   
               while (result.next()) {
@@ -130,7 +132,7 @@ public class UserRepository {
 		  boolean userExist = false;
           PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from user where login = ?");
           prepStatement.setString(1, login);    
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.findByUserName>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.findByUserName>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {   
               while (result.next()) {
@@ -157,7 +159,7 @@ public class UserRepository {
 		  boolean userAuthenticated = false;	      
           PreparedStatement prepStatement = dbConnection.prepareStatement("select password from user where login = ?");
           prepStatement.setString(1, login);  
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.findByLogin>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.findByLogin>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {
               while (result.next()) {
@@ -182,7 +184,7 @@ public class UserRepository {
 		  		"user.id = ?";		  		  		          
 		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
           prepStatement.setInt(1, id); 
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.getUser>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.getUser>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null && result.next()) {
               String firstname = result.getString("firstname");
@@ -214,7 +216,7 @@ public class UserRepository {
 		  int org_id = 0;
           PreparedStatement prepStatement = dbConnection.prepareStatement("select org_id from user where login = ?");
           prepStatement.setString(1, login);           
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.findOrgId>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.findOrgId>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null && result.next()) {	              
               org_id = result.getInt(1);	                             
@@ -234,7 +236,7 @@ public class UserRepository {
 		  int user_id = 0;		  
           PreparedStatement prepStatement = dbConnection.prepareStatement("select id from user where login = ?");
           prepStatement.setString(1, login);  
-          System.out.println(DbUtil.getTimestamp()+" @UserRepository.findUserId>prepStatement: "+prepStatement.toString());
+          System.out.println(Database.getTimestamp()+" @UserRepository.findUserId>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null && result.next()) {	              
         	  user_id = result.getInt(1);	                             
@@ -242,5 +244,15 @@ public class UserRepository {
           prepStatement.close();
           result.close();
 	      return user_id;
-	  }	  	 
-	}
+	  }	
+	  
+	  public void close() {
+		  System.out.println(Database.getTimestamp()+" @UserRepository.close>Closing Database Connection");
+		  Database.closeConnection();
+	  }
+	  
+	  public void finalize() {
+		  System.out.println(Database.getTimestamp()+" @UserRepository.finalize>Closing Database Connection");
+		  Database.closeConnection();
+	  }
+}

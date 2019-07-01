@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onwardpath.georeach.repository.ExperienceRepository;
-import com.onwardpath.georeach.util.DbUtil;
+import com.onwardpath.georeach.util.Database;
 
 @SuppressWarnings("serial")
 public class ExperienceController extends HttpServlet {
@@ -25,8 +25,7 @@ public class ExperienceController extends HttpServlet {
 	   * @see HttpServlet#HttpServlet()
 	   */
 	  public ExperienceController() {
-	      super();
-	      experienceRepository = new ExperienceRepository();	      
+	      super();	      	     
 	  }
 
 	  /**
@@ -41,9 +40,11 @@ public class ExperienceController extends HttpServlet {
 	  /**
 	   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	   */
-	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		  
+		  experienceRepository = new ExperienceRepository();
+		  
 	      String pageName = request.getParameter("pageName");
-	      System.out.println(DbUtil.getTimestamp()+" @ExperienceController.doPost>pageName: "+pageName);
+	      System.out.println(Database.getTimestamp()+" @ExperienceController.doPost>pageName: "+pageName);
 	      String forward = "";        	      
 	  	  HttpSession session = request.getSession();
 	      int org_id = (Integer)session.getAttribute("org_id");
@@ -110,6 +111,7 @@ public class ExperienceController extends HttpServlet {
 	        	  }        	                	             	              	              	              	           	             	              	              	   	                         
 	          }	          
 	      }
+	      //experienceRepository.close();
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
 	  }	  	 
