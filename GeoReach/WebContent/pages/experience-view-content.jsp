@@ -31,41 +31,28 @@
 						User user = userRepository.getUser(experience.getUser_id());
 						Map<Integer,Content> contents = experience.getContents();								
 						%>																																																		
-						<div class="row">
-							<!-- begin::view code -->
+						<div class="row">							
 						    <div class="col">
-						        <div class="alert alert-light alert-elevate fade show" role="alert">
-						            <div class="alert-icon"></div>		            		           
-						            <div class="alert-text">
-						            	<div class="d-inline-block">
-						            		<i class="flaticon-paper-plane kt-font-brand"></i>
-							            	<h3><%=experience.getName()%></h3>							            
-											<!--strong><mark><%=experience.getType()%></mark></strong -->											
-											<div>						            																				
-												<span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">
-													<label>
-													<%String status = experience.getStatus();
-													if (status.equalsIgnoreCase("on")) {%>
-														<input type="checkbox" checked="checked" name="">
-													<%} else {%>
-														<input type="checkbox" name="">
-													<%}%>												
-													<span></span>
-													</label>
-												</span>
-											</div>
-										</div>										
-										<div class="kt-user-card" style="border-bottom-style: solid; border-width: 1px; border-color: lightgrey;">
-											<div class="kt-user-card__wrapper">
-										        <div class="kt-user-card__pic">
-										            <img alt="Pic" src="<%=user.getProfile_pic()%>" />
-										        </div> 
-										        <div class="kt-user-card__details">
-										            <div class="kt-user-card__name" style="color: green;"><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></div>
-										            <div class="kt-user-card__position"></div>
-										        </div>
-										    </div>
-										</div>																																	            																																			
+						        <div class="alert alert-light alert-elevate fade show" role="alert">						            		            		          
+						            <div class="alert-text">						            	
+					            		<i class="flaticon-paper-plane kt-font-brand"></i>
+						            	<h3><%=experience.getName()%></h3>							            
+										<img alt="Pic" src="<%=user.getProfile_pic()%>" class="rounded-circle" style="width: 50px;"/>
+										<%=user.getFirstname()%>&nbsp;<%=user.getLastname()%>
+										<br><br>																				
+										<div>						            																				
+											<span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">
+												<label>
+												<%String status = experience.getStatus();
+												if (status.equalsIgnoreCase("on")) {%>
+													<input type="checkbox" checked="checked" name="">
+												<%} else {%>
+													<input type="checkbox" name="">
+												<%}%>												
+												<span></span>
+												</label>
+											</span>
+										</div>																																																															            																																			
 					    				<div><!-- begin::cards-container -->							
 										<%for ( Map.Entry<Integer, Content> ientry : contents.entrySet()) {
 											Integer key = ientry.getKey();
@@ -85,7 +72,7 @@
 										<%}%>						
 										<br><br>																																																						
 										</div><!-- end::cards-container -->																	                		          
-							            <!-- Button trigger modal -->
+							            <!-- begin::Button trigger modal -->
 							            &nbsp;&nbsp;
 										<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter<%=id%>">
 											View Code
@@ -93,10 +80,10 @@
 										<button type="button" class="btn btn-outline-brand">
 											Edit
 										</button>
+										<!-- end::Button trigger modal -->
 									</div>
 						        </div>
-						    </div><!-- end:: view code -->
-						    						    						    						    						 
+						    </div>						    						    						    						    						
 						</div>							
 						<!-- begin::modal -->		
 						<div class="kt-section__content kt-section__content--border">			

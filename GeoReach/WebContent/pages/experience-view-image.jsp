@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.Map,com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
 <!-- begin:: Content -->
+<style>
+imageThumb {
+	border: 1px solid #ddd; /* Gray border */
+  	border-radius: 4px;  /* Rounded border */
+  	padding: 5px; /* Some padding */
+  	width: 150px; /* Set a small width */
+}
+</style>
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 	<%//TODO: Resolve DataTable issue -- https://datatables.net/forums/discussion/32575/uncaught-typeerror-cannot-set-property-dt-cellindex-of-undefined
 	ExperienceRepository experienceRepository = new ExperienceRepository();
@@ -31,41 +39,29 @@
 						User user = userRepository.getUser(experience.getUser_id());
 						Map<Integer,Image> images = experience.getImages();								
 						%>																																																		
-						<div class="row">
-							<!-- begin::view code -->
+						<div class="row">							
 						    <div class="col">
-						        <div class="alert alert-light alert-elevate fade show" role="alert">
-						            <div class="alert-icon"></div>		            		           
-						            <div class="alert-text">
-						            	<div class="d-inline-block">
-						            		<i class="flaticon-paper-plane kt-font-brand"></i>
-							            	<h3><%=experience.getName()%></h3>							            
-											<!--strong><mark><%=experience.getType()%></mark></strong -->											
-											<div>						            																				
-												<span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">
-													<label>
-													<%String status = experience.getStatus();
-													if (status.equalsIgnoreCase("on")) {%>
-														<input type="checkbox" checked="checked" name="">
-													<%} else {%>
-														<input type="checkbox" name="">
-													<%}%>												
-													<span></span>
-													</label>
-												</span>
-											</div>
-										</div>										
-										<div class="kt-user-card" style="border-bottom-style: solid; border-width: 1px; border-color: lightgrey;">
-											<div class="kt-user-card__wrapper">
-										        <div class="kt-user-card__pic">
-										            <img alt="Pic" src="<%=user.getProfile_pic()%>" />
-										        </div> 
-										        <div class="kt-user-card__details">
-										            <div class="kt-user-card__name" style="color: green;"><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></div>
-										            <div class="kt-user-card__position"></div>
-										        </div>
-										    </div>
-										</div>																																	            																																			
+						        <div class="alert alert-light alert-elevate fade show" role="alert">						            		            		          
+						            <div class="alert-text">						            	
+					            		<i class="flaticon-paper-plane kt-font-brand"></i>
+						            	<h3><%=experience.getName()%></h3>							            											
+										<img alt="Pic" src="<%=user.getProfile_pic()%>" class="rounded-circle" style="width: 50px;"/>
+										<%=user.getFirstname()%>&nbsp;<%=user.getLastname()%>
+										<br><br>											
+										<div>						            																				
+											<span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">
+												<label>
+												<%String status = experience.getStatus();
+												if (status.equalsIgnoreCase("on")) {%>
+													<input type="checkbox" checked="checked" name="">
+												<%} else {%>
+													<input type="checkbox" name="">
+												<%}%>												
+												<span></span>
+												</label>
+											</span>
+										</div>
+																																																															            																																		
 					    				<div><!-- begin::cards-container -->							
 										<%for ( Map.Entry<Integer, Image> ientry : images.entrySet()) {
 											Integer key = ientry.getKey();
@@ -74,8 +70,8 @@
 											<!-- begin::card -->
 											<div class="d-inline-block">	
 												<div class="card">
-													<div class="card-body">																							    		
-											    		<img src="<%=image.getUrl()%>" class="rounded" >			    					    	
+													<div class="card-body">																							    													    													    	
+											    		<img src="<%=image.getUrl()%>" class="rounded" style="width: 200px;" >											    					    					    	
 											  		</div>
 											  		<div class="card-footer">
 												      <h5 class="card-title"><%=image.getSegmentName()%></h5>
@@ -85,7 +81,7 @@
 										<%}%>						
 										<br><br>																																																						
 										</div><!-- end::cards-container -->																	                		          
-							            <!-- Button trigger modal -->
+							            <!-- begin::Button trigger modal -->
 							            &nbsp;&nbsp;
 										<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter<%=id%>">
 											View Code
@@ -93,10 +89,10 @@
 										<button type="button" class="btn btn-outline-brand">
 											Edit
 										</button>
+										<!-- end::Button trigger modal -->
 									</div>
 						        </div>
-						    </div><!-- end:: view code -->
-						    						    						    						    						 
+						    </div>						    						    						    						    						
 						</div>							
 						<!-- begin::modal -->		
 						<div class="kt-section__content kt-section__content--border">			
