@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.SegmentRepository" %>    
 <script type="text/javascript">
-
 var expDetailsObj = {};
-
 function add(){		
 	var segment = document.getElementById("segment");	
 	var segment_id = segment.value;	
@@ -15,29 +13,28 @@ function add(){
 		expDetailsObj[segment_id] = url;				
 		var stage = document.getElementById("stage");	
 		stage.innerHTML += '<div id="'+segment_name+'" class="card-body"><img src="'+url+'" class="rounded">&nbsp;<button type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+segment_name+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button></div>';
-		stage.style.display = "block";		
+		stage.style.display = "block";
+		var library = document.getElementById("library");
+		library.style.display = "none";
 	}	
 }
-function remove(element, segment_id){	
-	//alert(element);
-	var displayElement = document.getElementById(element);
-	//alert(displayElement);
-	//alert(segment_id);
+function remove(element, segment_id){		
+	var displayElement = document.getElementById(element);	
 	delete expDetailsObj[segment_id];	
 	displayElement.style.display = "none";		
 }
-function showLibrary() {
-	alert("Going to show library");
-	var displayElement = document.getElementById("library");
-	displayElement.style.display = "block";	
+function showLibrary() {	
+	var library = document.getElementById("library");
+	library.style.display = "block";	
 }
-function saveExperience() 
-{	
+function getImageURL(x) {
+    var imageID=x;
+	var imageUrl=document.getElementById(imageID).src;		
+	document.getElementById("url").value = imageUrl;
+}
+function saveExperience() {	
 	var name = document.getElementById('name').value;
-	var type = "image";			
-	//alert("name: "+name);
-	//alert("type: "+type);	
-	//alert("experienceDetails: "+JSON.stringify(expDetailsObj));		
+	var type = "image";						
 	document.getElementById("experience-form").type.value=type;	
 	document.getElementById("experience-form").experienceDetails.value=JSON.stringify(expDetailsObj);	
 	document.getElementById("experience-form").method = "post";
@@ -45,15 +42,6 @@ function saveExperience()
 	document.getElementById("experience-form").submit();
 }
 </script>
-
-<!-- 
-https://www.associatedbank.com/content/image/mobile_upgrade_img_banking
-https://www.associatedbank.com/content/image/mobile_upgrade_img_mobile
-https://cdn.oectours.com/media/cds/banks/5231/59750.png
-https://cdn.oectours.com/media/cds/banks/5231/81461.png
-https://www.associatedbank.com/content/image/OLB_LP_Image
-https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
- -->
  
 <!--begin::Content-->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
@@ -76,8 +64,7 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 		String experience = "";
 		String organization = "";		
 		if (message.contains("#")) {			
-			String codeConstructor = message.substring(message.indexOf("#")+1);
-			
+			String codeConstructor = message.substring(message.indexOf("#")+1);			
 			message = message.substring(0,message.indexOf("#"));
 			String[] decoder = codeConstructor.split("#");
 			name = decoder[0].substring(decoder[0].indexOf("=")+1);
@@ -117,29 +104,31 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 							 <h3>Header</h3>
 							 <code>
 								&lt;!-- Begin::GeoSmart-Header --&gt; 
-								&lt;script&gt; 
-								function geo() 
-								{ 
-									var serviceURL = "http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=experience%>&org_id=<%=org_id%>&s="; 
-									var geoElement = document.getElementById("Geo-<%=name%>-<%=experience%>"); 	
-									var url = new URL(window.location.href); 
-									var c = url.searchParams.get("s"); 
-									serviceURL += c; 
-									console.log(serviceURL); 
-									var xhttp = new XMLHttpRequest(); 
-									xhttp.responseType = 'json'; 
-									xhttp.onreadystatechange = function () { 
-										if (this.readyState == 4 && this.status == 200) 
-										{ 
-											var locationbasedImage_element = geoElement.getElementsByTagName('img')[0]; 
-											let data = this.response; 
-											locationbasedImage_element.src = data[1].url; 
-											locationbasedImage_element.parentElement.href = data[1].url; 
-										} 
-									}; xhttp.open("GET", serviceURL); 
-									xhttp.send(); 
-								} window.onload = geo; 
-								&lt;/script&gt; 
+								&lt;script&gt;
+								function geo()
+								{
+								      var serviceURL= "http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=experience%>&org_id=<%=org_id%>&s=";
+								      var geoElement = document.getElementById("Geo-<%=name%>-<%=experience%>");
+								      var url = new URL(window.location.href);
+								      var c = url.searchParams.get("s");
+								      serviceURL += c;
+								      console.log(serviceURL);
+								
+								      var xhttp = new XMLHttpRequest();
+								      xhttp.responseType = 'json';
+								      xhttp.onreadystatechange = function() 
+								      {
+										if (this.readyState == 4 && this.status == 200)
+										{
+											let data = this.response;
+											geoElement.innerHTML = data[1].embedCode;
+										}
+								      };
+								      xhttp.open("GET", serviceURL);
+								      xhttp.send();
+								 }								
+								window.onload = geo;
+								&lt;/script&gt;  
 								&lt;!-- End::GeoSmart-Header --&gt;
 							</code>
 							<h3>Body</h3>
@@ -199,7 +188,12 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 				
 				<div class="kt-section__content kt-section__content--border">				
 					<div id="library" style="display: none;">
-					<img src="https://www.associatedbank.com/content/image/mobile_upgrade_img_banking" />																																																																																																									
+					<img id="image1" onclick="getImageURL('image1')" src="https://www.associatedbank.com/content/image/mobile_upgrade_img_banking" class="rounded" style="width: 250px;"/>
+					<img id="image2" onclick="getImageURL('image2')" src="https://www.associatedbank.com/content/image/mobile_upgrade_img_mobile" class="rounded" style="width: 250px;"/>
+					<img id="image3" onclick="getImageURL('image3')" src="https://cdn.oectours.com/media/cds/banks/5231/59750.png" class="rounded" style="width: 250px;"/>
+					<img id="image4" onclick="getImageURL('image4')" src="https://cdn.oectours.com/media/cds/banks/5231/81461.png" class="rounded" style="width: 250px;"/>
+					<img id="image5" onclick="getImageURL('image5')" src="https://www.associatedbank.com/content/image/OLB_LP_Image" class="rounded" style="width: 250px;"/>
+					<img id="image6" onclick="getImageURL('image6')" src="https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png" class="rounded" style="width: 250px;"/>																																																																																																																						
 					</div>
 				</div>
 				
@@ -252,6 +246,6 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 		</form>
 		<!--end::Form-->		
 	</div>
-	<!--begin::Portlet-->
+	<!--end::Portlet-->
 </div>
 <!--end::Content-->

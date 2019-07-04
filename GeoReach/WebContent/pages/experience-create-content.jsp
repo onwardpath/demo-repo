@@ -18,21 +18,15 @@ function add(){
 		stage.style.display = "block";		
 	}	
 }
-function remove(element, segment_id){	
-	//alert(element);
-	var displayElement = document.getElementById(element);
-	//alert(displayElement);
-	//alert(segment_id);
+function remove(element, segment_id){		
+	var displayElement = document.getElementById(element);	
 	delete expDetailsObj[segment_id];	
 	displayElement.style.display = "none";		
 }
 function saveExperience() 
 {	
 	var name = document.getElementById('name').value;
-	var type = "content";			
-	//alert("name: "+name);
-	//alert("type: "+type);	
-	//alert("experienceDetails: "+JSON.stringify(expDetailsObj));		
+	var type = "content";					
 	document.getElementById("experience-form").type.value=type;	
 	document.getElementById("experience-form").experienceDetails.value=JSON.stringify(expDetailsObj);	
 	document.getElementById("experience-form").method = "post";
@@ -111,29 +105,31 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 							 <h3>Header</h3>
 							 <code>
 								&lt;!-- Begin::GeoSmart-Header --&gt; 
-								&lt;script&gt; 
-								function geo() 
-								{ 
-									var serviceURL = "http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=experience%>&org_id=<%=org_id%>&s="; 
-									var geoElement = document.getElementById("Geo-<%=name%>-<%=experience%>"); 	
-									var url = new URL(window.location.href); 
-									var c = url.searchParams.get("s"); 
-									serviceURL += c; 
-									console.log(serviceURL); 
-									var xhttp = new XMLHttpRequest(); 
-									xhttp.responseType = 'json'; 
-									xhttp.onreadystatechange = function () { 
-										if (this.readyState == 4 && this.status == 200) 
-										{ 
-											var locationbasedImage_element = geoElement.getElementsByTagName('img')[0]; 
-											let data = this.response; 
-											locationbasedImage_element.src = data[1].url; 
-											locationbasedImage_element.parentElement.href = data[1].url; 
-										} 
-									}; xhttp.open("GET", serviceURL); 
-									xhttp.send(); 
-								} window.onload = geo; 
-								&lt;/script&gt; 
+								&lt;script&gt;
+								function geo()
+								{
+								      var serviceURL= "http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=experience%>&org_id=<%=org_id%>&s=";
+								      var geoElement = document.getElementById("Geo-<%=name%>-<%=experience%>");
+								      var url = new URL(window.location.href);
+								      var c = url.searchParams.get("s");
+								      serviceURL += c;
+								      console.log(serviceURL);
+								
+								      var xhttp = new XMLHttpRequest();
+								      xhttp.responseType = 'json';
+								      xhttp.onreadystatechange = function() 
+								      {
+										if (this.readyState == 4 && this.status == 200)
+										{
+											let data = this.response;
+											geoElement.innerHTML = data[1].embedCode;
+										}
+								      };
+								      xhttp.open("GET", serviceURL);
+								      xhttp.send();
+								 }								
+								window.onload = geo;
+								&lt;/script&gt;  
 								&lt;!-- End::GeoSmart-Header --&gt;
 							</code>
 							<h3>Body</h3>
@@ -184,7 +180,7 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 				</div>
 											
 				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12">Image</label>
+				<label class="col-form-label col-lg-3 col-sm-12">Content (Text/HTML)</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																								
 						<textarea id="content" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Enter Text" rows="" cols=""></textarea>
 					</div>

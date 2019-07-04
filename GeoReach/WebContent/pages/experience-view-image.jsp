@@ -110,29 +110,31 @@ imageThumb {
 											 <h3>Header</h3>
 											 <code>
 												&lt;!-- Begin::GeoSmart-Header --&gt; 
-												&lt;script&gt; 
-												function geo() 
-												{ 
-													var serviceURL = "http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=id%>&org_id=<%=org_id%>&s="; 
-													var geoElement = document.getElementById("Geo-<%=experience.getName()%>-<%=id%>"); 	
-													var url = new URL(window.location.href); 
-													var c = url.searchParams.get("s"); 
-													serviceURL += c; 
-													console.log(serviceURL); 
-													var xhttp = new XMLHttpRequest(); 
-													xhttp.responseType = 'json'; 
-													xhttp.onreadystatechange = function () { 
-														if (this.readyState == 4 && this.status == 200) 
-														{ 
-															var locationbasedImage_element = geoElement.getElementsByTagName('img')[0]; 
-															let data = this.response; 
-															locationbasedImage_element.src = data[1].url; 
-															locationbasedImage_element.parentElement.href = data[1].url; 
-														} 
-													}; xhttp.open("GET", serviceURL); 
-													xhttp.send(); 
-												} window.onload = geo; 
-												&lt;/script&gt; 
+												&lt;script&gt;
+												function geo()
+												{
+												      var serviceURL= "http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=id%>&org_id=<%=org_id%>&s=";
+												      var geoElement = document.getElementById("Geo-<%=experience.getName()%>-<%=id%>");
+												      var url = new URL(window.location.href);
+												      var c = url.searchParams.get("s");
+												      serviceURL += c;
+												      console.log(serviceURL);
+												
+												      var xhttp = new XMLHttpRequest();
+												      xhttp.responseType = 'json';
+												      xhttp.onreadystatechange = function() 
+												      {
+														if (this.readyState == 4 && this.status == 200)
+														{
+															let data = this.response;
+															geoElement.innerHTML = data[1].embedCode;
+														}
+												      };
+												      xhttp.open("GET", serviceURL);
+												      xhttp.send();
+												 }								
+												window.onload = geo;
+												&lt;/script&gt;  
 												&lt;!-- End::GeoSmart-Header --&gt;
 											</code>
 											<h3>Body</h3>
