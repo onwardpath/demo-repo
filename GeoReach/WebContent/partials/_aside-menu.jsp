@@ -86,7 +86,7 @@
             <!-- EXPERIENCE -->
             <li class="kt-menu__item kt-menu__item--submenu kt-menu__item--open" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
 			<a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-				<i class="kt-menu__link-icon flaticon-paper-plane"></i>
+				<i class="kt-menu__link-icon fa fa-cocktail"></i>
 				<span class="kt-menu__link-text">Experience</span>
 				<i class="kt-menu__ver-arrow la la-angle-right"></i>
 			</a>

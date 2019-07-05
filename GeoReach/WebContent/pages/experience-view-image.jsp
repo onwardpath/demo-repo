@@ -43,7 +43,7 @@ imageThumb {
 						    <div class="col">
 						        <div class="alert alert-light alert-elevate fade show" role="alert">						            		            		          
 						            <div class="alert-text">						            	
-					            		<i class="flaticon-paper-plane kt-font-brand"></i>
+					            		<i class="fa fa-cocktail kt-font-brand"></i>
 						            	<h3><%=experience.getName()%></h3>							            											
 										<img alt="Pic" src="<%=user.getProfile_pic()%>" class="rounded-circle" style="width: 50px;"/>
 										<%=user.getFirstname()%>&nbsp;<%=user.getLastname()%>
