@@ -168,7 +168,7 @@ function saveExperience() {
 					<div class="col-lg-4 col-md-9 col-sm-12">											
 						<select id="segment" class="form-control form-control--fixed kt_selectpicker" data-width="300">
 							<%
-							for ( Map.Entry<Integer, String> entry : segments.entrySet()) {
+							for (Map.Entry<Integer, String> entry : segments.entrySet()) {
 								Integer key = entry.getKey();
 							    String val = entry.getValue();	     	   
 							    out.println("<option value='"+key+"'>"+val+"</option>");

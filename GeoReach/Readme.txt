@@ -42,20 +42,15 @@ Download MySQL Connector/J Platform Independent Version(https://dev.mysql.com/do
 
 Optional Install GitBash (Git-2.21.0-64-bit from https://git-scm.com/download/win)
 
-
 GIT:
-
 Signin to GitHub.com with your onwardpath email
 Optional: Install GitBash (Git-2.21.0-64-bit from https://git-scm.com/download/win)
-
 Start GitBash
 $ git config --global user.name "pandyan"
 $ git config --global user.email "pandyans@onwardpath.com"
-
 From Eclipse, specify your GIT Local Repository as follows:
 Eclipse> Project > Team > Share
 C:\Users\Pandyan\git\repository
-
 $ git cd GeoReach
 After you have made changes to your code
 $ git status
@@ -92,6 +87,7 @@ https://www.froala.com/wysiwyg-editor/pricing
 
 TESTING:
 https://www.geoscreenshot.com/
+https://crossbrowsertesting.com/
 http://lab01.onwardpath.com/geosmart/
 
 OTHER PRODUCTS:
@@ -108,6 +104,15 @@ https://themes.getbootstrap.com/preview/?theme_id=6063&show_new=
 DMA (DESIGNATED MARKET AREAS)
 https://www.nielsen.com/intl-campaigns/us/dma-maps.html
 http://bl.ocks.org/simzou/6459889
+
+ANALYTICS:
+Cross Device Tracking:
+https://www.optimizesmart.com/understanding-universal-analytics-measurement-protocol/#a1
+A Google Analytics Data Model:
+https://www.vertabelo.com/blog/technical-articles/website-analytics-a-google-analytics-data-model
+https://my.vertabelo.com/model/P61M7h7pa4y5n9UJxlcTuOEzbelutkdi
+Build Your Own Web Analytics Platform in 25 Minutes:
+https://www.chaoming.li/blog/build-your-own-web-analytics-platform-in-25-minutes
 
 FEATURES WISHLIST
 1. Since we are not storing the URL for the experience, we need a way to list all pages where the experience is being used (Embed Code is present)

@@ -8,11 +8,18 @@ import java.sql.SQLException;
 import com.onwardpath.georeach.util.Database;
 import com.onwardpath.georeach.model.User;
 
+/**
+ * Allows Insert, Update and Select queries to Save, Edit and Load User Details. Will use User bean object.
+ * Methods: save, edit, load
+ * 
+ * @author Pandyan Ramar
+ * @date 5 July 2019
+ *
+ */
 public class UserRepository {
 	  private Connection dbConnection;
 	  
-	  public UserRepository() {
-	      //dbConnection = DbUtil.getConnection();
+	  public UserRepository() {	      
 		  dbConnection = Database.getConnection();
 	  }
 	  
@@ -28,6 +35,7 @@ public class UserRepository {
 	   * @param phone
 	   * @param password
 	   * @param role
+	   * @param profile_pic
 	   * @throws SQLException
 	   */
 	  public void saveUserandOrg (String orgName, String domain, String logoUrl, String firstName, String lastName, String email, String phone, String password, int role, String profile_pic) throws SQLException {		  		 
@@ -71,6 +79,7 @@ public class UserRepository {
 	   * @param phone
 	   * @param password
 	   * @param role
+	   * @param profile_pic
 	   * @throws SQLException
 	   */
 	  public void saveUserInOrg (String domain, String firstName, String lastName, String email, String phone, String password, int role, String profile_pic) throws SQLException {			 		  
@@ -103,7 +112,7 @@ public class UserRepository {
 	   * Check if an Organization exists based on domain
 	   * 
 	   * @param domain
-	   * @return
+	   * @return boolean
 	   */
 	  public boolean orgExists (String domain) throws SQLException {	
 		  boolean orgExist = false;
@@ -128,7 +137,7 @@ public class UserRepository {
 	   * Check if user exists (by login/email name)
 	   * 
 	   * @param login
-	   * @return
+	   * @return boolean
 	   */
 	  public boolean findByUserName(String login) throws SQLException {
 		  boolean userExist = false;
@@ -155,7 +164,7 @@ public class UserRepository {
 	   * 
 	   * @param login
 	   * @param password
-	   * @return
+	   * @return boolean
 	   */
 	  public boolean findByLogin(String login, String password) throws SQLException {
 		  boolean userAuthenticated = false;	      
@@ -177,6 +186,13 @@ public class UserRepository {
 	      return userAuthenticated;
 	  }
 	  
+	  /**
+	   * Get User object will all user details loaded
+	   * 
+	   * @param id
+	   * @return User 
+	   * @throws SQLException
+	   */
 	  public User getUser(int id) throws SQLException {
 		  User user = new User();		  			  
 		  String query = "select user.org_id as org_id, user.firstname as firstname, user.lastname as lastname, user.login as login, " +
@@ -250,11 +266,19 @@ public class UserRepository {
 	      return user_id;
 	  }	
 	  
+	  /**
+	   * Close the database connection used by this Experience Repository instance. Usually you dont have to close the connection.
+	   * 
+	   */
 	  public void close() {
 		  System.out.println(Database.getTimestamp()+" @UserRepository.close>Closing Database Connection");
 		  Database.closeConnection();
 	  }
 	  
+	  /**
+	   * Object destroyer to free up database connection. To be called by Garbage Collector
+	   * 
+	   */
 	  public void finalize() {
 		  System.out.println(Database.getTimestamp()+" @UserRepository.finalize>Closing Database Connection");
 		  Database.closeConnection();

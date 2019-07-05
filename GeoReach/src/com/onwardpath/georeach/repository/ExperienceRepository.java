@@ -16,7 +16,8 @@ import com.onwardpath.georeach.util.Database;
  * Allows Insert, Update and Select queries to Save, Edit and Load Experience Details. Will use Experience bean object.
  * Methods: save, edit, load
  * 
- * @author pandyan
+ * @author Pandyan Ramar
+ * @date 5 July 2019
  *
  */
 public class ExperienceRepository {
@@ -65,7 +66,15 @@ public class ExperienceRepository {
           return id;                           
 	  }
 	  	  
-	  //Pass columnType = 0 for int value
+	  /**
+	   * Update experience table single column data
+	   * 
+	   * @param id
+	   * @param columnType Pass columnType = 0 for int value
+	   * @param colunmName
+	   * @param value
+	   * @throws SQLException
+	   */
 	  public void update (int id, int columnType, String colunmName, String value) throws SQLException {
 		  String updateSql = "update experience set "+colunmName+" = ";
 		  if (columnType == 0) {
@@ -77,7 +86,15 @@ public class ExperienceRepository {
           prepStatement.executeUpdate();
           prepStatement.close();          
 	  }
-	  	  
+	  
+	  /**
+	   * Save a Image experience detail to the Image table
+	   * 
+	   * @param experience_id
+	   * @param segment_id
+	   * @param url
+	   * @throws SQLException
+	   */
 	  public void saveImage(int experience_id, int segment_id, String url) throws SQLException {	      	         
     	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.image (experience_id, segment_id, url, create_time) values (?,?,?,now())");                    
           prepStatement.setInt(1, experience_id);
@@ -87,7 +104,15 @@ public class ExperienceRepository {
           prepStatement.executeUpdate();
           prepStatement.close();          
 	  }	
-	  	  
+	  
+	  /**
+	   * Save a Content experience detail to the Content table
+	   * 
+	   * @param experience_id
+	   * @param segment_id
+	   * @param content
+	   * @throws SQLException
+	   */
 	  public void saveContent(int experience_id, int segment_id, String content) throws SQLException {	      	         
     	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.content (experience_id, segment_id, content, create_time) values (?,?,?,now())");                    
           prepStatement.setInt(1, experience_id);
@@ -97,12 +122,60 @@ public class ExperienceRepository {
           prepStatement.executeUpdate();
           prepStatement.close();          
 	  }
-	  	  	  	  	  
+	  
 	  /**
-	   * To be called after checking experience exists by id
+	   * Check weather an experience exists
 	   * 
 	   * @param id
-	   * @return
+	   * @return boolean 
+	   */
+	  public boolean exists(int id) throws SQLException {		  	     
+		  PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where id = ?");
+          prepStatement.setInt(1, id);  
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.exists>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {   
+              while (result.next()) {
+                  if (result.getInt(1) == 1) {
+                      return true;
+                  }               
+              }
+          }      
+    	  prepStatement.close();
+          result.close();	      	      
+	      return false;
+	  }	
+	  
+	  /**
+	   * Checks if an Experience name already exists for an organization
+	   * 
+	   * @param name
+	   * @param org_id
+	   * @return boolean
+	   */
+	  public boolean nameExists(String name, int org_id) throws SQLException {
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where name = ? and org_id = ?");
+          prepStatement.setString(1, name);
+          prepStatement.setInt(2, org_id); 
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.nameExists>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {   
+              while (result.next()) {
+                  if (result.getInt(1) == 1) {
+                      return true;
+                  }               
+              }
+          }	      
+          prepStatement.close();
+          result.close();	    
+	      return false;
+	  }
+	  	  	  	  	  
+	  /**
+	   * Get a single Experience Object. To be called after checking experience exists by id
+	   * 
+	   * @param id
+	   * @return Experience object
 	   */
 	  public Experience get(int id) throws SQLException {	
 		  Experience experience = new Experience(id);
@@ -129,6 +202,25 @@ public class ExperienceRepository {
           return experience;		   	     
 	  }
 	  
+	  /**
+	   * Gets all experiences configured for an organization
+	   * 
+	   * @param org_id
+	   * @return Map containing Experience objects
+	   */
+	  public Map<Integer, Experience> getOrgExperiences(int org_id) throws SQLException {
+		  Map<Integer,Experience> orgExp = new HashMap<Integer,Experience>();
+		  orgExp.putAll(getOrgImageExperiences(org_id));
+		  orgExp.putAll(getOrgContentExperiences(org_id));
+		  return orgExp;
+	  }
+	  
+	  /**
+	   * Gets all image experiences configured for an organization
+	   * 
+	   * @param org_id
+	   * @return Map containing Image Experience objects
+	   */
 	  public Map<Integer,Experience> getOrgImageExperiences (int org_id) throws SQLException {
 		  Map<Integer,Experience> orgImageExp = new HashMap<Integer,Experience>();		  
 		  String query = "select experience.id as id, experience.name as name, experience.type as type, experience.status as status, "
@@ -181,6 +273,12 @@ public class ExperienceRepository {
           return orgImageExp;
 	  }
 	  
+	  /**
+	   * Gets all content experiences configured for an organization
+	   * 
+	   * @param org_id
+	   * @return Map containing Content Experience objects
+	   */
 	  public Map<Integer,Experience> getOrgContentExperiences (int org_id) throws SQLException {
 		  Map<Integer,Experience> orgContentExp = new HashMap<Integer,Experience>();		  
 		  String query = "select experience.id as id, experience.name as name, experience.type as type, experience.status as status, "
@@ -232,59 +330,20 @@ public class ExperienceRepository {
           result.close();
           return orgContentExp;
 	  }
-	  	  	 
+	  	  	 	  	 
 	  /**
-	   * Check weather an experience exists
-	   * @param id
-	   * @return true if exists, false otherwise
-	   */
-	  public boolean exists(int id) throws SQLException {		  	     
-		  PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where id = ?");
-          prepStatement.setInt(1, id);  
-          System.out.println(Database.getTimestamp()+" @ExperienceRepository.exists>prepStatement: "+prepStatement.toString());
-          ResultSet result = prepStatement.executeQuery();
-          if (result != null) {   
-              while (result.next()) {
-                  if (result.getInt(1) == 1) {
-                      return true;
-                  }               
-              }
-          }      
-    	  prepStatement.close();
-          result.close();	      	      
-	      return false;
-	  }	
-	  
-	  /**
-	   * Checks if an Experience name already exists for an organization
+	   * Close the database connection used by this Experience Repository instance. Usually you dont have to close the connection.
 	   * 
-	   * @param name
-	   * @param org_id
-	   * @return
 	   */
-	  public boolean nameExists(String name, int org_id) throws SQLException {
-          PreparedStatement prepStatement = dbConnection.prepareStatement("select count(*) from experience where name = ? and org_id = ?");
-          prepStatement.setString(1, name);
-          prepStatement.setInt(2, org_id); 
-          System.out.println(Database.getTimestamp()+" @ExperienceRepository.nameExists>prepStatement: "+prepStatement.toString());
-          ResultSet result = prepStatement.executeQuery();
-          if (result != null) {   
-              while (result.next()) {
-                  if (result.getInt(1) == 1) {
-                      return true;
-                  }               
-              }
-          }	      
-          prepStatement.close();
-          result.close();	    
-	      return false;
-	  }
-	  
 	  public void close() {
 		  System.out.println(Database.getTimestamp()+" @ExperienceRepository.close>Closing Database Connection");
 		  Database.closeConnection();
 	  }
 	  
+	  /**
+	   * Object destroyer to free up database connection. To be called by Garbage Collector
+	   * 
+	   */
 	  public void finalize() {
 		  System.out.println(Database.getTimestamp()+" @ExperienceRepository.finalize>Closing Database Connection");
 		  Database.closeConnection();

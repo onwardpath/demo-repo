@@ -41,8 +41,8 @@
 											</a>
 										</li>
 										<li class="kt-menu__item " aria-haspopup="true">
-											<a href="#" class="kt-menu__link ">
-											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Custom</span>
+											<a href="/GeoReach?view=pages/segment-create-source.jsp" class="kt-menu__link ">
+											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Source</span>
 											</a>
 										</li>
 									</ul>
@@ -74,7 +74,7 @@
 										</li>
 										<li class="kt-menu__item " aria-haspopup="true">
 											<a href="#" class="kt-menu__link ">
-											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Custom</span>
+											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Source</span>
 											</a>
 										</li>
 									</ul>

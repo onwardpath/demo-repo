@@ -6,10 +6,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
+/**
+ * A singleton class to create database connection
+ * 
+ * @author Pandyan Ramar
+ *
+ */
 public class Database {
 	
 	private static Connection dbConnection = null;
 	
+	/**
+	 * Get a Database Connection 
+	 * 
+	 * @return Connection
+	 */
 	public static Connection getConnection() {
 		System.out.println(getTimestamp()+" @Database.getConnection");
 		try {
@@ -31,9 +42,15 @@ public class Database {
 			e.printStackTrace();
         }
 		return dbConnection;
-	 }
+	}
 	  
-	 public static void closeConnection() {
+	
+	/**
+	 * Close Database Connection
+	 * 
+	 * Note: Usually you do not have to close the connection explicitly.
+	 */
+	public static void closeConnection() {
 		 System.out.println(getTimestamp()+" @Database.closeConnection");
 		 if (dbConnection != null) {
 			 try {
@@ -43,11 +60,16 @@ public class Database {
 				 e.printStackTrace();
 			 }			  
 	     }
-	 }
+	}
 	 
-	 public static String getTimestamp() {
+	/**
+	 * Get the current timestamp
+	 * 
+	 * @return
+	 */
+	public static String getTimestamp() {
 		 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 	     return timestamp.toString();	 
-	 }
+	}
 
 }

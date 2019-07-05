@@ -9,13 +9,30 @@ import java.util.HashMap;
 import com.onwardpath.georeach.util.Database;
 import com.onwardpath.georeach.model.Segment;
 
+/**
+ * Allows Insert, Update and Select queries to Save, Edit and Load Segment Details. Will use Segment bean object.
+ * Methods: save, edit, load
+ * 
+ * @author Pandyan Ramar
+ * @date 5 July 2019
+ *
+ */
 public class SegmentRepository {
 	  private Connection dbConnection;
 	  
 	  public SegmentRepository() {
 	      dbConnection = Database.getConnection();
 	  }
-	  	  
+	  
+	  /**
+	   * Save the Segment to segment table
+	   * 
+	   * @param name
+	   * @param geography
+	   * @param user_id
+	   * @param org_id
+	   * @throws SQLException
+	   */
 	  public void save(String name, String geography, int user_id, int org_id) throws SQLException {
           PreparedStatement prepStatement = dbConnection.prepareStatement("insert into segment(name, geography, user_id, org_id) values (?,?,?,?)");	          	        	       
           prepStatement.setString(1, name);
@@ -29,8 +46,9 @@ public class SegmentRepository {
 	  
 	  /**
 	   * Method to find a Segment by Name
+	   * 
 	   * @param name
-	   * @return true if Segment exists, false otherwise
+	   * @return boolean
 	   */
 	  public boolean findBySegmentName(String name) throws SQLException {
 	      boolean segmentExist = false;
@@ -52,9 +70,10 @@ public class SegmentRepository {
 	  }
 	  
 	  /**
-	   * Method to find a Segment by Name
+	   * Method to find a Segment by Name for an Organization 
+	   * 
 	   * @param name
-	   * @return true if Segment exists, false otherwise
+	   * @return boolean
 	   */
 	  public boolean findBySegmentNameInOrg(String name, int org_id) throws SQLException {
 	      boolean segmentExist = false;
@@ -103,7 +122,7 @@ public class SegmentRepository {
 	   * Method to get all segment objects of an organization 
 	   * 
 	   * @param org_id
-	   * @return Map containing Segment objects
+	   * @return Map containing id and segment objects
 	   */
 	  public Map<Integer, Segment> loadOrgSegments(int org_id) throws SQLException {
 		  Map<Integer, Segment> orgSegments = new HashMap<Integer, Segment>();
@@ -127,11 +146,19 @@ public class SegmentRepository {
           return orgSegments;
 	  }	
 	  
+	  /**
+	   * Close the database connection used by this Experience Repository instance. Usually you dont have to close the connection.
+	   * 
+	   */
 	  public void close() {
 		  System.out.println(Database.getTimestamp()+" @SegmentRepository.close>Closing Database Connection");
 		  Database.closeConnection();
 	  }
 	  
+	  /**
+	   * Object destroyer to free up database connection. To be called by Garbage Collector
+	   * 
+	   */
 	  public void finalize() {
 		  System.out.println(Database.getTimestamp()+" @SegmentRepository.finalize>Closing Database Connection");
 		  Database.closeConnection();
