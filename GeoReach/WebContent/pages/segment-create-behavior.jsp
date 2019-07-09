@@ -1,23 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <script type="text/javascript">
 function add(){	
-	var geotype = document.getElementById("geotype").value;
-	var georule = document.getElementById("georule").value;
-	var geoloc = document.getElementById("geoloc").value;		
-	var geocondition = georule+":"+geotype+":"+geoloc;		
+	var rule = document.getElementById("rule").value;
+	var type = document.getElementById("type").value;
+	var criteria = document.getElementById("criteria").value;
+	var rulevalue = document.getElementById("rulevalue").value;	
+	var behavior = rule+":"+type+":"+criteria+":"+rulevalue;	
 	var select = document.getElementById("dynamic-select");
 	var index = select.options.length;
-	select.options[index] = new Option(geocondition, geocondition);
-	document.getElementById("geoloc").value = ""; //Clear the Text Field				
-	var x = document.getElementById("geobucket");	
-	geoloc = geoloc.replace(/\s+/g, ''); //Remove white space before displaying. Note: We are using the name as-is while saving the locations to segment table.	
-	if(georule == "include") {			
-		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
+	select.options[index] = new Option(behavior, behavior);		
+	document.getElementById("rule").reset;
+	document.getElementById("type").reset;
+	document.getElementById("criteria").reset;
+	document.getElementById("rulevalue").value = ""; //Clear the Text Field	
+	var x = document.getElementById("behaviourbucket");		
+	if(rule == "include") {			
+		x.innerHTML += '<button id="'+type+criteria+rulevalue+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+type+criteria+rulevalue+','+index+')">'+type+':'+criteria+':'+rulevalue+'<i class="la la-close"></i></button>&nbsp;';
 	} else {		
-		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
+		x.innerHTML += '<button id="'+type+criteria+rulevalue+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+type+criteria+rulevalue+','+index+')">'+type+':'+criteria+':'+rulevalue+'<i class="la la-close"></i></button>&nbsp;';
 	}	
 	x.style.display = "block";			
-	document.getElementById("geoloc").focus();	
+	document.getElementById("rule").focus();	
 }
 function remove(element, index){	
 	var select = document.getElementById("dynamic-select");
@@ -27,10 +30,11 @@ function remove(element, index){
 function removeAll(){
 	var select = document.getElementById("dynamic-select");
 	select.options.length = 0;
-	var x = document.getElementById("geobucket");
+	var x = document.getElementById("behaviourbucket");
 	x.style.display = "none";	
 }
-function  saveSegment() {			
+function saveSegment() {	
+	//TODO: Validate Rules and display error for conflicting/invalid rules
 	var x = document.getElementById("dynamic-select");
     var txt = "";
     var i;
@@ -40,7 +44,8 @@ function  saveSegment() {
     	} else {
     		txt = txt + "|" + x.options[i].text;	
     	}    	        
-    }            
+    }          
+    txt = "beh{"+txt+"}";    
 	document.getElementById("segmentRules").value = txt;	
 	document.getElementById("segment-form").method = "post";
 	document.getElementById("segment-form").action = "SegmentController";
@@ -98,16 +103,19 @@ function  saveSegment() {
 																			 				
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Criteria</label>
-					<div class="col-lg-4 col-md-9 col-sm-12">											
-						<select id="georule" class="form-control form-control--fixed kt_selectpicker" data-width="150">
-							<option value="include">Visits</option>
-							<option value="exclude">Session Duration</option>							
-							
+					<div class="col-lg-4 col-md-9 col-sm-12">		
+						<select id="rule" class="form-control form-control--fixed kt_selectpicker" data-width="150">
+							<option value="include">Include</option>
+							<option value="exclude">Exclude</option>														
+						</select>																		
+						<select id="type" class="form-control form-control--fixed kt_selectpicker" data-width="150">
+							<option value="visit">Visits</option>
+							<option value="session">Session Duration</option>														
 						</select>																	
-						<select id="geotype" class="form-control form-control--fixed kt_selectpicker" data-width="120">
-							<option value="city">Equals</option>
-							<option value="state">More than</option>
-							<option value="country">Less than</option>							
+						<select id="criteria" class="form-control form-control--fixed kt_selectpicker" data-width="120">
+							<option value="equals">Equals</option>
+							<option value="more">More than</option>
+							<option value="less">Less than</option>							
 						</select>																															
 					</div>
 				</div>
@@ -115,7 +123,7 @@ function  saveSegment() {
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Number/Duration in Seconds</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">															
-						<input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="0 to 10">						
+						<input id="rulevalue" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="0 to 10">						
 					</div>
 				</div>
 				
@@ -129,7 +137,7 @@ function  saveSegment() {
 				<div class="kt-separator kt-separator--border-dashed"></div>
 				<div class="kt-separator kt-separator--height-sm"></div>
 								
-				<div id="geobucket" style="display: none;">																					
+				<div id="behaviourbucket" style="display: none;">																					
 					<div class="kt-section__content kt-section__content--border">																																						
 					</div>																																							
 				</div>
@@ -145,7 +153,7 @@ function  saveSegment() {
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12">Segment Name</label>
 						<div class="col-lg-4 col-md-9 col-sm-12">															
-							<input name="segmentName" id="segmentName" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Name">	
+							<input name="segmentName" id="segmentName" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name">	
 							<span class="form-text text-muted">Give a name for this segment</span>					
 						</div>
 				</div>
@@ -154,7 +162,7 @@ function  saveSegment() {
 					<label class="col-form-label col-lg-3 col-sm-12"></label>					
 						<div class="col-lg-4 col-md-9 col-sm-12">
 							<div id="hidden-form" style="display: none;">							
-								<input type="hidden" name="pageName" value="segment-create">
+								<input type="hidden" name="pageName" value="segment-create-behavior.jsp">
 								<!-- input type="hidden" id = "segmentName" name="segmentName"  -->
 								<input type="hidden" id = "segmentRules" name="segmentRules" >
 								<select id="dynamic-select" size="2"></select>																																																					

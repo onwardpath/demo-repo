@@ -30,7 +30,8 @@ function removeAll(){
 	var x = document.getElementById("geobucket");
 	x.style.display = "none";	
 }
-function  saveSegment() {			
+function  saveSegment() {
+	//TODO: Validate Rules and display error for conflicting/invalid rules
 	var x = document.getElementById("dynamic-select");
     var txt = "";
     var i;
@@ -40,7 +41,8 @@ function  saveSegment() {
     	} else {
     		txt = txt + "|" + x.options[i].text;	
     	}    	        
-    }            
+    }
+    txt = "loc{"+txt+"}";
 	document.getElementById("segmentRules").value = txt;	
 	document.getElementById("segment-form").method = "post";
 	document.getElementById("segment-form").action = "SegmentController";
@@ -107,7 +109,7 @@ function  saveSegment() {
 				</div>
 											
 				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12">Area Name</label>
+				<label class="col-form-label col-lg-3 col-sm-12">Area</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">															
 						<input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name">						
 					</div>
@@ -139,7 +141,7 @@ function  saveSegment() {
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12">Segment Name</label>
 						<div class="col-lg-4 col-md-9 col-sm-12">															
-							<input name="segmentName" id="segmentName" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Name">	
+							<input name="segmentName" id="segmentName" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name">	
 							<span class="form-text text-muted">Give a name for this segment</span>					
 						</div>
 				</div>
@@ -148,7 +150,7 @@ function  saveSegment() {
 					<label class="col-form-label col-lg-3 col-sm-12"></label>					
 						<div class="col-lg-4 col-md-9 col-sm-12">
 							<div id="hidden-form" style="display: none;">							
-								<input type="hidden" name="pageName" value="segment-create">
+								<input type="hidden" name="pageName" value="segment-create-geo.jsp">
 								<!-- input type="hidden" id = "segmentName" name="segmentName"  -->
 								<input type="hidden" id = "segmentRules" name="segmentRules" >
 								<select id="dynamic-select" size="2"></select>																																																					

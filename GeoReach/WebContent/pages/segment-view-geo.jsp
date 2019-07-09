@@ -53,7 +53,13 @@
 									<tr>
 										<td><%=segment.getName()%></td>
 										<td>
-										<%										
+										<%	
+										//TODO: Update to include new format 
+										//loc{include:city:Coimbatore|include:city:Salem}
+										//beh{include:visit:more:0}
+										//int{include:visit:equals:1:onwardpath.com/packers-info}
+										//ref{}
+										
 										String segmentRules = segment.getGeography(); 
 										String [] rule = segmentRules.split("\\|"); 
 										for(String a:rule) {
