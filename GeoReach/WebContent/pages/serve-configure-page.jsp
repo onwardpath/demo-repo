@@ -3,33 +3,55 @@
 <!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script -->
 <script src="./assets/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
+
 var expDetailsObj = {};
 function add(){		
 	var experience = document.getElementById("experience");	
 	var experience_id = experience.value;	
 	var experience_name = experience.options[experience.selectedIndex].innerHTML;
 	var pageurl = document.getElementById("pageurl").value;
-		
-	var stage = document.getElementById("stage");
-	stage.innerHTML += '<object type="text/html" data="'+pageurl+'" width="800px" height="600px" style="overflow:auto;border:5px ridge blue" onmouseover="preview(event,\'divtoshow\')" onmouseout="preview(event,\'divtoshow\')"></object>';		
+			
+	var stage = document.getElementById("stage");	
+	//stage.innerHTML += '<object type="text/html" data="'+pageurl+'" width="100%" height="800px" style="overflow:auto;border:2px ridge blue" onmouseover="preview(event,\'previewdiv\')" onmouseout="preview(event,\'previewdiv\')"></object>';
+	stage.innerHTML += '<object type="text/html" data="'+pageurl+'" width="100%" height="800px" style="overflow:auto;border:2px ridge blue"></object>';
 	stage.style.display = "block";
-		
-	//$("#stage").html('<object data="'+pageurl+'" width="800px" height="600px" style="overflow:auto;border:5px ridge blue" onmouseover="preview(event,\'divtoshow\')" onmouseout="preview(event,\'divtoshow\')" />');
-	//stage.style.display = "block";
-	//$('#stage').mouseover(function () {			 
-	//	console.log("mouse in");							
-	//}).mouseout(function() {		
-	//	console.log("mouse out");		
-	//});	
-	//if (experience_id in expDetailsObj) {
-	//	alert("Experience "+experience_name+" already added. Select a different Experience.");	
-	//} else {
-	//	var content = document.getElementById("content").value;				
-	//	expDetailsObj[experience_id] = content;				
-	//	var stage = document.getElementById("stage");	
-	//	stage.innerHTML += '<div id="'+experience_name+'" class="card-body">'+content+'&nbsp;<button type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+segment_name+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button></div>';
-	//	stage.style.display = "block";		
-	//}	
+	
+	var mousePosition;
+	var offset = [0,0];
+	var isDown = false;
+	
+	var previewdiv = document.getElementById("previewdiv");
+	previewdiv.style.display = "block";
+	previewdiv.style.cursor = "move";
+	previewdiv.style.right = "300px";
+	previewdiv.style.top = "300px";
+	previewdiv.style.width = "500px";
+	previewdiv.style.height = "100px";
+	
+	
+	previewdiv.addEventListener('mousedown', function(e) {
+	    isDown = true;
+	    offset = [
+	    	previewdiv.offsetLeft - e.clientX,
+	    	previewdiv.offsetTop - e.clientY
+	    ];
+	}, true);
+
+	document.addEventListener('mouseup', function() {
+	    isDown = false;
+	}, true);
+
+	document.addEventListener('mousemove', function(event) {
+	    event.preventDefault();
+	    if (isDown) {
+	        mousePosition = {	    
+	            x : event.clientX,
+	            y : event.clientY	    
+	        };
+	        previewdiv.style.left = (mousePosition.x + offset[0]) + 'px';
+	        previewdiv.style.top  = (mousePosition.y + offset[1]) + 'px';
+	    }
+	}, true);
 }
 function remove(element, segment_id){		
 	var displayElement = document.getElementById(element);	
@@ -45,25 +67,15 @@ function saveExperience(){
 	//document.getElementById("experience-form").action = "ConfigController";
 	//document.getElementById("experience-form").submit();
 }
-//function hoverdiv(e,divid){
-//    var left  = e.clientX  + "px";
-//    var top  = e.clientY  + "px";
-//    var div = document.getElementById(divid);
-//    div.style.left = left;
-//    div.style.top = top;
-//    $("#"+divid).toggle();
-//    return false;
+//function preview(e,divid){ 
+//	var left = e.clientX + "px"; 
+//	var top = e.clientY + "px"; 
+//	$("#"+divid).css('left',left); 
+//	$("#"+divid).css('top',top); 
+//	$("#"+divid).css('position','fixed'); 
+//	$("#"+divid).toggle(); 
+//	return false; 
 //}
-
-function preview(e,divid){ 
-	var left = e.clientX + "px"; 
-	var top = e.clientY + "px"; 
-	$("#"+divid).css('left',left); 
-	$("#"+divid).css('top',top); 
-	$("#"+divid).css('position','fixed'); 
-	$("#"+divid).toggle(); 
-	return false; 
-}
 </script>
 
 <!--begin::Content-->
@@ -214,17 +226,17 @@ function preview(e,divid){
 						<button type="reset" class="btn btn-accent" onclick="javascript:add()">Preview</button>
 					</div>
 				</div>
-				
+											
 				<div class="kt-separator kt-separator--border-dashed"></div>
 				<div class="kt-separator kt-separator--height-sm"></div>
 				
-				<div id="divtoshow" style="position: fixed;display:none; z-index: 1;">										
+				<div id="previewdiv" style="position: fixed; display: none;">										
 				<h1 style="color:#008733; text-align: center;">Welcome To Acme Inc</h1>
  				<p>The transition of People Energy Wisconsin branches to Acme Inc is complete. You can now conduct your business at any Acme Inc! We're excited to work with you! </p>
 				</div>
 				
 				<div class="kt-section__content kt-section__content--border">				
-					<div id="stage" style="display: none; z-index: -1;">																																																																																																										
+					<div id="stage" style="display: none;">																																																																																																										
 					</div>
 				</div>													
 																	
