@@ -6,21 +6,24 @@ var expDetailsObj = {};
 var index = 0;
 
 function add(){		
-	var url = document.getElementById("url");				
-	if (url in expDetailsObj) {
+	var pageurl = document.getElementById("url").value;	
+	
+	var buttonid = pageurl.replace(/:/g, "");
+	buttonid = buttonid.replace(".", "");
+		
+	if (pageurl in expDetailsObj) {
 		alert("Page "+url+" already added. Add a different page.");	
-	} else {
-		var content = document.getElementById("content").value;				
+	} else {					
 		expDetailsObj[index] = url;
 		index++;
 		var stage = document.getElementById("stage");	
-		stage.innerHTML += '<button id = '+url+' type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+url+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button>';
+		stage.innerHTML += '<button id = '+buttonid+' type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+buttonid+'\','+index+')">'+pageurl+'<i class="la la-close"></i></button>&nbsp;';
 		stage.style.display = "block";		
 	}	
 }
-function remove(element, segment_id){		
+function remove(element, index){		
 	var displayElement = document.getElementById(element);	
-	delete expDetailsObj[segment_id];	
+	delete expDetailsObj[index];	
 	displayElement.style.display = "none";		
 }
 function saveConfig(){	
@@ -28,9 +31,9 @@ function saveConfig(){
 	var type = "content";					
 	document.getElementById("experience-form").type.value=type;	
 	document.getElementById("experience-form").experienceDetails.value=JSON.stringify(expDetailsObj);	
-	document.getElementById("experience-form").method = "post";
-	document.getElementById("experience-form").action = "ConfigController";
-	document.getElementById("experience-form").submit();
+	//document.getElementById("experience-form").method = "post";
+	//document.getElementById("experience-form").action = "ConfigController";
+	//document.getElementById("experience-form").submit();
 }
 function preview() {
 	alert("Under Development");
