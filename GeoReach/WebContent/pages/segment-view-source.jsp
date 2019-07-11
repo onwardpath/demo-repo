@@ -9,7 +9,7 @@
 			UserRepository userRepository = new UserRepository();
 			int org_id = (Integer)session.getAttribute("org_id");
 			//Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegments(org_id);
-			Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegmentsByType(org_id,"loc");
+			Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegmentsByType(org_id,"ref");
 			
 			if (orgSegments.size() == 0) {
 				%>
@@ -27,7 +27,7 @@
 						<div class="kt-portlet__head">
 							<div class="kt-portlet__head-label">
 								<h3 class="kt-portlet__head-title">
-									Your Geo Segments
+									Your Source Segments
 								</h3>
 							</div>
 						</div>
@@ -38,7 +38,7 @@
 								<thead>
 									<tr>
 										<th>Name</th>
-										<th>Geography</th>
+										<th>Source</th>
 										<th>Created By</th>
 										<th>Created On</th>																
 										<th>Actions</th>
@@ -61,8 +61,13 @@
 										//int{include:visit:equals:1:onwardpath.com/packers-info}
 										//ref{source:match:google.com}
 										
-										String segmentRules = segment.getGeography();
-										//Remove "loc{" and "}"
+										//<option value="match">Matches</option>
+										//<option value="contain">Contains</option>
+										//<option value="notmatch">Is Not</option>							
+										//<option value="notcontain">Does not Contain</option>
+										
+										String segmentRules = segment.getGeography(); 
+										//Remove "ref{" and "}"
 										if (segmentRules.indexOf("}") !=0) {
 											int beginIndex = segmentRules.indexOf("{")+1;
 											int endIndex = segmentRules.indexOf("}");											
@@ -72,10 +77,10 @@
 										for(String a:rule) {
 											String[] criteria = a.split(":");
 											String display = "";
-											if (criteria[0].startsWith("include")) {												
-												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-info btn-pill'>"+criteria[2]+"&nbsp;<i class='fa fa-map-marker-alt'></i></button>";	
+											if (criteria[1].startsWith("match") || criteria[1].startsWith("contain")) {												
+												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-info btn-pill'><i class='fa fa-hand-point-right'></i>"+criteria[2]+"&nbsp;</button>";	
 											} else {
-												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-danger btn-pill'>"+criteria[2]+"&nbsp;<i class='fa fa-map-marker-alt'></i></button>";
+												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-danger btn-pill'><i class='fa fa-hand-point-right'></i>"+criteria[2]+"&nbsp;</button>";
 											}																				
 											%>											
 											<%=display%>

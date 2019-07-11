@@ -147,6 +147,37 @@ public class SegmentRepository {
 	  }	
 	  
 	  /**
+	   * Method to get all segment objects of a particular type (loc/beh/int/ref) of an organization 
+	   * 
+	   * @param org_id
+	   * @return Map containing id and segment objects
+	   */
+	  public Map<Integer, Segment> loadOrgSegmentsByType(int org_id, String type) throws SQLException {
+		  //TODO: Check if type is only one of the following: loc/beh/int/ref
+		  Map<Integer, Segment> orgSegments = new HashMap<Integer, Segment>();
+		  PreparedStatement prepStatement = dbConnection.prepareStatement("select * from segment  where org_id = ? and geography like ?");
+          prepStatement.setInt(1, org_id);
+          //prepStatement.setString(2, type); 
+          prepStatement.setString(2, type + "%");
+          System.out.println(Database.getTimestamp()+" @SegmentRepository.loadOrgSegments>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {   
+              while (result.next()) {
+            	  Segment segment = new Segment();
+            	  segment.setId(result.getInt("id"));
+            	  segment.setName(result.getString("name"));
+            	  segment.setGeography(result.getString("geography"));
+            	  segment.setUser_id(result.getInt("user_id"));             	  
+            	  segment.setOrg_id(result.getInt("org_id"));
+            	  orgSegments.put(result.getInt("id"), segment);
+              }
+          }	
+          prepStatement.close();
+          result.close();
+          return orgSegments;
+	  }
+	  
+	  /**
 	   * Close the database connection used by this Experience Repository instance. Usually you dont have to close the connection.
 	   * 
 	   */

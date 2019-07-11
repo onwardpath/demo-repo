@@ -9,7 +9,7 @@
 			UserRepository userRepository = new UserRepository();
 			int org_id = (Integer)session.getAttribute("org_id");
 			//Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegments(org_id);
-			Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegmentsByType(org_id,"loc");
+			Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegmentsByType(org_id,"int");
 			
 			if (orgSegments.size() == 0) {
 				%>
@@ -27,7 +27,7 @@
 						<div class="kt-portlet__head">
 							<div class="kt-portlet__head-label">
 								<h3 class="kt-portlet__head-title">
-									Your Geo Segments
+									Your Interest Segments
 								</h3>
 							</div>
 						</div>
@@ -38,7 +38,7 @@
 								<thead>
 									<tr>
 										<th>Name</th>
-										<th>Geography</th>
+										<th>Interest</th>
 										<th>Created By</th>
 										<th>Created On</th>																
 										<th>Actions</th>
@@ -55,14 +55,22 @@
 										<td><%=segment.getName()%></td>
 										<td>
 										<%	
-										//TODO: Update to include new format 										
-										//loc{include:city:San Jose-CA-USA|include:city:Santa Clara-CA-USA|include:city:Fremont-CA-USA}
-										//beh{include:visit:equals:10|include:session:equals:60}
+										//TODO: Update to include new format 																													
 										//int{include:visit:equals:1:onwardpath.com/packers-info}
-										//ref{source:match:google.com}
 										
-										String segmentRules = segment.getGeography();
-										//Remove "loc{" and "}"
+										
+										//<option value="include">Include</option>
+										//<option value="exclude">Exclude</option>
+										
+										//<option value="visit">Visits</option>
+										//<option value="session">Session Duration</option>
+										
+										//<option value="equals">Equals</option>
+										//<option value="more">More than</option>
+										//<option value="less">Less than</option>
+										
+										String segmentRules = segment.getGeography(); 
+										//Remove "int{" and "}"
 										if (segmentRules.indexOf("}") !=0) {
 											int beginIndex = segmentRules.indexOf("{")+1;
 											int endIndex = segmentRules.indexOf("}");											
@@ -72,10 +80,12 @@
 										for(String a:rule) {
 											String[] criteria = a.split(":");
 											String display = "";
+											String label = criteria[4];
+											
 											if (criteria[0].startsWith("include")) {												
-												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-info btn-pill'>"+criteria[2]+"&nbsp;<i class='fa fa-map-marker-alt'></i></button>";	
+												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-info btn-pill'><i class='fab fa-gratipay'></i>"+label+"&nbsp;</button>";	
 											} else {
-												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-danger btn-pill'>"+criteria[2]+"&nbsp;<i class='fa fa-map-marker-alt'></i></button>";
+												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-danger btn-pill'><i class='fab fa-gratipay'></i>"+label+"&nbsp;</button>";
 											}																				
 											%>											
 											<%=display%>

@@ -81,9 +81,9 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 		            <div class="alert-text">
 		                <%=message%>		            
 			            <!-- Button trigger modal -->
-						<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter">
+						<!-- button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter">
 							View Code
-						</button>
+						</button -->
 					</div>
 		        </div>
 		    </div>

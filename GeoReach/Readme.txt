@@ -156,3 +156,6 @@ beh{include:visit:equals:10|include:session:equals:60}
 int{include:visit:equals:1:onwardpath.com/packers-info}
 ref{source:match:google.com}
 
+BUG LIST:
+VM1649 vendors.bundle.js:9837 POST http://localhost:8080/GeoReach/inc/api/datatables/demos/default.php 404
+

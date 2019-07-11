@@ -3,7 +3,7 @@ package com.onwardpath.georeach.model;
 public class Segment {
 	private int id;
 	private String name;
-	private String geography;	
+	private String geography;		
 	private int org_id;				//Segment is available for this organization
 	private int user_id; 			//Creator of this segment
 	

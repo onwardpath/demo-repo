@@ -2,19 +2,19 @@
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.SegmentRepository" %>    
 <script type="text/javascript">
 
-var expDetailsObj = {};
+var cfgDetailsObj = {};
 var index = 0;
 
 function add(){		
-	var pageurl = document.getElementById("url").value;	
-	
+	//alert("You are here");
+	var pageurl = document.getElementById("url").value;		
 	var buttonid = pageurl.replace(/:/g, "");
 	buttonid = buttonid.replace(".", "");
 		
-	if (pageurl in expDetailsObj) {
+	if (pageurl in cfgDetailsObj) {
 		alert("Page "+url+" already added. Add a different page.");	
 	} else {					
-		expDetailsObj[index] = url;
+		cfgDetailsObj[index] = pageurl;
 		index++;
 		var stage = document.getElementById("stage");	
 		stage.innerHTML += '<button id = '+buttonid+' type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+buttonid+'\','+index+')">'+pageurl+'<i class="la la-close"></i></button>&nbsp;';
@@ -23,17 +23,16 @@ function add(){
 }
 function remove(element, index){		
 	var displayElement = document.getElementById(element);	
-	delete expDetailsObj[index];	
+	delete cfgDetailsObj[index];	
 	displayElement.style.display = "none";		
 }
-function saveConfig(){	
-	var name = document.getElementById('name').value;
-	var type = "content";					
-	document.getElementById("experience-form").type.value=type;	
-	document.getElementById("experience-form").experienceDetails.value=JSON.stringify(expDetailsObj);	
-	//document.getElementById("experience-form").method = "post";
-	//document.getElementById("experience-form").action = "ConfigController";
-	//document.getElementById("experience-form").submit();
+function saveConfig(){			
+	//alert(JSON.stringify(cfgDetailsObj));
+	document.getElementById("config-form").urlList.value=JSON.stringify(cfgDetailsObj);
+	//alert(document.getElementById("config-form").urlList.value);
+	document.getElementById("config-form").method = "post";
+	document.getElementById("config-form").action = "ConfigController";
+	document.getElementById("config-form").submit();
 }
 function preview() {
 	alert("Under Development");
@@ -57,6 +56,8 @@ function preview() {
 	
 	if (message != null && !message.equals("")) {
 		String icon = "fa fa-cocktail"; 
+		boolean displayCode = false;
+		
 		if (message.startsWith("Error"))
 			icon = "flaticon-warning";		
 						
@@ -67,18 +68,28 @@ function preview() {
 			name = decoder[0].substring(decoder[0].indexOf("=")+1);
 			experience = decoder[1].substring(decoder[0].indexOf("=")+1);
 			organization = decoder[2].substring(decoder[0].indexOf("=")+1);
-		}			 							 							 					
+		}
+		
+		if (message.startsWith("Page"))
+			displayCode = true;
 		%>
 		<div class="row">
 		    <div class="col">
 		        <div class="alert alert-light alert-elevate fade show" role="alert">
 		            <div class="alert-icon"><i class="<%=icon%> kt-font-brand"></i></div>		            		           
 		            <div class="alert-text">
-		                <%=message%>		            
-			            <!-- Button trigger modal -->
-						<!-- button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter">
-							View Code
-						</button -->
+		                <%=message%>
+		                <%
+		                if (displayCode) {
+		                	%>
+		                	<!-- Button trigger modal -->
+		                	Insert the following code in the pages you want to display this experience:
+							<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter">
+								View Code
+							</button>
+		                	<%		                		
+		                }
+		                %>		            			            
 					</div>
 		        </div>
 		    </div>
@@ -188,17 +199,16 @@ function preview() {
 		<!--end::Form-->
 		
 		<!--begin::Form-->
-		<form class="kt-form kt-form--label-right" id="experience-form">
+		<form class="kt-form kt-form--label-right" id="config-form">
 			<div class="kt-portlet__body">															
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12"></label>					
 						<div class="col-lg-4 col-md-9 col-sm-12">
 							<div id="hidden-form" style="display: none;">																	
-								<input type="hidden" name="pageName" value="create-experience">								
+								<input type="hidden" name="pageName" value="experience-create-enable.jsp">								
 								<input type="hidden" name="experience_id" value=<%=experience%>>
-								<input type="hidden" name="experienceDetails">
-								<input type="hidden" name="segment_id">
-								<input type="hidden" name="url">																																																																																				
+								<input type="hidden" name="experience_name" value=<%=name%>>								
+								<input type="hidden" name="urlList">																																																																																																			
 							</div>											
 							<button type="reset" class="btn btn-primary" onclick="saveConfig();">Save</button>
 							<button type="reset" class="btn btn-secondary">Cancel</button>

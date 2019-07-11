@@ -63,17 +63,17 @@
 											</a>
 										</li>
 										<li class="kt-menu__item " aria-haspopup="true">
-											<a href="#" class="kt-menu__link ">
+											<a href="/GeoReach?view=pages/segment-view-behavior.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Behavior</span>
 											</a>
 										</li>
 										<li class="kt-menu__item " aria-haspopup="true">
-											<a href="#" class="kt-menu__link ">
+											<a href="/GeoReach?view=pages/segment-view-interest.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Interest</span>
 											</a>
 										</li>
 										<li class="kt-menu__item " aria-haspopup="true">
-											<a href="#" class="kt-menu__link ">
+											<a href="/GeoReach?view=pages/segment-view-source.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Source</span>
 											</a>
 										</li>

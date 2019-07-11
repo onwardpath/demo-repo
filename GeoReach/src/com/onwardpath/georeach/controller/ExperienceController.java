@@ -18,7 +18,7 @@ import com.onwardpath.georeach.util.Database;
 public class ExperienceController extends HttpServlet {
 	private ExperienceRepository experienceRepository;	
 		 
-	private static String SAVE_SUCCESS = "?view=pages/experience-create-content.jsp";
+	private static String SAVE_SUCCESS = "?view=pages/experience-create-enable.jsp";
 	private static String SAVE_FAILURE = "?view=pages/experience-create-content.jsp";		
 		
 	  /**
@@ -55,7 +55,7 @@ public class ExperienceController extends HttpServlet {
 	        	  try {
 	        		  String name = request.getParameter("name");	        	  	        	  	        	 
 		              if (experienceRepository.nameExists(name, org_id)) {	                  
-		                  session.setAttribute("message", "Experience Name exists. Try another name.");
+		                  session.setAttribute("message", "Error: Experience with name <b>"+name+"</b> already exist. Try another name.");
 		                  forward = SAVE_FAILURE;
 		                  RequestDispatcher view = request .getRequestDispatcher(forward);
 		                  view.forward(request, response);
@@ -78,8 +78,7 @@ public class ExperienceController extends HttpServlet {
 	            			  String url = entry.getValue();
 	            			  System.out.println("Segment ID = " + segment_id + ", URL = " + url);
 	            			  experienceRepository.saveImage(experience_id, segment_id, url);	            			  	            			 
-	            		  }	
-	            		  SAVE_SUCCESS = "?view=pages/experience-create-image.jsp";
+	            		  }		            		  
 	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
 	            	  } else if (type.equals("content")) {		            	  	            		 
 	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
@@ -91,10 +90,8 @@ public class ExperienceController extends HttpServlet {
 	            			  String content = entry.getValue();
 	            			  System.out.println("Segment ID = " + segment_id + ", Content = " + content);
 	            			  experienceRepository.saveContent(experience_id, segment_id, content);	            			  	            			 
-	            		  }	
-	            		  SAVE_SUCCESS = "?view=pages/experience-create-enable.jsp";
-	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
-	            		  
+	            		  }		            		  
+	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";	            		  
 	            	  }
 	            	  	            	  
 	            	  //3. Generate header_code & body_code and save to Experience table
