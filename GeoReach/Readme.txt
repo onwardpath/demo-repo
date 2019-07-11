@@ -149,7 +149,10 @@ Client Website  -- Webpage with geo enabled content (www.onwardpath.com/geodemo)
 JavaScript file with error
 WebContent/assets/js/demo1/pages/crud/datatables/advanced/footer-callback.js
 WebContent/assets/js/demo1/pages/crud/datatables/advanced/row-grouping.js
-	
-BUGS:
-Error: The last packet successfully received from the server was 30,390,745 milliseconds ago. The last packet sent successfully to the server was 30,390,783 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem. Please try again later or contact the administrator
+
+SEGMENT FORMAT:
+loc{include:city:San Jose-CA-USA|include:city:Santa Clara-CA-USA|include:city:Fremont-CA-USA}
+beh{include:visit:equals:10|include:session:equals:60}
+int{include:visit:equals:1:onwardpath.com/packers-info}
+ref{source:match:google.com}
 
