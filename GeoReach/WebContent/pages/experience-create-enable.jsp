@@ -3,18 +3,18 @@
 <script type="text/javascript">
 
 var expDetailsObj = {};
+var index = 0;
 
 function add(){		
-	var segment = document.getElementById("segment");	
-	var segment_id = segment.value;	
-	var segment_name = segment.options[segment.selectedIndex].innerHTML;
-	if (segment_id in expDetailsObj) {
-		alert("Segment "+segment_name+" already added. Select a different segment.");	
+	var url = document.getElementById("url");				
+	if (url in expDetailsObj) {
+		alert("Page "+url+" already added. Add a different page.");	
 	} else {
 		var content = document.getElementById("content").value;				
-		expDetailsObj[segment_id] = content;				
+		expDetailsObj[index] = url;
+		index++;
 		var stage = document.getElementById("stage");	
-		stage.innerHTML += '<div id="'+segment_name+'" class="card-body">'+content+'&nbsp;<button type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+segment_name+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button></div>';
+		stage.innerHTML += '<button id = '+url+' type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+url+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button>';
 		stage.style.display = "block";		
 	}	
 }
@@ -23,50 +23,42 @@ function remove(element, segment_id){
 	delete expDetailsObj[segment_id];	
 	displayElement.style.display = "none";		
 }
-function saveExperience() 
-{	
+function saveConfig(){	
 	var name = document.getElementById('name').value;
 	var type = "content";					
 	document.getElementById("experience-form").type.value=type;	
 	document.getElementById("experience-form").experienceDetails.value=JSON.stringify(expDetailsObj);	
 	document.getElementById("experience-form").method = "post";
-	document.getElementById("experience-form").action = "ExperienceController";
+	document.getElementById("experience-form").action = "ConfigController";
 	document.getElementById("experience-form").submit();
+}
+function preview() {
+	alert("Under Development");
 }
 </script>
 
-<!-- 
-https://www.associatedbank.com/content/image/mobile_upgrade_img_banking
-https://www.associatedbank.com/content/image/mobile_upgrade_img_mobile
-https://cdn.oectours.com/media/cds/banks/5231/59750.png
-https://cdn.oectours.com/media/cds/banks/5231/81461.png
-https://www.associatedbank.com/content/image/OLB_LP_Image
-https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
- -->
- 
 <!--begin::Content-->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 	<%	
-	String message = (String) session.getAttribute("message");
+	String message = (String) session.getAttribute("message");	
+	int org_id = (Integer)session.getAttribute("org_id");
+	String name = "";
+	String experience = "";
+	String organization = "";
 	
 	SegmentRepository segmentRepository = new SegmentRepository();
-	int org_id = (Integer)session.getAttribute("org_id");
 	Map<Integer,String> segments = segmentRepository.getOrgSegments(org_id);
 	if (segments.size() == 0) {
 		message = "Error: No Segments are configured. Create a Segment <a class='kt-link kt-font-bold' href='?view=pages/segment-create.jsp'>here</a>";	
 	}
-				
+	
 	if (message != null && !message.equals("")) {
 		String icon = "fa fa-cocktail"; 
 		if (message.startsWith("Error"))
 			icon = "flaticon-warning";		
-		
-		String name = "";
-		String experience = "";
-		String organization = "";		
+						
 		if (message.contains("#")) {			
-			String codeConstructor = message.substring(message.indexOf("#")+1);
-			
+			String codeConstructor = message.substring(message.indexOf("#")+1);			
 			message = message.substring(0,message.indexOf("#"));
 			String[] decoder = codeConstructor.split("#");
 			name = decoder[0].substring(decoder[0].indexOf("=")+1);
@@ -81,9 +73,9 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 		            <div class="alert-text">
 		                <%=message%>		            
 			            <!-- Button trigger modal -->
-						<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter">
+						<!-- button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter">
 							View Code
-						</button>
+						</button -->
 					</div>
 		        </div>
 		    </div>
@@ -156,39 +148,26 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 	<div class="kt-portlet">
 		<div class="kt-portlet__head">
 			<div class="kt-portlet__head-label">
-				<h3 class="kt-portlet__head-title">Create Content Experience</h3>
+				<h3 class="kt-portlet__head-title">Enable Experience</h3>
 			</div>
 		</div>
 				
 		<!--begin::Form-->
 		<form class="kt-form kt-form--label-right" id="dummy-form"> 
 			<div class="kt-portlet__body">
-																			 				
+																			 																
 				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12">Segment</label>
-					<div class="col-lg-4 col-md-9 col-sm-12">											
-						<select id="segment" class="form-control form-control--fixed kt_selectpicker" data-width="300">
-							<%
-							for ( Map.Entry<Integer, String> entry : segments.entrySet()) {
-								Integer key = entry.getKey();
-							    String val = entry.getValue();	     	   
-							    out.println("<option value='"+key+"'>"+val+"</option>");
-							}
-							%>													
-						</select>																																							
-					</div>
-				</div>
-											
-				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12">Content (Text/HTML)</label>
-					<div class="col-lg-4 col-md-9 col-sm-12">																								
-						<textarea id="content" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Enter Text" rows="" cols=""></textarea>
-					</div>
+					<label class="col-form-label col-lg-3 col-sm-12">Page Address</label>
+						<div class="col-lg-4 col-md-9 col-sm-12">															
+							<input name="url" id="url" type="text" class="form-control" aria-describedby="url" placeholder="URL">	
+							<span class="form-text text-muted">Enter the URL of the page that will display this experience</span>					
+						</div>
 				</div>
 				
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																					
+						<button type="reset" class="btn btn-accent" onclick="javascript:preview()">Preview</button>																									
 						<button type="reset" class="btn btn-accent" onclick="javascript:add()">Add</button>
 					</div>
 				</div>
@@ -207,27 +186,18 @@ https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
 		
 		<!--begin::Form-->
 		<form class="kt-form kt-form--label-right" id="experience-form">
-			<div class="kt-portlet__body">	
-						
-				<div class="form-group row">
-					<label class="col-form-label col-lg-3 col-sm-12">Experience Name</label>
-						<div class="col-lg-4 col-md-9 col-sm-12">															
-							<input name="name" id="name" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Name">	
-							<span class="form-text text-muted">Give a name for this experience</span>					
-						</div>
-				</div>
-						
+			<div class="kt-portlet__body">															
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12"></label>					
 						<div class="col-lg-4 col-md-9 col-sm-12">
 							<div id="hidden-form" style="display: none;">																	
 								<input type="hidden" name="pageName" value="create-experience">								
-								<input type="hidden" name="type">
+								<input type="hidden" name="experience_id" value=<%=experience%>>
 								<input type="hidden" name="experienceDetails">
 								<input type="hidden" name="segment_id">
 								<input type="hidden" name="url">																																																																																				
 							</div>											
-							<button type="reset" class="btn btn-primary" onclick="saveExperience();">Save</button>
+							<button type="reset" class="btn btn-primary" onclick="saveConfig();">Save</button>
 							<button type="reset" class="btn btn-secondary">Cancel</button>
 						</div>					
 				</div>										

@@ -58,7 +58,7 @@ public class SegmentController extends HttpServlet {
 		                return;
 		            }		              	             		              		              		              		              		           		              		              
 		            segmentRepository.save(segmentName, segmentRules, userId, orgId);
-		            session.setAttribute("message", "Info: Segment <b>"+segmentName+"</b> Saved.");		                
+		            session.setAttribute("message", "Segment <b>"+segmentName+"</b> Saved.");		                
 	        	} catch (SQLException e) {
 	        		session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");
 	        	}	        	  

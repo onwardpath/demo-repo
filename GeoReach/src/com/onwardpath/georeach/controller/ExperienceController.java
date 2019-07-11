@@ -65,7 +65,7 @@ public class ExperienceController extends HttpServlet {
 		              //1. Save to Experience table, get the id (name, type, org_id, user_id, create_time)
 	            	  String type = request.getParameter("type");
 	            	  int experience_id = experienceRepository.save(name, type, "on", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
-	            			  request.getParameter("header_code"), request.getParameter("body_code"), org_id, user_id);
+	            			  											request.getParameter("header_code"), request.getParameter("body_code"), org_id, user_id);
 	            	  
 	            	  //2. Save multiple entries to Image/Content table (experience_id, segment_id, url/content, create_time)
 	            	  if (type.contentEquals("image")) {	            		  
@@ -92,6 +92,8 @@ public class ExperienceController extends HttpServlet {
 	            			  System.out.println("Segment ID = " + segment_id + ", Content = " + content);
 	            			  experienceRepository.saveContent(experience_id, segment_id, content);	            			  	            			 
 	            		  }	
+	            		  SAVE_SUCCESS = "?view=pages/experience-create-enable.jsp";
+	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
 	            		  
 	            	  }
 	            	  	            	  
@@ -111,8 +113,7 @@ public class ExperienceController extends HttpServlet {
 	                  forward = SAVE_FAILURE;
 	        	  }        	                	             	              	              	              	           	             	              	              	   	                         
 	          }	          
-	      }
-	      //experienceRepository.close();
+	      }	      
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
 	  }	  	 

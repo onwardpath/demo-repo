@@ -55,7 +55,7 @@ function  saveSegment() {
 	<%
 	String message = (String) session.getAttribute("message");	
 	if (message != null && !message.equals("")) {
-		String icon = "flaticon-placeholder-3"; 
+		String icon = "fa fa-chart-pie"; 
 		if (message.startsWith("Error"))
 			icon = "flaticon-warning";
 		%>

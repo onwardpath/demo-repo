@@ -10,7 +10,7 @@
 				<span class="kt-menu__link-text">Segment</span>
 				<i class="kt-menu__ver-arrow la la-angle-right"></i>
 			</a>						
-			<div class="kt-menu__submenu " kt-hidden-height="160" style="">
+			<div class="kt-menu__submenu" kt-hidden-height="160" style="">
 				<span class="kt-menu__arrow"></span>
 					<ul class="kt-menu__subnav">
 						<li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true">

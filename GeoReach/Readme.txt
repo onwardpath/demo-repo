@@ -92,6 +92,7 @@ http://lab01.onwardpath.com/geosmart/
 
 OTHER PRODUCTS:
 https://optimize.google.com/optimize/home/#/accounts
+https://www.gartner.com/en/documents/3883805
 
 UI FRAMEWORK:
 REACT: 
