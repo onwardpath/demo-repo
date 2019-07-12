@@ -1,4 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>  
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%
+if (null == session.getAttribute("authenticated") || session.getAttribute("authenticated").equals("") || !session.getAttribute("authenticated").equals("true")) { 	
+	response.sendRedirect("/GeoReach/login.jsp");
+    return;
+}
+%>  
 <!DOCTYPE html>
 <html lang="en" >
     <!-- begin::Head -->

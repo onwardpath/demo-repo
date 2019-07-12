@@ -82,7 +82,8 @@ public class UserController extends HttpServlet {
 		              if (result == true) {	    
 		            	  int user_id = userRepository.findUserId(request.getParameter("userName"));	            	  	            	  
 		            	  int org_id = userRepository.findOrgId(request.getParameter("userName"));
-		            	  User user = userRepository.getUser(user_id);	            	  
+		            	  User user = userRepository.getUser(user_id);
+		            	  session.setAttribute("authenticated","true");
 		            	  session.setAttribute("user", user);
 		            	  session.setAttribute("user_id", user_id);
 		            	  session.setAttribute("org_id", org_id);	            	  	            	  	            	  

@@ -7,8 +7,13 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Attributes;
+import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
@@ -52,20 +57,22 @@ public class AjaxController extends HttpServlet {
 			System.out.println(Database.getTimestamp()+" @AjaxController.doPost>pageUrl: "+pageUrl);			
 			Document doc = Jsoup.connect(pageUrl).get();
 			
+			//Convert all src/href for images, stylesheets and scripts to absolute path
 			Elements media = doc.select("img[src]");
-			for (Element src : media) {
-				System.out.println("src.html(): "+src.html());
-				System.out.println("src.absUrl(\"src\"): "+src.absUrl("src"));
-				src.attr("src", src.absUrl("src"));
+			for (Element e1 : media) {
+				e1.attr("src", e1.absUrl("src"));
 			}
 			
-			Elements styles = doc.select("style");
-			for (Element href : styles) {
-				System.out.println("href.html(): "+href.html());
-				System.out.println("href.absUrl(\"href\"): "+href.absUrl("href"));
-				href.attr("href", href.absUrl("href"));
+			Elements style = doc.getElementsByTag("link");
+			for (Element e2 :style ){
+				e2.attr("href",e2.absUrl("href"));
 			}
 			
+			Elements script = doc.select("script[src]");
+			for (Element e3 : script) {
+				e3.attr("src", e3.absUrl("src"));
+			}
+													
 			String head = doc.head().html();
 			String body = doc.body().html();
 			String controls = "<a href='javascript:window.history.back()'>Close</a>";
@@ -78,5 +85,9 @@ public class AjaxController extends HttpServlet {
 			//RequestDispatcher view = request.getRequestDispatcher("/preview.jsp?content="+dummyhtml);
 			RequestDispatcher view = request.getRequestDispatcher("/preview.jsp");
 			view.forward(request, response);					
-		}			
+		}
+		
+		private void showExperiences() {
+			
+		}
 }

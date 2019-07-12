@@ -12,7 +12,7 @@ session.setAttribute("view", view);
         <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
             <jsp:include page="partials/_header-base.jsp" />
             <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
-            	<jsp:include page="partials/_subheader-subheader-v1.jsp" />                                                                
+            	<jsp:include page="partials/_subheader-subheader-v1.jsp" />                  	                                                          
                 <%if(view != null && !view.equals("index")) {%>        	                	     
                 	<jsp:include page="<%=view%>" />   
                 <%} else {%>                	
