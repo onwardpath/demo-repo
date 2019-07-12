@@ -35,15 +35,6 @@ function saveExperience()
 }
 </script>
 
-<!-- 
-https://www.associatedbank.com/content/image/mobile_upgrade_img_banking
-https://www.associatedbank.com/content/image/mobile_upgrade_img_mobile
-https://cdn.oectours.com/media/cds/banks/5231/59750.png
-https://cdn.oectours.com/media/cds/banks/5231/81461.png
-https://www.associatedbank.com/content/image/OLB_LP_Image
-https://x7i5t7v9.ssl.hwcdn.net/cds/banks/5231/81626.png
- -->
- 
 <!--begin::Content-->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 	<%	
