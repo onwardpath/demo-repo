@@ -6,35 +6,39 @@
 <!-- script src="./assets/js/jquery-3.4.1.min.js"></script -->
 <script type="text/javascript">
 function preview() {		
-	var pageUrl  = document.getElementById("pageurl").value;
-	var serviceUrl = "AjaxController?service=renderUrl&pageUrl="+pageUrl;
-	var x = new XMLHttpRequest();
+	//var pageUrl  = document.getElementById("pageurl").value;
+	//var serviceUrl = "AjaxController?service=renderUrl&pageUrl="+pageUrl;
+	//var x = new XMLHttpRequest();
 	//x.responseType = 'json';
 	//x.responseType = "document";
-	x.responseType = "text";
+	//x.responseType = "text";
 		
-	x.onreadystatechange = function(){
-		if(this.readyState == 4 && this.status == 200){
-			showPreview(this.response);			
-			//showPreview(this.responseXML);			
-		}
-	};	
-	x.open("GET", serviceUrl); 
+	//x.onreadystatechange = function(){
+	//	if(this.readyState == 4 && this.status == 200){
+	//		showPreview(this.response);			
+	//		//showPreview(this.responseXML);			
+	//	}
+	//};	
+	//x.open("GET", serviceUrl); 
 	//x.setRequestHeader('Content-type', 'text/html');
-	x.send(); 
+	//x.send(); 
+									
+	document.getElementById("preview-form").method = "post";
+	document.getElementById("preview-form").action = "AjaxController";
+	document.getElementById("preview-form").submit();	
 } 
 
 function showPreview(html) {
-	console.log(html);
+	//console.log(html);
 	
-	var stage = document.getElementById("previewdiv");	
-	document.getElementById("editor").value = html;	
-	ClassicEditor
-		.create( document.querySelector( '#editor' ) )
-        .catch( error => {
-            console.error( error );
-        } );		
-	stage.style.display = "block";
+	//var stage = document.getElementById("previewdiv");	
+	//document.getElementById("editor").value = html;	
+	//ClassicEditor
+	//	.create( document.querySelector( '#editor' ) )
+    //   .catch( error => {
+    //        console.error( error );
+    //    } );		
+	//stage.style.display = "block";
 	
 	//var stage = document.getElementById("previewdiv");
 	//stage.innerHTML+=html;
@@ -127,13 +131,14 @@ function nodeToString(n) {
 		</div>
 				
 		<!--begin::Form-->
-		<form class="kt-form kt-form--label-right" id="dummy-form"> 
+		<form class="kt-form kt-form--label-right" id="preview-form"> 
 			<div class="kt-portlet__body">
 																			 																	
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Page Address</label>
-					<div class="col-lg-4 col-md-9 col-sm-12">															
-						<input id="pageurl" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="URL">						
+					<div class="col-lg-4 col-md-9 col-sm-12">	
+						<input id="service" name="service" type="hidden">														
+						<input id="pageUrl" name="pageUrl" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="URL">						
 					</div>
 				</div>
 				

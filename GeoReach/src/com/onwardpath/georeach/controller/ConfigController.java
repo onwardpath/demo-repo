@@ -61,7 +61,7 @@ public class ConfigController extends HttpServlet {
 			            	System.out.println("index = " + index + ", URL = " + url);
 			            	configRepository.save(experience_id, url, user_id);	            			  	            			 
 			            }			            			            			           
-			            session.setAttribute("message", "Page(s) for <b>"+experience_name+"</b> Saved.#n="+experience_name+"#e="+experience_id+"#o="+org_id);
+			            session.setAttribute("message", "Page configuration for <b>"+experience_name+"</b> saved succesfully.#n="+experience_name+"#e="+experience_id+"#o="+org_id);
 	        	  } catch (SQLException e) {
 	        		  session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");	                  
 	        	  }        	                	             	              	              	              	           	             	              	              	   	                         

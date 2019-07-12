@@ -103,7 +103,7 @@ public class ExperienceController extends HttpServlet {
 	            	  //4. Save schedule_start, schedule_start & status
 	              	  //TODO: Save schedule
 	            	  	            	  			              	            	  		              
-		              session.setAttribute("message", "Experience <b>"+name+"</b> saved.#n="+name+"#e="+experience_id+"#o="+org_id); 
+		              session.setAttribute("message", "Experience <b>"+name+"</b> saved. You can now configure the pages for this experience. #n="+name+"#e="+experience_id+"#o="+org_id); 
 		              forward = SAVE_SUCCESS;	        		  
 	        	  } catch (SQLException e) {
 	        		  session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");

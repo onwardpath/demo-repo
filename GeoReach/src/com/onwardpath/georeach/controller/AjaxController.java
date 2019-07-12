@@ -2,12 +2,18 @@ package com.onwardpath.georeach.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
+import org.jsoup.select.Elements;
+
 import com.onwardpath.georeach.util.Database;
 
 @SuppressWarnings("serial")
@@ -23,26 +29,13 @@ public class AjaxController extends HttpServlet {
 		/**
 		 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 		 */
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			String service = request.getParameter("service");
-			System.out.println(Database.getTimestamp()+" @AjaxController.doGet>service: "+service);
-			
-			String message = "";
-			if (service.equals("renderUrl")) {
-				try {
-					message = renderUrl(request);
-				} catch (IOException e) {
-					message = e.getMessage();
-				}				
-			}
-								
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {										
 			//message = message.replaceAll("<", "&lt;"); //convert < to &lt;
-			//message = message.replaceAll(">", "&gt;"); //convert > to &gt;
-			
-		    response.setContentType("text/plain");  
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().print(message);
-			response.getWriter().flush();
+			//message = message.replaceAll(">", "&gt;"); //convert > to &gt;			
+		    //response.setContentType("text/plain");  
+			//response.setCharacterEncoding("UTF-8");
+			//response.getWriter().print(html);
+			//response.getWriter().flush();
 		    //response.setContentType("application/json");			
 		    //response.setContentType("text/html;charset=UTF-8");
 		    //final ObjectMapper mapper = new ObjectMapper();		    
@@ -53,17 +46,37 @@ public class AjaxController extends HttpServlet {
 		 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 		 */
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		  
-			
-		}
-		
-		private String renderUrl(HttpServletRequest request) throws IOException {
-			String html = "";
+			String service = request.getParameter("service");
 			String pageUrl = request.getParameter("pageUrl");
-			System.out.println(Database.getTimestamp()+" @AjaxController.renderUrl>pageUrl: "+pageUrl);
-			                                  
-            html = Jsoup.connect(pageUrl).get().html();
-            //System.out.println(html);
-            
-			return html;
-		}
+			System.out.println(Database.getTimestamp()+" @AjaxController.doPost>service: "+service);								
+			System.out.println(Database.getTimestamp()+" @AjaxController.doPost>pageUrl: "+pageUrl);			
+			Document doc = Jsoup.connect(pageUrl).get();
+			
+			Elements media = doc.select("img[src]");
+			for (Element src : media) {
+				System.out.println("src.html(): "+src.html());
+				System.out.println("src.absUrl(\"src\"): "+src.absUrl("src"));
+				src.attr("src", src.absUrl("src"));
+			}
+			
+			Elements styles = doc.select("style");
+			for (Element href : styles) {
+				System.out.println("href.html(): "+href.html());
+				System.out.println("href.absUrl(\"href\"): "+href.absUrl("href"));
+				href.attr("href", href.absUrl("href"));
+			}
+			
+			String head = doc.head().html();
+			String body = doc.body().html();
+			String controls = "<a href='javascript:window.history.back()'>Close</a>";
+			String html = "<html><head>"+head+"</head><body>"+controls+"<br>"+body+"</body></html>";
+			//html = Jsoup.clean(html, Whitelist.basic());
+			//System.out.println(html);
+			HttpSession session = request.getSession();
+			session.setAttribute("content", html);										
+			//String dummyhtml ="<html><body><h1>This is awesome, but dummy</h1></body></html>";			
+			//RequestDispatcher view = request.getRequestDispatcher("/preview.jsp?content="+dummyhtml);
+			RequestDispatcher view = request.getRequestDispatcher("/preview.jsp");
+			view.forward(request, response);					
+		}			
 }

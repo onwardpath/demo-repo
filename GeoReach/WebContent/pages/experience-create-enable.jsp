@@ -82,8 +82,9 @@ function preview() {
 		                <%
 		                if (displayCode) {
 		                	%>
-		                	<!-- Button trigger modal -->
-		                	Insert the following code in the pages you want to display this experience:
+		                	<!-- Button trigger modal -->		                	
+		                	You can now embed the following code in the pages:
+		                	<br><br>
 							<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter">
 								View Code
 							</button>
@@ -108,7 +109,7 @@ function preview() {
 							</button>
 						</div>
 						<div class="modal-body">														 
-							 <h3>Header</h3>
+							 <!-- h3>Header</h3>
 							 <code>
 								&lt;!-- Begin::GeoSmart-Header --&gt; 
 								&lt;script&gt;
@@ -138,11 +139,11 @@ function preview() {
 								&lt;/script&gt;  
 								&lt;!-- End::GeoSmart-Header --&gt;
 							</code>
-							<h3>Body</h3>
-							<code>
-								&lt;!-- Begin::GeoSmart-Body --&gt;
-								&lt;div id="Geo-<%=name%>-<%=experience%>"&gt;&lt;/div&gt;
-								&lt;!-- End::GeoSmart-Body --&gt;
+							<h3>Body</h3-->
+							<b>Embed below code in the body section of your page where <%=name%> experience should appear</b>
+							<br>
+							<code>								
+								&lt;div id="Geo-<%=name%>-<%=experience%>"&gt;&lt;/div&gt;								
 							</code>
 						</div>
 						<div class="modal-footer">							
