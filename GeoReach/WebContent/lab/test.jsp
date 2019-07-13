@@ -2,8 +2,6 @@
 <%@ page import="java.util.Map, com.onwardpath.georeach.model.Experience, com.onwardpath.georeach.repository.ExperienceRepository" %>
 
 <script src="https://cdn.ckeditor.com/ckeditor5/12.3.0/classic/ckeditor.js"></script>
-
-<!-- script src="./assets/js/jquery-3.4.1.min.js"></script -->
 <script type="text/javascript">
 function preview() {		
 	//var pageUrl  = document.getElementById("pageurl").value;
@@ -33,12 +31,12 @@ function showPreview(html) {
 	
 	//var stage = document.getElementById("previewdiv");	
 	//document.getElementById("editor").value = html;	
-	//ClassicEditor
-	//	.create( document.querySelector( '#editor' ) )
-    //   .catch( error => {
-    //        console.error( error );
-    //    } );		
-	//stage.style.display = "block";
+	ClassicEditor
+		.create( document.querySelector( '#editor' ) )
+       	.catch( error => {
+            console.error( error );
+        } );		
+	stage.style.display = "block";
 	
 	//var stage = document.getElementById("previewdiv");
 	//stage.innerHTML+=html;

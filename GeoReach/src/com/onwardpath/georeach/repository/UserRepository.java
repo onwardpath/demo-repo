@@ -271,8 +271,8 @@ public class UserRepository {
 	   * 
 	   */
 	  public void close() {
-		  System.out.println(Database.getTimestamp()+" @UserRepository.close>Closing Database Connection");
-		  Database.closeConnection();
+		  //System.out.println(Database.getTimestamp()+" @UserRepository.close>Closing Database Connection");
+		  //Database.closeConnection();
 	  }
 	  
 	  /**
@@ -280,7 +280,7 @@ public class UserRepository {
 	   * 
 	   */
 	  public void finalize() {
-		  System.out.println(Database.getTimestamp()+" @UserRepository.finalize>Closing Database Connection");
-		  Database.closeConnection();
+		  //System.out.println(Database.getTimestamp()+" @UserRepository.finalize>Closing Database Connection");
+		  //Database.closeConnection();
 	  }
 }

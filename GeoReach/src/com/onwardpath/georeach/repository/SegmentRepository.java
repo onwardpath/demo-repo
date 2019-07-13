@@ -182,8 +182,8 @@ public class SegmentRepository {
 	   * 
 	   */
 	  public void close() {
-		  System.out.println(Database.getTimestamp()+" @SegmentRepository.close>Closing Database Connection");
-		  Database.closeConnection();
+		  //System.out.println(Database.getTimestamp()+" @SegmentRepository.close>Closing Database Connection");
+		  //Database.closeConnection();
 	  }
 	  
 	  /**
@@ -191,7 +191,7 @@ public class SegmentRepository {
 	   * 
 	   */
 	  public void finalize() {
-		  System.out.println(Database.getTimestamp()+" @SegmentRepository.finalize>Closing Database Connection");
-		  Database.closeConnection();
+		  //System.out.println(Database.getTimestamp()+" @SegmentRepository.finalize>Closing Database Connection");
+		  //Database.closeConnection();
 	  }
 }

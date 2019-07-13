@@ -336,8 +336,8 @@ public class ExperienceRepository {
 	   * 
 	   */
 	  public void close() {
-		  System.out.println(Database.getTimestamp()+" @ExperienceRepository.close>Closing Database Connection");
-		  Database.closeConnection();
+		  //System.out.println(Database.getTimestamp()+" @ExperienceRepository.close>Closing Database Connection");
+		  //Database.closeConnection();
 	  }
 	  
 	  /**
@@ -345,7 +345,7 @@ public class ExperienceRepository {
 	   * 
 	   */
 	  public void finalize() {
-		  System.out.println(Database.getTimestamp()+" @ExperienceRepository.finalize>Closing Database Connection");
-		  Database.closeConnection();
+		  //System.out.println(Database.getTimestamp()+" @ExperienceRepository.finalize>Closing Database Connection");
+		  //Database.closeConnection();
 	  }
 }

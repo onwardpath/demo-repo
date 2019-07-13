@@ -34,15 +34,13 @@ public class AjaxController extends HttpServlet {
 		/**
 		 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 		 */
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {										
-			//message = message.replaceAll("<", "&lt;"); //convert < to &lt;
-			//message = message.replaceAll(">", "&gt;"); //convert > to &gt;			
-		    //response.setContentType("text/plain");  
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {																		
+		    //response.setContentType("text/plain");
+			//response.setContentType("application/json");			
+		    //response.setContentType("text/html;charset=UTF-8");
 			//response.setCharacterEncoding("UTF-8");
 			//response.getWriter().print(html);
-			//response.getWriter().flush();
-		    //response.setContentType("application/json");			
-		    //response.setContentType("text/html;charset=UTF-8");
+			//response.getWriter().flush();		    
 		    //final ObjectMapper mapper = new ObjectMapper();		    
 		    //mapper.writeValue(response.getWriter(), message);		    
 		}
@@ -57,7 +55,7 @@ public class AjaxController extends HttpServlet {
 			System.out.println(Database.getTimestamp()+" @AjaxController.doPost>pageUrl: "+pageUrl);			
 			Document doc = Jsoup.connect(pageUrl).get();
 			
-			//Convert all src/href for images, stylesheets and scripts to absolute path
+			//Convert all src/href attributes for image, style-sheet and script elements to absolute path
 			Elements media = doc.select("img[src]");
 			for (Element e1 : media) {
 				e1.attr("src", e1.absUrl("src"));
@@ -75,19 +73,12 @@ public class AjaxController extends HttpServlet {
 													
 			String head = doc.head().html();
 			String body = doc.body().html();
-			String controls = "<a href='javascript:window.history.back()'>Close</a>";
+			String controls = "<a href='javascript:window.history.back()'>Back</a>";
 			String html = "<html><head>"+head+"</head><body>"+controls+"<br>"+body+"</body></html>";
 			//html = Jsoup.clean(html, Whitelist.basic());
-			//System.out.println(html);
 			HttpSession session = request.getSession();
-			session.setAttribute("content", html);										
-			//String dummyhtml ="<html><body><h1>This is awesome, but dummy</h1></body></html>";			
-			//RequestDispatcher view = request.getRequestDispatcher("/preview.jsp?content="+dummyhtml);
+			session.setAttribute("content", html); //passing as parameter is not working										
 			RequestDispatcher view = request.getRequestDispatcher("/preview.jsp");
 			view.forward(request, response);					
-		}
-		
-		private void showExperiences() {
-			
-		}
+		}			
 }
