@@ -33,8 +33,17 @@ public class UserController extends HttpServlet {
 	  /**
 	   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	   */
-	  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {    
-	      String forward = USER_SIGNUP;
+	  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		  String pageName = request.getParameter("pageName");
+		  System.out.println(Database.getTimestamp()+" @UserController.doGet>pageName: "+pageName);
+		  String forward = USER_SIGNUP;
+		  if (pageName.equals("logout")) {
+			  HttpSession session = request.getSession();
+			  if(session != null) {
+        		  session.invalidate();
+        	  }	
+			  forward = USER_LOGIN;
+		  }	      
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
 	  }
@@ -55,7 +64,7 @@ public class UserController extends HttpServlet {
 		        	  String emailName = request.getParameter("email");	        	  
 		              if (userRepository.findByUserName(emailName)) {
 		                  //request.setAttribute("message", "User "+emailName+" alredy exist. <a href='index.jsp'>Click here</a> to login");
-		                  session.setAttribute("message", "Error. User "+emailName+" alredy exist. <a href='index.jsp'>Click here</a> to login");
+		                  session.setAttribute("message", "Error. User "+emailName+" already exist. <a href='index.jsp'>Click here</a> to login");
 		                  forward = USER_SIGNUP;
 		                  RequestDispatcher view = request .getRequestDispatcher(forward);
 		                  view.forward(request, response);
@@ -92,7 +101,8 @@ public class UserController extends HttpServlet {
 		            	  session.setAttribute("message", "Error: Login failed. Try again with valid login & password.");
 		                  forward = LOGIN_FAILURE;
 		              }
-		          } else if (pageName.equals("logout")) {	        	  
+		          } else if (pageName.equals("logout")) {
+		        	  System.out.println("User logged out");
 		        	  if(session != null) {
 		        		  session.invalidate();
 		        	  }	        	      

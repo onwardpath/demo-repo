@@ -196,7 +196,7 @@ public class UserRepository {
 	  public User getUser(int id) throws SQLException {
 		  User user = new User();		  			  
 		  String query = "select user.org_id as org_id, user.firstname as firstname, user.lastname as lastname, user.login as login, " +
-		  		"user.email as email, user.phone1 as phone1, user.profile_pic as pic, organization.name as orgname " + 
+		  		"user.email as email, user.phone1 as phone1, user.profile_pic as pic, organization.name as orgname, organization.domain as orgdomain " + 
 		  		"from user, organization " + 
 		  		"where user.org_id = organization.id and " + 
 		  		"user.id = ?";		  		  		          
@@ -213,11 +213,13 @@ public class UserRepository {
               String pic = result.getString("pic");
               int organization_id = Integer.parseInt(result.getString("org_id"));
               String organization_name = result.getString("orgname");
+              String organization_domain = result.getString("orgdomain");
               user.setFirstname(firstname);
               user.setLastname(lastname);
               user.setEmail(email);
               user.setOrganization_id(organization_id);
               user.setOrganization_name(organization_name);
+              user.setOrganization_domain(organization_domain);
               user.setPhone1(phone1);
               user.setProfile_pic(pic);
           }           

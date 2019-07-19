@@ -11,9 +11,8 @@ if (session.getAttribute("user") != null) {
 }
 %>
 <script type="text/javascript">
-function submitform()
-{
-  document.logout.submit();
+function logout() {	
+	document.getElementById("logout").submit();
 }
 </script>            
 <div class="kt-user-card kt-margin-b-40 kt-margin-b-30-tablet-and-mobile" style="background-image: url(./assets/media/misc/head_bg_sm.jpg)">
@@ -55,15 +54,15 @@ function submitform()
         </a>
     </li>
     <li class="kt-nav__item">
-        <a href="?page=custom/user/profile-v1" class="kt-nav__link">
+        <a href="/GeoReach?view=pages/profile-view-settings.jsp" class="kt-nav__link">
             <span class="kt-nav__link-icon"><i class="flaticon2-gear"></i></span>
             <span class="kt-nav__link-text">Settings</span> 
         </a>
     </li>
-    <li class="kt-nav__item kt-nav__item--custom kt-margin-t-15">
-    	<form name="logout" action="UserController" method="post">
-		<input type="hidden" name="pageName" value="logout">
+    <li class="kt-nav__item kt-nav__item--custom kt-margin-t-15">    	    
+    	<form id="logout" action="UserController" method="post">
+			<input type="hidden" name="pageName" value="logout">
 		</form>
-    	<a href="javascript:submitform()" class="btn btn-label-brand btn-upper btn-sm btn-bold">Sign Out</a>     	
+    	<a href="javascript:logout();" class="btn btn-label-brand btn-upper btn-sm btn-bold">Sign Out</a>     	
     </li>
 </ul>

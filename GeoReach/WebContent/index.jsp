@@ -1,10 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%
-if (null == session.getAttribute("authenticated") || session.getAttribute("authenticated").equals("") || !session.getAttribute("authenticated").equals("true")) { 	
-	response.sendRedirect("/GeoReach/login.jsp");
-    return;
-}
-%>  
 <!DOCTYPE html>
 <html lang="en" >
     <!-- begin::Head -->
@@ -15,7 +9,7 @@ if (null == session.getAttribute("authenticated") || session.getAttribute("authe
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <!--begin::Fonts -->
-        <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>        
         <script>
         WebFont.load({
                 google: {
@@ -24,7 +18,7 @@ if (null == session.getAttribute("authenticated") || session.getAttribute("authe
                 active: function() {
                     sessionStorage.fonts = true;                
                 }            
-		});        
+		});                     
         </script>
         <!--end::Fonts -->
         <!--begin::Page Vendors Styles(used by this page) -->
@@ -44,8 +38,14 @@ if (null == session.getAttribute("authenticated") || session.getAttribute("authe
     </head>
     <!-- end::Head -->
     <!-- begin::Body -->
-    <body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-page--loading" >        
-        <jsp:include page="_layout.jsp" />                    
+    <body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-page--loading" >    	     
+	    <%
+		if (null == session.getAttribute("authenticated") || session.getAttribute("authenticated").equals("") || !session.getAttribute("authenticated").equals("true")) { 			
+			response.sendRedirect("/GeoReach/login.jsp");
+		    return;
+		} else {%>			
+			<jsp:include page="_layout.jsp" />			
+		<%}%>                                    
         <!-- begin::Global Config(global config for global JS sciprts) -->
         <script>            
         var KTAppOptions = {
@@ -93,6 +93,7 @@ if (null == session.getAttribute("authenticated") || session.getAttribute("authe
         <script src="./assets/js/demo1/pages/dashboard.js" type="text/javascript"></script>
         <script src="./assets/js/demo1/pages/crud/forms/layouts/repeater.js" type="text/javascript"></script>
         <script src="./assets/js/demo1/pages/crud/forms/widgets/bootstrap-select.js" type="text/javascript"></script>
+        <script src="./assets/js/demo1/pages/components/extended/session-timeout.js" type="text/javascript"></script>
         <!-- using below causes issues with bootstrap-select components -->        
         <!-- script src="./assets/js/demo1/pages/crud/datatables/data-sources/html.js" type="text/javascript"></script>        
         <script src="./assets/js/demo1/pages/crud/datatables/advanced/multiple-controls.js" type="text/javascript"></script -->

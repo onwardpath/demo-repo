@@ -7,6 +7,13 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,15 +41,34 @@ public class AjaxController extends HttpServlet {
 		/**
 		 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 		 */
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {																		
-		    //response.setContentType("text/plain");
-			//response.setContentType("application/json");			
-		    //response.setContentType("text/html;charset=UTF-8");
-			//response.setCharacterEncoding("UTF-8");
-			//response.getWriter().print(html);
-			//response.getWriter().flush();		    
-		    //final ObjectMapper mapper = new ObjectMapper();		    
-		    //mapper.writeValue(response.getWriter(), message);		    
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			//String service_name = request.getParameter("service_name");
+			//if ( service_name. equals("suggestions")) {
+			//	
+			//}
+			String geoloc = request.getParameter("geoloc");
+			System.out.println(geoloc);
+			final StringWriter sw = new StringWriter();
+			final ObjectMapper mapper = new ObjectMapper();
+			Connection con = Database.getConnection();
+			ArrayList<String> citieslist = new ArrayList<String>();
+			try {			
+				String sql_query = "select * from city join state on city.ID_STATE = state.id  where city.city like ?";							
+				PreparedStatement prepStatement = con.prepareStatement(sql_query);		        		          		         		       
+		        prepStatement.setString(1, geoloc + "%");		        		       
+				ResultSet rst = prepStatement.executeQuery();
+				while (rst.next()) {
+					citieslist.add(rst.getString("city") + ", " + rst.getString("state_name"));
+					//citieslist.add(rst.getString("city") + rst.getString("state_name"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			mapper.writeValue(sw, citieslist);
+			System.out.println(sw.toString());// use toString() to convert to JSON
+			String jsonstring = sw.toString();
+			sw.close();
+			response.getWriter().write(jsonstring);	    
 		}
 
 		/**

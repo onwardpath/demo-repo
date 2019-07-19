@@ -5,11 +5,13 @@ var KTSessionTimeoutDemo = function () {
         $.sessionTimeout({
             title: 'Session Timeout Notification',
             message: 'Your session is about to expire.',
-            keepAliveUrl: 'inc/api/session-timeout/keepalive.php',
-            redirUrl: '?page=custom/user/login-v1&demo=default',
-            logoutUrl: '?page=custom/user/login-v1&demo=default',
-            warnAfter: 3000, //warn after 5 seconds
-            redirAfter: 35000, //redirect after 10 secons,
+            keepAliveUrl: 'keepalive.jsp',
+            redirUrl: 'UserController?pageName=logout',
+            logoutUrl: 'UserController?pageName=logout',
+            //warnAfter: 3000, //warn after 5 seconds
+            warnAfter: 180000, //warn after 5 minutes
+            //redirAfter: 35000, //redirect after 10 seconds
+            redirAfter: 215000, //redirect after 10 seconds
             ignoreUserActivity: true,
             countdownMessage: 'Redirecting in {timer} seconds.',
             countdownBar: true

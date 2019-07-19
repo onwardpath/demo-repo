@@ -12,7 +12,7 @@
 		<div class="alert alert-light alert-elevate" role="alert">
 			<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
 				<div class="alert-text">
-				No Content Experience Available for your Organization. Create a new Content Experience <a class="kt-link kt-font-bold" href="?view=pages/experience-content-create.jsp">here</a>.
+				No Content Experience Available for your Organization. Create a new Content Experience <a class="kt-link kt-font-bold" href="?view=pages/experience-create-content.jsp">here</a>.
 			</div>
 		</div>
 	<%} else {%>

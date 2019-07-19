@@ -1,9 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <script type="text/javascript">
+function suggestArea() {
+	var geoloc = document.getElementById("geoloc").value;	
+	var suggest_list = document.getElementById("suggest_list");		
+	if (geoloc.length >= 3) {		
+		var xhttp = new XMLHttpRequest(); 
+		//xhttp.responseType = 'json'; 
+		xhttp.onreadystatechange = function () { 
+			if (this.readyState == 4 && this.status == 200) { 								
+				var response = JSON.parse( this.responseText ); 									
+				suggest_list.innerHTML = "";
+                response.forEach(function(item) {                    
+                    var option = document.createElement('option');
+                    //option.label = item;
+                    option.value = item;                    
+                    suggest_list.appendChild(option);
+                });
+			} 
+		}; 
+		xhttp.open("GET", "AjaxController?geoloc="+geoloc); 
+		xhttp.send();
+	} 					
+}
+
 function add(){	
 	var geotype = document.getElementById("geotype").value;
 	var georule = document.getElementById("georule").value;
-	var geoloc = document.getElementById("geoloc").value;		
+	var geoloc = document.getElementById("geoloc").value;
+	//alert(geoloc);
 	var geocondition = georule+":"+geotype+":"+geoloc;		
 	var select = document.getElementById("dynamic-select");
 	var index = select.options.length;
@@ -11,15 +35,20 @@ function add(){
 	document.getElementById("geoloc").value = ""; //Clear the Text Field				
 	var x = document.getElementById("geobucket");	
 	geoloc = geoloc.replace(/\s+/g, ''); //Remove white space before displaying. Note: We are using the name as-is while saving the locations to segment table.	
+	geoloc = geoloc.replace(',', ''); //Remove comma before displaying.
 	if(georule == "include") {			
 		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
+		//alert(x.innerHTML);
 	} else {		
 		x.innerHTML += '<button id="'+geoloc+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+geoloc+','+index+')">'+geoloc+'<i class="la la-close"></i></button>&nbsp;';
+		//alert(x.innerHTML);
 	}	
 	x.style.display = "block";			
 	document.getElementById("geoloc").focus();	
 }
-function remove(element, index){	
+function remove(element, index){
+	//alert(element);
+	//alert(index);
 	var select = document.getElementById("dynamic-select");
 	select.remove(index);		
 	element.style.display = "none";		
@@ -111,7 +140,11 @@ function  saveSegment() {
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Area</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">															
-						<input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name">						
+						<input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Name" list="suggest_list" onkeypress="javascript:suggestArea()">
+						<datalist id="suggest_list"></datalist>
+						<!-- div class="ui-widget">
+							<label for="us_city">Area:</label> <input id="geoloc" type="text" class="form-control col-lg-9 col-sm-12" placeholder="Enter Your Location">
+						</div -->						
 					</div>
 				</div>
 				

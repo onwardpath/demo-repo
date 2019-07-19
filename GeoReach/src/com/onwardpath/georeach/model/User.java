@@ -4,6 +4,7 @@ public class User {
 	private int id; 
 	private int organization_id;
 	private String organization_name;
+	private String organization_domain; //setOrganization_domain
 	private String firstname;
 	private String lastname;
 	private String gender;
@@ -35,6 +36,12 @@ public class User {
 	}
 	public void setOrganization_name(String organization_name) {
 		this.organization_name = organization_name;
+	}
+	public String getOrganization_domain() {
+		return organization_domain;
+	}
+	public void setOrganization_domain(String organization_domain) {
+		this.organization_domain = organization_domain;
 	}
 	public String getFirstname() {
 		return firstname;

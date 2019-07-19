@@ -159,3 +159,6 @@ ref{source:match:google.com}
 BUG LIST:
 VM1649 vendors.bundle.js:9837 POST http://localhost:8080/GeoReach/inc/api/datatables/demos/default.php 404
 
+FINANCIAL WEBSITES:
+https://thefinancialbrand.com/45952/banking-website-personalization/
+

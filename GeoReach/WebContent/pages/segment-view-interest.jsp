@@ -16,7 +16,7 @@
 				<div class="alert alert-light alert-elevate" role="alert">
 					<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
 						<div class="alert-text">
-						No Segments Available for your Organization. Create a new segment <a class="kt-link kt-font-bold" href="?view=pages/segment-create.jsp">here</a>.
+						No Segments Available for your Organization. Create a new segment <a class="kt-link kt-font-bold" href="?view=pages/segment-create-geo.jsp">here</a>.
 					</div>
 				</div>
 				<%

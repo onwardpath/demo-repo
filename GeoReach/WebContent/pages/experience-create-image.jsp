@@ -52,7 +52,7 @@ function saveExperience() {
 	int org_id = (Integer)session.getAttribute("org_id");
 	Map<Integer,String> segments = segmentRepository.getOrgSegments(org_id);
 	if (segments.size() == 0) {
-		message = "Error: No Segments are configured. Create a Segment <a class='kt-link kt-font-bold' href='?view=pages/segment-create.jsp'>here</a>";	
+		message = "Error: No Segments are configured. Create a Segment <a class='kt-link kt-font-bold' href='?view=pages/segment-create-geo.jsp'>here</a>";	
 	}
 				
 	if (message != null && !message.equals("")) {
