@@ -92,48 +92,15 @@
 								<div class="modal-dialog modal-dialog-centered" role="document">
 									<div class="modal-content">						
 										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalCenterTitle">Embed Code for: <%=experience.getName()%></h5>
+											<h5 class="modal-title" id="exampleModalCenterTitle">
+											Embed Code for <span class="badge badge-secondary"><%=experience.getName()%></span>											
+											</h5>
 											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												<span aria-hidden="true">×</span>
 											</button>
 										</div>
-										<div class="modal-body">														 
-											 <h3>Header</h3>
-											 <code>
-												&lt;!-- Begin::GeoSmart-Header --&gt; 
-												&lt;script&gt;
-												function geo()
-												{
-												      var serviceURL= "http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=id%>&org_id=<%=org_id%>&s=";
-												      var geoElement = document.getElementById("Geo-<%=experience.getName()%>-<%=id%>");
-												      var url = new URL(window.location.href);
-												      var c = url.searchParams.get("s");
-												      serviceURL += c;
-												      console.log(serviceURL);
-												
-												      var xhttp = new XMLHttpRequest();
-												      xhttp.responseType = 'json';
-												      xhttp.onreadystatechange = function() 
-												      {
-														if (this.readyState == 4 && this.status == 200)
-														{
-															let data = this.response;
-															geoElement.innerHTML = data[1].embedCode;
-														}
-												      };
-												      xhttp.open("GET", serviceURL);
-												      xhttp.send();
-												 }								
-												window.onload = geo;
-												&lt;/script&gt;  
-												&lt;!-- End::GeoSmart-Header --&gt;
-											</code>
-											<h3>Body</h3>
-											<code>
-												&lt;!-- Begin::GeoSmart-Body --&gt;
-												&lt;div id="Geo-<%=experience.getName()%>-<%=id%>"&gt;&lt;/div&gt;
-												&lt;!-- End::GeoSmart-Body --&gt;
-											</code>
+										<div class="modal-body">														 											 
+											<code>&lt;div id="G-<%=experience.getName()%>-<%=id%>"&gt;&lt;/div&gt;</code>											
 										</div>
 										<div class="modal-footer">							
 											<button type="button" class="btn btn-outline-brand">Copy</button>

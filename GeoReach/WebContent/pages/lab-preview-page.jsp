@@ -69,7 +69,7 @@ function preview() {
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Page Address</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">	
-						<input id="service" name="service" type="hidden">														
+						<input id="service" name="service" value="preview" type="hidden">														
 						<input id="pageUrl" name="pageUrl" type="text" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="URL">						
 					</div>
 				</div>

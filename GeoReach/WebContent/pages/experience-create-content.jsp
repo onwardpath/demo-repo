@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.SegmentRepository" %>    
 <script type="text/javascript">
-
 var expDetailsObj = {};
-
 function add(){		
 	var segment = document.getElementById("segment");	
 	var segment_id = segment.value;	
@@ -23,8 +21,7 @@ function remove(element, segment_id){
 	delete expDetailsObj[segment_id];	
 	displayElement.style.display = "none";		
 }
-function saveExperience() 
-{	
+function saveExperience(){	
 	var name = document.getElementById('name').value;
 	var type = "content";					
 	document.getElementById("experience-form").type.value=type;	
@@ -56,8 +53,7 @@ function saveExperience()
 		String experience = "";
 		String organization = "";		
 		if (message.contains("#")) {			
-			String codeConstructor = message.substring(message.indexOf("#")+1);
-			
+			String codeConstructor = message.substring(message.indexOf("#")+1);			
 			message = message.substring(0,message.indexOf("#"));
 			String[] decoder = codeConstructor.split("#");
 			name = decoder[0].substring(decoder[0].indexOf("=")+1);
@@ -126,7 +122,7 @@ function saveExperience()
 							<h3>Body</h3>
 							<code>
 								&lt;!-- Begin::GeoSmart-Body --&gt;
-								&lt;div id="Geo-<%=name%>-<%=experience%>"&gt;&lt;/div&gt;
+								&lt;div id="G-<%=name%>-<%=experience%>"&gt;&lt;/div&gt;
 								&lt;!-- End::GeoSmart-Body --&gt;
 							</code>
 						</div>

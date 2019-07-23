@@ -4,8 +4,7 @@ function suggestArea() {
 	var geoloc = document.getElementById("geoloc").value;	
 	var suggest_list = document.getElementById("suggest_list");		
 	if (geoloc.length >= 3) {		
-		var xhttp = new XMLHttpRequest(); 
-		//xhttp.responseType = 'json'; 
+		var xhttp = new XMLHttpRequest(); 		
 		xhttp.onreadystatechange = function () { 
 			if (this.readyState == 4 && this.status == 200) { 								
 				var response = JSON.parse( this.responseText ); 									
@@ -18,7 +17,7 @@ function suggestArea() {
                 });
 			} 
 		}; 
-		xhttp.open("GET", "AjaxController?geoloc="+geoloc); 
+		xhttp.open("GET", "AjaxController?service=city_suggestions&geoloc="+geoloc); 		
 		xhttp.send();
 	} 					
 }

@@ -38,7 +38,7 @@
 						<code>&lt;script&gt;function geo() { 
 							var u = new URL(window.location.href); 
 						    var c = u.searchParams.get("simulate"); 
-						    var s = "http://demo.onwardpath.com/GeoTargetService/a/g/g?o=1&simulate="+c+"&url="+u.toString(); 
+						    var s = "http://demo.onwardpath.com/GeoTargetService/a/g/g?o=<%=org_id%>&simulate="+c+"&url="+u.toString(); 
 						    var x = new XMLHttpRequest(); 
 						    console.log(s); 
 						    x.responseType = 'json'; 

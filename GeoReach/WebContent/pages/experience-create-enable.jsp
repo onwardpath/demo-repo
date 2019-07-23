@@ -5,12 +5,10 @@
 var cfgDetailsObj = {};
 var index = 0;
 
-function add(){		
-	//alert("You are here");
+function add(){	
 	var pageurl = document.getElementById("url").value;		
 	var buttonid = pageurl.replace(/:/g, "");
-	buttonid = buttonid.replace(".", "");
-		
+	buttonid = buttonid.replace(".", "");		
 	if (pageurl in cfgDetailsObj) {
 		alert("Page "+url+" already added. Add a different page.");	
 	} else {					
@@ -26,10 +24,8 @@ function remove(element, index){
 	delete cfgDetailsObj[index];	
 	displayElement.style.display = "none";		
 }
-function saveConfig(){			
-	//alert(JSON.stringify(cfgDetailsObj));
-	document.getElementById("config-form").urlList.value=JSON.stringify(cfgDetailsObj);
-	//alert(document.getElementById("config-form").urlList.value);
+function saveConfig(){				
+	document.getElementById("config-form").urlList.value=JSON.stringify(cfgDetailsObj);	
 	document.getElementById("config-form").method = "post";
 	document.getElementById("config-form").action = "ConfigController";
 	document.getElementById("config-form").submit();
@@ -42,7 +38,7 @@ function preview() {
 <!--begin::Content-->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 	<%	
-	String message = (String) session.getAttribute("message");	
+	String message = (String) session.getAttribute("message");		
 	int org_id = (Integer)session.getAttribute("org_id");
 	String name = "";
 	String experience = "";
@@ -63,11 +59,12 @@ function preview() {
 						
 		if (message.contains("#")) {			
 			String codeConstructor = message.substring(message.indexOf("#")+1);			
-			message = message.substring(0,message.indexOf("#"));
+			message = message.substring(0,message.indexOf("#"));			
 			String[] decoder = codeConstructor.split("#");
-			name = decoder[0].substring(decoder[0].indexOf("=")+1);
-			experience = decoder[1].substring(decoder[0].indexOf("=")+1);
+			name = decoder[0].substring(decoder[0].indexOf("=")+1);			
+			experience = decoder[1].substring(decoder[0].indexOf("=")+1);			
 			organization = decoder[2].substring(decoder[0].indexOf("=")+1);
+			
 		}
 		
 		if (message.startsWith("Page"))
@@ -103,48 +100,15 @@ function preview() {
 				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">						
 						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalCenterTitle">Embed Code for: <%=name%></h5>
+							<h5 class="modal-title" id="exampleModalCenterTitle">
+							Embed below code in the body section of your page where <span class="badge badge-secondary"><%=name%></span> experience should appear
+							</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">×</span>
 							</button>
 						</div>
-						<div class="modal-body">														 
-							 <!-- h3>Header</h3>
-							 <code>
-								&lt;!-- Begin::GeoSmart-Header --&gt; 
-								&lt;script&gt;
-								function geo()
-								{
-								      var serviceURL= "http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=experience%>&org_id=<%=org_id%>&s=";
-								      var geoElement = document.getElementById("Geo-<%=name%>-<%=experience%>");
-								      var url = new URL(window.location.href);
-								      var c = url.searchParams.get("s");
-								      serviceURL += c;
-								      console.log(serviceURL);
-								
-								      var xhttp = new XMLHttpRequest();
-								      xhttp.responseType = 'json';
-								      xhttp.onreadystatechange = function() 
-								      {
-										if (this.readyState == 4 && this.status == 200)
-										{
-											let data = this.response;
-											geoElement.innerHTML = data[1].embedCode;
-										}
-								      };
-								      xhttp.open("GET", serviceURL);
-								      xhttp.send();
-								 }								
-								window.onload = geo;
-								&lt;/script&gt;  
-								&lt;!-- End::GeoSmart-Header --&gt;
-							</code>
-							<h3>Body</h3-->
-							<b>Embed below code in the body section of your page where <%=name%> experience should appear</b>
-							<br>
-							<code>								
-								&lt;div id="Geo-<%=name%>-<%=experience%>"&gt;&lt;/div&gt;								
-							</code>
+						<div class="modal-body">														 							 							
+							<code>&lt;div id="G-<%=name%>-<%=experience%>"&gt;&lt;/div&gt;</code>
 						</div>
 						<div class="modal-footer">							
 							<button type="button" class="btn btn-outline-brand">Copy</button>
@@ -207,8 +171,8 @@ function preview() {
 						<div class="col-lg-4 col-md-9 col-sm-12">
 							<div id="hidden-form" style="display: none;">																	
 								<input type="hidden" name="pageName" value="experience-create-enable.jsp">								
-								<input type="hidden" name="experience_id" value=<%=experience%>>
-								<input type="hidden" name="experience_name" value=<%=name%>>								
+								<input type="hidden" name="experience_id" value="<%=experience%>">
+								<input type="hidden" name="experience_name" value="<%=name%>">								
 								<input type="hidden" name="urlList">																																																																																																			
 							</div>											
 							<button type="reset" class="btn btn-primary" onclick="saveConfig();">Save</button>
