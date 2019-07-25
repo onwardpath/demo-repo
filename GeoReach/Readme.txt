@@ -114,6 +114,9 @@ https://www.vertabelo.com/blog/technical-articles/website-analytics-a-google-ana
 https://my.vertabelo.com/model/P61M7h7pa4y5n9UJxlcTuOEzbelutkdi
 Build Your Own Web Analytics Platform in 25 Minutes:
 https://www.chaoming.li/blog/build-your-own-web-analytics-platform-in-25-minutes
+Matamo:
+https://developer.matomo.org/guides/getting-started-part-1
+https://developer.matomo.org/integration
 
 FEATURES WISHLIST
 1. Since we are not storing the URL for the experience, we need a way to list all pages where the experience is being used (Embed Code is present)

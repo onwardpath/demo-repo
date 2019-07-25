@@ -109,7 +109,7 @@ imageThumb {
 											</button>
 										</div>
 										<div class="modal-body">														 											 
-											<code>&lt;div id="Geo-<%=experience.getName()%>-<%=id%>"&gt;&lt;/div&gt;</code>
+											<code>&lt;div id="G-<%=experience.getName()%>-<%=id%>"&gt;&lt;/div&gt;</code>
 										</div>
 										<div class="modal-footer">							
 											<button type="button" class="btn btn-outline-brand">Copy</button>
