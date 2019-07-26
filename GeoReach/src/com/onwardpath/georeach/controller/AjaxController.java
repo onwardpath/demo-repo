@@ -43,6 +43,7 @@ public class AjaxController extends HttpServlet {
 		/**
 		 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 		 */
+		//Updated By Poovarasan 
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String service_name = request.getParameter("service");
 			if (service_name.equals("city_suggestions")) {
