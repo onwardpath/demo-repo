@@ -97,18 +97,21 @@ public class AjaxController extends HttpServlet {
 			}			
 		}
 		
+		/* Commited by Poovarsan for Auto Complete Query change (26-Jul-19)*/
 		private String citySuggestion(String startsWith) throws SQLException, JsonGenerationException, JsonMappingException, IOException {
 			final StringWriter sw = new StringWriter();
 			final ObjectMapper mapper = new ObjectMapper();
 			Connection con = Database.getConnection();
 			ArrayList<String> citieslist = new ArrayList<String>();
-			try {			
-				String sql_query = "select * from city join state on city.ID_STATE = state.id  where city.city like ?";							
-				PreparedStatement prepStatement = con.prepareStatement(sql_query);		        		          		         		       
-		        prepStatement.setString(1, startsWith + "%");		        		       
+			try {
+				String sql_query = "select city.name,state.name,country.code from city join state join country on city.state_id = state.id where state.country_id = country.id AND city.name like ?  ORDER BY city.name,state.name ASC LIMIT 10";
+				PreparedStatement prepStatement = con.prepareStatement(sql_query);
+				prepStatement.setString(1, startsWith + "%");
 				ResultSet rst = prepStatement.executeQuery();
 				while (rst.next()) {
-					citieslist.add(rst.getString("city") + ", " + rst.getString("state_name"));						
+					citieslist.add(rst.getString(1) + ", " + rst.getString(2) + ", "
+							+ rst.getString(3));
+
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -117,6 +120,11 @@ public class AjaxController extends HttpServlet {
 			System.out.println(sw.toString());// use toString() to convert to JSON
 			String jsonstring = sw.toString();
 			sw.close();
+			
+			if (citieslist.size() == 0) {
+				jsonstring = "null";
+			}
+			
 			return jsonstring;
 		}
 }
