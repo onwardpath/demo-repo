@@ -27,12 +27,11 @@
 			xhttp.send();
 		}
 	}
-
 	function add() {
 		var geotype = document.getElementById("geotype").value;
 		var georule = document.getElementById("georule").value;
-		var geoloc = document.getElementById("geoloc").value;
-		//alert(geoloc);
+		var geoloc = document.getElementById("geoloc").value;		
+		alert(geoloc);
 		var geocondition = georule + ":" + geotype + ":" + geoloc;
 		var select = document.getElementById("dynamic-select");
 		var index = select.options.length;
@@ -41,7 +40,8 @@
 		document.getElementById("suggest_list").innerHTML = ""; //Clear Suggestion list
 		var x = document.getElementById("geobucket");
 		geoloc = geoloc.replace(/\s+/g, ''); //Remove white space before displaying. Note: We are using the name as-is while saving the locations to segment table.	
-		geoloc = geoloc.replace(',', ''); //Remove comma before displaying.
+		geoloc = geoloc.replaceAll(',', ''); //Remove comma before displaying.
+		alert(geoloc);
 		if (georule == "include") {
 			x.innerHTML += '<button id="'
 					+ geoloc
@@ -61,8 +61,8 @@
 		document.getElementById("geoloc").focus();
 	}
 	function remove(element, index) {
-		//alert(element);
-		//alert(index);
+		alert(element);
+		alert(index);
 		var select = document.getElementById("dynamic-select");
 		select.remove(index);
 		element.style.display = "none";
@@ -91,6 +91,11 @@
 		document.getElementById("segment-form").action = "SegmentController";
 		document.getElementById("segment-form").submit();
 	}
+	
+	String.prototype.replaceAll = function(search, replacement) {
+	    var target = this;
+	    return target.replace(new RegExp(search, 'g'), replacement);
+	};
 </script>
 
 <!--begin::Content-->
@@ -116,7 +121,7 @@
 		</div>
 	</div>
 	<%
-		session.setAttribute("message", "");
+			session.setAttribute("message", "");
 		}
 	%>
 	<!--begin::Portlet-->

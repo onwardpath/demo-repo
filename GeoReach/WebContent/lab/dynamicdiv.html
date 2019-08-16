@@ -65,7 +65,11 @@ function add(){
 	    dDiv.style.left = parentPositionLeft+'px';
 	    dDiv.style.top = parentPositionTop+'px';
 	    dDiv.style.position = "absolute";
-        console.log(dDiv.style.left);
+        //console.log(dDiv.style.left);  
+        //for (let name of dDiv.getAttributeNames()) {
+		  //let value = dDiv.getAttribute(name);
+		  //console.log(name, value);
+		//}
       	//end::research
 	    
 	}, true);
@@ -94,13 +98,23 @@ function add(){
 	    //lonelyimage.style.top = "300px";
 	    
 	    //2. THIS WORKS
-	    //document.querySelectorAll('body *').forEach(function(node) {	    		    
-	    	//if (node instanceof Element) {	    		
+	    document.querySelectorAll('body *').forEach(function(node) {	    		    
+	    	if (node instanceof Element && (node.getAttribute('id') != 'block')) {	    		
 	    		//node.style.display = "block";
 	    		//node.style.position = "fixed";	    
-	    		//node.style.top = "300px";	    		
-	    	//}	    		    		    
-		//});
+	    		//node.style.top = "300px";	
+	    		//console.log(node);
+	    		//console.log(node.getBoundingClientRect().left);
+	    		//console.log(node.getBoundingClientRect().top);
+	    		//if(node.getBoundingClientRect().top == dDiv.getBoundingClientRect().top) {
+	    		//	console.log(node);
+	    		//}
+	    		
+	    		var rect1
+	    		var overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom)
+	    		
+	    	}	    		    		    
+		});
 	    
 	    //end::research
 	    
