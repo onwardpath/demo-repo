@@ -8,14 +8,14 @@
     		<li class="kt-menu__item kt-menu__item--submenu kt-menu__item--rel kt-menu__item--active" data-ktmenu-submenu-toggle="click" aria-haspopup="true">
     		<a href="javascript:;" class="kt-menu__link kt-menu__toggle">
     			<span class="kt-menu__link-text">
-    			<%
+    	    	<%
 	            if (session.getAttribute("user") != null) {
 	            	String orgName = ((User) session.getAttribute("user")).getOrganization_name();
 	                if (orgName != null) {%>
 	                	<%=orgName%>	                            
 	            	<%}   
 	            }
-	            %>    			
+	            %>   		
     			</span>
     			<!-- i class="kt-menu__hor-arrow la la-angle-down"></i><i class="kt-menu__ver-arrow la la-angle-right"></i -->
    			</a>

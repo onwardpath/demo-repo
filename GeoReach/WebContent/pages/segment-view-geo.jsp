@@ -60,7 +60,7 @@
 										//beh{include:visit:equals:10|include:session:equals:60}
 										//int{include:visit:equals:1:onwardpath.com/packers-info}
 										//ref{source:match:google.com}
-										
+						
 										String segmentRules = segment.getGeography();
 										//Remove "loc{" and "}"
 										if (segmentRules.indexOf("}") !=0) {
