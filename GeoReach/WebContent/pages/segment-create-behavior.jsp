@@ -13,7 +13,8 @@ function add(){
 	document.getElementById("type").reset;
 	document.getElementById("criteria").reset;
 	document.getElementById("rulevalue").value = ""; //Clear the Text Field	
-	var x = document.getElementById("behaviourbucket");		
+	var x = document.getElementById("behaviourbucket");	
+	
 	if(rule == "include") {			
 		x.innerHTML += '<button id="'+type+criteria+rulevalue+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+type+criteria+rulevalue+','+index+')">'+type+':'+criteria+':'+rulevalue+'<i class="la la-close"></i></button>&nbsp;';
 	} else {		
@@ -50,6 +51,21 @@ function saveSegment() {
 	document.getElementById("segment-form").method = "post";
 	document.getElementById("segment-form").action = "SegmentController";
 	document.getElementById("segment-form").submit();
+}
+
+//Created new function for dropdown issue - Sre.
+function selectedValue(selectedValue){
+	var selectedTagId = selectedValue.getAttribute("id")
+	var setSelectedValue = document.getElementById(selectedTagId)
+	var optionSelectedVal = setSelectedValue.options[setSelectedValue.selectedIndex].getAttribute("value") 
+	
+	$("#"+selectedTagId+" option").each(function(){
+		if(optionSelectedVal == $(this).val()){
+			$(this).attr("selected","selected")
+		}else{
+			$(this).removeAttr("selected")
+		}
+    });
 }
 </script>
 
@@ -107,15 +123,16 @@ function saveSegment() {
 						<select id="rule" class="form-control form-control--fixed kt_selectpicker" data-width="150">
 							<option value="include">Include</option>
 							<option value="exclude">Exclude</option>														
-						</select>																		
-						<select id="type" class="form-control form-control--fixed kt_selectpicker" data-width="150">
+						</select>
+						<%-- include onchange event for type and criteria -Sre--%>																		
+						<select id="type" class="form-control form-control--fixed kt_selectpicker" data-width="150" onchange="selectedValue(this)">
 							<option value="visit">Visits</option>
 							<option value="session">Session Duration</option>														
-						</select>																	
-						<select id="criteria" class="form-control form-control--fixed kt_selectpicker" data-width="120">
-							<option value="equals">Equals</option>
-							<option value="more">More than</option>
-							<option value="less">Less than</option>							
+						</select>															
+						<select id="criteria" class="form-control kt_selectpicker" data-width="120" onchange="selectedValue(this)">
+							<option value="equals" id="criteria_equals" >Equals</option>
+							<option value="more" id="criteria_more" >More than</option>
+							<option value="less" id="criteria_less">Less than</option>							
 						</select>																															
 					</div>
 				</div>
