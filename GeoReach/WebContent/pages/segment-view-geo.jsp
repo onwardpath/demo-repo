@@ -34,34 +34,30 @@
 						
 						<div class="kt-portlet__body">			
 							<!--begin: Datatable -->
-							<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Geography</th>
-										<th>Created By</th>
-										<th>Created On</th>																
-										<th>Actions</th>
-									</tr>
-								</thead>								
-								<%
+						<div class="row">
+      						<div class="col-sm-12">
+         						<table class="table table-striped- table-bordered table-hover table-checkable kt_table_1" id="kt_table_1">
+            						<thead>
+               							<tr role="row">
+											<th class="sorting_asc" tabindex="0" aria-controls="kt_table_1" aria-sort="ascending">Name</th>
+											<th class="sorting" tabindex="0" aria-controls="kt_table_1">Geography</th>
+											<th class="sorting"tabindex="0" aria-controls="kt_table_1">Created By</th>
+											<th class="sorting" tabindex="0" aria-controls="kt_table_1">Created On</th>																
+											<th class="sorting_disabled" tabindex="0" aria-controls="kt_table_1">Actions</th>
+										</tr>
+									</thead>						
+								
+				    			<tbody>
+				    			<%
 								for ( Map.Entry<Integer, Segment> entry : orgSegments.entrySet()) {
 									Integer key = entry.getKey();
 									Segment segment = entry.getValue();
 									User user = userRepository.getUser(segment.getUser_id());
 								    %>
-				    			<tbody>
-									<tr>
-										<td><%=segment.getName()%></td>
-										<td>
-										<%	
-										//TODO: Update to include new format 										
-										//loc{include:city:San Jose-CA-USA|include:city:Santa Clara-CA-USA|include:city:Fremont-CA-USA}
-										//beh{include:visit:equals:10|include:session:equals:60}
-										//int{include:visit:equals:1:onwardpath.com/packers-info}
-										//ref{source:match:google.com}
-						
-										String segmentRules = segment.getGeography();
+								     <tr role="row" class="odd">
+					<td tabindex="0" class="sorting_1"><%=segment.getName()%></td>
+					<td><%
+					String segmentRules = segment.getGeography();
 										//Remove "loc{" and "}"
 										if (segmentRules.indexOf("}") !=0) {
 											int beginIndex = segmentRules.indexOf("{")+1;
@@ -82,19 +78,19 @@
 										<%}%>
 										<!-- 
 										include:City:Test2|include:City:Test3										
-										 -->										
-										</td>
-										<td><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></td>
-										<td>1/2/2019</td>										
-										<td nowrap>																				
-										<button type='button' class="btn btn-outline-secondary btn-icon"><i class="fa fa-tools"></i></button>&nbsp;
-										<button type='button' class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>																																					
-										</td>
-									</tr>
-								</tbody>
-								<%
+										 -->									
+					</td>
+					<td><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></td>
+					<td>1/9/2019</td>										
+					<td nowrap>																				
+					<button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-tools"></i></button>&nbsp;
+					<button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>										
+					</td>
+				</tr>	<%
 								}
-								%>																				
+								%>
+								</tbody>
+																												
 							</table>
 							<!--end: Datatable -->
 						</div>
@@ -103,5 +99,7 @@
 			}			
 		%>
 	
+</div>
+</div>
 </div>
 <!-- end:: Content -->	

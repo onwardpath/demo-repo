@@ -32,25 +32,29 @@
 							</div>
 						</div>
 						
-						<div class="kt-portlet__body">			
+						<div class="kt-portlet__body">
+						<div class="row">
+      						<div class="col-sm-12">
+         						<table class="table table-striped- table-bordered table-hover table-checkable kt_table_1" id="kt_table_2">			
 							<!--begin: Datatable -->
-							<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+						
 								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Geography</th>
-										<th>Created By</th>
-										<th>Created On</th>																
-										<th>Actions</th>
+									<tr role="row">
+										<th class="sorting_asc" tabindex="0" aria-controls="kt_table_1" aria-sort="ascending">Name</th>
+										<th class="sorting" tabindex="0" aria-controls="kt_table_1">Geography</th>
+										<th class="sorting"tabindex="0" aria-controls="kt_table_1">Created By</th>
+										<th class="sorting" tabindex="0" aria-controls="kt_table_1">Created On</th>																
+										<th class="sorting_disabled" tabindex="0" aria-controls="kt_table_1">Actions</th>
 									</tr>
 								</thead>								
-								<%
+								
+				    			<tbody>
+				    			<%
 								for ( Map.Entry<Integer, Segment> entry : orgSegments.entrySet()) {
 									Integer key = entry.getKey();
 									Segment segment = entry.getValue();
 									User user = userRepository.getUser(segment.getUser_id());
 								    %>
-				    			<tbody>
 									<tr>
 										<td><%=segment.getName()%></td>
 										<td>
@@ -96,10 +100,9 @@
 										<button type='button' class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>																																					
 										</td>
 									</tr>
+									<%}%>
 								</tbody>
-								<%
-								}
-								%>																				
+																												
 							</table>
 							<!--end: Datatable -->
 						</div>
@@ -108,5 +111,7 @@
 			}			
 		%>
 	
+</div>
+</div>
 </div>
 <!-- end:: Content -->	

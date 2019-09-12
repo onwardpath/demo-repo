@@ -1,27 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <script type="text/javascript">
 function add(){	
+	var errorMSg =""
 	var rule = document.getElementById("rule").value;
 	var type = document.getElementById("type").value;
 	var criteria = document.getElementById("criteria").value;
-	var rulevalue = document.getElementById("rulevalue").value;	
+	var rulevalue = document.getElementById("rulevalue").value;
+	errorMSg = rulevalue.replace(" ","").length  <=0 ? "Number/Duration in Seconds should not be empty" : ""; 
+	if(errorMSg !="" || isNaN(rulevalue) ){
+		errorMSg = errorMSg !="" ? errorMSg : "Please Provide only numeric value in the Number/Duration in Seconds" 
+		alert(errorMSg)
+		document.getElementById("rulevalue").focus();
+	}else{
 	var behavior = rule+":"+type+":"+criteria+":"+rulevalue;	
 	var select = document.getElementById("dynamic-select");
+	
 	var index = select.options.length;
 	select.options[index] = new Option(behavior, behavior);		
 	document.getElementById("rule").reset;
 	document.getElementById("type").reset;
 	document.getElementById("criteria").reset;
-	document.getElementById("rulevalue").value = ""; //Clear the Text Field	
+	document.getElementById("rulevalue").value = ""; //Cleammr the Text Field	
 	var x = document.getElementById("behaviourbucket");	
-	
-	if(rule == "include") {			
-		x.innerHTML += '<button id="'+type+criteria+rulevalue+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+type+criteria+rulevalue+','+index+')">'+type+':'+criteria+':'+rulevalue+'<i class="la la-close"></i></button>&nbsp;';
-	} else {		
-		x.innerHTML += '<button id="'+type+criteria+rulevalue+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+type+criteria+rulevalue+','+index+')">'+type+':'+criteria+':'+rulevalue+'<i class="la la-close"></i></button>&nbsp;';
-	}	
+	if(!hasConditionExistsAlready(type,criteria)){
+		if(rule == "include") {	
+			x.innerHTML += '<button id="'+type+criteria+rulevalue+'" data-condition="'+type+criteria+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+type+criteria+rulevalue+','+index+')">'+type+':'+criteria+':'+rulevalue+'<i class="la la-close"></i></button>&nbsp;';
+		} else {		
+			x.innerHTML += '<button id="'+type+criteria+rulevalue+'" data-condition="'+type+criteria+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+type+criteria+rulevalue+','+index+')">'+type+':'+criteria+':'+rulevalue+'<i class="la la-close"></i></button>&nbsp;';
+		}
+	}else{
+		alert("The Same condition has exist already.Please remove the conditon and add it again")
+	}
 	x.style.display = "block";			
-	document.getElementById("rule").focus();	
+	document.getElementById("rule").focus();
+	}
+	
+}
+function hasConditionExistsAlready(type,criteria){
+	var exist = false
+	$("#behaviourbucket button").each(function(){
+		var conditionMatch = $(this).attr("data-condition")
+		if(conditionMatch == (type+criteria)){
+			exist = true
+		}
+	});
+	return exist
 }
 function remove(element, index){	
 	var select = document.getElementById("dynamic-select");
@@ -37,6 +60,8 @@ function removeAll(){
 function saveSegment() {	
 	//TODO: Validate Rules and display error for conflicting/invalid rules
 	var x = document.getElementById("dynamic-select");
+	if(x.length > 0){
+	var segmentName = document.getElementById("segmentName").value
     var txt = "";
     var i;
     for (i = 0; i < x.length; i++) {
@@ -47,10 +72,19 @@ function saveSegment() {
     	}    	        
     }          
     txt = "beh{"+txt+"}";    
-	document.getElementById("segmentRules").value = txt;	
-	document.getElementById("segment-form").method = "post";
-	document.getElementById("segment-form").action = "SegmentController";
-	document.getElementById("segment-form").submit();
+	document.getElementById("segmentRules").value = txt;
+	if(segmentName.replace(" ","").length > 0){
+		document.getElementById("segment-form").method = "post";
+		document.getElementById("segment-form").action = "SegmentController";
+		document.getElementById("segment-form").submit();
+	}else{
+		alert("Segment Name value should not be empty.")
+		document.getElementById("segmentName").focus()
+	}
+	}else{
+		alert("Rule should not be empty Please provide rule for the criteria.")
+		document.getElementById("criteria").focus()
+	}
 }
 
 //Created new function for dropdown issue - Sre.
@@ -119,12 +153,12 @@ function selectedValue(selectedValue){
 																			 				
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Criteria</label>
-					<%-- include onchange event for rule, type and criteria -Sre--%>		
 					<div class="col-lg-4 col-md-9 col-sm-12">		
-						<select id="rule" class="form-control form-control--fixed kt_selectpicker" data-width="150" onchange="selectedValue(this)">
+						<select id="rule" class="form-control form-control--fixed kt_selectpicker" data-width="150">
 							<option value="include">Include</option>
 							<option value="exclude">Exclude</option>														
-						</select>																
+						</select>
+						<%-- include onchange event for type and criteria -Sre--%>																		
 						<select id="type" class="form-control form-control--fixed kt_selectpicker" data-width="150" onchange="selectedValue(this)">
 							<option value="visit">Visits</option>
 							<option value="session">Session Duration</option>														

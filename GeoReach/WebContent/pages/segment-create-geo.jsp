@@ -32,6 +32,7 @@
 		var georule = document.getElementById("georule").value;
 		var geoloc = document.getElementById("geoloc").value;
 		//alert(geoloc);
+		if(geoloc.length > 0){
 		var geocondition = georule + ":" + geotype + ":" + geoloc;
 		var select = document.getElementById("dynamic-select");
 		var index = select.options.length;
@@ -58,6 +59,10 @@
 			//alert(x.innerHTML);
 		}
 		x.style.display = "block";
+		
+		}else{
+			alert("Area value should not be empty.")
+		}
 		document.getElementById("geoloc").focus();
 	}
 	function remove(element, index) {
@@ -76,6 +81,8 @@
 	function saveSegment() {
 		//TODO: Validate Rules and display error for conflicting/invalid rules
 		var x = document.getElementById("dynamic-select");
+		if(x.length > 0){
+		var segmentName = document.getElementById("segmentName").value
 		var txt = "";
 		var i;
 		for (i = 0; i < x.length; i++) {
@@ -87,9 +94,18 @@
 		}
 		txt = "loc{" + txt + "}";
 		document.getElementById("segmentRules").value = txt;
+		if(segmentName.replace(" ","").length > 0){
 		document.getElementById("segment-form").method = "post";
 		document.getElementById("segment-form").action = "SegmentController";
 		document.getElementById("segment-form").submit();
+		}else{
+			alert("Segment Name value should not be empty.")
+			document.getElementById("segmentName").focus()
+		}
+		}else{
+			alert("Area value should not be empty. Please Select any")
+			document.getElementById("geoloc").focus()
+		}
 	}
 
 	String.prototype.replaceAll = function(search, replacement) {
