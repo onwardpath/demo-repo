@@ -35,28 +35,16 @@
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12">Embed Code</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																								
-						<code>&lt;script&gt;function geo() { 
-							var u = new URL(window.location.href); 
-						    var c = u.searchParams.get("simulate"); 
-						    var s = "https://demo.onwardpath.com/GeoTargetService/a/g/g?o=<%=org_id%>&simulate="+c+"&url="+u.toString(); 
-						    var x = new XMLHttpRequest(); 
-						    console.log(s); 
-						    x.responseType = 'json'; 
-						    x.onreadystatechange = function() { 
-							    if (this.readyState == 4 && this.status == 200) {
-							        let data = this.response;
-							   		var length = x.getResponseHeader("X-Json-Length");
-							       	for(var i = 1; i <= length; i++) {
-							       		var e=document.getElementById(data[i].divid);
-							       		if (e != null)	 
-							            	e.innerHTML = data[i].embedCode; 
-							       	}
-							    } 
-							}; 
-							x.open("GET", s);
-							x.send(); 
-						} 
-						window.onload = geo;&lt;/script&gt;</code>
+						<code>
+						&lt;script&gt;
+					  var _gr = window._gr || [];
+					  (function() {
+					    var u="https://demo.onwardpath.com:8443/GeoTargetService/";
+					    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+					    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'georeach.js'; s.parentNode.insertBefore(g,s);
+					  })();
+					&lt;/script&gt;
+					</code>
 						<br><br><button type="button" class="btn btn-outline-brand">Copy</button>
 					</div>
 					
