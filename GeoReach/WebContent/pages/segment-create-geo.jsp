@@ -5,11 +5,13 @@
 		var geoloc = document.getElementById("geoloc").value;
 		var suggest_list = document.getElementById("suggest_list");
 		var frag = document.createDocumentFragment();
+		var serviceName = document.getElementById("geotype").options[document.getElementById("geotype").selectedIndex].value
 		if (geoloc.length >= 3) {
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200
 						&& this.response != "null") {
+					
 					var response = JSON.parse(this.response);
 					suggest_list.innerHTML = "";
 					response.forEach(function(item) {
@@ -22,7 +24,7 @@
 					suggest_list.appendChild(frag);
 				}
 			};
-			xhttp.open("GET", "AjaxController?service=city_suggestions&geoloc="
+			xhttp.open("GET", "AjaxController?service="+serviceName+"_suggestions&geoloc="
 					+ geoloc);
 			xhttp.send();
 		}
@@ -112,6 +114,21 @@
 		var target = this;
 		return target.replace(new RegExp(search, 'g'), replacement);
 	};
+	
+	//Created new function for dropdown(City/State/Country) - Sre.
+	function selectedValue(selectedValue){
+		var selectedTagId = selectedValue.getAttribute("id")
+		var setSelectedValue = document.getElementById(selectedTagId)
+		var optionSelectedVal = setSelectedValue.options[setSelectedValue.selectedIndex].getAttribute("value") 
+		
+		$("#"+selectedTagId+" option").each(function(){
+			if(optionSelectedVal == $(this).val()){
+				$(this).attr("selected","selected")
+			}else{
+				$(this).removeAttr("selected")
+			}
+	    });
+	}
 </script>
 
 <!--begin::Content-->
@@ -171,7 +188,7 @@
 							<option value="exclude">Exclude</option>
 						</select> <select id="geotype"
 							class="form-control form-control--fixed kt_selectpicker"
-							data-width="120">
+							data-width="120" onchange="selectedValue(this)">
 							<option value="city">City</option>
 							<option value="state">State</option>
 							<option value="country">Country</option>
