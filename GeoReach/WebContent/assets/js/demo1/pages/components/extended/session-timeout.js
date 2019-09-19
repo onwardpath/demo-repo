@@ -9,9 +9,9 @@ var KTSessionTimeoutDemo = function () {
             redirUrl: 'UserController?pageName=logout',
             logoutUrl: 'UserController?pageName=logout',
             //warnAfter: 3000, //warn after 5 seconds
-            warnAfter: 300000, //warn after 5 minutes	//Updated By Poovarasan 
+            warnAfter: 900000, //warn after 5 minutes	//Updated By Poovarasan 
             //redirAfter: 35000, //redirect after 10 seconds
-            redirAfter: 350000, //redirect after 10 seconds		//Updated By Poovarasan 
+            redirAfter: 900000, //redirect after 10 seconds		//Updated By Poovarasan 
             ignoreUserActivity: true,
             countdownMessage: 'Redirecting in {timer} seconds.',
             countdownBar: true
