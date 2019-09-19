@@ -46,10 +46,14 @@ function hasConditionExistsAlready(type,criteria){
 	});
 	return exist
 }
-function remove(element, index){	
+function remove(element, index){
 	var select = document.getElementById("dynamic-select");
-	select.remove(index);		
-	element.style.display = "none";		
+	select.remove(index);
+	
+	//Bug Fix for not removing the selected beahviour criteria completely in behaviour segment creation.
+	var removeButtonTag = document.getElementById("behaviourbucket")
+	removeButtonTag.removeChild(element)
+	//element.style.display = "none";		
 }
 function removeAll(){
 	var select = document.getElementById("dynamic-select");
@@ -156,7 +160,7 @@ function selectedValue(selectedValue){
 					<div class="col-lg-4 col-md-9 col-sm-12">		
 						<select id="rule" class="form-control form-control--fixed kt_selectpicker" data-width="150">
 							<option value="include">Include</option>
-							<option value="exclude">Exclude</option>														
+							<!-- <option value="exclude">Exclude</option> -->														
 						</select>
 						<%-- include onchange event for type and criteria -Sre--%>																		
 						<select id="type" class="form-control form-control--fixed kt_selectpicker" data-width="150" onchange="selectedValue(this)">
