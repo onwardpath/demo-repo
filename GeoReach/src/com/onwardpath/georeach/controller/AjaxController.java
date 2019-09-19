@@ -12,20 +12,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attribute;
-import org.jsoup.nodes.Attributes;
-import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import com.onwardpath.georeach.util.Database;
@@ -46,17 +41,19 @@ public class AjaxController extends HttpServlet {
 		//Updated By Poovarasan 
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String service_name = request.getParameter("service");
-			if (service_name.equals("city_suggestions")) {
+			if(!service_name.isEmpty() && service_name !=null) {
+			String selectionValues = service_name.equals("city_suggestions") ? "city" : "state";
 				String geoloc = request.getParameter("geoloc");
 				try {
-					String jsonString = citySuggestion(geoloc);
+					String jsonString = SuggestionListValues(geoloc,selectionValues);
+					System.out.println("jsonString ::"+jsonString);
 					response.getWriter().write(jsonString);
 				} catch (Exception e) {
 					e.printStackTrace();
 					//TODO: Return error message in JSON format to caller
-				}								
-			}				    
+				}												    
 		}
+	}
 
 		/**
 		 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -98,20 +95,23 @@ public class AjaxController extends HttpServlet {
 		}
 		
 		/* Commited by Poovarsan for Auto Complete Query change (26-Jul-19)*/
-		private String citySuggestion(String startsWith) throws SQLException, JsonGenerationException, JsonMappingException, IOException {
+		private String SuggestionListValues(String startsWith,String filterBy) throws SQLException, JsonGenerationException, JsonMappingException, IOException {
 			final StringWriter sw = new StringWriter();
 			final ObjectMapper mapper = new ObjectMapper();
 			Connection con = Database.getConnection();
 			ArrayList<String> citieslist = new ArrayList<String>();
+			String LOVCityValues = "select city.name,state.name,country.code from city join state join country on city.state_id = state.id where state.country_id = country.id AND city.name like ?  ORDER BY city.name,state.name ASC LIMIT 10";
+			String LOVStatesValues = "select st.name,ctry.code from state st,country ctry where st.name like ? and st.country_id = ctry.id";  
 			try {
-				String sql_query = "select city.name,state.name,country.code from city join state join country on city.state_id = state.id where state.country_id = country.id AND city.name like ?  ORDER BY city.name,state.name ASC LIMIT 10";
+				System.out.println("filter by value :"+filterBy.equals("city"));
+				String sql_query = filterBy.equals("city") ? LOVCityValues : LOVStatesValues;
 				PreparedStatement prepStatement = con.prepareStatement(sql_query);
 				prepStatement.setString(1, startsWith + "%");
 				ResultSet rst = prepStatement.executeQuery();
 				while (rst.next()) {
-					citieslist.add(rst.getString(1) + ", " + rst.getString(2) + ", "
-							+ rst.getString(3));
-
+					String concatValues = rst.getString(1) + ", " + rst.getString(2); 
+					if(filterBy.equals("city"))  concatValues += ", " +rst.getString(3);
+					citieslist.add(concatValues) ;
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
