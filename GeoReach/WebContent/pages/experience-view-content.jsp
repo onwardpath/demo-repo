@@ -1,7 +1,33 @@
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="com.onwardpath.georeach.util.Database"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.Map,com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
 <!-- begin:: Content -->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
+<%!
+Connection con = Database.getConnection();
+public List<String> getPageUrl(int expid){
+	List<String> pageUrls = new ArrayList<String>();
+	String configValues = "select url from config where experience_id=?";
+	try {
+		PreparedStatement prepStatement = con.prepareStatement(configValues);
+		prepStatement.setInt(1,expid);
+		ResultSet rst = prepStatement.executeQuery();
+		while (rst.next()) {
+			String pageurl = rst.getString(1);
+			pageUrls.add(pageurl) ;
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	return pageUrls;
+}
+%>
 	<%//TODO: Resolve DataTable issue -- https://datatables.net/forums/discussion/32575/uncaught-typeerror-cannot-set-property-dt-cellindex-of-undefined
 	ExperienceRepository experienceRepository = new ExperienceRepository();
 	UserRepository userRepository = new UserRepository();
@@ -29,7 +55,9 @@
 						Integer id = eentry.getKey();
 						Experience experience = eentry.getValue();
 						User user = userRepository.getUser(experience.getUser_id());
-						Map<Integer,Content> contents = experience.getContents();								
+						Map<Integer,Content> contents = experience.getContents();
+						out.write("experience get cotnent result::"+eentry.getValue());
+			
 						%>																																																		
 						<div class="row">							
 						    <div class="col">
@@ -52,7 +80,7 @@
 												<span></span>
 												</label>
 											</span>
-										</div>																																																															            																																			
+										</div>																																																														            																																			
 					    				<div><!-- begin::cards-container -->							
 										<%for ( Map.Entry<Integer, Content> ientry : contents.entrySet()) {
 											Integer key = ientry.getKey();
@@ -65,13 +93,18 @@
 											    		<%=content.getContent()%>			    					    	
 											  		</div>
 											  		<div class="card-footer">
-												      <h5 class="card-title"><%=content.getSegmentName()%></h5>
+												      <h5 class="card-title"><%=content.getSegmentName()%></h5> and Get Experience Id : <%=content.getExperience_id()%>
 												    </div>
 												</div>		
 										  	</div><!-- end::card -->						  																		
 										<%}%>						
 										<br><br>																																																						
-										</div><!-- end::cards-container -->																	                		          
+										</div><!-- end::cards-container -->	
+										<div>
+											<b>Page URL :</b>
+											<% for(String pageUrlVal : getPageUrl(experience.getId())){%><i> <%=pageUrlVal %></i>												
+											<%}%>
+										</div>																                		          
 							            <!-- begin::Button trigger modal -->
 							            &nbsp;&nbsp;
 										<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter<%=id%>">
