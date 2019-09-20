@@ -56,7 +56,7 @@ public List<String> getPageUrl(int expid){
 						Experience experience = eentry.getValue();
 						User user = userRepository.getUser(experience.getUser_id());
 						Map<Integer,Content> contents = experience.getContents();
-						out.write("experience get cotnent result::"+eentry.getValue());
+						//out.write("experience get cotnent result::"+eentry.getValue());
 			
 						%>																																																		
 						<div class="row">							
