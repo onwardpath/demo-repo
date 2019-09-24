@@ -158,10 +158,10 @@ function selectedValue(selectedValue){
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Criteria</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">		
-						<select id="rule" class="form-control form-control--fixed kt_selectpicker" data-width="150">
-							<option value="include">Include</option>
-							<!-- <option value="exclude">Exclude</option> -->														
-						</select>
+						<!--<select id="rule" class="form-control form-control--fixed kt_selectpicker" data-width="150">
+							<option value="include">Include</option>  
+							<option value="exclude">Exclude</option>												
+						</select>-->
 						<%-- include onchange event for type and criteria -Sre--%>																		
 						<select id="type" class="form-control form-control--fixed kt_selectpicker" data-width="150" onchange="selectedValue(this)">
 							<option value="visit">Visits</option>

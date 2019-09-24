@@ -42,7 +42,8 @@ public class AjaxController extends HttpServlet {
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String service_name = request.getParameter("service");
 			if(!service_name.isEmpty() && service_name !=null) {
-			String selectionValues = service_name.equals("city_suggestions") ? "city" : "state";
+			//String selectionValues = service_name.equals("city_suggestions") ? "city" : "state";
+				String selectionValues = service_name.equals("city_suggestions") ? "city" : service_name.equals("state_suggestions") ? "state" : "country"; 
 				String geoloc = request.getParameter("geoloc");
 				try {
 					String jsonString = SuggestionListValues(geoloc,selectionValues);
@@ -102,15 +103,18 @@ public class AjaxController extends HttpServlet {
 			ArrayList<String> citieslist = new ArrayList<String>();
 			String LOVCityValues = "select city.name,state.name,country.code from city join state join country on city.state_id = state.id where state.country_id = country.id AND city.name like ?  ORDER BY city.name,state.name ASC LIMIT 10";
 			String LOVStatesValues = "select st.name,ctry.code from state st,country ctry where st.name like ? and st.country_id = ctry.id";  
+			String LOVCountryValues = "select name from country where name like ?";
 			try {
 				System.out.println("filter by value :"+filterBy.equals("city"));
-				String sql_query = filterBy.equals("city") ? LOVCityValues : LOVStatesValues;
+				String sql_query = filterBy.equals("city") ? LOVCityValues : filterBy.equals("state") ? LOVStatesValues : LOVCountryValues;
 				PreparedStatement prepStatement = con.prepareStatement(sql_query);
 				prepStatement.setString(1, startsWith + "%");
 				ResultSet rst = prepStatement.executeQuery();
 				while (rst.next()) {
-					String concatValues = rst.getString(1) + ", " + rst.getString(2); 
-					if(filterBy.equals("city"))  concatValues += ", " +rst.getString(3);
+					String concatValues  = null;
+					if(filterBy.equals("country"))  concatValues  = rst.getString(1);
+					if(filterBy.equals("state"))   concatValues = rst.getString(1) + ", " + rst.getString(2); 
+					if(filterBy.equals("city"))  concatValues =  rst.getString(1) + ", " + rst.getString(2)+", " +rst.getString(3);
 					citieslist.add(concatValues) ;
 				}
 			} catch (SQLException e) {
