@@ -1,20 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.SegmentRepository" %>    
 <script type="text/javascript">
+
 var expDetailsObj = {};
-function add(){		
-	var segment = document.getElementById("segment");	
-	var segment_id = segment.value;	
-	var segment_name = segment.options[segment.selectedIndex].innerHTML;
-	if (segment_id in expDetailsObj) {
-		alert("Segment "+segment_name+" already added. Select a different segment.");	
-	} else {
-		var content = document.getElementById("content").value;				
-		expDetailsObj[segment_id] = content;				
-		var stage = document.getElementById("stage");	
-		stage.innerHTML += '<div id="'+segment_name+'" class="card-body">'+content+'&nbsp;<button type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+segment_name+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button></div>';
-		stage.style.display = "block";		
-	}	
+var segment = null;	
+var segment_id = null;	
+var segment_name = null;
+
+function selectIndex()
+{
+	segment = document.getElementById("segment");
+	segment_id = segment.value;	
+	segment_name = segment.options[segment.selectedIndex].innerHTML;
+	
+}
+function add(event){
+	selectIndex();	
+	   if (segment_id in expDetailsObj) {
+			alert("Segment "+segment_name+" already added. Select a different segment.");	
+		} else {
+			segment.options.selectedIndex = segment.selectedIndex;
+			var content = document.getElementById("content").value;				
+			expDetailsObj[segment_id] = content;				
+			var stage = document.getElementById("stage");	
+			stage.innerHTML += '<div id="'+segment_name+'" class="card-body">'+content+'&nbsp;<button type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+segment_name+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button></div>';
+			stage.style.display = "block";
+			
+		}	
+	
 }
 function remove(element, segment_id){		
 	var displayElement = document.getElementById(element);	
@@ -29,7 +42,12 @@ function saveExperience(){
 	document.getElementById("experience-form").method = "post";
 	document.getElementById("experience-form").action = "ExperienceController";
 	document.getElementById("experience-form").submit();
+	
 }
+window.addEventListener("load", function(){
+	selectIndex();
+	});
+
 </script>
 
 <!--begin::Content-->
@@ -154,8 +172,8 @@ function saveExperience(){
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Segment</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">											
-						<select id="segment" class="form-control form-control--fixed kt_selectpicker" data-width="300">
-							<%
+						<select id="segment" class="custom-select form-control" data-width="300" onchange="javascript:selectIndex()">
+						    <%
 							for ( Map.Entry<Integer, String> entry : segments.entrySet()) {
 								Integer key = entry.getKey();
 							    String val = entry.getValue();	     	   
@@ -176,7 +194,7 @@ function saveExperience(){
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																					
-						<button type="reset" class="btn btn-accent" onclick="javascript:add()">Add</button>
+						<button type="reset" class="btn btn-accent" onclick="javascript:add(event)">Add</button>
 					</div>
 				</div>
 				
