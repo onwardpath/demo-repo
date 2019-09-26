@@ -6,26 +6,30 @@ var expDetailsObj = {};
 var segment = null;	
 var segment_id = null;	
 var segment_name = null;
+var content = null;
 
 function selectIndex()
 {
 	segment = document.getElementById("segment");
 	segment_id = segment.value;	
 	segment_name = segment.options[segment.selectedIndex].innerHTML;
+	content = document.getElementById("content").value;	
 	
 }
 function add(event){
-	selectIndex();	
+       selectIndex();	
 	   if (segment_id in expDetailsObj) {
 			alert("Segment "+segment_name+" already added. Select a different segment.");	
 		} else {
-			segment.options.selectedIndex = segment.selectedIndex;
-			var content = document.getElementById("content").value;				
+			if(content.length > 0)
+			{
 			expDetailsObj[segment_id] = content;				
-			var stage = document.getElementById("stage");	
+			var stage = document.getElementById("stage");
 			stage.innerHTML += '<div id="'+segment_name+'" class="card-body">'+content+'&nbsp;<button type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+segment_name+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i></button></div>';
 			stage.style.display = "block";
-			
+			}
+			else
+			alert("Please enter any content");
 		}	
 	
 }
