@@ -133,17 +133,6 @@ function suggestArea(obj) {
 	}
 
 </script>
-<!--Handling session::Edit or Create-->
-<%
-  String id = request.getParameter("id");
-  String pageMode =(String) session.getAttribute("mode");
-  out.println(pageMode+id);
-  if(id == null)
-  {
-	session.setAttribute("mode","create");
-  }
-  %>
-<!--begin::Content-->
 
 <div class="kt-content  kt-grid__item kt-grid__item--fluid"
 	id="kt_content">
@@ -174,11 +163,7 @@ function suggestArea(obj) {
 	<div class="kt-portlet">
 		<div class="kt-portlet__head">
 			<div class="kt-portlet__head-label">
-			<% if(pageMode.equals("edit"))
-			{
-				out.println("<h3 class=\"kt-portlet__head-title\">Editing Segment Name=</h3>");
-			}
-			%>
+				<h3 class=\"kt-portlet__head-title\">Create Geo Segment</h3>
 			</div>
 		</div>
 		<div class="kt-portlet__body">
