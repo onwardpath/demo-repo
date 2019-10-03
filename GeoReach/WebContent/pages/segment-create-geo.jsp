@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-	<%@page import="java.util.*" session ="true" %>
 <script type="text/javascript">
-
-function suggestArea(obj) {
+	function suggestArea(obj) {
 		var geoloc = document.getElementById("geoloc").value;
 		var suggest_list = document.getElementById("suggest_list");
 		var frag = document.createDocumentFragment();
@@ -131,13 +129,13 @@ function suggestArea(obj) {
 			}
 	    });
 	}
-
 </script>
 
+<!--begin::Content-->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid"
 	id="kt_content">
 	<%
-	    String message = (String) session.getAttribute("message");
+		String message = (String) session.getAttribute("message");
 		if (message != null && !message.equals("")) {
 			String icon = "fa fa-chart-pie";
 			if (message.startsWith("Error"))
@@ -163,7 +161,11 @@ function suggestArea(obj) {
 	<div class="kt-portlet">
 		<div class="kt-portlet__head">
 			<div class="kt-portlet__head-label">
+<<<<<<< HEAD
+				<h3 class="kt-portlet__head-title">Create Geo Segment</h3>
+=======
 				<h3 class=\"kt-portlet__head-title\">Create Geo Segment</h3>
+>>>>>>> branch 'master' of https://github.com/onwardpath/demo-repo.git
 			</div>
 		</div>
 		<div class="kt-portlet__body">

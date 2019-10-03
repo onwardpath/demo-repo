@@ -62,7 +62,29 @@ public class SegmentController extends HttpServlet {
 	        	} catch (SQLException e) {
 	        		session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");
 	        	}	        	  
-	       } 
+	       }
+	    	else if (pageName.startsWith("segment-edit")) {
+	    		System.out.println("@SegmentController.doPost called from page:"+pageName);
+	        	try {
+	        		int userId = (Integer)session.getAttribute("user_id");	              
+		            int orgId = (Integer)session.getAttribute("org_id");
+		            String segmentName = request.getParameter("segmentName");
+		            String segmentRules = request.getParameter("segmentRules");
+		            String segmentId = request.getParameter("segmentId");
+		            System.out.println("segmentName: "+segmentName);
+		            System.out.println("segmentRules: "+segmentRules);
+		            if (segmentRepository.findBySegmentNameInOrg(segmentName ,orgId)) {	                  
+		            	session.setAttribute("message", "Error: Segment name "+segmentName+" already exist. Try another name.");
+		                RequestDispatcher view = request .getRequestDispatcher("?view=pages/"+pageName);
+		                view.forward(request, response);	      
+		                return;
+		            }		              	             		              		              		              		              		           		              		              
+		            segmentRepository.update(segmentRules, segmentId, orgId);
+		            session.setAttribute("message", "Segment <b>"+segmentName+"</b> Saved.");		                
+	        	} catch (SQLException e) {
+	        		session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");
+	        	}	        	  
+	       }
 	    }
 	    RequestDispatcher view = request.getRequestDispatcher("?view=pages/"+pageName);
 	    view.forward(request, response);	     

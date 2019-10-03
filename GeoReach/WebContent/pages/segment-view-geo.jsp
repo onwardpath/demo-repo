@@ -1,27 +1,31 @@
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
 <%@page import="java.util.*" session ="true" %>
 <script type="text/javascript">
 function edit(id)
 {
-	console.log(id);
-	<%session.setAttribute("mode","edit");%>
-	window.location.href = "/GeoReach?view=pages/segment-create-geo.jsp?id="+id;
+	var form = document.getElementById("form-"+id);
+	sessionStorage.setItem('seg_id', form.seg_id.value);
+	sessionStorage.setItem('seg_rule', form.seg_rule.value);
+	sessionStorage.setItem('seg_name',  form.seg_name.value);
+	form.method = "post";
+	form.action = "/GeoReach?view=pages/segment-edit-geo.jsp";
+	form.submit();
 }
 </script>
+
 <!-- begin:: Content -->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
-		<%  
-		   //TODO: Resolve DataTable issue -- https://datatables.net/forums/discussion/32575/uncaught-typeerror-cannot-set-property-dt-cellindex-of-undefined
+		<%
+			//TODO: Resolve DataTable issue -- https://datatables.net/forums/discussion/32575/uncaught-typeerror-cannot-set-property-dt-cellindex-of-undefined
 			SegmentRepository segmentRepository = new SegmentRepository();
 			UserRepository userRepository = new UserRepository();
 			int org_id = (Integer)session.getAttribute("org_id");
 			//Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegments(org_id);
 			Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegmentsByType(org_id,"loc");
 			
-			if (orgSegments.size() == 0) { 
-			%>
+			if (orgSegments.size() == 0) {
+				%>
 				<div class="alert alert-light alert-elevate" role="alert">
 					<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
 						<div class="alert-text">
@@ -91,15 +95,20 @@ function edit(id)
 					</td>
 					<td><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></td>
 					<td>1/9/2019</td>										
-					<td nowrap>																				
+					<td nowrap>
+					<form id="form-<%=key%>">
+					<input type="hidden" name="seg_id" value="<%=segment.getId()%>"/>
+					<input type="hidden" name="seg_rule" value="<%=segment.getGeography()%>"/>
+					<input type="hidden" name="seg_name" value="<%=segment.getName()%>"/>
 					<button type="button" class="btn btn-outline-secondary btn-icon" onclick="javascript:edit(<%=segment.getId()%>)"><i class="fa fa-tools"></i></button>&nbsp;
-					<button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>										
+					<button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>
+					</form>										
 					</td>
 				</tr>	<%
 								}
 								%>
 								</tbody>
-																												
+											
 							</table>
 							<!--end: Datatable -->
 						</div>
