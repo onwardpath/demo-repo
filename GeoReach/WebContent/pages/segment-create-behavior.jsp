@@ -160,7 +160,6 @@ function selectedValue(selectedValue){
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Criteria</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
-				<%--Removed Include & Exclude Criteria By  Poovarasan --%> 
 					<div id="tohide" style="display:none;">
 						<select id="rule" class="form-control form-control--fixed kt_selectpicker" data-width="150">
 							<option value="include" selected>Include</option>  
