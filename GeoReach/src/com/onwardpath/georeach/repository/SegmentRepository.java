@@ -45,6 +45,26 @@ public class SegmentRepository {
 	  }
 	  
 	  /**
+	   * Update the Segment to segment table
+	   * 
+	   * @param name
+	   * @param geography
+	   * @param user_id
+	   * @param org_id
+	   * @throws SQLException
+	   */
+	  public void update(String geography,String id, int org_id) throws SQLException {
+          PreparedStatement prepStatement = dbConnection.prepareStatement("UPDATE segment SET geography = ? WHERE id = ? AND org_id = ?");	          	        	       
+          prepStatement.setString(1, geography);
+          prepStatement.setString(2, id);
+          prepStatement.setInt(3, org_id);
+          System.out.println(Database.getTimestamp()+" @SegmentRepository.save>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();
+	  }
+	  
+	  
+	  /**
 	   * Method to find a Segment by Name
 	   * 
 	   * @param name

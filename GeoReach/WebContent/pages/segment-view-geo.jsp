@@ -1,6 +1,19 @@
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
+<%@page import="java.util.*" session ="true" %>
+<script type="text/javascript">
+function edit(id)
+{
+	var form = document.getElementById("form-"+id);
+	sessionStorage.setItem('seg_id', form.seg_id.value);
+	sessionStorage.setItem('seg_rule', form.seg_rule.value);
+	sessionStorage.setItem('seg_name',  form.seg_name.value);
+	form.method = "post";
+	form.action = "/GeoReach?view=pages/segment-edit-geo.jsp";
+	form.submit();
+}
+</script>
+
 <!-- begin:: Content -->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 		<%
@@ -82,15 +95,20 @@
 					</td>
 					<td><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></td>
 					<td>1/9/2019</td>										
-					<td nowrap>																				
-					<button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-tools"></i></button>&nbsp;
-					<button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>										
+					<td nowrap>
+					<form id="form-<%=key%>">
+					<input type="hidden" name="seg_id" value="<%=segment.getId()%>"/>
+					<input type="hidden" name="seg_rule" value="<%=segment.getGeography()%>"/>
+					<input type="hidden" name="seg_name" value="<%=segment.getName()%>"/>
+					<button type="button" class="btn btn-outline-secondary btn-icon" onclick="javascript:edit(<%=segment.getId()%>)"><i class="fa fa-tools"></i></button>&nbsp;
+					<button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>
+					</form>										
 					</td>
 				</tr>	<%
 								}
 								%>
 								</tbody>
-																												
+											
 							</table>
 							<!--end: Datatable -->
 						</div>
