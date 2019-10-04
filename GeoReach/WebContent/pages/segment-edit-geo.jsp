@@ -1,6 +1,9 @@
+<!-- Created by Gurujegan - for Segment Edit feature 
+     Date - 4 Oct 2019 -->
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-	<%@page import="java.util.*" session ="true" %>
+<%@page import="java.util.*" session="true"%>
 <script type="text/javascript">
 	window.addEventListener('load', (event) => {
 	
@@ -18,7 +21,6 @@
 	console.log(seg_rule);
 	document.getElementById("segment-form").segmentId.value = seg_id;
 	document.getElementById("segmentName").value = seg_name;
-	document.getElementById("segmentName").disabled = true;
 	
 	var format_rules = seg_rule.split("loc{")[1];
 	var trim_rules = format_rules.trim().slice(0,format_rules.length-1);
@@ -176,16 +178,16 @@ function addDynamically(georule,geotype,geoloc) {
 <div class="kt-content  kt-grid__item kt-grid__item--fluid"
 	id="kt_content">
 	<%
-	    String message = (String) session.getAttribute("message");
-	     String clear_SStore = "";
+		String message = (String) session.getAttribute("message");
+		String clear_SStore = "";
 		if (message != null && !message.equals("")) {
 			String icon = "fa fa-chart-pie";
 			if (message.startsWith("Error"))
 				icon = "flaticon-warning";
 			else
-				clear_SStore = "true";	
+				clear_SStore = "true";
 	%>
-	
+
 	<div class="row">
 		<div class="col">
 			<div class="alert alert-light alert-elevate fade show" role="alert">
@@ -206,25 +208,33 @@ function addDynamically(georule,geotype,geoloc) {
 	<div class="kt-portlet">
 		<div class="kt-portlet__head">
 			<div class="kt-portlet__head-label">
-			<h3 class=\"kt-portlet__head-title\">Edit Geo Segment</h3>
+				<h3 class=\"kt-portlet__head-title\">Edit Geo Segment</h3>
 			</div>
 		</div>
-		<div class="kt-portlet__body">
-			<div class="kt-portlet__content">
+		<!--<div class="kt-portlet__body">
+			 	<div class="kt-portlet__content">
 				Create segments based on location of the visitor. For example, you
 				can create a segment called <span class="badge badge-warning">West
 					Coast</span> with criteria <span class="badge badge-secondary">Include
 					- State - California</span>, <span class="badge badge-secondary">Include
 					- State - Oregon</span> & <span class="badge badge-secondary">Include
 					- State - Washington</span>
-			</div>
-		</div>
+			</div> 
+		</div>-->
 		<!--begin::Form-->
-		<form class="kt-form kt-form--label-right" id="dummy-form">
+		<form class="kt-form kt-form--label-right" id="segment-form">
 			<div class="kt-portlet__body">
-
 				<div class="form-group row">
-					<label class="col-form-label col-lg-3 col-sm-12">Criteria</label>
+					<label class="col-form-label col-lg-3 col-sm-12">Segment
+						Name</label>
+					<div class="col-lg-4 col-md-9 col-sm-12">
+						<input name="segmentName" id="segmentName" type="text"
+							class="form-control col-lg-9 col-sm-12"> <span
+							class="form-text text-muted">Give a name for this segment</span>
+					</div>
+				</div>
+				<div class="form-group row">
+				<label class="col-form-label col-lg-3 col-sm-12">Criteria</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
 						<select id="georule"
 							class="form-control form-control--fixed kt_selectpicker"
@@ -272,31 +282,14 @@ function addDynamically(georule,geotype,geoloc) {
 				</div>
 
 			</div>
-		</form>
-		<!--end::Form-->
-
-		<!--begin::Form-->
-		<form class="kt-form kt-form--label-right" id="segment-form">
 			<div class="kt-portlet__body">
-           <input type="hidden" name="segmentId"/>
-           <input type="hidden" id ="clear_SStore" name="clear_SStore" value="<%=clear_SStore%>"/>	
-				<div class="form-group row">
-					<label class="col-form-label col-lg-3 col-sm-12">Segment
-						Name</label>
-					<div class="col-lg-4 col-md-9 col-sm-12">
-						<input name="segmentName" id="segmentName" type="text"
-							class="form-control col-lg-9 col-sm-12"
-							placeholder="Disabled" disabled" style="background: #ccc;"> <span
-							class="form-text text-muted">Give a name for this segment</span>
-					</div>
-				</div>
-
+				<input type="hidden" name="segmentId" /> 
+				<input type="hidden" id="clear_SStore" name="clear_SStore" value="<%=clear_SStore%>" />
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
 						<div id="hidden-form" style="display: none;">
-							<input type="hidden" name="pageName"
-								value="segment-edit-geo.jsp">
+							<input type="hidden" name="pageName" value="segment-edit-geo.jsp">
 							<!-- input type="hidden" id = "segmentName" name="segmentName"  -->
 							<input type="hidden" id="segmentRules" name="segmentRules">
 							<select id="dynamic-select" size="2"></select>
