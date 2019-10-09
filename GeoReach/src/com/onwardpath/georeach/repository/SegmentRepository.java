@@ -171,11 +171,11 @@ public class SegmentRepository {
 	   * 
 	   * @param org_id
 	   * @return Map containing id and segment objects
-	   */
+	   */   
 	  public Map<Integer, Segment> loadOrgSegmentsByType(int org_id, String type) throws SQLException {
 		  //TODO: Check if type is only one of the following: loc/beh/int/ref
 		  Map<Integer, Segment> orgSegments = new HashMap<Integer, Segment>();
-		  PreparedStatement prepStatement = dbConnection.prepareStatement("select * from segment  where org_id = ? and geography like ?");
+		  PreparedStatement prepStatement = dbConnection.prepareStatement("select * from segment  where org_id = ? and geography like ? LIMIT 8");
           prepStatement.setInt(1, org_id);
           //prepStatement.setString(2, type); 
           prepStatement.setString(2, type + "%");
