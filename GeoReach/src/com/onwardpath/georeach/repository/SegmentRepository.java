@@ -26,7 +26,8 @@ public class SegmentRepository {
 	  
 	  /**
 	   * Save the Segment to segment table
-	   * 
+	   * @author Gurujegan
+	   * @date 4 Oct 2019
 	   * @param name
 	   * @param geography
 	   * @param user_id
@@ -53,11 +54,12 @@ public class SegmentRepository {
 	   * @param org_id
 	   * @throws SQLException
 	   */
-	  public void update(String geography,String id, int org_id) throws SQLException {
-          PreparedStatement prepStatement = dbConnection.prepareStatement("UPDATE segment SET geography = ? WHERE id = ? AND org_id = ?");	          	        	       
-          prepStatement.setString(1, geography);
-          prepStatement.setString(2, id);
-          prepStatement.setInt(3, org_id);
+	  public void update(String name,String geography,String id, int org_id) throws SQLException {
+          PreparedStatement prepStatement = dbConnection.prepareStatement("UPDATE segment SET name = ?, geography = ? WHERE id = ? AND org_id = ?");
+          prepStatement.setString(1, name);
+          prepStatement.setString(2, geography);
+          prepStatement.setString(3, id);
+          prepStatement.setInt(4, org_id);
           System.out.println(Database.getTimestamp()+" @SegmentRepository.save>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();
