@@ -63,6 +63,7 @@ public class SegmentController extends HttpServlet {
 	        		session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");
 	        	}	        	  
 	       }
+	    	//Added by Gurujegan for Segment Geo Update --Start-- 
 	    	else if (pageName.startsWith("segment-edit")) {
 	    		System.out.println("@SegmentController.doPost called from page:"+pageName);
 	        	try {
@@ -79,12 +80,13 @@ public class SegmentController extends HttpServlet {
 		                view.forward(request, response);	      
 		                return;
 		            }		              	             		              		              		              		              		           		              		              
-		            segmentRepository.update(segmentRules, segmentId, orgId);
+		            segmentRepository.update(segmentName,segmentRules, segmentId, orgId);
 		            session.setAttribute("message", "Segment <b>"+segmentName+"</b> Saved.");		                
 	        	} catch (SQLException e) {
 	        		session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");
 	        	}	        	  
 	       }
+	    	//Added by Gurujegan for Segment Geo Update --End-- 
 	    }
 	    RequestDispatcher view = request.getRequestDispatcher("?view=pages/"+pageName);
 	    view.forward(request, response);	     
