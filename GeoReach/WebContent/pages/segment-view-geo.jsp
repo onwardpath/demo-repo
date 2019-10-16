@@ -2,7 +2,8 @@
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
 <%@page import="java.util.*" session ="true" %>
 <!-- Modified by Gurujegan - Segment Geo Edit feature --Start-->
-<script type="text/javascript">
+
+<script type="text/javascript"> 
 function edit(id)
 {
 	var form = document.getElementById("form-"+id);
@@ -13,7 +14,10 @@ function edit(id)
 	form.action = "/GeoReach?view=pages/segment-edit-geo.jsp";
 	form.submit();
 }
+
 </script>
+
+
 <!-- Modified by Gurujegan - Segment Geo Edit feature --End-->
 
 <!-- begin:: Content -->
@@ -35,7 +39,7 @@ function edit(id)
 					</div>
 				</div>
 				<%
-					
+					  
 			} else {
 				%>
 				<div class="kt-portlet kt-portlet--mobile">
@@ -103,9 +107,39 @@ function edit(id)
 					<input type="hidden" name="seg_id" value="<%=segment.getId()%>"/>
 					<input type="hidden" name="seg_rule" value="<%=segment.getGeography()%>"/>
 					<input type="hidden" name="seg_name" value="<%=segment.getName()%>"/>
+					<input type="hidden" name="result_page" value="pages/segment-view-geo.jsp"/>
 					<button type="button" class="btn btn-outline-secondary btn-icon" onclick="javascript:edit(<%=segment.getId()%>)"><i class="fa fa-tools"></i></button>&nbsp;
-					<button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>
-					</form>
+					<!-- <button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button> -->
+					
+						<!-- Button trigger modal -->
+						<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter" onclick="getsegmentname(<%=segment.getId()%>)">
+							<i class="fa fa-trash-alt"></i>
+						</button> 
+ 
+						<!-- Modal  added for POP UP-->
+						<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display: none;">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalCenterTitle">Are you sure to delete Segment</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<p id="segmentTitle"><b><%=segment.getName()%></b></p> 
+									</div>
+									 
+									<div class="modal-footer">
+										<button type="button" class="btn btn-outline-brand"  id="segmentId"   name="kv"  value="<%=segment.getId()%>" onclick="deletesegment(<%=segment.getId()%>)">Yes</button>
+										<button type="button" class="btn btn-outline-brand" data-dismiss="modal">No</button>     
+									</div>     
+									    
+								</div>
+							</div>
+						</div>  
+					      
+					</form>    
 					<!-- Modified by Gurujegan - Segment Geo Edit feature --End-->										
 					</td>
 				</tr>	<%
@@ -123,5 +157,5 @@ function edit(id)
 	
 </div>
 </div>
-</div>
-<!-- end:: Content -->	
+</div> 
+<!-- end:: Content -->	 
