@@ -1,6 +1,8 @@
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
+
+
 <!-- begin:: Content -->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 		<%
@@ -95,9 +97,38 @@
 										</td>
 										<td><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></td>
 										<td>1/2/2019</td>										
-										<td nowrap>																				
+										<td nowrap>
+										<form id="form-<%=key%>">
+					                    <input type="hidden" name="seg_id" value="<%=segment.getId()%>"/>
+					                    <input type="hidden" name="seg_name" value="<%=segment.getName()%>"/>
+					                    <input type="hidden" name="result_page" value="pages/segment-view-behavior.jsp"/>																				
 										<button type='button' class="btn btn-outline-secondary btn-icon"><i class="fa fa-tools"></i></button>&nbsp;
-										<button type='button' class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button>																																					
+										<button type='button' class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter" onclick="getsegmentname(<%=segment.getId()%>)"><i class="fa fa-trash-alt"></i></button>
+										  
+										<!-- Modal -->
+						<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display: none;">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalCenterTitle">Are you sure to delete Segment</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<p id="segmentTitle"><b><%=segment.getName()%></b></p> 
+									</div>
+									 
+									<div class="modal-footer">
+										<button type="button" class="btn btn-outline-brand"  id="segmentId"  value="<%=segment.getId()%>" onclick="deletesegment(<%=segment.getId()%>)">Yes</button>
+										<button type="button" class="btn btn-outline-brand" data-dismiss="modal">No</button>     
+									</div>     
+									     
+								</div>
+							</div>
+						</div>
+					 
+										</form>																																				
 										</td>
 									</tr>
 									<%}%>

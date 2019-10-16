@@ -43,7 +43,7 @@
   <servlet-mapping>
     <servlet-name>ajaxServlet</servlet-name>
     <url-pattern>/AjaxController</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping>  
   <session-config>
   	<session-timeout>-1</session-timeout>
   </session-config>
