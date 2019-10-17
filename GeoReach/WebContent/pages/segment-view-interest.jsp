@@ -105,7 +105,7 @@
 										<button type='button' class="btn btn-outline-secondary btn-icon"><i class="fa fa-tools"></i></button>&nbsp;
 										<button type='button' class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter" onclick="getsegmentname(<%=segment.getId()%>)"><i class="fa fa-trash-alt"></i></button>
 										  
-										<!-- Modal -->
+										<!-- Modal com-->
 						<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display: none;">
 							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content">
