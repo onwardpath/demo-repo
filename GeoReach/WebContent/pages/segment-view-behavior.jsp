@@ -3,7 +3,7 @@
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
 
 
-<!-- begin:: Content -->
+<!-- begin::Content -->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 		<%
 			//TODO: Resolve DataTable issue -- https://datatables.net/forums/discussion/32575/uncaught-typeerror-cannot-set-property-dt-cellindex-of-undefined

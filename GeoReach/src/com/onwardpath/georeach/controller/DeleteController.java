@@ -34,7 +34,7 @@ public class DeleteController extends HttpServlet {
     
     
 	  /**
-	   * Method to Delete a Segment by id
+	   * Method to Deleted a Segment by id
 	   * @param id
 	   */
 	  public void delete(String id) throws SQLException {

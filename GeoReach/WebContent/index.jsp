@@ -76,7 +76,7 @@
 		} else {%>			
 			<jsp:include page="_layout.jsp" />			
 		<%}%>                                    
-        <!-- begin::Global Config(global config for global JS sciprts) -->
+        <!-- begin::GlobalConfig(global config for global JS sciprts) -->
         <script>            
         var KTAppOptions = {
     		"colors": {

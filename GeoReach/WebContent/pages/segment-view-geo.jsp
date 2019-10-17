@@ -110,7 +110,7 @@ function edit(id)
 					<input type="hidden" name="result_page" value="pages/segment-view-geo.jsp"/>
 					<button type="button" class="btn btn-outline-secondary btn-icon" onclick="javascript:edit(<%=segment.getId()%>)"><i class="fa fa-tools"></i></button>&nbsp;
 					<!-- <button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button> -->
-					
+					 
 						<!-- Button trigger modal -->
 						<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target="#exampleModalCenter" onclick="getsegmentname(<%=segment.getId()%>)">
 							<i class="fa fa-trash-alt"></i>
