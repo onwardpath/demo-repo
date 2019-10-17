@@ -74,12 +74,6 @@ public class SegmentController extends HttpServlet {
 		            String segmentId = request.getParameter("segmentId");
 		            System.out.println("segmentName: "+segmentName);
 		            System.out.println("segmentRules: "+segmentRules);
-		            if (segmentRepository.findBySegmentNameInOrg(segmentName ,orgId)) {	                  
-		            	session.setAttribute("message", "Error: Segment name "+segmentName+" already exist. Try another name.");
-		                RequestDispatcher view = request .getRequestDispatcher("?view=pages/"+pageName);
-		                view.forward(request, response);	      
-		                return;
-		            }		              	             		              		              		              		              		           		              		              
 		            segmentRepository.update(segmentName,segmentRules, segmentId, orgId);
 		            session.setAttribute("message", "Segment <b>"+segmentName+"</b> Saved.");		                
 	        	} catch (SQLException e) {
