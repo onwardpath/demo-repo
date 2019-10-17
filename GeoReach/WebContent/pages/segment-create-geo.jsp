@@ -161,11 +161,8 @@
 	<div class="kt-portlet">
 		<div class="kt-portlet__head">
 			<div class="kt-portlet__head-label">
-<<<<<<< HEAD
-				<h3 class="kt-portlet__head-title">Create Geo Segment</h3>
-=======
+				
 				<h3 class=\"kt-portlet__head-title\">Create Geo Segment</h3>
->>>>>>> branch 'master' of https://github.com/onwardpath/demo-repo.git
 			</div>
 		</div>
 		<div class="kt-portlet__body">
