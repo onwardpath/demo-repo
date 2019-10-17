@@ -73,12 +73,11 @@
 			el_ifr.style.display = "flex";
 		}
 	}
-	
-	function changeIcon(event)
-	{
+
+	function changeIcon(event) {
 		var icon_el = event.target.children[0];
-		icon_el.setAttribute("class","flaticon-folder-1");
-				
+		icon_el.setAttribute("class", "flaticon-folder-1");
+
 	}
 
 	window.addEventListener("load", function() {
@@ -199,88 +198,118 @@
 		<div class="accordion accordion-outline" id="accordionExample3">
 			<div class="card">
 				<div class="card-header" id="headingOne3">
-				
-					<div class="card-title" data-toggle="collapse"
-						data-target="#basic" aria-expanded="true"
-						aria-controls="collapseOne3">Basic Settings</div>
+
+					<div class="card-title" data-toggle="collapse" data-target="#basic"
+						aria-expanded="true" aria-controls="collapseOne3">Basic
+						Settings</div>
 				</div>
-				<div id="basic" class="card-body-wrapper collapse show" aria-labelledby="headingOne3"
-					data-parent="#accordionExample3" style="">
+				<div id="basic" class="card-body-wrapper collapse show"
+					aria-labelledby="headingOne3" data-parent="#accordionExample3"
+					style="">
 					<div class="card-body">
-					<!--begin::Form-->
-					<form class="kt-form kt-form--label-right" id="dummy-form">
-						<div class="kt-portlet__body">
+						<!--begin::Form-->
+						<form class="kt-form kt-form--label-right" id="dummy-form">
+							<div class="kt-portlet__body">
 
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3 col-sm-12">Segment</label>
-								<div class="col-lg-4 col-md-9 col-sm-12">
-									<select id="segment" class="custom-select form-control"
-										data-width="300" onchange="javascript:selectIndex()">
-										<%
-											for (Map.Entry<Integer, String> entry : segments.entrySet()) {
-												Integer key = entry.getKey();
-												String val = entry.getValue();
-												out.println("<option value='" + key + "'>" + val + "</option>");
-											}
-										%>
-									</select>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-3 col-sm-12">Segment</label>
+									<div class="col-lg-4 col-md-9 col-sm-12">
+										<select id="segment" class="custom-select form-control"
+											data-width="300" onchange="javascript:selectIndex()">
+											<%
+												for (Map.Entry<Integer, String> entry : segments.entrySet()) {
+													Integer key = entry.getKey();
+													String val = entry.getValue();
+													out.println("<option value='" + key + "'>" + val + "</option>");
+												}
+											%>
+										</select>
+									</div>
 								</div>
-							</div>
 
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3 col-sm-12">Popup
-									Type</label>
-								<div class="col-lg-4 col-md-9 col-sm-12">
-									<select id="popup" class="custom-select form-control"
-										data-width="300" onchange="showChild(event)">
-										<option value="html">HTML Code</option>
-										<option value="iframe">Iframe</option>
-									</select>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-3 col-sm-12">Popup
+										Type</label>
+									<div class="col-lg-4 col-md-9 col-sm-12">
+										<select id="popup" class="custom-select form-control"
+											data-width="300" onchange="showChild(event)">
+											<option value="html">HTML Code</option>
+											<option value="iframe">Iframe</option>
+										</select>
+									</div>
 								</div>
-							</div>
+								<div class="form-group row">
 
+
+									<label class="col-lg-3 col-sm-12 col-form-label">Background Color:</label>
+									<div class="col-lg-3">
+										<input type="text" class="form-control jscolor">
+									</div>
+									<label class="col-lg-2 col-form-label">Width (px):</label>
+									<div class="col-lg-3">
+										<input type="text" class="form-control">
+											
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-lg-3 col-sm-12 col-form-label">Background ImageURL:</label>
+									<div class="col-lg-3">
+										<div class="kt-input-icon">
+											<input type="text" class="form-control">
+										</div>
+									</div>
+									<label class="col-lg-2 col-form-label">Height (px):</label>
+									<div class="col-lg-3">
+										<div class="kt-input-icon">
+											<input type="text" class="form-control">
+												
+										</div>
+									
+									</div>
+								</div>
+	
 							<div class="form-group row" id="for-html">
-								<label class="col-form-label col-lg-3 col-sm-12">Content
-									(Text/HTML)</label>
-								<div class="col-lg-4 col-md-9 col-sm-12">
-									<textarea id="content" type="text"
-										class="form-control col-lg-9 col-sm-12"
-										aria-describedby="emailHelp" placeholder="Enter Text"
-										rows="10" cols="10"></textarea>
+									<label class="col-form-label col-lg-3 col-sm-12">Content
+										(Text/HTML)</label>
+									<div class="col-lg-4 col-md-9 col-sm-12">
+										<textarea id="content" type="text"
+											class="form-control col-lg-9 col-sm-12"
+											aria-describedby="emailHelp" placeholder="Enter Text"
+											rows="10" cols="10"></textarea>
+									</div>
 								</div>
-							</div>
 
-							<div class="form-group row" id="for-iframe"
-								style="display: none;">
-								<label class="col-form-label col-lg-3 col-sm-12">External
-									URL</label>
-								<div class="col-lg-4 col-md-9 col-sm-12">
-									<input id="iframe-url" type="text"
-										class="form-control col-lg-9 col-sm-12"
-										aria-describedby="emailHelp" data-toggle="tooltip"
-										data-original-title="Tooltip on bottom"
-										placeholder="Enter or Paste URL">
+								<div class="form-group row" id="for-iframe"
+									style="display: none;">
+									<label class="col-form-label col-lg-3 col-sm-12">External
+										URL</label>
+									<div class="col-lg-4 col-md-9 col-sm-12">
+										<input id="iframe-url" type="text"
+											class="form-control col-lg-9 col-sm-12"
+											aria-describedby="emailHelp" data-toggle="tooltip"
+											data-original-title="Tooltip on bottom"
+											placeholder="Enter or Paste URL">
+									</div>
 								</div>
-							</div>
 
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3 col-sm-12"></label>
-								<div class="col-lg-4 col-md-9 col-sm-12">
-									<button type="reset" class="btn btn-accent"
-										onclick="javascript:add(event)">Add</button>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-3 col-sm-12"></label>
+									<div class="col-lg-4 col-md-9 col-sm-12">
+										<button type="reset" class="btn btn-accent"
+											onclick="javascript:add(event)">Add</button>
+									</div>
 								</div>
+
+								<div class="kt-separator kt-separator--border-dashed"></div>
+								<div class="kt-separator kt-separator--height-sm"></div>
+
+								<div class="kt-section__content kt-section__content--border">
+									<div id="stage" style="display: none;"></div>
+								</div>
+
 							</div>
-
-							<div class="kt-separator kt-separator--border-dashed"></div>
-							<div class="kt-separator kt-separator--height-sm"></div>
-
-							<div class="kt-section__content kt-section__content--border">
-								<div id="stage" style="display: none;"></div>
-							</div>
-
-						</div>
-					</form>
-					<!--end::Form-->
+						</form>
+						<!--end::Form-->
 					</div>
 				</div>
 			</div>
@@ -293,16 +322,60 @@
 				<div id="collapseThree3" class="card-body-wrapper collapse"
 					aria-labelledby="headingThree3" data-parent="#accordionExample3"
 					style="">
-					<div class="card-body">Anim pariatur cliche reprehenderit,
-						enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
-						moon officia aute, non cupidatat skateboard dolor brunch. Food
-						truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-						sunt aliqua put a bird on it squid single-origin coffee nulla
-						assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer
-						labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-						excepteur butcher vice lomo. Leggings occaecat craft beer
-						farm-to-table, raw denim aesthetic synth nesciunt you probably
-						haven't heard of them accusamus labore sustainable VHS.</div>
+					<div class="card-body">
+						<div class="kt-section__content kt-section__content--border">
+							<div class="card w-75">
+								<div class="card-body">
+
+									<div class="form-group">
+										<div class="card-header kt-font-bolder">Choose the Page
+											Events here</div>
+										<div class="kt-separator--space-md"></div>
+										</br>
+										<div class="kt-checkbox-inline">
+											<label class="kt-checkbox"> <input type="checkbox">All<span></span></label>
+											<label class="kt-checkbox"> <input type="checkbox"
+												checked="">onPageLoad<span></span></label> <label
+												class="kt-checkbox"> <input type="checkbox">onPageExit<span></span></label>
+											<label class="kt-checkbox"> <input type="checkbox">onPageScroll<span></span></label>
+											<label class="kt-checkbox"> <input type="checkbox">onPageClick<span></span></label>
+											<label class="kt-checkbox"> <input type="checkbox">onPageClick<span></span></label>
+										</div>
+										<span class="form-text text-muted">Some help text goes
+											here</span>
+									</div>
+									<div class="card-header kt-font-bolder">Popup Cookie</div>
+									<div class="form-group row">
+										<label class="col-3 col-form-label">Cookie Time
+											(hours)</label>
+										<div class="col-9">
+											<input class="form-control" type="text" value="0"> <span
+												class="form-text text-muted">Shows popup to visitor
+												only once in the time period . Set to 0 to shown on every
+												page visit.</span>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="card w-75">
+								<div class="card-body">
+									<div class="card-header kt-font-bolder">Popup Delay</div>
+									<div class="form-group row">
+										<label class="col-3 col-form-label">Delay Time
+											(seconds)</label>
+										<div class="col-9">
+											<input class="form-control" type="text" value="0"> <span
+												class="form-text text-muted">Delay pop up from being
+												displayed. Set 0 to show popup instantly.</span>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

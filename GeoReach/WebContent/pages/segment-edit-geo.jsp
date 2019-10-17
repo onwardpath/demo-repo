@@ -7,6 +7,7 @@
 <script type="text/javascript">
 	window.addEventListener('load', (event) => {
 	
+	
 	let sess_store = document.getElementById("clear_SStore").value;
 		
 	if(sess_store)
@@ -229,7 +230,7 @@ function addDynamically(georule,geotype,geoloc) {
 						Name</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
 						<input name="segmentName" id="segmentName" type="text"
-							class="form-control col-lg-9 col-sm-12"> <span
+							class="form-control col-lg-9 col-sm-12" style="pointer-events: none;"> <span
 							class="form-text text-muted">Give a name for this segment</span>
 					</div>
 				</div>
@@ -268,7 +269,7 @@ function addDynamically(georule,geotype,geoloc) {
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
-						<button type="reset" class="btn btn-accent"
+						<button type="button" class="btn btn-accent"
 							onclick="javascript:add()">Add</button>
 					</div>
 				</div>

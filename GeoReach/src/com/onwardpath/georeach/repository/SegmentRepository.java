@@ -26,8 +26,6 @@ public class SegmentRepository {
 	  
 	  /**
 	   * Save the Segment to segment table
-	   * @author Gurujegan
-	   * @date 4 Oct 2019
 	   * @param name
 	   * @param geography
 	   * @param user_id
@@ -48,6 +46,8 @@ public class SegmentRepository {
 	  /**
 	   * Update the Segment to segment table
 	   * 
+	   * @author Gurujegan
+	   * @date 4 Oct 2019
 	   * @param name
 	   * @param geography
 	   * @param user_id
@@ -60,6 +60,7 @@ public class SegmentRepository {
           prepStatement.setString(2, geography);
           prepStatement.setString(3, id);
           prepStatement.setInt(4, org_id);
+          System.out.println("12345");
           System.out.println(Database.getTimestamp()+" @SegmentRepository.save>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();
