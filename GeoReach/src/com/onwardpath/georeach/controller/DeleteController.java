@@ -19,7 +19,7 @@ import com.onwardpath.georeach.util.Database;
 /**
  * Servlet implementation class DeleteController
  */
-@WebServlet("/DeleteController")
+  
 public class DeleteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
