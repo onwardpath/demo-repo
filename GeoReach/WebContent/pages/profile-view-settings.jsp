@@ -54,23 +54,23 @@
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12">First Name</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																								
-						<input type="text" class="form-control" aria-describedby="emailHelp" placeholder="<%=user.getFirstname()%>">
+						<input type="text" class="form-control" aria-describedby="emailHelp" placeholder="<%=user.getFirstname()%>" readonly>
 					</div>
 				</div>
 				
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12">Last Name</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																								
-						<input type="text" class="form-control" aria-describedby="emailHelp" placeholder="<%=user.getLastname()%>">
+						<input type="text" class="form-control" aria-describedby="emailHelp" placeholder="<%=user.getLastname()%>" readonly>
 					</div>
 				</div>	
 				
-				<div class="form-group row">
+				<%-- <div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12">Profile Picture</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																								
 						<img alt="Pic" src="<%=user.getProfile_pic()%>"/>
 					</div>
-				</div>
+				</div> --%>
 				
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12">Email</label>
