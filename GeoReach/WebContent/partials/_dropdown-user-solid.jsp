@@ -1,13 +1,28 @@
+<%@page import="java.util.Base64"%>
+<%@page import="java.io.ByteArrayOutputStream"%>
+<%@page import="java.io.InputStream"%>
+<%@page import="java.awt.print.Book"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="com.onwardpath.georeach.util.Database"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.Blob"%>
 <%@ page import="com.onwardpath.georeach.model.User" %>
 <%
 String fname = "";
 String lname = "";
 String pic = "";
+  
+
 	
+int ids = ((User) session.getAttribute("user")).getOrganization_id();
+ 
 if (session.getAttribute("user") != null) {
 	fname = ((User) session.getAttribute("user")).getFirstname();
 	lname = ((User) session.getAttribute("user")).getLastname();
 	pic = ((User) session.getAttribute("user")).getProfile_pic();
+	
 }
 %>
 <script type="text/javascript">
@@ -20,7 +35,7 @@ function logout() {
         <div class="kt-user-card__pic">
         	<%
         	if (!pic.equals("")) {%>
-        		<img alt="Pic" src="<%=pic%>" />
+        		<img alt="Pic" src='/GeoReach/DisplayImageController?id=<%=ids%>'/> 
         	<%}%>            
         </div>
         <div class="kt-user-card__details">
@@ -60,9 +75,9 @@ function logout() {
         </a>
     </li>
     <li class="kt-nav__item kt-nav__item--custom kt-margin-t-15">    	    
-    	<form id="logout" action="UserController" method="post">
-			<input type="hidden" name="pageName" value="logout">
-		</form>
+    	<form id="logout" action="UserController" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="pageName" value="logout">  
+		</form>   
     	<a href="javascript:logout();" class="btn btn-label-brand btn-upper btn-sm btn-bold">Sign Out</a>     	
     </li>
 </ul>

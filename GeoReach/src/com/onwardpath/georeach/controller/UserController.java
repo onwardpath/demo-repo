@@ -4,10 +4,13 @@ package com.onwardpath.georeach.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 
 import com.onwardpath.georeach.model.User;
@@ -15,9 +18,10 @@ import com.onwardpath.georeach.repository.UserRepository;
 import com.onwardpath.georeach.util.Database;
 
 @SuppressWarnings("serial")
+@MultipartConfig(maxFileSize = 16177215)
 public class UserController extends HttpServlet {
 	private UserRepository userRepository;
-
+ 
 	private static String USER_SIGNUP = "signup.jsp";
 	private static String USER_LOGIN = "login.jsp";	  
 	private static String LOGIN_SUCCESS = "index.jsp";
@@ -57,8 +61,21 @@ public class UserController extends HttpServlet {
 		  String pageName = request.getParameter("pageName");	      
 	      System.out.println(Database.getTimestamp()+" @UserController.doPost>pageName: "+pageName);
 	      String forward = "";        
-	      HttpSession session = request.getSession();	      
+	      HttpSession session = request.getSession();
+	      
 	      if (userRepository != null) {
+	    	  InputStream inputStream = null;
+    		  Part filePart = request.getPart("photo");
+    		  if (filePart != null) {
+    	            // prints out some information for debugging
+    	            System.out.println(filePart.getName());
+    	            System.out.println(filePart.getSize());
+    	            System.out.println(filePart.getContentType());
+    	             
+    	            // obtains input stream of the upload file
+    	            inputStream = filePart.getInputStream();
+    	        }
+    		     
 	    	  try {
 	    		  if (pageName.equals("signup")) {
 		        	  String emailName = request.getParameter("email");	        	  
@@ -75,14 +92,17 @@ public class UserController extends HttpServlet {
 	            	  if (userRepository.orgExists(orgDomain)) {
 	            		  System.out.println("orgDomain already exist: "+orgDomain);
 	            		  userRepository.saveUserInOrg(request.getParameter("domain"), request.getParameter("firstName"), request.getParameter("lastName"), 
-	            				  request.getParameter("email"), request.getParameter("phone"), request.getParameter("password"), Integer.parseInt(request.getParameter("role")),""); 
+	            				  request.getParameter("email"), request.getParameter("phone"), request.getParameter("password"), Integer.parseInt(request.getParameter("role")),inputStream); 
 	            		  System.out.println("New User from existing organization");
 	            	  } else {
 	            		  System.out.println("orgDomain is new: "+orgDomain);
+	            		     
 	            		  //If domain does not exist, create a new Organization and add user
+	            		  
+	            		 
 	            		  userRepository.saveUserandOrg(request.getParameter("orgName"), request.getParameter("domain"), request.getParameter("logoUrl"), 
 			            		  request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("email"), request.getParameter("phone"), 
-			            		  request.getParameter("password"), Integer.parseInt(request.getParameter("role")),"");
+			            		  request.getParameter("password"),Integer.parseInt(request.getParameter("role")),inputStream );
 	            		  System.out.println("New User from new organization");
 	            	  }	            	  	            	  		            
 		              forward = USER_LOGIN;		              	              	             

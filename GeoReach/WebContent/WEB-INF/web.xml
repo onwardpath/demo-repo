@@ -43,7 +43,7 @@
   <servlet-mapping>
     <servlet-name>ajaxServlet</servlet-name>
     <url-pattern>/AjaxController</url-pattern>
-  </servlet-mapping> 
+  </servlet-mapping>
   <servlet>
     <servlet-name>deleteServlet</servlet-name>
     <servlet-class>com.onwardpath.georeach.controller.DeleteController</servlet-class>
@@ -52,6 +52,14 @@
     <servlet-name>deleteServlet</servlet-name>
     <url-pattern>/DeleteController</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>displayimageServlet</servlet-name>
+    <servlet-class>com.onwardpath.georeach.controller.DisplayImageController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>displayimageServlet</servlet-name>
+    <url-pattern>/DisplayImageControllerr</url-pattern>
+  </servlet-mapping>  
   <session-config>
   	<session-timeout>-1</session-timeout>
   </session-config>

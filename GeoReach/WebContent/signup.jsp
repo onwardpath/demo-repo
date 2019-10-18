@@ -85,7 +85,7 @@
 						<div class="row">
 						<div class="col-lg-12">
 							<!--begin::Portlet-->
-							<form class="kt-form" id="kt_form" action="GeoReach/UserController" method="post" class="needs-validation" novalidate >
+							<form class="kt-form" id="kt_form" action="GeoReach/UserController" method="post" class="needs-validation" enctype="multipart/form-data">
 							<input type="hidden" name="pageName" value="signup">
 							<input type="hidden" name="role" value="1">
 							<div class="kt-portlet" id="kt_page_portlet">
@@ -129,7 +129,7 @@
 															<div class="form-group row">
 																<label class="col-3 col-form-label">Company Name</label>
 																<div class="col-9">
-																	<input class="form-control" type="text" name="orgName" placeholder="Enter Company Name">																	
+																	<input class="form-control" type="text" name="orgName" placeholder="Enter Company Name" required>																	
 																</div>
 															</div>																																																									
 															
@@ -138,7 +138,7 @@
 																<label class="col-3 col-form-label">Company Website</label>
 																<div class="col-9">
 																	<div class="input-group">
-																		<input type="text" class="form-control" name="domain"  placeholder="Enter Domain">
+																		<input type="text" class="form-control" name="domain"  placeholder="Enter Domain" required>
 																		<div class="input-group-append"><span class="input-group-text">.com</span></div>
 																	</div>
 																</div>
@@ -157,13 +157,13 @@
 															<div class="form-group row">
 																<label class="col-3 col-form-label">First Name</label>
 																<div class="col-9">
-																	<input class="form-control" type="text" name="firstName" placeholder="First Name">
+																	<input class="form-control" type="text" name="firstName" placeholder="First Name" required >
 																</div>
 															</div>
 															<div class="form-group row">
 																<label class="col-3 col-form-label">Last Name</label>
 																<div class="col-9">
-																	<input class="form-control" type="text" name="lastName" placeholder="Last Name">
+																	<input class="form-control" type="text" name="lastName" placeholder="Last Name" required>
 																</div>
 															</div>
 																																												
@@ -182,24 +182,34 @@
 																<div class="col-9">
 																	<div class="input-group">
 																		<div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
-																		<input type="text" class="form-control" name="email" placeholder="Email" aria-describedby="basic-addon1">
+																		<input type="text" class="form-control" name="email" placeholder="Email" aria-describedby="basic-addon1" required>
 																	</div>
 																</div>
 															</div>
 															
 															<div class="form-group row">
+																<label class="col-3 col-form-label">Profile Photo</label>
+																<div class="col-9">
+																	<div class="input-group">
+																		<div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
+																		<input type="file" class="form-control" name="photo"  aria-describedby="basic-addon1" accept="image/*" required>
+																	</div>
+																</div>
+															</div> 
+															 
+															<div class="form-group row">
 																<label class="col-3 col-form-label">Password</label>
 																<div class="col-9">
-																	<input class="form-control" type="password" name="password">
+																	<input class="form-control" type="password" name="password" required>
 																</div>
 															</div>	
 															
 															<div class="form-group form-group-last row">
 																<label class="col-3 col-form-label">Repeat Password</label>
 																<div class="col-9">
-																	<input class="form-control" type="password" name="password-repeat">
+																	<input class="form-control" type="password" name="password-repeat" required>
 																</div>
-															</div>																																																																																																																																																																																																																												
+															</div>	  																																																																																																																																																																																																																											
 													</div>
 												</div>																							
 											</div>
@@ -209,7 +219,7 @@
 								</div>
 							</div>
 							<!--end::Portlet-->
-						</div>
+						</div>  
 					</div></div>
 					<!-- end:: Content -->
 				<!-- end::body -->

@@ -1,5 +1,6 @@
 package com.onwardpath.georeach.repository;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,7 +39,7 @@ public class UserRepository {
 	   * @param profile_pic
 	   * @throws SQLException
 	   */
-	  public void saveUserandOrg (String orgName, String domain, String logoUrl, String firstName, String lastName, String email, String phone, String password, int role, String profile_pic) throws SQLException {		  		 
+	  public void saveUserandOrg (String orgName, String domain, String logoUrl, String firstName, String lastName, String email, String phone, String password, int role, InputStream inputStream) throws SQLException {		  		 
 		  //1. Save Organization
 		  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into organization (name, domain, logo) values (?, ?, ?)");
 		  prepStatement.setString(1, orgName);
@@ -53,7 +54,7 @@ public class UserRepository {
           orgResult.next();
           int org_id = orgResult.getInt(1);                    
           //2. Save User
-          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id,profile_pic) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
           prepStatement.setInt(1, org_id);
           prepStatement.setString(2, firstName);
           prepStatement.setString(3, lastName);
@@ -62,7 +63,7 @@ public class UserRepository {
           prepStatement.setString(6, email);
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
-          prepStatement.setString(9, profile_pic);
+          prepStatement.setBlob(9, inputStream);
           System.out.println(Database.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement3: "+prepStatement.toString());
           prepStatement.executeUpdate();              
           prepStatement.close();
@@ -82,7 +83,7 @@ public class UserRepository {
 	   * @param profile_pic
 	   * @throws SQLException
 	   */
-	  public void saveUserInOrg (String domain, String firstName, String lastName, String email, String phone, String password, int role, String profile_pic) throws SQLException {			 		  
+	  public void saveUserInOrg (String domain, String firstName, String lastName, String email, String phone, String password, int role, InputStream inputStream) throws SQLException {			 		  
 		  //1. Find Organization ID from given domain name		  		                     		          	                                                                                                    
           PreparedStatement prepStatement = dbConnection.prepareStatement("select id from organization where domain = ?");
           prepStatement.setString(1, domain);
@@ -91,7 +92,7 @@ public class UserRepository {
           orgResult.next();
           int org_id = orgResult.getInt(1);                   
           //2. Save User
-          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id, profile_pic) values (?, ?, ?, ?, ?, ?, ?, ?,?)");
           prepStatement.setInt(1, org_id);
           prepStatement.setString(2, firstName);
           prepStatement.setString(3, lastName);
@@ -100,14 +101,13 @@ public class UserRepository {
           prepStatement.setString(6, email);
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
-          prepStatement.setString(9, profile_pic);
+          prepStatement.setBlob(9, inputStream);
           System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
           prepStatement.executeUpdate(); 
           prepStatement.close();
           orgResult.close();
 	  }
-	  
-	  
+	   
 	  /**
 	   * Check if an Organization exists based on domain
 	   * 
@@ -202,7 +202,7 @@ public class UserRepository {
 		  		"user.id = ?";		  		  		          
 		  PreparedStatement prepStatement = dbConnection.prepareStatement(query);
           prepStatement.setInt(1, id); 
-          System.out.println(Database.getTimestamp()+" @UserRepository.getUser>prepStatement: "+prepStatement.toString());
+          //System.out.println(Database.getTimestamp()+" @UserRepository.getUser>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null && result.next()) {
               String firstname = result.getString("firstname");
