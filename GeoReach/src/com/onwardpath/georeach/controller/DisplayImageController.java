@@ -20,7 +20,6 @@ import com.onwardpath.georeach.util.Database;
 /**
  * Servlet implementation class DisplayImageController
  */
-
 public class DisplayImageController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -56,7 +55,7 @@ public class DisplayImageController extends HttpServlet {
 		is.read(buf);
 		os.write(buf);	
 		prepStatement.close();
-		dbConnection.close();
+		//dbConnection.close();  
 		}catch (SQLException e) {
 			System.out.println("Something went wrong in Display Image Controller."+ e.getMessage());
 	    }
