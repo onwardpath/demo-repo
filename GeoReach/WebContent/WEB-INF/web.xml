@@ -58,8 +58,8 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>displayimageServlet</servlet-name>
-    <url-pattern>/DisplayImageControllerr</url-pattern>
-  </servlet-mapping>  
+    <url-pattern>/DisplayImageController</url-pattern>
+  </servlet-mapping> 
   <session-config>
   	<session-timeout>-1</session-timeout>
   </session-config>
