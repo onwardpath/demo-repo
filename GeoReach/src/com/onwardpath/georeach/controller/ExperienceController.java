@@ -67,6 +67,8 @@ public class ExperienceController extends HttpServlet {
 	            	  int experience_id = experienceRepository.save(name, type, "on", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
 	            			  											request.getParameter("header_code"), request.getParameter("body_code"), org_id, user_id);
 	            	  
+	            	  
+	            	  
 	            	  //2. Save multiple entries to Image/Content table (experience_id, segment_id, url/content, create_time)
 	            	  if (type.contentEquals("image")) {	            		  
 	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
@@ -92,6 +94,26 @@ public class ExperienceController extends HttpServlet {
 	            			  experienceRepository.saveContent(experience_id, segment_id, content);	            			  	            			 
 	            		  }		            		  
 	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";	            		  
+	            	  }
+	            	  
+	            	  else if (type.equals("popup")) {
+	            		  
+	            		  String pop_events = request.getParameter("page_events");
+	            		  String pop_cookie = request.getParameter("popup_cookie");
+	            		  String pop_delay = request.getParameter("popup_delay");
+	            		  experienceRepository.savePopupDetails(experience_id, pop_events, pop_cookie, pop_delay);
+	            		  
+	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
+	            		  ObjectMapper mapper = new ObjectMapper();	            		  
+	            		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+	            		  System.out.println(map);	            		  
+	            		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+	            			  int segment_id = Integer.parseInt(entry.getKey());
+	            			  String content = entry.getValue();
+	            			  System.out.println("Segment ID = " + segment_id + ", Content = " + content);
+	            			  experienceRepository.saveContent(experience_id, segment_id, content);	            			  	            			 
+	            		  }		            		  
+	            		  SAVE_FAILURE = "?view=pages/experience-create-popup.jsp";	            		  
 	            	  }
 	            	  	            	  
 	            	  //3. Generate header_code & body_code and save to Experience table

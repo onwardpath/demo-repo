@@ -9,12 +9,40 @@
 	var segment_id = null;
 	var segment_name = null;
 	var content = null;
+	var popup = null;
+	var bgcolor = null;
+	var bgimgurl = null;
+	var width = null;
+	var height = null;
+	var ptype = null;
 
 	function selectIndex() {
 		segment = document.getElementById("segment");
 		segment_id = segment.value;
 		segment_name = segment.options[segment.selectedIndex].innerHTML;
-		content = document.getElementById("content").value;
+		popup = document.getElementById("popup");
+		//bgcolor = "background-color:"+ document.getElementById("bgcolor").value;
+		bgcolor = "background-color:#"
+				+ document.getElementById("bgcolor").value;
+		bgimgurl = "url('" + document.getElementById("bgimgurl").value + "')";
+		width = document.getElementById("width").value + "px";
+		height = document.getElementById("height").value + "px";
+
+		//Creating DIV Popup element here
+		var element = document.createElement("div");
+		element.id = "gr_popup";
+		element.setAttribute("style", bgcolor);
+		element.style.backgroundImage = bgimgurl;
+		element.style.width = width;
+		element.style.height = height;
+
+		ptype = popup.options[popup.selectedIndex].value;
+		if (ptype == "html") {
+			element.innerHTML = document.getElementById("content").value;
+			content = element.outerHTML;
+		} else if (ptype == "iframe") {
+			content = document.getElementById("iframe-url").value;
+		}
 
 	}
 	function add(event) {
@@ -47,9 +75,15 @@
 		displayElement.style.display = "none";
 	}
 	function saveExperience() {
+		var page_events = getCheckedEvents();
+		var popup_cookie = document.getElementById('popup_cookie').value;
+		var popup_delay = document.getElementById('popup_delay').value;
 		var name = document.getElementById('name').value;
-		var type = "content";
+		var type = "popup";
 		document.getElementById("experience-form").type.value = type;
+		document.getElementById("experience-form").page_events.value = page_events;
+		document.getElementById("experience-form").popup_cookie.value = popup_cookie;
+		document.getElementById("experience-form").popup_delay.value = popup_delay;
 		document.getElementById("experience-form").experienceDetails.value = JSON
 				.stringify(expDetailsObj);
 		document.getElementById("experience-form").method = "post";
@@ -57,6 +91,21 @@
 		document.getElementById("experience-form").submit();
 
 	}
+
+	function getCheckedEvents() {
+		var checkedValue = "";
+		var inputElements = document.getElementById('page_events').getElementsByTagName("input");
+
+		for (var i = 0; inputElements[i]; ++i) {
+			if (inputElements[i].checked) {
+				checkedValue += inputElements[i].value + "|";
+			}
+		}
+
+		checkedValue = checkedValue.slice(0, checkedValue.length - 1);
+		return checkedValue;
+	}
+
 	function showChild(event) {
 		var el = document.getElementById(event.target.id);
 		var opt_val = el.options[el.selectedIndex].value;
@@ -73,6 +122,15 @@
 			el_ifr.style.display = "flex";
 		}
 	}
+	
+	function isChecked(event)
+	{
+		if(event.currentTarget.checked == true)
+		document.getElementById("adv-settings").style.display = "block";
+		else
+		document.getElementById("adv-settings").style.display = "none";	
+		
+	}
 
 	function changeIcon(event) {
 		var icon_el = event.target.children[0];
@@ -82,7 +140,7 @@
 
 	window.addEventListener("load", function() {
 		selectIndex();
-
+		document.getElementById("adv-settings").style.display = "none";	
 	});
 </script>
 
@@ -133,56 +191,6 @@
 		</div>
 	</div>
 
-	<!-- begin::modal -->
-	<div class="kt-section__content kt-section__content--border">
-		<!-- Modal -->
-		<div class="modal fade" id="exampleModalCenter" tabindex="-1"
-			role="dialog" aria-labelledby="exampleModalCenterTitle"
-			aria-hidden="true" style="display: none;">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalCenterTitle">
-							Embed Code for:
-							<%=name%></h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">×</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<h3>Header</h3>
-						<code>
-							&lt;!-- Begin::GeoSmart-Header --&gt; &lt;script&gt; function
-							geo() { var serviceURL=
-							"http://lab01.onwardpath.com/GeoTargetService/app/georeach/get?id=<%=experience%>&org_id=<%=org_id%>&s=";
-							var geoElement = document.getElementById("Geo-<%=name%>-<%=experience%>");
-							var url = new URL(window.location.href); var c =
-							url.searchParams.get("s"); serviceURL += c;
-							console.log(serviceURL); var xhttp = new XMLHttpRequest();
-							xhttp.responseType = 'json'; xhttp.onreadystatechange =
-							function() { if (this.readyState == 4 && this.status == 200) {
-							let data = this.response; geoElement.innerHTML =
-							data[1].embedCode; } }; xhttp.open("GET", serviceURL);
-							xhttp.send(); } window.onload = geo; &lt;/script&gt; &lt;!--
-							End::GeoSmart-Header --&gt;
-						</code>
-						<h3>Body</h3>
-						<code>
-							&lt;!-- Begin::GeoSmart-Body --&gt; &lt;div id="G-<%=name%>-<%=experience%>"&gt;&lt;/div&gt;
-							&lt;!-- End::GeoSmart-Body --&gt;
-						</code>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-outline-brand">Copy</button>
-						<button type="button" class="btn btn-outline-brand"
-							data-dismiss="modal">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end::modal -->
 	<%
 		session.setAttribute("message", "");
 		}
@@ -241,34 +249,36 @@
 								<div class="form-group row">
 
 
-									<label class="col-lg-3 col-sm-12 col-form-label">Background Color:</label>
+									<label class="col-lg-3 col-sm-12 col-form-label">Background
+										Color:</label>
 									<div class="col-lg-3">
-										<input type="text" class="form-control jscolor">
+										<input id="bgcolor" type="text" class="form-control jscolor">
 									</div>
 									<label class="col-lg-2 col-form-label">Width (px):</label>
 									<div class="col-lg-3">
-										<input type="text" class="form-control">
-											
+										<input id="width" type="text" class="form-control">
+
 									</div>
 								</div>
 								<div class="form-group row">
-									<label class="col-lg-3 col-sm-12 col-form-label">Background ImageURL:</label>
+									<label class="col-lg-3 col-sm-12 col-form-label">Background
+										ImageURL:</label>
 									<div class="col-lg-3">
 										<div class="kt-input-icon">
-											<input type="text" class="form-control">
+											<input id="bgimgurl" type="text" class="form-control">
 										</div>
 									</div>
 									<label class="col-lg-2 col-form-label">Height (px):</label>
 									<div class="col-lg-3">
 										<div class="kt-input-icon">
-											<input type="text" class="form-control">
-												
+											<input id="height" type="text" class="form-control">
+
 										</div>
-									
+
 									</div>
 								</div>
-	
-							<div class="form-group row" id="for-html">
+
+								<div class="form-group row" id="for-html">
 									<label class="col-form-label col-lg-3 col-sm-12">Content
 										(Text/HTML)</label>
 									<div class="col-lg-4 col-md-9 col-sm-12">
@@ -295,9 +305,83 @@
 								<div class="form-group row">
 									<label class="col-form-label col-lg-3 col-sm-12"></label>
 									<div class="col-lg-4 col-md-9 col-sm-12">
-										<button type="reset" class="btn btn-accent"
+										<button type="button" class="btn btn-accent"
 											onclick="javascript:add(event)">Add</button>
 									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-3 col-sm-12"></label>
+									<div class="col-lg-4 col-md-9 col-sm-12">
+										<div class="kt-checkbox-inline">
+											<label class="kt-checkbox"> <input id="is-adv-settings" type="checkbox"
+												value="" onclick ="isChecked(event);">Advanced Settings<span></span>
+											</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group row" id="adv-settings">
+									<div class="card-body">
+										<div class="kt-section__content kt-section__content--border">
+											<div class="card w-75">
+												<div class="card-body">
+													<div class="form-group">
+														<div class="card-header kt-font-bolder">Choose the
+															Page Events here</div>
+														<div class="kt-separator--space-md"></div>
+														</br>
+														<div class="kt-checkbox-inline" id="page_events">
+															<label class="kt-checkbox"> <input
+																type="checkbox" value="all">All<span></span></label> <label
+																class="kt-checkbox"> <input type="checkbox"
+																checked="" value="onload">onPageLoad<span></span></label>
+															<label class="kt-checkbox"> <input
+																type="checkbox" value="onexit">onPageExit<span></span></label>
+															<label class="kt-checkbox"> <input
+																type="checkbox" value="onscroll">onPageScroll<span></span></label>
+															<label class="kt-checkbox"> <input
+																type="checkbox" value="onclick">onPageClick<span></span></label>
+															<label class="kt-checkbox"> <input
+																type="checkbox" value="onidle">onPageIdle<span></span></label>
+														</div>
+														<span class="form-text text-muted">Some help text
+															goes here</span>
+													</div>
+													<div class="card-header kt-font-bolder">Popup Cookie</div>
+													<div class="form-group row">
+														<label class="col-3 col-form-label">Cookie Time
+															(hours)</label>
+														<div class="col-9">
+															<input id="popup_cookie" class="form-control" type="text"
+																value="0"> <span class="form-text text-muted">Shows
+																popup to visitor only once in the time period . Set to 0
+																to shown on every page visit.</span>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+											<div class="card w-75">
+												<div class="card-body">
+													<div class="card-header kt-font-bolder">Popup Delay</div>
+													<div class="form-group row">
+														<label class="col-3 col-form-label">Delay Time
+															(seconds)</label>
+														<div class="col-9">
+															<input id="popup_delay" class="form-control" type="text"
+																value="0"> <span class="form-text text-muted">Delay
+																pop up from being displayed. Set 0 to show popup
+																instantly.</span>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+
 								</div>
 
 								<div class="kt-separator kt-separator--border-dashed"></div>
@@ -310,71 +394,6 @@
 							</div>
 						</form>
 						<!--end::Form-->
-					</div>
-				</div>
-			</div>
-			<div class="card">
-				<div class="card-header" id="headingThree3">
-					<div class="card-title collapsed" data-toggle="collapse"
-						data-target="#collapseThree3" aria-expanded="false"
-						aria-controls="collapseThree3">Advanced Settings</div>
-				</div>
-				<div id="collapseThree3" class="card-body-wrapper collapse"
-					aria-labelledby="headingThree3" data-parent="#accordionExample3"
-					style="">
-					<div class="card-body">
-						<div class="kt-section__content kt-section__content--border">
-							<div class="card w-75">
-								<div class="card-body">
-
-									<div class="form-group">
-										<div class="card-header kt-font-bolder">Choose the Page
-											Events here</div>
-										<div class="kt-separator--space-md"></div>
-										</br>
-										<div class="kt-checkbox-inline">
-											<label class="kt-checkbox"> <input type="checkbox">All<span></span></label>
-											<label class="kt-checkbox"> <input type="checkbox"
-												checked="">onPageLoad<span></span></label> <label
-												class="kt-checkbox"> <input type="checkbox">onPageExit<span></span></label>
-											<label class="kt-checkbox"> <input type="checkbox">onPageScroll<span></span></label>
-											<label class="kt-checkbox"> <input type="checkbox">onPageClick<span></span></label>
-											<label class="kt-checkbox"> <input type="checkbox">onPageClick<span></span></label>
-										</div>
-										<span class="form-text text-muted">Some help text goes
-											here</span>
-									</div>
-									<div class="card-header kt-font-bolder">Popup Cookie</div>
-									<div class="form-group row">
-										<label class="col-3 col-form-label">Cookie Time
-											(hours)</label>
-										<div class="col-9">
-											<input class="form-control" type="text" value="0"> <span
-												class="form-text text-muted">Shows popup to visitor
-												only once in the time period . Set to 0 to shown on every
-												page visit.</span>
-										</div>
-									</div>
-
-								</div>
-							</div>
-
-							<div class="card w-75">
-								<div class="card-body">
-									<div class="card-header kt-font-bolder">Popup Delay</div>
-									<div class="form-group row">
-										<label class="col-3 col-form-label">Delay Time
-											(seconds)</label>
-										<div class="col-9">
-											<input class="form-control" type="text" value="0"> <span
-												class="form-text text-muted">Delay pop up from being
-												displayed. Set 0 to show popup instantly.</span>
-										</div>
-									</div>
-
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -406,6 +425,9 @@
 							<input type="hidden" name="type"> <input type="hidden"
 								name="experienceDetails"> <input type="hidden"
 								name="segment_id"> <input type="hidden" name="url">
+							<input type="hidden" name="page_events"> <input
+								type="hidden" name="popup_cookie"> <input type="hidden"
+								name="popup_delay">
 						</div>
 						<button type="reset" class="btn btn-primary"
 							onclick="saveExperience();">Save</button>

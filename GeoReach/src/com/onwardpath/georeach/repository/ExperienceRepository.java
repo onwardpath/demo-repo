@@ -65,6 +65,29 @@ public class ExperienceRepository {
           result.close();
           return id;                           
 	  }
+	  
+	  /**
+	   * Save the experience to Experience table
+	   * 
+	   * @param pop_expid
+	   * @param pop_events
+	   * @param pop_cookie
+	   * @param pop_delay
+	   * @throws SQLException
+	   * @author Gurujegan
+	   * 
+	   */
+	  public void savePopupDetails(int pop_expid, String pop_events, String pop_cookie, String pop_delay) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.popup (pop_expid,pop_events,pop_cookie,pop_delay) values (?,?,?,?)");
+          prepStatement.setInt(1, pop_expid);
+          prepStatement.setString(2, pop_events);
+          prepStatement.setString(3, pop_cookie);          
+          prepStatement.setString(4, pop_delay);
+         //prepStatement.setDate(5, new java.sql.Date(new SimpleDateFormat("MM/dd/yyyy").parse(dateOfBirth.substring(0, 10)).getTime()));	
+          System.out.println(Database.getTimestamp()+" @ExperienceRepositoryPopUp.save>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();
+	  }
 	  	  
 	  /**
 	   * Update experience table single column data
