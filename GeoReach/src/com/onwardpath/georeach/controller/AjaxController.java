@@ -103,7 +103,7 @@ public class AjaxController extends HttpServlet {
 			ArrayList<String> citieslist = new ArrayList<String>();
 			String LOVCityValues = "select city.name,state.name,country.code from city join state join country on city.state_id = state.id where state.country_id = country.id AND city.name like ?  ORDER BY city.name,state.name ASC LIMIT 10";
 			String LOVStatesValues = "select st.name,ctry.code from state st,country ctry where st.name like ? and st.country_id = ctry.id";  
-			String LOVCountryValues = "select name from country where name like ?";
+			String LOVCountryValues = "select code,name from country where name like ?";
 			try {
 				System.out.println("filter by value :"+filterBy.equals("city"));
 				String sql_query = filterBy.equals("city") ? LOVCityValues : filterBy.equals("state") ? LOVStatesValues : LOVCountryValues;
@@ -112,7 +112,7 @@ public class AjaxController extends HttpServlet {
 				ResultSet rst = prepStatement.executeQuery();
 				while (rst.next()) {
 					String concatValues  = null;
-					if(filterBy.equals("country"))  concatValues  = rst.getString(1);
+					if(filterBy.equals("country"))  concatValues  = rst.getString(1)+ ", " + rst.getString(2);
 					if(filterBy.equals("state"))   concatValues = rst.getString(1) + ", " + rst.getString(2); 
 					if(filterBy.equals("city"))  concatValues =  rst.getString(1) + ", " + rst.getString(2)+", " +rst.getString(3);
 					citieslist.add(concatValues) ;

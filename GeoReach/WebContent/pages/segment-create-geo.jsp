@@ -33,6 +33,13 @@
 		var geotype = document.getElementById("geotype").value;
 		var georule = document.getElementById("georule").value;
 		var geoloc = document.getElementById("geoloc").value;
+		if(geotype == "country")
+		{
+		var location = geoloc.substring(0,geoloc.indexOf(","));
+		geoloc = location;
+		console.log("loc"+geoloc);
+		
+		}
 		//alert(geoloc);
 		if(geoloc.length > 0){
 		var geocondition = georule + ":" + geotype + ":" + geoloc;
