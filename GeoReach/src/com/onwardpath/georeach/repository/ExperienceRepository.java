@@ -78,7 +78,7 @@ public class ExperienceRepository {
 	   * 
 	   */
 	  public void savePopupDetails(int pop_expid, String pop_events, String pop_cookie, String pop_delay) throws SQLException {	      	         
-    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.popup (pop_expid,pop_events,pop_cookie,pop_delay) values (?,?,?,?)");
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.popup (experience_id,events,cookie,delay) values (?,?,?,?)");
           prepStatement.setInt(1, pop_expid);
           prepStatement.setString(2, pop_events);
           prepStatement.setString(3, pop_cookie);          
