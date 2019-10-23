@@ -72,7 +72,8 @@ function addDynamically(georule,geotype,geoloc) {
 	  var georule = georule;
 	  var geotype = geotype;
 	  var geoloc = geoloc;
-	  //alert(geoloc);
+	  
+	   //alert(geoloc);
 	  if(geoloc.length > 0){
 	  var geocondition = georule + ":" + geotype + ":" + geoloc;
 	  var select = document.getElementById("dynamic-select");
@@ -110,6 +111,14 @@ function addDynamically(georule,geotype,geoloc) {
 		var geotype = document.getElementById("geotype").value;
 		var georule = document.getElementById("georule").value;
 		var geoloc = document.getElementById("geoloc").value;
+		
+		if(geotype == "country")
+		{
+		var location = geoloc.substring(0,geoloc.indexOf(","));
+		geoloc = location;
+		console.log("loc"+geoloc);
+		}
+				
 		addDynamically(georule,geotype,geoloc);
 	}
 	function remove(element, index) {
@@ -230,12 +239,13 @@ function addDynamically(georule,geotype,geoloc) {
 						Name</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
 						<input name="segmentName" id="segmentName" type="text"
-							class="form-control col-lg-9 col-sm-12" style="pointer-events: none;"> <span
+							class="form-control col-lg-9 col-sm-12"
+							style="pointer-events: none;"> <span
 							class="form-text text-muted">Give a name for this segment</span>
 					</div>
 				</div>
 				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12">Criteria</label>
+					<label class="col-form-label col-lg-3 col-sm-12">Criteria</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
 						<select id="georule"
 							class="form-control form-control--fixed kt_selectpicker"
@@ -284,8 +294,8 @@ function addDynamically(georule,geotype,geoloc) {
 
 			</div>
 			<div class="kt-portlet__body">
-				<input type="hidden" name="segmentId" /> 
-				<input type="hidden" id="clear_SStore" name="clear_SStore" value="<%=clear_SStore%>" />
+				<input type="hidden" name="segmentId" /> <input type="hidden"
+					id="clear_SStore" name="clear_SStore" value="<%=clear_SStore%>" />
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
