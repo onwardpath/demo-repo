@@ -32,6 +32,9 @@
 		var element = document.createElement("div");
 		element.id = "gr_popup";
 		element.setAttribute("style", bgcolor);
+		element.setAttribute("margin-left", "auto");
+		element.setAttribute("margin-right", "auto");
+		element.setAttribute("background-size", "cover");
 		element.style.backgroundImage = bgimgurl;
 		element.style.width = width;
 		element.style.height = height;
@@ -94,7 +97,8 @@
 
 	function getCheckedEvents() {
 		var checkedValue = "";
-		var inputElements = document.getElementById('page_events').getElementsByTagName("input");
+		var inputElements = document.getElementById('page_events')
+				.getElementsByTagName("input");
 
 		for (var i = 0; inputElements[i]; ++i) {
 			if (inputElements[i].checked) {
@@ -122,14 +126,13 @@
 			el_ifr.style.display = "flex";
 		}
 	}
-	
-	function isChecked(event)
-	{
-		if(event.currentTarget.checked == true)
-		document.getElementById("adv-settings").style.display = "block";
+
+	function isChecked(event) {
+		if (event.currentTarget.checked == true)
+			document.getElementById("adv-settings").style.display = "block";
 		else
-		document.getElementById("adv-settings").style.display = "none";	
-		
+			document.getElementById("adv-settings").style.display = "none";
+
 	}
 
 	function changeIcon(event) {
@@ -138,9 +141,46 @@
 
 	}
 
+	//JS code for preview content in the modal
+	function preview(event) {
+		var prvw_el = document.getElementById("preview");
+		var prvw_style_el = document.getElementById("preview-style");
+
+		var ifr_el = document.getElementById("iframe-element");
+		var ifr_url_val = document.getElementById("iframe-url").value;
+
+		var bgcolor = "background-color:#"
+				+ document.getElementById("bgcolor").value;
+		var bgimgurl = "url('" + document.getElementById("bgimgurl").value
+				+ "')";
+		var width = document.getElementById("width").value + "px";
+		var height = document.getElementById("height").value + "px";
+
+		prvw_style_el.setAttribute("style", bgcolor);
+		prvw_style_el.setAttribute("margin-left", "auto");
+		prvw_style_el.setAttribute("margin-right", "auto");
+		prvw_style_el.setAttribute("background-size", "cover");
+		prvw_style_el.style.backgroundImage = bgimgurl;
+		prvw_style_el.style.width = width;
+		prvw_style_el.style.height = height;
+
+		var ptype = popup.options[popup.selectedIndex].value;
+
+		if (ptype == "html") {
+			prvw_el.innerHTML = document.getElementById("content").value;
+		} else if (ptype == "iframe") {
+
+			ifr_el.firstElementChild.setAttribute("src", ifr_url_val);
+			var cln = ifr_el.cloneNode(true);
+			cln.style.display = "block";
+			prvw_el.innerHTML = cln.outerHTML;
+		}
+
+	}
+
 	window.addEventListener("load", function() {
 		selectIndex();
-		document.getElementById("adv-settings").style.display = "none";	
+		document.getElementById("adv-settings").style.display = "none";
 	});
 </script>
 
@@ -237,12 +277,12 @@
 
 								<div class="form-group row">
 									<label class="col-form-label col-lg-3 col-sm-12">Popup
-										Type</label>
+										Content</label>
 									<div class="col-lg-4 col-md-9 col-sm-12">
 										<select id="popup" class="custom-select form-control"
 											data-width="300" onchange="showChild(event)">
 											<option value="html">HTML Code</option>
-											<option value="iframe">Iframe</option>
+											<option value="iframe">External URL</option>
 										</select>
 									</div>
 								</div>
@@ -256,7 +296,7 @@
 									</div>
 									<label class="col-lg-2 col-form-label">Width (px):</label>
 									<div class="col-lg-3">
-										<input id="width" type="text" class="form-control">
+										<input id="width" type="text" value="400" class="form-control">
 
 									</div>
 								</div>
@@ -271,10 +311,9 @@
 									<label class="col-lg-2 col-form-label">Height (px):</label>
 									<div class="col-lg-3">
 										<div class="kt-input-icon">
-											<input id="height" type="text" class="form-control">
-
-										</div>
-
+											<input id="height" type="text" value="250"
+											class="form-control">
+									</div>
 									</div>
 								</div>
 
@@ -307,6 +346,29 @@
 									<div class="col-lg-4 col-md-9 col-sm-12">
 										<button type="button" class="btn btn-accent"
 											onclick="javascript:add(event)">Add</button>
+										<button type="button" class="btn btn-accent"
+											data-toggle="modal" data-target="#exampleModalLongInner"
+											onclick="javascript:preview(event)">Preview</button>
+									</div>
+									<!--  Iframe for External URL View -->
+									<div class="embed-responsive embed-responsive-16by9"
+										id="iframe-element" style="display: none;height: 100%">
+										<iframe class="embed-responsive-item" src=""></iframe>
+									</div>
+
+									<div class="modal fade" id="exampleModalLongInner"
+										tabindex="-1" role="dialog"
+										aria-labelledby="exampleModalLongTitle" aria-hidden="true"
+										style="display: none;">
+										<div class="modal-dialog modal-dialog-centered"
+											role="document">
+											<div class="modal-content" id="preview-style">
+												<div class="modal-body" id="preview">
+													<div id="preview" class="kt-scroll ps" data-scroll="true"
+														style="overflow: hidden;"></div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 
@@ -314,8 +376,9 @@
 									<label class="col-form-label col-lg-3 col-sm-12"></label>
 									<div class="col-lg-4 col-md-9 col-sm-12">
 										<div class="kt-checkbox-inline">
-											<label class="kt-checkbox"> <input id="is-adv-settings" type="checkbox"
-												value="" onclick ="isChecked(event);">Advanced Settings<span></span>
+											<label class="kt-checkbox"> <input
+												id="is-adv-settings" type="checkbox" value=""
+												onclick="isChecked(event);">Advanced Settings<span></span>
 											</label>
 										</div>
 									</div>
