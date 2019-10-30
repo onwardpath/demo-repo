@@ -3,6 +3,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page
 	import="java.util.Map, com.onwardpath.georeach.repository.SegmentRepository"%>
+
 <script type="text/javascript">
 	var expDetailsObj = {};
 	var segment = null;
@@ -21,32 +22,11 @@
 		segment_id = segment.value;
 		segment_name = segment.options[segment.selectedIndex].innerHTML;
 		popup = document.getElementById("popup");
-		//bgcolor = "background-color:"+ document.getElementById("bgcolor").value;
-		bgcolor = "background-color:#"
-				+ document.getElementById("bgcolor").value;
-		bgimgurl = "url('" + document.getElementById("bgimgurl").value + "')";
-		width = document.getElementById("width").value + "px";
-		height = document.getElementById("height").value + "px";
-
-		//Creating DIV Popup element here
-		var element = document.createElement("div");
-		element.id = "gr_popup";
-		element.setAttribute("style", bgcolor);
-		element.setAttribute("margin-left", "auto");
-		element.setAttribute("margin-right", "auto");
-		element.setAttribute("background-size", "cover");
-		element.style.backgroundImage = bgimgurl;
-		element.style.width = width;
-		element.style.height = height;
-
-		ptype = popup.options[popup.selectedIndex].value;
-		if (ptype == "html") {
-			element.innerHTML = document.getElementById("content").value;
-			content = element.outerHTML;
-		} else if (ptype == "iframe") {
-			content = document.getElementById("iframe-url").value;
-		}
-
+		
+		//set modal content from the UI
+        setModalContent();
+		content = exampleModalLongInner.outerHTML;
+		
 	}
 	function add(event) {
 		selectIndex();
@@ -58,7 +38,7 @@
 				expDetailsObj[segment_id] = content;
 				var stage = document.getElementById("stage");
 				stage.innerHTML += '<div id="'+segment_name+'" class="card-body">'
-						+ content
+						//+ content
 						+ '&nbsp;<button type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''
 						+ segment_name
 						+ '\','
@@ -122,11 +102,13 @@
 			el_htm.style.display = "flex";
 			el_ifr.style.display = "none";
 		} else {
+			/* document.getElementById("bgimgurl").disabled = true;
+			document.getElementById("bgcolor").style.pointerEvents = "none"; */
 			el_htm.style.display = "none";
 			el_ifr.style.display = "flex";
 		}
 	}
-
+	//Validate Advanced Settings Checkbox & return its content
 	function isChecked(event) {
 		if (event.currentTarget.checked == true)
 			document.getElementById("adv-settings").style.display = "block";
@@ -141,8 +123,13 @@
 
 	}
 
-	//JS code for preview content in the modal
+	
 	function preview(event) {
+		setModalContent();
+	}
+	
+	//JS code for set content in the modal
+	function setModalContent() {
 		var prvw_el = document.getElementById("preview");
 		var prvw_style_el = document.getElementById("preview-style");
 
@@ -165,19 +152,17 @@
 		prvw_style_el.style.height = height;
 
 		var ptype = popup.options[popup.selectedIndex].value;
-
+		prvw_el.style.padding = "0.25em";
 		if (ptype == "html") {
 			prvw_el.innerHTML = document.getElementById("content").value;
 		} else if (ptype == "iframe") {
-
 			ifr_el.firstElementChild.setAttribute("src", ifr_url_val);
 			var cln = ifr_el.cloneNode(true);
 			cln.style.display = "block";
 			prvw_el.innerHTML = cln.outerHTML;
 		}
-
 	}
-
+	
 	window.addEventListener("load", function() {
 		selectIndex();
 		document.getElementById("adv-settings").style.display = "none";
@@ -282,7 +267,7 @@
 										<select id="popup" class="custom-select form-control"
 											data-width="300" onchange="showChild(event)">
 											<option value="html">HTML Code</option>
-											<option value="iframe">External URL</option>
+											<option value="iframe">URL</option>
 										</select>
 									</div>
 								</div>
@@ -312,10 +297,11 @@
 									<div class="col-lg-3">
 										<div class="kt-input-icon">
 											<input id="height" type="text" value="250"
-											class="form-control">
-									</div>
+												class="form-control">
+										</div>
 									</div>
 								</div>
+
 
 								<div class="form-group row" id="for-html">
 									<label class="col-form-label col-lg-3 col-sm-12">Content
@@ -328,9 +314,21 @@
 									</div>
 								</div>
 
+								<div class="form-group row">
+									<label class="col-form-label col-lg-3 col-sm-12"></label>
+									<div class="col-lg-4 col-md-9 col-sm-12">
+										<div class="kt-checkbox-inline">
+											<label class="kt-checkbox"> <input
+												id="is-adv-settings" type="checkbox" value=""
+												onclick="isChecked(event);">Advanced Settings<span></span>
+											</label>
+										</div>
+									</div>
+								</div>
+
 								<div class="form-group row" id="for-iframe"
 									style="display: none;">
-									<label class="col-form-label col-lg-3 col-sm-12">External
+									<label class="col-form-label col-lg-3 col-sm-12">
 										URL</label>
 									<div class="col-lg-4 col-md-9 col-sm-12">
 										<input id="iframe-url" type="text"
@@ -352,9 +350,10 @@
 									</div>
 									<!--  Iframe for External URL View -->
 									<div class="embed-responsive embed-responsive-16by9"
-										id="iframe-element" style="display: none;height: 100%">
+										id="iframe-element" style="display: none; height: 100%">
 										<iframe class="embed-responsive-item" src=""></iframe>
 									</div>
+
 
 									<div class="modal fade" id="exampleModalLongInner"
 										tabindex="-1" role="dialog"
@@ -372,17 +371,7 @@
 									</div>
 								</div>
 
-								<div class="form-group row">
-									<label class="col-form-label col-lg-3 col-sm-12"></label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<div class="kt-checkbox-inline">
-											<label class="kt-checkbox"> <input
-												id="is-adv-settings" type="checkbox" value=""
-												onclick="isChecked(event);">Advanced Settings<span></span>
-											</label>
-										</div>
-									</div>
-								</div>
+
 
 								<div class="form-group row" id="adv-settings">
 									<div class="card-body">

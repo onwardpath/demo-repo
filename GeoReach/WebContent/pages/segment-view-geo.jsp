@@ -55,7 +55,7 @@ function edit(id)
 							<!--begin: Datatable -->
 						<div class="row">
       						<div class="col-sm-12">
-         						<table class="table table-striped- table-bordered table-hover table-checkable kt_table_1" id="kt_table_1">
+         						<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
             						<thead>
                							<tr role="row">
 											<th class="sorting_asc" tabindex="0" aria-controls="kt_table_1" aria-sort="ascending">Name</th>
