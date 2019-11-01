@@ -22,11 +22,11 @@
 		segment_id = segment.value;
 		segment_name = segment.options[segment.selectedIndex].innerHTML;
 		popup = document.getElementById("popup");
-		
+
 		//set modal content from the UI
-        setModalContent();
+		setModalContent();
 		content = exampleModalLongInner.outerHTML;
-		
+
 	}
 	function add(event) {
 		selectIndex();
@@ -70,8 +70,16 @@
 		document.getElementById("experience-form").experienceDetails.value = JSON
 				.stringify(expDetailsObj);
 		document.getElementById("experience-form").method = "post";
+		
+		if(expDetailsObj[1] == undefined)
+			{
+			alert("Please add atleast one content");
+			}
+		else
+			{
 		document.getElementById("experience-form").action = "ExperienceController";
 		document.getElementById("experience-form").submit();
+			}
 
 	}
 
@@ -123,11 +131,10 @@
 
 	}
 
-	
 	function preview(event) {
 		setModalContent();
 	}
-	
+
 	//JS code for set content in the modal
 	function setModalContent() {
 		var prvw_el = document.getElementById("preview");
@@ -162,7 +169,7 @@
 			prvw_el.innerHTML = cln.outerHTML;
 		}
 	}
-	
+
 	window.addEventListener("load", function() {
 		selectIndex();
 		document.getElementById("adv-settings").style.display = "none";
@@ -328,8 +335,7 @@
 
 								<div class="form-group row" id="for-iframe"
 									style="display: none;">
-									<label class="col-form-label col-lg-3 col-sm-12">
-										URL</label>
+									<label class="col-form-label col-lg-3 col-sm-12"> URL</label>
 									<div class="col-lg-4 col-md-9 col-sm-12">
 										<input id="iframe-url" type="text"
 											class="form-control col-lg-9 col-sm-12"
