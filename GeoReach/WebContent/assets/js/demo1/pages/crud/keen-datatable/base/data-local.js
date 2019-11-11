@@ -125,22 +125,18 @@ function test()
 				var recordsPerPage = 10;
 				var page_display = Math.ceil(json_len.length/recordsPerPage); 
 				console.log("page=="+page_display);
-				/*var mydiv = document.getElementById("page");
-				var aTag = document.createElement('a');
-				aTag.setAttribute('href',"");
-				aTag.setAttribute('class',"kt-datatable__pager-link kt-datatable__pager-link-number");
+		/*		var mydiv = document.getElementById("page");
+				var ul = document.createElement('ul');
+				ul.setAttribute('class',"kt-datatable__pager-nav");
 				
-				mydiv.appendChild(aTag);
 				for(var i = 1; i <= page_display; i++) {
 					var mydiv = document.getElementById("page");
-					var list = document.createElement('ul');
-					list.setAttribute('class',"kt-datatable__pager-nav");
-					var aTag = document.createElement('a');
+					var list = document.createElement('li');
 					
-					aTag.setAttribute('href',"");
-					aTag.setAttribute('data-page',i);
-					aTag.setAttribute('class',"kt-datatable__pager-link kt-datatable__pager-link-number");
-					aTag.innerText = i;
+					var li=document.createElement('li');
+			        li.innerHTML='<a href="" class="kt-datatable__pager-link kt-datatable__pager-link-number" data-toggle="modal"  data-page = "'+i+'" >' + i  + '</a>';
+			        ul.appendChild(li);
+
 					mydiv.appendChild(aTag);
 					
 				}*/
