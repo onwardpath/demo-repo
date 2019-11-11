@@ -140,12 +140,7 @@
 													
 												</div>
 											</div>
-											<div class="col-xl-4 order-1 order-xl-2 kt-align-right">
-												<a href="#" class="btn btn-default kt-hidden">
-													<i class="la la-cart-plus"></i> New Order
-												</a>
-												<div class="kt-separator kt-separator--border-dashed kt-separator--space-lg d-xl-none"></div>
-											</div>
+										 
 										</div>
 									</div>
 
