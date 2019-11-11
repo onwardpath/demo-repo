@@ -60,6 +60,17 @@
     <servlet-name>displayimageServlet</servlet-name>
     <url-pattern>/DisplayImageController</url-pattern>
   </servlet-mapping> 
+  
+    
+  <servlet>
+    <servlet-name>ajaxExpServlet</servlet-name>
+    <servlet-class>com.onwardpath.georeach.controller.AjaxExpController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ajaxExpServlet</servlet-name>
+    <url-pattern>/AjaxExpController</url-pattern>
+  </servlet-mapping> 
+  
   <session-config>
   	<session-timeout>-1</session-timeout>
   </session-config>
