@@ -5,7 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import com.onwardpath.georeach.model.Experience;
 import com.onwardpath.georeach.model.Image;
 import com.onwardpath.georeach.model.Content;
@@ -216,7 +219,40 @@ public class ExperienceRepository {
           result.close();	    
 	      return false;
 	  }
-	  	  	  	  	  
+	  
+	  public List<String> experienceName(String id) {
+	    	
+			String query = "SELECT exp.name FROM georeachdb.content seg, georeachdb.experience exp where seg.segment_id = ? and exp.id = seg.experience_id";
+				List<String> returnlist = new ArrayList<String>();
+			try {
+				Connection  dbConnection = Database.getConnection();
+				PreparedStatement prepStatement = dbConnection.prepareStatement(query);
+				prepStatement.setString(1, id); 
+		        ResultSet result = prepStatement.executeQuery();            
+		        if (result != null) {   
+		              while (result.next()) {
+		            	  returnlist.add(result.getString("name"));         
+		              }   
+		          }      
+		          
+		        prepStatement.close();
+		        result.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return returnlist;
+			
+		}
+	  
+	  public void deleteContent(int experience_id) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("delete from georeachdb.content where experience_id =?");                    
+          prepStatement.setInt(1, experience_id);   
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveContent>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
+	  }
+	  	    	  	  	  
 	  /**
 	   * Get a single Experience Object. To be called after checking experience exists by id
 	   * 

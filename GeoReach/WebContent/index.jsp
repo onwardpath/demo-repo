@@ -9,7 +9,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <!--begin::Fonts -->
-        <script src="./assets/js/jscolor.js"></script>       
+        <script src="./assets/js/jscolor.js"></script> 
+             
         <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>        
         <script>
         WebFont.load({
@@ -49,21 +50,6 @@
     		border: 1px solid #5d78ff;
 		}
         </style>
-        <script type="text/javascript">
-        function getsegmentname(id){
-        	var form = document.getElementById("form-"+id);
-        	document.getElementById("segmentTitle").innerHTML=form.seg_name.value;
-        	 
-        } 
-
-        function deletesegment(id){
-        	var form = document.getElementById("form-"+id);
-        	//sessionStorage.setItem('seg_id', form.seg_id.value);
-        	form.method = "POST"; 
-        	form.action = "/GeoReach/DeleteController";   
-        	form.submit();                
-        }   
-        </script>
         
     </head>
     <!-- end::Head -->
@@ -143,9 +129,9 @@
             	    { "orderable": false, "targets": 4}
             	  ]
             });
+            $('#showdependantexperience').modal('show');
         });
-         
-         
+          
         </script>
     </body>
     <!-- end::Body -->
