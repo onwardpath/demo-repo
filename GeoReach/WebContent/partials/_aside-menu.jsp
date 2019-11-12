@@ -115,7 +115,13 @@
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Image</span>
 											</a>
 										</li>
-																				<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true">
+											<a href="/GeoReach?view=pages/experience-create-link.jsp" class="kt-menu__link ">
+												<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Link</span>
+											</a>
+										</li>
+										
+										<li class="kt-menu__item " aria-haspopup="true">
 											<a href="/GeoReach?view=pages/experience-create-popup.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Pop Up</span>
 											</a>
