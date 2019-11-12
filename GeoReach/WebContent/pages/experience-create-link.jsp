@@ -38,15 +38,15 @@ function selectIndex()
 	targetUrl = document.getElementById("targeturl").value;
 	console.log("linkText value is ::"+(linkText.trim().length))
 	//errorMessage()
-	if(linkText.trim().length==0){
+	if(!document.getElementById("imageChkBox").checked && linkText.trim().length==0){
 		errorMsg = "Please provide value in linktext";
 	}else if(targetUrl.trim().length==0){
 		errorMsg = "Please provide url in TargetUrl field";
 	}else if(document.getElementById("imageChkBox").checked){
+		//linkText = document.getElementById("imgaltlinkTxt").value;
 		imageUrl =  document.getElementById("image-url").value;
 		imgWidth =	document.getElementById("width").value;
 		imgHeight = document.getElementById("height").value;
-		linkText = document.getElementById("imglinkTxt").value;
 		console.log("IMAGE URL VALUE IS :::"+imageUrl)
 		if(imageUrl.trim().length==0){
 			errorMsg = "Please provide image url in ImageUrl field";
@@ -58,12 +58,19 @@ function toggleCheckbox(element)
 {
 	if(element.id == "imageChkBox" && element.checked){
 			document.getElementById("imageurl").style.display =""
-			document.getElementById("linktext").style.display ="none"
-			document.getElementById("imglinktext").style.display ="block";
+	
+			document.getElementById("linktext").style.display="none";
+			document.getElementById("imgalttext").style.display="block";
+			//document.getElementsByClassName("imagelinktext").innerText ="Alt Text";
+			//alert("sdfd"+document.getElementsByClassName("imagelinktext").innerText)
 			typeVal = "Image";
 			//console.log("inside checked symbol")
-	}else
-		document.getElementById("linktext").style.display ="block"
+	}else{
+		document.getElementById("linktext").style.display="block";
+		document.getElementById("imageurl").style.display ="none"
+		document.getElementById("imgalttext").style.display ="none"
+		
+	}
 }
 function getContentFromLinkExp(){
 	 var linkHTMLElemFormation = ""
@@ -103,6 +110,8 @@ function add(event){
 			document.getElementById("dummy-form").reset();
 			document.getElementById("imageurl").style.display ="none"
 			document.getElementById("linkContent").innerHTML = ""
+			document.getElementById("linktext").style.display="block";
+			document.getElementById("imgalttext").style.display="none";
 			typeVal = "Link";
 			}
 			else{
@@ -126,10 +135,7 @@ function saveExperience(){
 	document.getElementById("experience-form").action = "ExperienceController";
 	document.getElementById("experience-form").submit();
 }
-window.addEventListener("load", function(){
-	document.getElementById("imglinktext").style.display ="none";
-	//selectIndex();
-});
+
 </script>
 
 <!--begin::Content-->
@@ -295,17 +301,20 @@ window.addEventListener("load", function(){
 							</div>
 					</div>
 				</div>						
-				<div class="form-group row" id="linktext">
-				<label class="col-form-label col-lg-3 col-sm-12 linktext">Text</label>
+				
+				<div id="linktext">
+				<div class="form-group row" >
+				<label class="col-form-label col-lg-3 col-sm-12 imagelinktext">Text</label>
 					<div class="col-lg-6 col-md-9 col-sm-12">	
 						<input type="text" id="linkTxt" class="form-control col-lg-9 col-sm-12" placeholder="Enter Display text" required/>																						
 					</div>
 				</div>
-				<div id ="imglinktext" style="display:none">
-				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12 imglinktext">Alt Text</label>
+				</div>
+				<div id="imgalttext" style="display:none">
+				<div class="form-group row" id="">
+				<label class="col-form-label col-lg-3 col-sm-12 imagealttext">AltText</label>
 					<div class="col-lg-6 col-md-9 col-sm-12">	
-						<input type="text" id="imglinkTxt" class="form-control col-lg-9 col-sm-12" placeholder="Enter Alt text" required/>																						
+						<input type="text" id="imgaltlinkTxt" class="form-control col-lg-9 col-sm-12" placeholder="Enter Alt text" required/>																						
 					</div>
 				</div>
 				</div>
@@ -367,4 +376,10 @@ window.addEventListener("load", function(){
 	</div>	
 	<!--begin::Portlet-->
 </div>
+<!-- <script>
+window.addEventListener("load", function(){
+	document.getElementsByClassName("linktext").innerText ="Text";
+	//selectIndex();
+});
+</script> -->
 <!--end::Content-->
