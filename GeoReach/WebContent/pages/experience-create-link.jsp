@@ -46,6 +46,7 @@ function selectIndex()
 		imageUrl =  document.getElementById("image-url").value;
 		imgWidth =	document.getElementById("width").value;
 		imgHeight = document.getElementById("height").value;
+		linkText = document.getElementById("imglinkTxt").value;
 		console.log("IMAGE URL VALUE IS :::"+imageUrl)
 		if(imageUrl.trim().length==0){
 			errorMsg = "Please provide image url in ImageUrl field";
@@ -57,11 +58,12 @@ function toggleCheckbox(element)
 {
 	if(element.id == "imageChkBox" && element.checked){
 			document.getElementById("imageurl").style.display =""
-			document.getElementsByClassName("imagelinktext").text ="Alt Text";
+			document.getElementById("linktext").style.display ="none"
+			document.getElementById("imglinktext").style.display ="block";
 			typeVal = "Image";
 			//console.log("inside checked symbol")
 	}else
-		document.getElementById("imageurl").style.display ="none"
+		document.getElementById("linktext").style.display ="block"
 }
 function getContentFromLinkExp(){
 	 var linkHTMLElemFormation = ""
@@ -72,7 +74,7 @@ function getContentFromLinkExp(){
 	  if(typeVal == "Image"){
 		var createImg = document.createElement("img");
 		createImg.src = imageUrl;
-		createImg.alttext = linkText;
+		createImg.alt = linkText;
 		createImg.style.width = imgWidth+"px" ;
 		createImg.style.height = imgHeight+"px" ;
 		linkHTMLElemFormation = document.getElementById("linkContent").appendChild(createAnchor)
@@ -125,6 +127,7 @@ function saveExperience(){
 	document.getElementById("experience-form").submit();
 }
 window.addEventListener("load", function(){
+	document.getElementById("imglinktext").style.display ="none";
 	//selectIndex();
 });
 </script>
@@ -270,7 +273,7 @@ window.addEventListener("load", function(){
                            	<input type="radio" id="imageChkBox" name="imageCheckbox" value="Image" onchange="toggleCheckbox(this)">Image<span></span>
 		                 </label>
 		                 <label class="kt-checkbox mr20">
-                           	<input type="radio" id="linkChkBox" name="imageCheckbox" value="Link" checked onchange="toggleCheckbox(this)">Link<span></span>
+                           	<input type="radio" id="linkChkBox" name="imageCheckbox" value="Link" checked onchange="toggleCheckbox(this)">Text<span></span>
 		                 </label>																						
 					</div>
 				</div>
@@ -292,13 +295,20 @@ window.addEventListener("load", function(){
 							</div>
 					</div>
 				</div>						
-				<div class="form-group row">
-				<label class="col-form-label col-lg-3 col-sm-12 imagelinktext">Text</label>
+				<div class="form-group row" id="linktext">
+				<label class="col-form-label col-lg-3 col-sm-12 linktext">Text</label>
 					<div class="col-lg-6 col-md-9 col-sm-12">	
 						<input type="text" id="linkTxt" class="form-control col-lg-9 col-sm-12" placeholder="Enter Display text" required/>																						
 					</div>
 				</div>
-				
+				<div id ="imglinktext" style="display:none">
+				<div class="form-group row">
+				<label class="col-form-label col-lg-3 col-sm-12 imglinktext">Alt Text</label>
+					<div class="col-lg-6 col-md-9 col-sm-12">	
+						<input type="text" id="imglinkTxt" class="form-control col-lg-9 col-sm-12" placeholder="Enter Alt text" required/>																						
+					</div>
+				</div>
+				</div>
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Target URL</label>
 					<div class="col-lg-6 col-md-9 col-sm-12">
