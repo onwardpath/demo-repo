@@ -50,21 +50,6 @@
     		border: 1px solid #5d78ff;
 		}
         </style>
-        <script type="text/javascript">
-        function getsegmentname(id){
-        	var form = document.getElementById("form-"+id);
-        	document.getElementById("segmentTitle").innerHTML=form.seg_name.value;
-        	 
-        } 
-
-        function deletesegment(id){
-        	var form = document.getElementById("form-"+id);
-        	//sessionStorage.setItem('seg_id', form.seg_id.value);
-        	form.method = "POST"; 
-        	form.action = "/GeoReach/DeleteController";   
-        	form.submit();                
-        }   
-        </script>
         
     </head>
     <!-- end::Head -->
@@ -144,6 +129,7 @@
             	    { "orderable": false, "targets": 4}
             	  ]
             });
+            $('#showdependantexperience').modal('show');
         });
          
          

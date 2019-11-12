@@ -3,7 +3,10 @@ package com.onwardpath.georeach.controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.onwardpath.georeach.model.Experience;
+import com.onwardpath.georeach.model.ExperienceContent;
+import com.onwardpath.georeach.repository.ExperienceRepository;
 import com.onwardpath.georeach.repository.SegmentRepository;
 import com.onwardpath.georeach.util.Database;
 
@@ -33,6 +39,7 @@ public class DeleteController extends HttpServlet {
     
     
     
+	
 	  /**
 	   * Method to Deleted a Segment by id
 	   * @param id
@@ -54,17 +61,25 @@ public class DeleteController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		
+		HttpSession session = request.getSession();
 		SegmentRepository segmentRepository = new SegmentRepository();
 		String resultPage = request.getParameter("result_page");
 		try {
-		String assetId = request.getParameter("seg_id");	
-		delete(assetId);	
+		String assetId = request.getParameter("seg_id");
+		ExperienceRepository exp = new ExperienceRepository();
+		List expname =exp.experienceName(assetId);
+		if(expname.isEmpty()) {
+			delete(assetId);	
+		}else {
+		
+			session.setAttribute("experienceName", expname); 
+			System.out.println("expname"+ expname + " & session  variable : " + session.getAttribute("experienceName") + "& assetId:"+assetId);
+		}
 	   }catch (SQLException e) {
 		System.out.println("Something went wrong in Delete Controller."+ e.getMessage());
 	     }
 		  response.sendRedirect("/GeoReach?view="+resultPage);
-	}
+	} 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
