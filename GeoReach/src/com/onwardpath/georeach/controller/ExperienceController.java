@@ -3,6 +3,9 @@ package com.onwardpath.georeach.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -64,6 +67,7 @@ public class ExperienceController extends HttpServlet {
 		              
 		              //1. Save to Experience table, get the id (name, type, org_id, user_id, create_time)
 	            	  String type = request.getParameter("type");
+	            	  
 	            	  int experience_id = experienceRepository.save(name, type, "on", request.getParameter("schedule_start"), request.getParameter("schedule_end"), 
 	            			  											request.getParameter("header_code"), request.getParameter("body_code"), org_id, user_id);
 	            	  
@@ -82,7 +86,7 @@ public class ExperienceController extends HttpServlet {
 	            			  experienceRepository.saveImage(experience_id, segment_id, url);	            			  	            			 
 	            		  }		            		  
 	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
-	            	  } else if (type.equals("content")) {		            	  	            		 
+	            	  } else if (type.equals("content") || type.equals("link")) {	            	  	            		 
 	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
 	            		  ObjectMapper mapper = new ObjectMapper();	            		  
 	            		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
@@ -91,12 +95,14 @@ public class ExperienceController extends HttpServlet {
 	            			  int segment_id = Integer.parseInt(entry.getKey());
 	            			  String content = entry.getValue();
 	            			  System.out.println("Segment ID = " + segment_id + ", Content = " + content);
-	            			  experienceRepository.saveContent(experience_id, segment_id, content);	            			  	            			 
+	            			  String exactContentElem = type.equals("link")? content.split("#")[0] :content; 
+	            			  experienceRepository.saveContent(experience_id, segment_id, exactContentElem);
+	            			  if(type.equals("link")) {
+	            				  experienceRepository.saveLink(content.split("#")[1], content.split("#")[2],content.split("#")[3],content.split("#")[4]);
+	            			  }
 	            		  }		            		  
 	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";	            		  
-	            	  }
-	            	  
-	            	  else if (type.equals("popup")) {
+	            	  }else if (type.equals("popup")) {
 	            		  
 	            		  String pop_events = request.getParameter("page_events");
 	            		  String pop_cookie = request.getParameter("popup_cookie");

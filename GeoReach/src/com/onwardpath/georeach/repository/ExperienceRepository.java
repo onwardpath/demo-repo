@@ -147,6 +147,29 @@ public class ExperienceRepository {
 	  }
 	  
 	  /**
+	   * Save a Link experience detail to the Link table
+	   * 
+	   * @param experience_id
+	   * @param segment_id
+	   * @param content
+	   * @param text
+	   * @param targeturl
+	   * @param imageurl
+	   * @throws SQLException
+	   */
+	  public void saveLink(String linktype,String text,String targeturl,String imgurl) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.link (type,text,targeturl,imageurl) values (?,?,?,?)");                    
+          prepStatement.setString(1,linktype);
+          prepStatement.setString(2, text);
+          prepStatement.setString(3, targeturl);
+          prepStatement.setString(4, imgurl);
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveLink>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
+	  }
+	  
+	  
+	  /**
 	   * Check weather an experience exists
 	   * 
 	   * @param id
