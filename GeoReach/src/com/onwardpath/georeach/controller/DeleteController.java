@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.onwardpath.georeach.model.Experience;
-import com.onwardpath.georeach.model.ExperienceContent;
 import com.onwardpath.georeach.repository.ExperienceRepository;
 import com.onwardpath.georeach.repository.SegmentRepository;
 import com.onwardpath.georeach.util.Database;
