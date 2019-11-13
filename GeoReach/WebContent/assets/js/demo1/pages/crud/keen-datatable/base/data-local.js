@@ -351,7 +351,6 @@ var KTDatatableDataLocalDemo = function() {
 }();
 
 
-
 	jQuery(document).ready(function() {
 	
 	test();
