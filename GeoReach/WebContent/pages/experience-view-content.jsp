@@ -137,6 +137,7 @@
 															</span>
 														</div>
 													</div>
+										
 													
 												</div>
 											</div>
@@ -324,9 +325,10 @@
   
 		<!--end::Page Scripts -->
 		
-		<div id ="page">
+		<div id ="page" style=" display: flex; padding-left: 0px; list-style: none; border-radius: 0.25rem; justify-content: center;">
 		
 		</div>
+	
 	</body>
 			
 			

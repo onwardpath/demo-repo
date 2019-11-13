@@ -10,6 +10,27 @@ var response = "";
 
 window.onclick = myFunction;
 function myFunction() {
+	
+	
+	
+	var anchor = document.getElementsByClassName("page-link")
+	  
+	  for(var i = 0; i < anchor.length; i++) {
+	        var anchors = anchor[i];
+	        anchors.onclick = function() {
+	        	
+	        	var page_id = $(this).attr("data-page");
+	        	var offset = ((page_id-1) * 10) + 1;
+	        	var limit = page_id * 10;
+	        	
+	        	console.log("pageid="+page_id);
+	        	console.log("pageid="+offset);
+	        	console.log("currentlinks="+currentLinks);
+	        }
+	  }
+	
+	
+	
 	/*Code for Toggle ON and OFF*/	
 	var stat = document.getElementsByClassName("stat");
 	for(var i = 0; i < stat.length; i++) {
@@ -110,7 +131,8 @@ function test()
 	
 	var response = "";
 
-			
+	 	/*var url	 = "http://localhost:8080/GeoReach/AjaxExpController"
+		var params = "offset="+1+"&limit="+10+"&load=initial";*/
 		var xhttp = new XMLHttpRequest();
 		
 		xhttp.onreadystatechange = function() {
@@ -119,33 +141,39 @@ function test()
 				
 				response = this.response;
 				KTDatatableDataLocalDemo.init(response);
-				
+				console.log("json response="+response);
 				var json_len = JSON.parse(response);
 				console.log("json_length"+json_len.length)
+				
+				/*var expcount = json_len[0];
+				var exp = expcount.ExpCount;
 				var recordsPerPage = 10;
-				var page_display = Math.ceil(json_len.length/recordsPerPage); 
+				var page_display = Math.ceil(exp/recordsPerPage); 
 				console.log("page=="+page_display);
-		/*		var mydiv = document.getElementById("page");
+				var mydiv = document.getElementById("page");
 				var ul = document.createElement('ul');
-				ul.setAttribute('class',"kt-datatable__pager-nav");
+				ul.setAttribute('class',"pagination");
 				
 				for(var i = 1; i <= page_display; i++) {
 					var mydiv = document.getElementById("page");
 					var list = document.createElement('li');
 					
 					var li=document.createElement('li');
-			        li.innerHTML='<a href="" class="kt-datatable__pager-link kt-datatable__pager-link-number" data-toggle="modal"  data-page = "'+i+'" >' + i  + '</a>';
+			        li.innerHTML='<a href="" class="page-link" data-toggle="modal"  data-page = "'+i+'" >' + i  + '</a>';
 			        ul.appendChild(li);
 
-					mydiv.appendChild(aTag);
 					
-				}*/
+				}
+				document.getElementById('page').appendChild(ul);*/
+					
 		}};
+		
 		xhttp.open("GET", "http://localhost:8080/GeoReach/AjaxExpController");
 		
 		xhttp.send();
 		return response;
 		
+	
 		
 		} 
 
@@ -206,7 +234,7 @@ var KTDatatableDataLocalDemo = function() {
 					title: 'Segments',
 					template: function(row) {
 						var exp_id = row.id;
-						
+						var exp_name = row.experience;
 						var segArray = row.segments.split(",");
 						segArray = segArray.slice(0,segArray.lastIndexOf(","));
 					
@@ -217,7 +245,7 @@ var KTDatatableDataLocalDemo = function() {
 							{  
 							
 							var segname = segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length); 
-							s += '<a href="" class="hover" data-toggle="modal"  title="Experience contents" data-segname="'+segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length)+'"  data-expid="'+exp_id+'" id="' + segArray[i].slice(0,segArray[i].lastIndexOf(":")) + '" >' + segname +"," + '</a>';
+							s += '<a href="" class="hover" data-expname="'+exp_name+'" data-toggle="modal"  title="Experience contents" data-segname="'+segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length)+'"  data-expid="'+exp_id+'" id="' + segArray[i].slice(0,segArray[i].lastIndexOf(":")) + '" >' + segname +",  " + '</a>';
 							
 							}
 						
