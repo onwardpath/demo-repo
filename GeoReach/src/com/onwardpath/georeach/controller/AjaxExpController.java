@@ -54,7 +54,7 @@ public class AjaxExpController extends HttpServlet {
 	        String tmp_org_id = String.valueOf(orgId);
 	        String offset = request.getParameter("offset") ;
 	        String limit  = request.getParameter("limit");
-			String value = ExperienceAllValues(tmp_org_id,offset,limit);
+			String value = ExperienceAllValues(tmp_org_id);
 			// ExperienceConfigValues();
 			
 			
@@ -69,7 +69,7 @@ public class AjaxExpController extends HttpServlet {
 	}
 	
 //	Code for Populating Datatables values  -- START --
-	public String ExperienceAllValues(String tmp_org_id,String offset,String limit) throws SQLException,
+	public String ExperienceAllValues(String tmp_org_id) throws SQLException,
 			JsonGenerationException, JsonMappingException, IOException,
 			JSONException {
 
@@ -80,13 +80,9 @@ public class AjaxExpController extends HttpServlet {
 		String[] segment_ids;
 		String segments = "";
 		String tmp_org_ids = tmp_org_id;
-		int offsets = Integer.parseInt(offset);
-		int limits  = Integer.parseInt(limit);
-		System.out.println("org="+tmp_org_ids);
-		System.out.println("offsets="+offsets);
-		System.out.println("limits="+limits);
+	
 
-		String ExpAllValues = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT(DISTINCT segment.name) as segmentname,GROUP_CONCAT(DISTINCT segment.id) as segment_id, experience.create_time as create_time from experience, segment, content ,config where experience.id = content.experience_id and experience.id = config.experience_id and experience.org_id = ? and content.segment_id = segment.id GROUP BY experience.id  ";
+		String ExpAllValues = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT(DISTINCT segment.name) as segmentname,GROUP_CONCAT(DISTINCT segment.id) as segment_id, experience.create_time as create_time from experience, segment, content ,config where experience.id = content.experience_id and experience.id = config.experience_id and experience.org_id = ? and content.segment_id = segment.id GROUP BY experience.id ";
 		try {
 
 			PreparedStatement prepStatement = con
