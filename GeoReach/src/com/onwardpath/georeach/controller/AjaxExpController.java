@@ -113,17 +113,19 @@ public class AjaxExpController extends HttpServlet {
 						json.put("pages", URLCount.getInt(1));
 					}
 					
-					String ExpAllCount = "select count(*) from experience, segment, content ,config where experience.id = content.experience_id and experience.id = config.experience_id and experience.org_id = ? and content.segment_id = segment.id GROUP BY experience.id ";
-					
-					prepStatement = con.prepareStatement(ExpAllCount);
-					prepStatement.setString(1, tmp_org_ids);
-
-					ResultSet ExpCount = prepStatement.executeQuery();
-
-						ExpCount.last();
-				        int rows = ExpCount.getRow();
-				        ExpCount.beforeFirst();
-						json.put("ExpCount", rows);
+					/*
+					 * String ExpAllCount =
+					 * "select count(*) from experience, segment, content ,config where experience.id = content.experience_id and experience.id = config.experience_id and experience.org_id = ? and content.segment_id = segment.id GROUP BY experience.id "
+					 * ;
+					 * 
+					 * prepStatement = con.prepareStatement(ExpAllCount); prepStatement.setString(1,
+					 * tmp_org_ids);
+					 * 
+					 * ResultSet ExpCount = prepStatement.executeQuery();
+					 * 
+					 * ExpCount.last(); int rows = ExpCount.getRow(); ExpCount.beforeFirst();
+					 * json.put("ExpCount", rows);
+					 */
 					
 					
 					if (rst.getString(6).contains(",")) {
@@ -154,7 +156,7 @@ public class AjaxExpController extends HttpServlet {
 					json.put("segments", segments);
 					// json.put("segments_id",rst.getString(6));
 					json.put("org_id", tmp_org_ids);
-					json.put("exp", ExpCount.getRow());
+					
 					
 
 					jarray.put(json);
