@@ -297,8 +297,7 @@ var KTDatatableDataLocalDemo = function() {
 							
 							}
 					},
-					
-				
+									
 				}, {
 					field: 'Actions',
 					title: 'Actions',
