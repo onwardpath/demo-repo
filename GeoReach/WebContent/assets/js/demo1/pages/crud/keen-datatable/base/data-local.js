@@ -181,7 +181,8 @@ function test()
 var KTDatatableDataLocalDemo = function() {
 	
 	var demo = function(response) {
-		
+		var experid = null;
+		var expname = null;
 		
 		var dataJSON		  = JSON.parse(response);
 		var dataJSONArray = JSON.parse(response);
@@ -266,6 +267,8 @@ var KTDatatableDataLocalDemo = function() {
 					{
 					
 						var exp_id = row.id;
+						experid = row.id;
+						expname = row.experience;
 					
 						if ((row.type == 'on') ) 
 						{
@@ -315,7 +318,7 @@ var KTDatatableDataLocalDemo = function() {
 						    	<a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>\
 						  	</div>\
 						</div>\
-						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">\
+						<a href="/GeoReach?view=pages/experience-edit-content.jsp&id='+experid+'&exp_name='+expname+'" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">\
 							<i class="la la-edit"></i>\
 						</a>\
 						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">\
