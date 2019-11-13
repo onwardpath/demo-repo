@@ -12,6 +12,7 @@ import java.util.Map;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onwardpath.georeach.repository.ConfigRepository;
 import com.onwardpath.georeach.repository.ExperienceRepository;
 import com.onwardpath.georeach.util.Database;
 
@@ -36,6 +37,35 @@ public class ExperienceController extends HttpServlet {
 	      String forward = SAVE_SUCCESS;
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
+	  }
+	  
+	  private void addContent(int experience_id,HttpServletRequest request) throws IOException, SQLException {
+		  String experienceDetails = request.getParameter("experienceDetails");	
+		  ObjectMapper mapper = new ObjectMapper();	            		  
+   		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+   		  System.out.println(map);	            		  
+   		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+   			  int segment_id = Integer.parseInt(entry.getKey());
+   			  String content = entry.getValue();
+   			  experienceRepository.saveContent(experience_id, segment_id, content);	
+   		  }	
+	  }
+	   
+	  private void updateconfig(int experience_id,HttpServletRequest request,int user_id) throws IOException, SQLException {
+	  //String experience_name = request.getParameter("experience_name");
+      String configDetails = request.getParameter("urlList");	            		
+      ConfigRepository configRepository = new ConfigRepository();
+	 configRepository.delete(experience_id);
+		
+      ObjectMapper mapper = new ObjectMapper();	            		  
+      @SuppressWarnings("unchecked")
+		Map<String, String> map = mapper.readValue(configDetails, Map.class);
+      System.out.println(map);	            		  
+      for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+      	String url = entry.getValue();
+      	configRepository.save(experience_id, url, user_id);	            			  	            			 
+      }	
+      
 	  }
 
 	  /**
@@ -135,7 +165,31 @@ public class ExperienceController extends HttpServlet {
 	        		  session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");
 	                  forward = SAVE_FAILURE;
 	        	  }        	                	             	              	              	              	           	             	              	              	   	                         
-	          }	          
+	          }	 
+	          else if (pageName.equals("edit-experience")) {
+	        	  
+	        	  
+		        	 try {
+		        		 // update the experience name
+		        		 int experience_id = Integer.parseInt(request.getParameter("expid"));
+			        	 String name = request.getParameter("expName");
+			        	 experienceRepository.update(experience_id, 1, "name", name);
+			        	// Update  Content Table 
+			        	 experienceRepository.deleteContent(experience_id);
+			        	 addContent(experience_id, request);           		  	            		 
+			        	// Update  config Table 
+	           		  	updateconfig(experience_id, request,user_id);
+			        	  
+	           		 session.setAttribute("message", "Update Success"); 
+		        	  forward = "?view=pages/experience-view-content.jsp";   
+					} catch (SQLException e) { 
+						// TODO Auto-generated catch block
+						session.setAttribute("message", "Update Fail.Please try later or contact the administrator"); 
+						e.printStackTrace(); 
+					}
+		        	  
+		        	  
+		          }
 	      }	      
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
