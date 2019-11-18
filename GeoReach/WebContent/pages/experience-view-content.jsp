@@ -21,6 +21,23 @@
 		<meta name="description" content="Initialized with local json data">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<style>
+		/* Style the buttons */
+		.page-link {
+		  border: none;
+		  outline: none;
+		  padding: 10px 16px;
+		  background-color: #f1f1f1;
+		  cursor: pointer;
+		  font-size: 18px;
+		}
+		/* Style the active class, and buttons on mouse-over */
+		.active, .page-link:hover {
+		  background-color: #5867dd;
+		  color: #fff;
+		}
+		
+		</style>
 
 		<!--begin::Fonts -->
 		<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
@@ -164,6 +181,34 @@
 						        
 						        <!-- Modal body -->
 						        <div id="popover-element" class="modal-body">
+						          Modal body..
+						        </div>
+						        
+						        <!-- Modal footer -->
+						        <div class="modal-footer">
+						          <button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+						        </div>
+						        
+						      </div>
+						    </div>
+						  </div>
+						  
+						  
+						  
+						  <div class="modal" id="myModals" role="document">
+						    <div class="modal-dialog ">
+						      <div class="modal-content">
+						      
+						        <!-- Modal Header -->
+						        <div  class="modal-header">
+						          <h4 id="experience-element" class="modal-title">Modal Heading</h4>
+						          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+								  </button>
+						        </div>
+						        
+						        <!-- Modal body -->
+						        <div id="popover-elements" class="modal-body">
 						          Modal body..
 						        </div>
 						        
