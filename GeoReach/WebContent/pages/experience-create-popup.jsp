@@ -70,16 +70,13 @@
 		document.getElementById("experience-form").experienceDetails.value = JSON
 				.stringify(expDetailsObj);
 		document.getElementById("experience-form").method = "post";
-		
-		if(expDetailsObj[1] == undefined)
-			{
-			alert("Please add atleast one content");
-			}
-		else
-			{
-		document.getElementById("experience-form").action = "ExperienceController";
-		document.getElementById("experience-form").submit();
-			}
+
+		if (Object.entries(expDetailsObj).length <= 0) {
+			alert("Please add atleast one content by Clicking ADD Button");
+		} else {
+			document.getElementById("experience-form").action = "ExperienceController";
+			document.getElementById("experience-form").submit();
+		}
 
 	}
 
@@ -118,10 +115,11 @@
 	}
 	//Validate Advanced Settings Checkbox & return its content
 	function isChecked(event) {
+		let el_id = event.target.attributes.for.value;		
 		if (event.currentTarget.checked == true)
-			document.getElementById("adv-settings").style.display = "block";
+			document.getElementById(el_id).style.display = "block";
 		else
-			document.getElementById("adv-settings").style.display = "none";
+			document.getElementById(el_id).style.display = "none";
 
 	}
 
@@ -326,7 +324,7 @@
 									<div class="col-lg-4 col-md-9 col-sm-12">
 										<div class="kt-checkbox-inline">
 											<label class="kt-checkbox"> <input
-												id="is-adv-settings" type="checkbox" value=""
+												id="is-adv-settings" for="adv-settings" type="checkbox" value=""
 												onclick="isChecked(event);">Advanced Settings<span></span>
 											</label>
 										</div>
@@ -391,21 +389,22 @@
 														</br>
 														<div class="kt-checkbox-inline" id="page_events">
 															<label class="kt-checkbox"> <input
-																type="checkbox" value="all">All<span></span></label> <label
-																class="kt-checkbox"> <input type="checkbox"
-																checked="" value="onload">onPageLoad<span></span></label>
+																type="checkbox" checked="" value="load" for="for-onload" onclick="isChecked(event);">onPageLoad<span></span></label>
 															<label class="kt-checkbox"> <input
-																type="checkbox" value="onexit">onPageExit<span></span></label>
+																type="checkbox" value="pageexit">onPageExit<span></span></label>
 															<label class="kt-checkbox"> <input
-																type="checkbox" value="onscroll">onPageScroll<span></span></label>
+																type="checkbox" value="scroll">onPageScroll<span></span></label>
 															<label class="kt-checkbox"> <input
-																type="checkbox" value="onclick">onPageClick<span></span></label>
-															<label class="kt-checkbox"> <input
-																type="checkbox" value="onidle">onPageIdle<span></span></label>
+																type="checkbox" value="idle">onPageIdle<span></span></label>
 														</div>
-														<span class="form-text text-muted">Some help text
-															goes here</span>
+														<span class="form-text text-muted">Popup Cookie & Delay only applies for PageOnload option</span>
 													</div>
+												</div>
+											</div>
+											
+											<div id="for-onload">
+											<div class="card w-75">
+												<div class="card-body">
 													<div class="card-header kt-font-bolder">Popup Cookie</div>
 													<div class="form-group row">
 														<label class="col-3 col-form-label">Cookie Time
@@ -417,9 +416,10 @@
 																to shown on every page visit.</span>
 														</div>
 													</div>
-
 												</div>
 											</div>
+
+
 
 											<div class="card w-75">
 												<div class="card-body">
@@ -437,6 +437,8 @@
 
 												</div>
 											</div>
+											</div>
+											
 										</div>
 									</div>
 
