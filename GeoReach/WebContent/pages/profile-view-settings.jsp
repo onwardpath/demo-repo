@@ -22,7 +22,7 @@ function myCopy(){
 	<%
 		String message = (String) session.getAttribute("message");
 		if (message != null && !message.equals("")) {
-			String icon = "fa fa-chart-pie";
+			String icon = "la la-thumbs-up";
 			if (message.startsWith("Error"))
 				icon = "flaticon-warning";
 	%>
