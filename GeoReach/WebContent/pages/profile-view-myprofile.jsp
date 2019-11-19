@@ -43,9 +43,7 @@
     	  if(password.value != confirm_password.value) {
     	    confirm_password.setCustomValidity("Passwords Don't Match");
     	  } else {
-    		if (password){
-    		 document.getElementById("password").value=password
-    		}
+    		  
     	    confirm_password.setCustomValidity('');
     	  }
     	} 
