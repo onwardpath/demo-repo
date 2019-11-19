@@ -40,12 +40,21 @@ function remove(element, segment_id){
 }
 function saveExperience(){	
 	var name = document.getElementById('name').value;
-	var type = "content";					
+	if(name){
+		
+	var type = "content"; 
+	if (JSON.stringify(expDetailsObj)!=='{}'){
 	document.getElementById("experience-form").type.value=type;	
 	document.getElementById("experience-form").experienceDetails.value=JSON.stringify(expDetailsObj);	
 	document.getElementById("experience-form").method = "post";
 	document.getElementById("experience-form").action = "ExperienceController";
 	document.getElementById("experience-form").submit();
+	}else{
+		alert("Please enter atleast one content for this Experience")
+	}
+	}else{ 
+		alert("Please enter a value for  Experience Name")
+	} 
 	
 }
 window.addEventListener("load", function(){
