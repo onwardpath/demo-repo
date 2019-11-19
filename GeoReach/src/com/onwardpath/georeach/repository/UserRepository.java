@@ -226,7 +226,7 @@ public class UserRepository {
           result.close(); 
 	      return userAuthenticated;
 	  }
-	  
+	 
 	  /**
 	   * Get User object will all user details loaded
 	   * 
