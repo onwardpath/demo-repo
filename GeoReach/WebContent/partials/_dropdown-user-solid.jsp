@@ -35,7 +35,7 @@ function logout() {
         <div class="kt-user-card__pic">
         	<%
         	if (!pic.equals("")) {%>
-        		<img alt="Pic" src='/GeoReach/DisplayImageController?id=<%=ids%>'/> 
+        		<img alt="Pic" src='/GeoReach/DisplayImageController?id=<%=session.getAttribute("user_id")%>'/> 
         	<%}%>            
         </div>
         <div class="kt-user-card__details">
@@ -51,7 +51,7 @@ function logout() {
 </div>
 <ul class="kt-nav kt-margin-b-10">
     <li class="kt-nav__item">
-        <a href="?page=custom/user/profile-v1" class="kt-nav__link">
+        <a href="?view=pages/profile-view-myprofile.jsp" class="kt-nav__link">
             <span class="kt-nav__link-icon"><i class="flaticon2-calendar-3"></i></span>
             <span class="kt-nav__link-text">My Profile</span> 
         </a>

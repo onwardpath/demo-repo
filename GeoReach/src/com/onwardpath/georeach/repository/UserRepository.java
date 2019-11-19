@@ -107,6 +107,47 @@ public class UserRepository {
           prepStatement.close();
           orgResult.close();
 	  }
+	  
+	  
+	  public void updateUser(String firstName, String lastName, String phone, String password, int role, InputStream inputStream, int orgid) throws SQLException {	
+		  System.out.println("MyImage:"+inputStream);
+		  PreparedStatement prepStatement ;
+		  if (inputStream != null) {
+          prepStatement = dbConnection.prepareStatement("update user SET firstname = ?, lastname =?, phone1 =?, password=?, role_id=?, profile_pic=? where org_id = ?");
+          prepStatement.setString(1, firstName);
+          prepStatement.setString(2, lastName);
+          prepStatement.setString(3, phone);
+          prepStatement.setString(4, password);	          
+          prepStatement.setInt(5, role); //1=Administrator, 2=User
+          prepStatement.setBlob(6, inputStream);
+          prepStatement.setInt(7, orgid);
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
+          prepStatement.executeUpdate(); 
+          prepStatement.close();  
+            } else {
+            	 prepStatement = dbConnection.prepareStatement("update user SET firstname = ?, lastname =?, phone1 =?, password=?, role_id=? where org_id = ?");
+               
+          prepStatement.setString(1, firstName);
+          prepStatement.setString(2, lastName);
+          prepStatement.setString(3, phone);
+          prepStatement.setString(4, password);	          
+          prepStatement.setInt(5, role); //1=Administrator, 2=User
+          prepStatement.setInt(6, orgid);
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
+          prepStatement.executeUpdate(); 
+          prepStatement.close();
+            }
+	  } 
+	  
+	  public void updateOrg (String orgName, String domain,int org_id) throws SQLException {	
+		  PreparedStatement prepStatement = dbConnection.prepareStatement("update organization SET name = ? ,domain = ? where id = ?");
+		  prepStatement.setString(1, orgName);
+          prepStatement.setString(2, domain);
+          prepStatement.setInt(3, org_id);
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement1: "+prepStatement.toString());                   
+          prepStatement.executeUpdate();  
+          prepStatement.close();
+	  } 
 	   
 	  /**
 	   * Check if an Organization exists based on domain

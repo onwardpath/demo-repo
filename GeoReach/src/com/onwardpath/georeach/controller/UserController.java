@@ -41,16 +41,19 @@ public class UserController extends HttpServlet {
 		  String pageName = request.getParameter("pageName");
 		  System.out.println(Database.getTimestamp()+" @UserController.doGet>pageName: "+pageName);
 		  String forward = USER_SIGNUP;
-		  if (pageName.equals("logout")) {
+		  
+		  if ("logout".equals(pageName)) {
 			  HttpSession session = request.getSession();
 			  if(session != null) {
         		  session.invalidate();
         	  }	
 			  forward = USER_LOGIN;
-		  }	      
+		  }	else {
+			  forward="index.jsp?view=pages/profile-view-myprofile.jsp";
+		  }
 	      RequestDispatcher view = request.getRequestDispatcher(forward);
 	      view.forward(request, response);
-	  }
+	  } 
 
 	  /**
 	   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -64,16 +67,20 @@ public class UserController extends HttpServlet {
 	      HttpSession session = request.getSession();
 	      
 	      if (userRepository != null) {
+	    	  System.out.println("First coming here");
 	    	  InputStream inputStream = null;
     		  Part filePart = request.getPart("photo");
     		  if (filePart != null) {
     	            // prints out some information for debugging
     	            System.out.println(filePart.getName());
     	            System.out.println(filePart.getSize());
+    	            if (filePart.getSize()>0) {
+    	            	inputStream = filePart.getInputStream();
+    	            }
     	            System.out.println(filePart.getContentType());
     	             
     	            // obtains input stream of the upload file
-    	            inputStream = filePart.getInputStream();
+    	            
     	        }
     		     
 	    	  try {
@@ -97,10 +104,11 @@ public class UserController extends HttpServlet {
 	            	  } else {
 	            		  System.out.println("orgDomain is new: "+orgDomain);
 	            		     
-	            		  //If domain does not exist, create a new Organization and add user
+	            		  //If domain does not exist, create a new Organization and add 
+
 	            		  
 	            		 
-	            		  userRepository.saveUserandOrg(request.getParameter("orgName"), request.getParameter("domain"), request.getParameter("logoUrl"), 
+	            		  userRepository.saveUserandOrg(request.getParameter("orgName"), request.getParameter("domain"), "logoUrl", 
 			            		  request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("email"), request.getParameter("phone"), 
 			            		  request.getParameter("password"),Integer.parseInt(request.getParameter("role")),inputStream );
 	            		  System.out.println("New User from new organization");
@@ -127,7 +135,34 @@ public class UserController extends HttpServlet {
 		        		  session.invalidate();
 		        	  }	        	      
 		              forward = USER_LOGIN;	              
-		          }		    		  
+				} 
+					  else if (pageName.equals("profile")) {
+						  String orgid = request.getParameter("orgid");
+							 int idorg = Integer.parseInt(orgid);
+							  
+							 userRepository.updateUser( request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("phone"), request.getParameter("password"), Integer.parseInt(request.getParameter("role")), inputStream, idorg);
+							 int userid = (int) session.getAttribute("user_id");
+							 User user = userRepository.getUser(userid);
+			            	  session.setAttribute("authenticated","true");
+			            	  session.setAttribute("user", user);
+			            	  session.setAttribute("message", "Update Success");
+							  System.out.println(session.getAttribute("message")); 
+							 forward="?view=pages/profile-view-myprofile.jsp";
+					 } else if(pageName.equals("profilesetting")) {
+						 System.out.println("coming here");
+						 String orgid = request.getParameter("orgId");
+						 int idorg = Integer.parseInt(orgid);								 
+						 userRepository.updateOrg(request.getParameter("org"), request.getParameter("domain"),idorg);
+						 int userid = (int) session.getAttribute("user_id");
+						 User user = userRepository.getUser(userid);
+		            	  session.setAttribute("authenticated","true");
+		            	  session.setAttribute("user", user);
+		            	  session.setAttribute("message", "Update Success");
+						  System.out.println(session.getAttribute("message"));
+						 forward="?view=pages/profile-view-settings.jsp";
+						  
+					 }
+					 
 	    	  } catch (SQLException e) {
 	    		  System.out.println(e.getMessage());;            	  
             	  session.setAttribute("message", "Error: "+e.getMessage()+" Please try again later or contact the administrator");

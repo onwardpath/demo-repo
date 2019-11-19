@@ -49,13 +49,61 @@
 
 		<!--end::Layout Skins -->
 		<!-- link rel="shortcut icon" href="./GeoReach/assets/media/logos/favicon.ico" / -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	</head>
 
 	<!-- end::Head -->
 
 	<!-- begin::Body -->
 	<body style="background-image: url(./GeoReach/assets/media/misc/bg_1.jpg)" class="kt-login-v1--enabled kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-page--loading">
+    <script type="text/javascript">
+     /*  $(document).ready(function(){
+      $('#email, #confirmemail').on('keyup', function () {
+    	  if ($('#eamil').val() == $('#confirmemail').val()) {
+    	    $('#message').html('Matching').css('color', 'green');
+    	  } else 
+    	    $('#message').html('Not Matching').css('color', 'red'); 
+    	});
+      });
+       */
+       
+        
+       function validateEmail(){
+   		var email1 = document.getElementById("email")
+   		var email2 = document.getElementById("confirmemail"); 
+   		if(email1.value != email2.value) {
+   		email2.setCustomValidity("Email Don't Match");
+   	  } else {
+   		email2.setCustomValidity('');
+   	  }
+   	} 
+        
+       /* function checkPassword(form) { 
+           var password1 = form.email.value; 
+           var password2 = form.confirmemail.value; 
 
+           // If password not entered 
+           if (password1 == '') 
+               alert ("Please enter Password"); 
+                 
+           // If confirm password not entered 
+           else if (password2 == '') 
+               alert ("Please enter confirm password"); 
+                 
+           // If Not same return False.     
+           else if (password1 != password2) { 
+               alert ("\nEmail did not match: Please try again...") 
+               return false; 
+           } 
+
+           // If same return True. 
+            
+       }   */
+       var loadFile = function(event) {
+    		var image = document.getElementById('output');
+    		image.src = URL.createObjectURL(event.target.files[0]);
+    	};  
+</script>
 		<!-- begin:: Page -->
 		<div class="kt-grid kt-grid--ver kt-grid--root">
 			<div class="kt-grid__item  kt-grid__item--fluid kt-grid kt-grid--hor kt-login-v1" id="kt_login_v1">
@@ -85,7 +133,7 @@
 						<div class="row">
 						<div class="col-lg-12">
 							<!--begin::Portlet-->
-							<form class="kt-form" id="kt_form" action="GeoReach/UserController" method="post" class="needs-validation" enctype="multipart/form-data">
+							<form class="kt-form" id="kt_form" action="GeoReach/UserController" method="post" class="needs-validation" enctype="multipart/form-data" >
 							<input type="hidden" name="pageName" value="signup">
 							<input type="hidden" name="role" value="1">
 							<div class="kt-portlet" id="kt_page_portlet">
@@ -95,7 +143,7 @@
 									</div>
 									<div class="kt-portlet__head-toolbar">
 										<button type="clear" class="btn btn-primary">Clear</button>&nbsp;
-										<button type="submit" class="btn btn-primary">Submit</button>
+										<button type="submit" class="btn btn-primary" onclick="validateEmail()">Submit</button>
 										<!-- a href="#" class="btn btn-secondary kt-margin-r-10">
 											<i class="la la-arrow-left"></i>
 											<span class="kt-hidden-mobile">Back</span>											
@@ -139,17 +187,17 @@
 																<div class="col-9">
 																	<div class="input-group">
 																		<input type="text" class="form-control" name="domain"  placeholder="Enter Domain" required>
-																		<div class="input-group-append"><span class="input-group-text">.com</span></div>
+																		<!-- <div class="input-group-append"><span class="input-group-text">.com</span></div> -->
 																	</div>
 																</div>
 															</div>
 															
-															<div class="form-group form-group-last row">
+															<!-- <div class="form-group form-group-last row">
 																<label class="col-3 col-form-label">Company Logo</label>
 																<div class="col-9">
 																	<input class="form-control" type="text" name="logoUrl" placeholder="Logo URL">																	
 																</div>
-															</div>	
+															</div> -->	
 																																													
 															<div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
 															
@@ -178,11 +226,22 @@
 															</div>
 																
 															<div class="form-group row">
-																<label class="col-3 col-form-label">Email Address</label>
+																<label class="col-3 col-form-label">Email</label>
 																<div class="col-9">
 																	<div class="input-group">
 																		<div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
-																		<input type="text" class="form-control" name="email" placeholder="Email" aria-describedby="basic-addon1" required>
+																		<input type="text" class="form-control" id ="email" name="email" placeholder="Email" aria-describedby="basic-addon1" required>
+																	</div>
+																</div>
+															</div>
+															
+															<div class="form-group row">
+																<label class="col-3 col-form-label">Confirm Email </label>
+																<div class="col-9">
+																	<div class="input-group">
+																		<div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
+																		<input type="text" class="form-control" id="confirmemail"  name="confirmemail" placeholder="Email" aria-describedby="basic-addon1" required>
+																		<!-- <span id='message'></span>  -->
 																	</div>
 																</div>
 															</div>

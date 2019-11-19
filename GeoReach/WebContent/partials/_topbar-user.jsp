@@ -7,8 +7,9 @@ String profilepic = "";
 	
 int ids = ((User) session.getAttribute("user")).getOrganization_id();
 
- 
-
+    
+   
+  
 
 if ((User) session.getAttribute("user") != null) {
 	username = ((User) session.getAttribute("user")).getFirstname();
@@ -33,7 +34,7 @@ if ((User) session.getAttribute("user") != null) {
             	<%	
             } else if(!profilepic.equals("")) {
             	%>
-            	<img alt="Pic" src='/GeoReach/DisplayImageController?id=<%=ids%>'/>
+            	<img alt="Pic" src='/GeoReach/DisplayImageController?id=<%=session.getAttribute("user_id")%>'/>
             	<% 
             }            
             %>                                    
