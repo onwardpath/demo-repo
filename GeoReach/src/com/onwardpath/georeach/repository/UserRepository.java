@@ -236,7 +236,7 @@ public class UserRepository {
 	   */
 	  public User getUser(int id) throws SQLException {
 		  User user = new User();		  			  
-		  String query = "select user.org_id as org_id, user.firstname as firstname, user.lastname as lastname, user.login as login, " +
+		  String query = "select user.org_id as org_id, user.password as password, user.firstname as firstname, user.lastname as lastname, user.login as login, " +
 		  		"user.email as email, user.phone1 as phone1, user.profile_pic as pic, organization.name as orgname, organization.domain as orgdomain " + 
 		  		"from user, organization " + 
 		  		"where user.org_id = organization.id and " + 
@@ -246,6 +246,7 @@ public class UserRepository {
           //System.out.println(Database.getTimestamp()+" @UserRepository.getUser>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null && result.next()) {
+        	  String password = result.getString("password");
               String firstname = result.getString("firstname");
               String lastname = result.getString("lastname");
               String login = result.getString("login");
@@ -255,6 +256,7 @@ public class UserRepository {
               int organization_id = Integer.parseInt(result.getString("org_id"));
               String organization_name = result.getString("orgname");
               String organization_domain = result.getString("orgdomain");
+              user.setPassword(password);
               user.setFirstname(firstname);
               user.setLastname(lastname);
               user.setEmail(email);
@@ -267,7 +269,7 @@ public class UserRepository {
           prepStatement.close();
           result.close(); 
 	      return user;
-	  }	 	 
+	  }	
 	  
 	  /**
 	   * Find a users org_id. To be called after user is successfully authenticated
