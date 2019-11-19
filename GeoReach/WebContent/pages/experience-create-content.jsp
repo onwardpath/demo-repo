@@ -40,8 +40,7 @@ function remove(element, segment_id){
 }
 function saveExperience(){	
 	var name = document.getElementById('name').value;
-	if(name){
-		
+	if(name){	
 	var type = "content"; 
 	if (JSON.stringify(expDetailsObj)!=='{}'){
 	document.getElementById("experience-form").type.value=type;	
