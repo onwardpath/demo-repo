@@ -40,7 +40,7 @@ public class DisplayImageController extends HttpServlet {
 		     
 		try {
 			String id = request.getParameter("id");
-			String sql = "SELECT * FROM user WHERE org_id=?";
+			String sql = "SELECT * FROM user WHERE id=?";
 		Connection   dbConnection = Database.getConnection();
 		PreparedStatement prepStatement = dbConnection.prepareStatement(sql);
 		prepStatement.setString(1,id);
