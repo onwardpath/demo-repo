@@ -407,7 +407,7 @@
 											<div class="form-group row">
 												<label class="col-3 col-form-label">Cookie Time
 													(hours)</label>
-												<div class="col-9">
+												<div class="col-lg-4 col-md-9 col-sm-12">
 													<input id="popup_cookie" class="form-control" type="text"
 														value="0"> <span class="form-text text-muted">Shows
 														popup to visitor only once in the time period . Set to 0
@@ -419,7 +419,7 @@
 											<div class="form-group row">
 												<label class="col-3 col-form-label">Delay Time
 													(seconds)</label>
-												<div class="col-9">
+												<div class="col-lg-4 col-md-9 col-sm-12">
 													<input id="popup_delay" class="form-control" type="text"
 														value="0"> <span class="form-text text-muted">Delay
 														pop up from being displayed. Set 0 to show popup
