@@ -7,7 +7,22 @@
 	System.out.println("heyssss:"+user.getOrganization_id());     
      %>
      
+    <style>
+     .field-icon {
+  float: right;
+  margin-right: 8px;
+  margin-top: -23px;
+  position: relative;
+  z-index: 2;
+  cursor:pointer;
+}
+
+.container{
+  padding-top:50px;
+  margin: auto;
+}
     
+    </style>
       <script type="text/javascript">
       $(document).ready(function(){
       $('#password, #confirm_password').on('keyup', function () {
@@ -35,22 +50,28 @@
     	};  
     	
     	
-
     	function validatePassword(){
     		var password = document.getElementById("passwords")
        	    var confirm_password = document.getElementById("confirm_password"); 
     		
-    	  if(password.value != confirm_password.value) {
-    	    confirm_password.setCustomValidity("Passwords Don't Match");
-    	  } else {
-    		  
-    	    confirm_password.setCustomValidity('');
-    	  }
+    		if (password.value || confirm_password.value){
+    			
+    			if(password.value != confirm_password.value) {
+    	    	    confirm_password.setCustomValidity("Passwords Don't Match");
+    	    	  } else {
+    	    		 if (confirm_password.value){
+    	    		  document.getElementById("password-field").value=confirm_password.value
+    	    	  	 }
+    	    	    confirm_password.setCustomValidity('');
+    	    	  }	
+    		}
+    		document.getElementById("password-field").disabled = false;
+    		
     	} 
       	  	
 </script>                
+ 
 
-	
 					<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
 					<%
 		String message = (String) session.getAttribute("message");
@@ -137,8 +158,9 @@
 																	<div class="input-group">
 																		
 																		<input type="file" class="form-control"  name="photo"  aria-describedby="basic-addon1" accept="image/*"  onchange="loadFile(event)" >
-																		<img alt="Pic" id ="output" src='/GeoReach/DisplayImageController?id=<%=session.getAttribute("user_id")%>' height="100" width="100"/>
-																	</div>
+																		
+																	</div></br>
+																	<img alt="Pic" id ="output" src='/GeoReach/DisplayImageController?id=<%=session.getAttribute("user_id")%>' height="100" width="100"/>
 																</div>
 																 
 															</div> 
@@ -146,11 +168,16 @@
 															<div class="form-group row">
 																<label class="col-3 col-form-label">Password</label>
 																<div class="col-9">
-																<div class="input-group">
+																<%-- <div class="input-group">
 																	<input class="form-control" id="password-field" type="password" name="password" required value="<%=user.getPassword()%>"  disabled="disabled" >
-																	</br></br><span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-																	</div>
+																	<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+																	</div> --%>
 																	
+																	<div class="col-md-6" style="max-width: unset">
+              <input id="password-field" type="password" class="form-control" name="password" required value="<%=user.getPassword()%>"  disabled="disabled">
+              <span toggle="#password-field" class="fa fa-lg fa-eye field-icon toggle-password"></span>
+            </div> 
+																
 																</div> 
 																
 															</div>	
@@ -160,7 +187,7 @@
 																<div class="col-9">
 																	<div class="input-group">
 																		
-																		 <input id="passwords"  type="password" class="form-control" name="password" >
+																		 <input id="passwords"  type="password" class="form-control" name="newpassword" >
                                                                          
 																	</div>																	
 																</div>
@@ -171,7 +198,7 @@
 																<div class="col-9">
 																	<div class="input-group">
 																		
-																		 <input id="confirm_password" type="password" class="form-control" name="password" >
+																		 <input id="confirm_password" type="password" class="form-control" name="confirmpassword" >
                                                                           
 																	</div>																	
 																</div>
