@@ -30,6 +30,7 @@ import com.onwardpath.georeach.util.Database;
 public class AjaxExpController extends HttpServlet {
 
 	private String id;
+	private String value;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -57,12 +58,16 @@ public class AjaxExpController extends HttpServlet {
 
 			String offset = request.getParameter("offset");
 			String limit = request.getParameter("limit");
+			/*
+			 * String load = request.getParameter("load"); System.out.println("load"+load);
+			 */
+			String Expquery = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT(DISTINCT segment.name) as segmentname,GROUP_CONCAT(DISTINCT segment.id) as segment_id, experience.create_time as create_time, CONCAT(user.firstname, ' ', user.lastname) as name from user, experience, segment, content ,config where experience.id = content.experience_id and experience.id = config.experience_id and experience.org_id = ? and content.segment_id = segment.id and user.org_id = ? GROUP BY experience.id limit ?, ?  ";
 
-			String value = ExperienceAllValues(tmp_org_id, offset, limit);
+		    value = ExperienceAllValues(tmp_org_id, offset, limit, Expquery);
 			// ExperienceConfigValues();
 
 			// response.getWriter().write(value.toString());
-			System.out.println("value" + (value.toString()));
+			System.out.println("getvalue=" + (value.toString()));
 			out.println(value.toString());
 
 		} catch (Exception e) {
@@ -73,7 +78,7 @@ public class AjaxExpController extends HttpServlet {
 	}
 
 //	Code for Populating Datatables values  -- START --
-	public String ExperienceAllValues(String tmp_org_id, String offset, String limit)
+	public String ExperienceAllValues(String tmp_org_id, String offset, String limit,String Expquery)
 			throws SQLException, JsonGenerationException, JsonMappingException, IOException, JSONException {
 
 		Connection con = Database.getConnection();
@@ -88,15 +93,16 @@ public class AjaxExpController extends HttpServlet {
 		System.out.println("org="+tmp_org_ids);
 		System.out.println("offsets="+offsets); System.out.println("limits="+limits);
 		 
-		String ExpAllValues = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT(DISTINCT segment.name) as segmentname,GROUP_CONCAT(DISTINCT segment.id) as segment_id, experience.create_time as create_time, CONCAT(user.firstname, ' ', user.lastname) as name from user, experience, segment, content ,config where experience.id = content.experience_id and experience.id = config.experience_id and experience.org_id = ? and content.segment_id = segment.id and user.org_id = ? GROUP BY experience.id limit ?, ?  ";
+		String ExpAllValues = Expquery;
 		try {
 
 			PreparedStatement prepStatement = con.prepareStatement(ExpAllValues);
+			
 			prepStatement.setString(1, tmp_org_ids);
 			prepStatement.setString(2, tmp_org_ids);
 			prepStatement.setInt(3, offsets); 
 			prepStatement.setInt(4, limits);
-			 
+			
 
 			ResultSet rst = prepStatement.executeQuery();
 
@@ -172,7 +178,7 @@ public class AjaxExpController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		
+		PrintWriter out = response.getWriter();
 		response.setHeader("Access-Control-Allow-Origin", "*");
 
 		Connection con = Database.getConnection();
@@ -182,9 +188,10 @@ public class AjaxExpController extends HttpServlet {
 		String exp_id = request.getParameter("expid");
 		String tmp_exp_id = String.valueOf(exp_id);
 		String experience = request.getParameter("exper");
+		System.out.println("experience="+experience);
 		String tmp_status = service;
 
-		String content = "";
+		String contents = "";
 		try {
 
 			// Code for Modal Popup getting Content from DB Tables -- START --
@@ -204,7 +211,7 @@ public class AjaxExpController extends HttpServlet {
 							jarray.put(json);
 						}
 
-						content = jarray.toString();
+						contents = jarray.toString();
 					}
 					prepStatement.close();
 					rst.close();
@@ -231,14 +238,142 @@ public class AjaxExpController extends HttpServlet {
 					prepStatement.executeUpdate();
 				}
 			}
+			
+			else if(experience.equals("search"))
+			{
+				String searchvalue = request.getParameter("search");
+				System.out.println("value="+searchvalue);
+				
+				
+				HttpSession session = request.getSession();
+				int userId = (Integer) session.getAttribute("user_id");
+				int orgId = (Integer) session.getAttribute("org_id");
+				System.out.println("session" + userId + orgId);
+				String tmp_org_id = String.valueOf(orgId);
 
-			response.getWriter().write(jarray.toString().toString());
+			
+				String limit = request.getParameter("limit");
+				
+				String Expquery = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT(DISTINCT segment.name) as segmentname,GROUP_CONCAT(DISTINCT segment.id) as segment_id, experience.create_time as create_time, CONCAT(user.firstname, ' ', user.lastname) as name from user, experience, segment, content ,config where experience.id = content.experience_id and experience.id = config.experience_id and experience.org_id = ? and content.segment_id = segment.id and user.org_id = ? and (experience.name  LIKE ? or segment.name LIKE ?) GROUP BY experience.id limit ?  ";
+
+				value = SearchExperienceValues(tmp_org_id, searchvalue, limit, Expquery);
+				System.out.println("post value="+value);
+				
+				//jarray.put(value);
+				contents = value;
+				System.out.println("PostValue"+contents);
+			}
+
+			
+		//	response.getWriter().write(jarray.toString().toString());
+			out.println(contents.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: Return error message in JSON format to caller
 		}
 
-	} // Code for Toggle ON and OFF and setting in DB tables -- END --
+	} // Code for Toggle ON and OFF and setting in DB tables -- END -- 
+	
+	public String SearchExperienceValues(String tmp_org_id, String searchvalue, String limit,String Expquery)
+			throws SQLException, JsonGenerationException, JsonMappingException, IOException, JSONException {
+
+		Connection con = Database.getConnection();
+		JSONArray jarray = new JSONArray();
+
+		String[] segment_names;
+		String[] segment_ids;
+		String segments = "";
+		String tmp_org_ids = tmp_org_id;
+		String searchvalues = searchvalue;
+		int limits = Integer.parseInt(limit);
+		System.out.println("org="+tmp_org_ids);
+		System.out.println("offsets="+searchvalues); System.out.println("limits="+limits);
+		 
+		String ExpAllValues = Expquery;
+		try {
+
+			PreparedStatement prepStatement = con.prepareStatement(ExpAllValues);
+			
+			prepStatement.setString(1, tmp_org_ids);
+			prepStatement.setString(2, tmp_org_ids);
+			prepStatement.setString(3, searchvalues + "%"); 
+			prepStatement.setString(4, searchvalues + "%");
+			
+			prepStatement.setInt(5, limits);
+			
+			 
+
+			ResultSet rst = prepStatement.executeQuery();
+
+			if (rst != null) {
+				while (rst.next()) {
+					int exp_id = rst.getInt(1);
+					String tmp_exp_id = String.valueOf(exp_id);
+					String GetExpPageCountQuery = "select count(url) from config where experience_id = ?";
+					JSONObject json = new JSONObject();
+					prepStatement = con.prepareStatement(GetExpPageCountQuery);
+					prepStatement.setString(1, tmp_exp_id);
+
+					ResultSet URLCount = prepStatement.executeQuery();
+
+					if (URLCount.next()) {
+						json.put("pages", URLCount.getInt(1));
+					}
+
+					String ExpAllCount = "select count(*) from experience, segment, content ,config where experience.id = content.experience_id and experience.id = config.experience_id and experience.org_id = ? and content.segment_id = segment.id GROUP BY experience.id ";
+
+					prepStatement = con.prepareStatement(ExpAllCount);
+					prepStatement.setString(1, tmp_org_ids);
+
+					ResultSet ExpCount = prepStatement.executeQuery();
+
+					ExpCount.last();
+					int rows = ExpCount.getRow();
+					ExpCount.beforeFirst();
+					json.put("ExpCount", rows);
+
+					if (rst.getString(6).contains(",")) {
+						segment_names = rst.getString(5).split(",");
+						segment_ids = rst.getString(6).split(",");
+
+						for (int i = 0; i < segment_ids.length; i++) {
+							segments += segment_ids[i] + ":" + segment_names[i] + ",";
+
+							int temp = segments.lastIndexOf(",");
+
+						}
+
+					}
+
+					else
+
+						segments = rst.getString(6) + ":" + rst.getString(5) + ",";
+
+					json.put("id", rst.getInt(1));
+					json.put("experience", rst.getString(2));
+					json.put("status", rst.getString(3));
+					json.put("type", rst.getString(4));
+					json.put("segments", segments);
+					// json.put("segments_id",rst.getString(6));
+					json.put("org_id", tmp_org_ids);
+					json.put("name", rst.getString(8));
+
+					jarray.put(json);
+
+					segments = "";
+				}
+
+				System.out.println("jarray=" + jarray.toString());
+			}
+			prepStatement.close();
+			rst.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return jarray.toString();
+	} 
 
 }

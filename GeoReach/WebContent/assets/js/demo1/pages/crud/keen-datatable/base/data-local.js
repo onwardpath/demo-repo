@@ -3,12 +3,244 @@ var dataJSONArray = {};
 jQuery(document).ready(function() {
 	
 	test();
+	
+	  
 });
 
-$("#myBtn").click(function(){
-    /*$('#myModals').modal('show');*/
-	console.log("jquery");
+/*Custom Pagination for Datatables*/
+
+$(window).ready(function() {
+	
+
+	    $('ul.pagination').on('click', 'a', function() {
+	    	console.log("total_page="+ localStorage.getItem("totalpage"));
+	    	var total_page = localStorage.getItem("totalpage");
+	    	   if($(this).hasClass('active')) return false;
+	    	    
+	    	    var active_elm = $('ul.pagination a.active');
+	    	    var page_id = $(this).attr("data-pageid")//on click call ajax controller(check page-id not equals to undefined)
+	    	    
+	    	    if(page_id == null)
+	    	    	{
+	    	   // 	console.log("page_id="+page_id);
+	    	    	}else
+	    	    		{
+	    	    		console.log("page_id="+page_id);
+	    	    		page(page_id);
+	    	    		}
+	    	    var new_id = "";
+	    	    var custom_id = "";
+	    	   
+	    	    if(this.id == 'next'){
+	    	      var _next = active_elm.parent().next().children('a');
+	    	      var page_idn = $(_next).attr('data-pageid');//on move  call ajax controller(check page-id not equals to undefined)
+	    	      if(page_idn == null)
+	    	    	{
+	    	    //	console.log("page_idn="+page_idn);
+	    	    	}
+	    	      else
+	    	    	  {
+	    	    	  console.log("page_idn="+page_idn);
+	    	    	  page(page_idn);
+	    	    	  }
+	    	      if($(_next).attr('id') == 'next') {
+	    	    	  var page_idns = $(_next).attr('data-pageid');
+	    	        // appending next button if reach end
+	    	        var num = parseInt($('a.active').text())+1;
+	    	        if(num <= total_page){
+	    	        	var nums = 'test'+num;
+	    	        active_elm.removeClass('active');
+	    	        $('.three_links').first().remove();
+	    	  			$('.three_links').last().after('<li class="three_links"><a id="'+nums+'" data-pageid="'+num+'" class="active" >'+num+'</a></li>');
+	    	  			var new_element = $('.three_links').last();
+	    				new_id = new_element[0].textContent;//on move of newly created element call ajax controller(check page-id not equals to undefined)
+	    				console.log("new_id="+new_id);
+	    				page(new_id);
+	    				
+	    	        }
+	    	  			return; 
+	    	      }
+	    	      _next.addClass('active');   
+	    	      
+	    	      
+	    	      
+	    	      
+	    	    }
+	    	    
+	    	    else if(this.id == 'prev') {
+	    	        var _prev = active_elm.parent().prev().children('a');
+	    	        var page_idp = $(_prev).attr('data-pageid');//on move  call ajax controller(check page-id not equals to undefined)
+	    	        if(page_idp == null)
+	    	    	{
+	    	//    	console.log("page_idp="+page_idp);
+	    	    	}
+	    	        else
+	    	        	{
+	    	        	console.log("page_idp="+page_idp);
+	    	        	page(page_idp);
+	    	        	}
+	    	        if($(_prev).attr('id') == 'prev'){
+	    	        	var page_idps = $(_prev).attr('data-pageid');
+	    	        	var num = parseInt($('a.active').text())-1;
+	    	          if(num > 0){
+	    	        	  var nums = 'test'+num;
+	    	            active_elm.removeClass('active');
+	    	          	$('.three_links').last().remove();
+	    	    				$('.three_links').first().before('<li class="three_links"><a id="'+nums+'" data-pageid="'+num+'" class="active" >'+num+'</a></li>');
+	    	    				var new_element = $('.three_links').first();
+	    	    				new_idp = new_element[0].textContent;//on move of newly created element call ajax controller(check page-id not equals to undefined)
+	    	    				console.log("new_idp="+new_idp);
+	    	    				page(new_idp);
+	    	    		
+	    	          }
+	    	          return;
+	    	        }
+	    	        _prev.addClass('active');   
+	    	      }
+	    	    else {
+	    	        $(this).addClass('active');
+	    	      }
+	    	      active_elm.removeClass('active');
+	    	 
+	    	       
+	        
+	    });
+	 
 });
+
+/*Ajax Call for Custom Pagination*/
+
+function page(id)
+{
+	var page_id = id;
+	var page_end = "";
+	var page_count = localStorage.getItem("pagecount");
+	var offset  = "";
+console.log("coming pages"+page_id);	
+page_id  = page_id-1 ;
+if(page_id != '0'){
+offset = (page_id * 10) - 1;
+page_end = offset+10;
+}
+/*else if(page_id == page_count )
+	{
+	
+	}*/
+else
+offset = 0 
+var limit =  10;
+page_end = offset+9;
+
+/*console.log("pageid="+page_id);
+console.log("offset="+offset);
+console.log("limt="+limit);
+console.log("page_end"+page_end)*/
+
+ 		var url	 = "/GeoReach/AjaxExpController"
+ 		var params = "offset="+offset+"&limit="+limit+"&load=next";
+ 		var response = "";
+ 		document.getElementById("spin").style.display= "block";
+ 		document.getElementById("spin").style.position= "relative";
+ 		document.getElementById("spin").style.top= "50%";
+ 		document.getElementById("spin").style.left= "40%"; 
+ 		document.getElementById("local_data").style.display= "none";
+ 		document.getElementById("count").style.display = "none";
+		
+		var xhttp = new XMLHttpRequest(); 
+		
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200
+					&& this.response != "null") {
+			document.getElementById("spin").style.display= "none";
+			document.getElementById("local_data").style.display= "block";
+			document.getElementById("count").style.display = "block";
+				response = this.response; 
+				
+				dataJSONArray = JSON.parse(response);
+				var table = $('.kt_datatable');
+				c = table.KTDatatable();
+
+				c.originalDataSet = dataJSONArray;
+
+				c.reload();
+				document.getElementById("count").innerHTML= 'Showing '+offset+' - '+page_end+' of '+page_count+''
+				
+				
+				
+		}};
+		xhttp.open("GET", url+"?"+params);
+		
+		xhttp.send();
+		return response;
+}
+
+/*Custom Search for Datatables*/
+
+var timer;
+function search() {
+	
+	document.getElementById("spin").style.display= "block";
+	document.getElementById("spin").style.position= "relative";
+	document.getElementById("spin").style.top= "50%";
+	document.getElementById("spin").style.left= "40%"; 
+	document.getElementById("local_data").style.display= "none";
+	document.getElementById("page").style.display = "none";
+	document.getElementById("count").style.display = "none";
+    clearTimeout(timer) // clear the request from the previous event
+    timer = setTimeout(function() {
+     	var values =  document.getElementById("generalSearch").value;
+    	 console.log("values="+values)
+        if (values.length >= 3 && values != null && values != '' ) {
+		  
+        document.getElementById("delete").innerHTML='\
+			  <label id="find" type="text" class="col-2 col-form-label">'+values+' </label>\
+				<span id="clear" class="kt-input-icon__icon kt-input-icon__icon--right">\
+			  <span></span>\
+			  <a href="#" class="kt-demo-panel__close" id="kt_demo_panel_close">\
+			 <i style="margin-left: 50px;" class="flaticon2-delete"></i>\
+			  </a>\
+			  </span>\
+ 			  ';
+      
+		var url	 = "/GeoReach/AjaxExpController"
+		var params = "search="+values+"&limit=10"+"&exper=search";
+  		var response = "";
+	   		 
+	   				
+			var xhttp = new XMLHttpRequest(); 
+			
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200
+						&& this.response != "null") {
+					document.getElementById("page").style.display = "none";
+					document.getElementById("spin").style.display= "none";
+					document.getElementById("count").style.display = "none";
+					document.getElementById("local_data").style.display= "block";
+					
+					response = this.response; 
+					console.log("response search="+JSON.parse(response));
+				
+					dataJSONArray = JSON.parse((response));
+					var table = $('.kt_datatable');
+					c = table.KTDatatable();
+
+					c.originalDataSet = dataJSONArray;
+                    
+					c.reload();
+					
+					
+					
+					
+			}};
+			xhttp.open("POST", url+"?"+params);
+			
+			xhttp.send();
+			return response;
+	  }
+    }, 5000);
+}
+
+
 
 window.onclick = myFunction;
 function myFunction() {
@@ -22,22 +254,81 @@ function myFunction() {
 	  for(var i = 0; i < anchor.length; i++) {
 	        var anchors = anchor[i];
 	        
-	        anchors.addEventListener("click", function() {
-	        	  var current = document.getElementsByClassName("active");
+	      
+	        	  
+	        
+	        anchors.onclick = function() {
+	        	var previuos_page_id = "";
+	        	var total_pages = "";
+	        	var current_value = "";
+	        	 if(this.id != 'next' )
+	        		 {
+	        	var current = document.getElementsByClassName("active");
 	        	  if (current.length > 0) { 
 	        		    current[0].className = current[0].className.replace(" active", "");
 	        		  }
 	        		  this.className += " active";
-	        		  });
-	        
-	        anchors.onclick = function() {
-	        	visiblePages: 5;
-	        	var page_id = $(this).attr("data-page");
-	        	var offset = ((page_id-1) * 10) + 1;
+	        		 }
+	        	  
+	        	  var id = this.id;
+	        	  console.log("id"+id);
+	        	  var active_elm = $('ul.pagination a.active');
+	        	  console.log("active class"+active_elm);
+	        	  if(this.id == 'next' && active_elm[0].text <= 5)
+	        	  {
+	        		  
+	        		  var current = document.getElementsByClassName("active");
+		        	  if (current.length > 0) 
+		        	  { 
+		        		    current[0].className = current[0].className.replace(" active", "");
+		        		  }
+	        		  var _next = active_elm.parent().next().children('a');
+	        		  _next.addClass('active');
+	        		  previuos_page_id = _next.prevObject["prevObject"].prevObject[0].text;
+	        		  total_pages = _next[0].dataset.page;
+	        		  current_value = _next[0].text;
+	        		 /* var li = document.getElementById("lists");
+	        		  li.removeChild(li.childNodes[1]);*/
+	        		
+	        	   if ((current_value == 'Next') && (active_elm[0].text >= 5) ) 
+	        		  
+	        			{
+	        			var li = document.getElementById("lists");
+	        			var page_value = previuos_page_id + 1; 
+	        			var NewElement = document.createElement('li');
+	        			NewElement.innerHTML = '<a class="page-link " id="test'+page_value+'"  data-pageid='+page_value+' data-page = "'+total_pages+'"   >' + page_value  + '</a>';;
+	        			
+	        			/*new code for next element creation*/
+	        			 var current = document.getElementsByClassName("active");
+			        	  if (current.length > 0) { 
+			        		    current[0].className = current[0].className.replace(" active", "");
+			        		  }
+		        		  var _next = active_elm.parent().next().children('a');
+		        		  _next.addClass('active');
+		        		  previuos_page_id = _next.prevObject["prevObject"].prevObject[0].text;
+		        		  total_pages = _next[0].dataset.page;
+		        		  current_value = _next[0].text;
+	        			
+	        			
+	        			var li = document.getElementById("lists");
+	        			li.removeChild(li.childNodes[1]);
+	        			}
+	        	  }
+	        	  /*if(this.id == 'prev'){
+	        		  var li = document.getElementById("lists");
+	        		  li.removeChild(li.childNodes[5]);
+	        		 
+	        	  }*/
+	        	  else
+	        		  {
+	        	  var page_id = $(this).attr("data-pageid")
+	        	previuos_page_id  = page_id-1 ; 
+	        		  }
+	        	var offset = (previuos_page_id * 10) + 1;
 	        	var limit =  10;
 	        	
-	        	console.log("pageid="+page_id);
-	        	console.log("pageid="+offset);
+	        	console.log("pageid="+previuos_page_id);
+	        	console.log("offset="+offset);
 	        	console.log("limt="+limit);
 	        	
 	        	 var url	 = "/GeoReach/AjaxExpController"
@@ -173,31 +464,52 @@ function myFunction() {
 	        	var exp_id		=	$(this).attr("data-ids");
 	        	var exp_name	=	$(this).attr("data-expname");
 	       
-	        	document.getElementById("popover-elements").innerHTML = '<code>&lt;div id="G-"'+exp_name+'"-"'+exp_id+'"&gt;&lt;/div&gt;</code>';
-				document.getElementById("experience-element").innerHTML = 'Embed Code for <span class="badge badge-secondary">"'+exp_name+'"</span>';
+	        	document.getElementById("popover-elements").innerHTML = '<code>&lt;div id="G-'+exp_name+'-'+exp_id+'"&gt;&lt;/div&gt;</code>';
+				document.getElementById("experience-element").innerHTML = 'Embed Code for <span class="badge badge-secondary">'+exp_name+'</span>';
 				$('#myModals').modal('show');
 				 
 	        }
 	  }
+	
+	var clear = document.getElementsByClassName("kt-demo-panel__close")
+	
+	 for(var i = 0; i < clear.length; i++) {
+	        var clears = clear[i];
+	        clears.onclick = function() {
+	        	
+	        	console.log("clear console true")
+	        	document.getElementById("delete").style.display = "none";
+	        	window.location.reload(true);
+	        }
+	 }
+	
  
 }
 
 
 function test()
 	{
-
+	document.getElementById("spin").style.display= "block";
+	document.getElementById("spin").style.position= "relative";
+	document.getElementById("spin").style.top= "50%";
+	document.getElementById("spin").style.left= "40%"; 
+	document.getElementById("local_data").style.display= "none";
 		$.ajax({
-             type : "GET", 
+            type : "GET", 
+           
             url : "/GeoReach/AjaxExpController",
             contentType: "application/json; charset=utf-8", 
             data: { 
-            	offset: 1, 
-            	limit: 10 
+            	offset: 0, 
+            	limit:10  
             	
               },
           
             async: true,
-            success : function(data) {                
+          
+            success : function(data) {    
+            	document.getElementById("local_data").style.display= "block";
+            	document.getElementById("spin").style.display= "none";
                 dataJSONArray = JSON.parse(data) ;
                 
                 ktDATA();
@@ -206,29 +518,56 @@ function test()
 				var recordsPerPage = 10;
 				var page_display = Math.ceil(exp/recordsPerPage); 
 				console.log("page=="+page_display);
+				localStorage.setItem("totalpage", page_display);
+				localStorage.setItem("pagecount", exp);
 				var mydiv = document.getElementById("page");
-				var ul = document.createElement('ul');
+				/*var ul = document.createElement('ul');
 				ul.setAttribute('class',"pagination");
+				ul.setAttribute('id',"lists");
+				ul.setAttribute("onclick","paginate();")*/
 				var list=document.createElement('li');
-				list.innerHTML='<a class="page-link"   data-page = "previous" >' + "Previous"  + '</a>';
-				ul.appendChild(list);
+				list.innerHTML='<a    id="prev"  data-page = "previous" >' + "Previous"  + '</a>';
+				mydiv.appendChild(list);
 				
-				for(var i = 1; i <= page_display; i++) {
+				var x = document.getElementsByClassName("page-link");
+				for(var i = 1; i <= page_display; i++) 
+				{
+				
+					if(i > 5)
+					{
+					for (var p = 5; p < x.length; p++) {
+					document.getElementsByClassName("three_links")[p].style.display = 'none';
+					}
+					}
+					else
+						{
 					var mydiv = document.getElementById("page");
 					
 					
 					var li=document.createElement('li');
+					li.setAttribute('class',"three_links");
 					
-			        li.innerHTML='<a class="page-link "   data-page = "'+i+'" >' + i  + '</a>';
-			        
-			        ul.appendChild(li);
-
+					if(i == 1)
+					{
+			        li.innerHTML='<a  class="active" id="test'+i+'"  data-pageid='+i+' data-page = "'+page_display+'" >' + i  + '</a>';
+					
+					console.log("true="+i);
+					}
+					else
+			 			{
+						li.innerHTML='<a id="test'+i+'" data-pageid='+i+'  data-page = "'+page_display+'" >' + i  + '</a>';	
+						}
+					mydiv.appendChild(li);
+						
+						}
 					
 				}
 				var lists=document.createElement('li');
-				lists.innerHTML='<a class="page-link"   data-page = "next" >' + "Next"  + '</a>';
-				ul.appendChild(lists);
-				document.getElementById('page').appendChild(ul);
+				lists.innerHTML='<a  id="next"  data-page = "next" >' + "Next"  + '</a>';
+				mydiv.appendChild(lists);
+				
+				document.getElementById("count").innerHTML= 'Showing 0 - 9 of '+exp+''
+				
             }
         });
                 
@@ -257,10 +596,12 @@ function test()
         			sortable: true,
 
         			pagination: false,
+        			
+        			searching: false,
 
-        			search: {
+        			/*search: {
         				input: $('#generalSearch'),
-        			},
+        			},*/
 
         			// columns definition
         			columns: [
@@ -348,7 +689,7 @@ function test()
         				
         				},{
         					field: 'statuss',
-        					title: 'Page URL', 
+        					title: 'URL', 
         					template:function(row)
         					{
         					
@@ -356,7 +697,7 @@ function test()
         		 				var exp_name = row.experience;
         						var r = "";
         						 
-        						r+= '<button  id="myBtn" data-ids="'+exp_id+'" data-expname="'+exp_name+'" class="btn btn-outline-brand btn-pill" >View code</button>'
+        						r+= '<button  id="myBtn" data-ids="'+exp_id+'" data-expname="'+exp_name+'" class="btn btn-outline-brand btn-pill" >Code</button>'
         							return r;
         					}
         				},  {

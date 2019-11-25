@@ -22,20 +22,30 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<style>
-		/* Style the buttons */
-		.page-link {
-		  border: none;
-		  outline: none;
-		  padding: 10px 16px;
-		  background-color: #f1f1f1;
-		  cursor: pointer;
-		  font-size: 18px;
-		}
-		/* Style the active class, and buttons on mouse-over */
-		.active, .page-link:hover {
-		  background-color: #5867dd;
-		  color: #fff;
-		}
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+}
+
+ul.pagination li a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+
+ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 		
 		</style>
 
@@ -148,10 +158,17 @@
 												<div class="row align-items-center">
 													<div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
 														<div class="kt-input-icon kt-input-icon--left">
-															<input type="text" class="form-control" placeholder="Search..." id="generalSearch">
+															<input type="text" onkeyup="javascript:search(this)" class="form-control" placeholder="Search..." id="generalSearch">
 															<span class="kt-input-icon__icon kt-input-icon__icon--left">
 																<span><i class="la la-search"></i></span>
 															</span>
+														</div>
+													</div>
+													
+																
+						 							<div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+														<div id = "delete" class="kt-form__group kt-form__group--inline">
+															<!-- <button class="btn btn-secondary" onclick="javascript:clear	(this)" type="button" id="kt_datatable_reload">Clear Search</button> -->
 														</div>
 													</div>
 										
@@ -224,15 +241,33 @@
 								
 								
 								<div class="kt-portlet__body kt-portlet__body--fit">
+								
+								<!-- <div id="spin" class="spinner-border" style="display:none;"></div> -->
+								
+								<!-- <div id="spin" class="col-sm" style="margin-left: 100px;">
+                                 <div class="kt-spinner kt-spinner--md kt-spinner--info"></div>
+                            	</div> -->
+                            	
+                            	<div id="spin" style="display:none; class="d-flex justify-content-center">
+                            	<button id="spinner"  class="btn btn-brand "  disabled>
+								  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+								  Loading...
+								</button>
+								</div>
 
 									<!--begin: Datatable -->
+									
+									
 									<div class="kt_datatable" id="local_data"></div>
 									
 			
 
 									<!--end: Datatable -->
+									<div id="count" class="kt-datatable__pager-info"><span class="kt-datatable__pager-detail"></span></div>
 								</div>
 							</div>
+							 
+				
 						</div>
 
 						<!-- end:: Content -->
@@ -296,6 +331,7 @@
 
 		<!--begin:: Global Mandatory Vendors -->
 		<script src="/GeoReach/assets/vendors/general/jquery/dist/jquery.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/jquery/dist/jquery.min.js" type="text/javascript"></script>
 		<script src="/GeoReach/assets/vendors/general/popper.js/dist/umd/popper.js" type="text/javascript"></script>
 		<script src="/GeoReach/assets/vendors/general/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
 		<script src="/GeoReach/assets/vendors/general/js-cookie/src/js.cookie.js" type="text/javascript"></script>
@@ -370,9 +406,10 @@
   
 		<!--end::Page Scripts -->
 		
-		<div id ="page" style=" display: flex; padding-left: 0px; list-style: none; border-radius: 0.25rem; justify-content: center;">
+		<ul class="pagination" id ="page" style=" display: flex; padding-left: 0px; list-style: none; border-radius: 0.25rem; justify-content: center;">
 		
-		</div>
+		</ul>
+		
 	
 	</body>
 			
