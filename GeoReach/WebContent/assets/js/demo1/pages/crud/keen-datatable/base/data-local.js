@@ -511,7 +511,6 @@ function test()
             	document.getElementById("local_data").style.display= "block";
             	document.getElementById("spin").style.display= "none";
                 dataJSONArray = JSON.parse(data) ;
-                
                 ktDATA();
                 var expcount = dataJSONArray[0];
             	var exp = expcount.ExpCount;
@@ -578,7 +577,7 @@ function test()
 	 
                 var datatable = $('.kt_datatable').KTDatatable({
         			// datasource definition
-        				
+                	
         			data: {
         				type: 'local',
         				source: dataJSONArray,
@@ -689,7 +688,7 @@ function test()
         				
         				},{
         					field: 'statuss',
-        					title: 'URL', 
+        					title: 'Embed Code', 
         					template:function(row)
         					{
         					

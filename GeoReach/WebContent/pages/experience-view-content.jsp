@@ -43,6 +43,7 @@ ul.pagination li a.active {
     background-color: #4CAF50;
     color: white;
     border: 1px solid #4CAF50;
+    
 }
 
 ul.pagination li a:hover:not(.active) {background-color: #ddd;}
@@ -406,7 +407,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
   
 		<!--end::Page Scripts -->
 		
-		<ul class="pagination" id ="page" style=" display: flex; padding-left: 0px; list-style: none; border-radius: 0.25rem; justify-content: center;">
+		<ul class="pagination" id ="page" style=" display: flex; padding-left: 0px; list-style: none; border-radius: 0.25rem; justify-content: center; cursor: pointer;">
 		
 		</ul>
 		
