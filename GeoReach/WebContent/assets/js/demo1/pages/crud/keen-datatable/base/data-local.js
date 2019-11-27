@@ -25,7 +25,7 @@ $(window).ready(function() {
 	    	   // 	console.log("page_id="+page_id);
 	    	    	}else
 	    	    		{
-	    	    		console.log("page_id="+page_id);
+	    	    		
 	    	    		page(page_id);
 	    	    		}
 	    	    var new_id = "";
@@ -40,22 +40,29 @@ $(window).ready(function() {
 	    	    	}
 	    	      else
 	    	    	  {
-	    	    	  console.log("page_idn="+page_idn);
+	    	    	  
 	    	    	  page(page_idn);
 	    	    	  }
 	    	      if($(_next).attr('id') == 'next') {
 	    	    	  var page_idns = $(_next).attr('data-pageid');
 	    	        // appending next button if reach end
-	    	        var num = parseInt($('a.active').text())+1;
+	    	  //      var num = parseInt($('a.active').text())+1;
+	    	        var testing = $('a.active').last();
+	    	        var count = (testing.prevObject[0].dataset.pageid);
+	    	        var num = parseInt(count) + 1;
+	    	        
 	    	        if(num <= total_page){
 	    	        	var nums = 'test'+num;
 	    	        active_elm.removeClass('active');
 	    	        $('.three_links').first().remove();
 	    	  			$('.three_links').last().after('<li class="three_links"><a id="'+nums+'" data-pageid="'+num+'" class="active" >'+num+'</a></li>');
 	    	  			var new_element = $('.three_links').last();
-	    				new_id = new_element[0].textContent;//on move of newly created element call ajax controller(check page-id not equals to undefined)
-	    				console.log("new_id="+new_id);
+	    		//		new_id = new_element[0].textContent;//on move of newly created element call ajax controller(check page-id not equals to undefined)
+	    				var n = new_element[0].innerHTML;
+	    				new_id = n.substring(27,28);
+	    				
 	    				page(new_id);
+	    				
 	    				
 	    	        }
 	    	  			return; 
@@ -76,22 +83,29 @@ $(window).ready(function() {
 	    	    	}
 	    	        else
 	    	        	{
-	    	        	console.log("page_idp="+page_idp);
+	    	        	
 	    	        	page(page_idp);
 	    	        	}
 	    	        if($(_prev).attr('id') == 'prev'){
 	    	        	var page_idps = $(_prev).attr('data-pageid');
-	    	        	var num = parseInt($('a.active').text())-1;
+	    	     //   	var num = parseInt($('a.active').text())-1;
+	    	        	 var testing = $('a.active').first();
+	 	    	        var count = (testing.prevObject[0].dataset.pageid);
+	 	    	        var num = parseInt(count) - 1;
+	 	    	       
 	    	          if(num > 0){
 	    	        	  var nums = 'test'+num;
 	    	            active_elm.removeClass('active');
 	    	          	$('.three_links').last().remove();
 	    	    				$('.three_links').first().before('<li class="three_links"><a id="'+nums+'" data-pageid="'+num+'" class="active" >'+num+'</a></li>');
 	    	    				var new_element = $('.three_links').first();
-	    	    				new_idp = new_element[0].textContent;//on move of newly created element call ajax controller(check page-id not equals to undefined)
-	    	    				console.log("new_idp="+new_idp);
+	    	    		//		new_idp = new_element[0].textContent;//on move of newly created element call ajax controller(check page-id not equals to undefined)
+	    	    				var r = new_element[0].innerHTML;
+	    	    				new_idp = r.substring(27,28);
+	    	    				
 	    	    				page(new_idp);
-	    	    		
+	    	    				
+	    	    				
 	    	          }
 	    	          return;
 	    	        }
@@ -116,21 +130,24 @@ function page(id)
 	var page_end = "";
 	var page_count = localStorage.getItem("pagecount");
 	var offset  = "";
-console.log("coming pages"+page_id);	
+	var limit =  "";
+
 page_id  = page_id-1 ;
 if(page_id != '0'){
-offset = (page_id * 10) - 1;
-page_end = offset+10;
+offset = (page_id * 10) + 1;
+page_end = offset+9;
+limit = 10;
 }
 /*else if(page_id == page_count )
 	{
 	
 	}*/
 else
-offset = 0 
-var limit =  10;
-page_end = offset+9;
-
+	{
+offset = 0; 
+limit =  10;
+page_end = offset+10;
+	}
 /*console.log("pageid="+page_id);
 console.log("offset="+offset);
 console.log("limt="+limit);
@@ -163,7 +180,15 @@ console.log("page_end"+page_end)*/
 				c.originalDataSet = dataJSONArray;
 
 				c.reload();
-				document.getElementById("count").innerHTML= 'Showing '+offset+' - '+page_end+' of '+page_count+''
+				if(page_id != '0')
+					{
+					document.getElementById("count").innerHTML= 'Showing '+offset+' - '+page_end+' of '+page_count+'';
+					}
+				
+				else
+					{
+					document.getElementById("count").innerHTML= 'Showing 1 - '+page_end+' of '+page_count+''
+					}
 				
 				
 				
@@ -189,7 +214,7 @@ function search() {
     clearTimeout(timer) // clear the request from the previous event
     timer = setTimeout(function() {
      	var values =  document.getElementById("generalSearch").value;
-    	 console.log("values="+values)
+    	 
         if (values.length >= 3 && values != null && values != '' ) {
 		  
         document.getElementById("delete").innerHTML='\
@@ -218,7 +243,7 @@ function search() {
 					document.getElementById("local_data").style.display= "block";
 					
 					response = this.response; 
-					console.log("response search="+JSON.parse(response));
+					
 				
 					dataJSONArray = JSON.parse((response));
 					var table = $('.kt_datatable');
@@ -271,9 +296,9 @@ function myFunction() {
 	        		 }
 	        	  
 	        	  var id = this.id;
-	        	  console.log("id"+id);
+	        	  
 	        	  var active_elm = $('ul.pagination a.active');
-	        	  console.log("active class"+active_elm);
+	        	  
 	        	  if(this.id == 'next' && active_elm[0].text <= 5)
 	        	  {
 	        		  
@@ -327,9 +352,7 @@ function myFunction() {
 	        	var offset = (previuos_page_id * 10) + 1;
 	        	var limit =  10;
 	        	
-	        	console.log("pageid="+previuos_page_id);
-	        	console.log("offset="+offset);
-	        	console.log("limt="+limit);
+	        	
 	        	
 	        	 var url	 = "/GeoReach/AjaxExpController"
 	    			 var params = "offset="+offset+"&limit="+limit+"&load=next";
@@ -376,7 +399,7 @@ function myFunction() {
         	
         	var exp_id = this.id;
         	var status = document.getElementById(exp_id).checked;
-        	console.log("status="+status+exp_id);
+        	
         	
 		
 		   		 var url	 = "/GeoReach/AjaxExpController"
@@ -525,7 +548,7 @@ function test()
 				ul.setAttribute('id',"lists");
 				ul.setAttribute("onclick","paginate();")*/
 				var list=document.createElement('li');
-				list.innerHTML='<a    id="prev"  data-page = "previous" >' + "Previous"  + '</a>';
+				list.innerHTML='<a class="flaticon2-back"  id="prev"  data-page = "previous" >' + ""  + '</a>';
 				mydiv.appendChild(list);
 				
 				var x = document.getElementsByClassName("page-link");
@@ -562,10 +585,10 @@ function test()
 					
 				}
 				var lists=document.createElement('li');
-				lists.innerHTML='<a  id="next"  data-page = "next" >' + "Next"  + '</a>';
+				lists.innerHTML='<a class="flaticon2-next" id="next"  data-page = "next" >' + ""  + '</a>';
 				mydiv.appendChild(lists);
 				
-				document.getElementById("count").innerHTML= 'Showing 0 - 9 of '+exp+''
+				document.getElementById("count").innerHTML= 'Showing 1 - 10 of '+exp+''
 				
             }
         });
@@ -581,7 +604,7 @@ function test()
         			data: {
         				type: 'local',
         				source: dataJSONArray,
-        				pageSize: 10,
+        				
         			},
         			
         			// layout definition
@@ -696,7 +719,7 @@ function test()
         		 				var exp_name = row.experience;
         						var r = "";
         						 
-        						r+= '<button  id="myBtn" data-ids="'+exp_id+'" data-expname="'+exp_name+'" class="btn btn-outline-brand btn-pill" >Code</button>'
+        						r+= '<button  id="myBtn" data-ids="'+exp_id+'" data-expname="'+exp_name+'" class="btn btn-outline-brand btn-pill" >View</button>'
         							return r;
         					}
         				},  {

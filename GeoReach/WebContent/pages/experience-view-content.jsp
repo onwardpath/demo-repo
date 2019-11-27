@@ -407,7 +407,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
   
 		<!--end::Page Scripts -->
 		
-		<ul class="pagination" id ="page" style=" display: flex; padding-left: 0px; list-style: none; border-radius: 0.25rem; justify-content: center; cursor: pointer;">
+		<ul class="pagination" id ="page" style=" display: flex; padding-left: 0px; list-style: none; border-radius: 0.25rem; justify-content: center; cursor: pointer;margin: 10px;">
 		
 		</ul>
 		
