@@ -182,6 +182,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 
 									<!--end: Search Form -->
 								</div>
+						<!-- 		<a id="popoverData" class="btn" href="#" data-content="Popover with data-trigger"  data-placement="bottom" data-original-title="Title" data-trigger="hover">Popover with data-trigger</a> -->
 							
 						<!-- modal popup  -->
 						
@@ -198,7 +199,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 						        </div>
 						        
 						        <!-- Modal body -->
-						        <div id="popover-element" class="modal-body">
+						        <div id="popover-element" data-trigger="hover" class="modal-body">
 						          Modal body..
 						        </div>
 						        

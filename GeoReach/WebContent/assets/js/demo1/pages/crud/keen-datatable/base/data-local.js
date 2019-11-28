@@ -3,6 +3,12 @@ var dataJSONArray = {};
 jQuery(document).ready(function() {
 	
 	test();
+	/*console.log(document.getElementById('popoverData').getAttribute('data-content'));
+	var myInput = document.getElementById('popoverData');
+	var sec = myInput.getAttribute('data-content');
+	myInput.setAttribute('data-content', 'custom-value');
+	console.log(myInput.setAttribute('data-content', 'custom-value'));*/
+	$('#popoverData').popover(); 
 	
 	  
 });
@@ -40,7 +46,6 @@ $(window).ready(function() {
 	    	    	}
 	    	      else
 	    	    	  {
-	    	    	  
 	    	    	  page(page_idn);
 	    	    	  }
 	    	      if($(_next).attr('id') == 'next') {
@@ -58,10 +63,10 @@ $(window).ready(function() {
 	    	  			$('.three_links').last().after('<li class="three_links"><a id="'+nums+'" data-pageid="'+num+'" class="active" >'+num+'</a></li>');
 	    	  			var new_element = $('.three_links').last();
 	    		//		new_id = new_element[0].textContent;//on move of newly created element call ajax controller(check page-id not equals to undefined)
-	    				var n = new_element[0].innerHTML;
-	    				new_id = n.substring(27,28);
+	    				/*var n = new_element[0].innerHTML;
+	    				new_id = n.substring(27,28);*/
 	    				
-	    				page(new_id);
+	    				page(num);
 	    				
 	    				
 	    	        }
@@ -100,10 +105,10 @@ $(window).ready(function() {
 	    	    				$('.three_links').first().before('<li class="three_links"><a id="'+nums+'" data-pageid="'+num+'" class="active" >'+num+'</a></li>');
 	    	    				var new_element = $('.three_links').first();
 	    	    		//		new_idp = new_element[0].textContent;//on move of newly created element call ajax controller(check page-id not equals to undefined)
-	    	    				var r = new_element[0].innerHTML;
-	    	    				new_idp = r.substring(27,28);
+	    	    			/*	var r = new_element[0].innerHTML;
+	    	    				new_idp = r.substring(27,28);*/
 	    	    				
-	    	    				page(new_idp);
+	    	    				page(num);
 	    	    				
 	    	    				
 	    	          }
@@ -267,6 +272,69 @@ function search() {
 
 
 
+document.body.onclick= function(e){
+	   e=window.event? event.srcElement: e.target;
+	   if(e.className && e.className.indexOf('btn btn-outline-brand btn-pill')!=-1)
+	   {
+		   /*alert('hohoho');*/
+		   console.log("view");
+		   
+			console.log("coming");
+        	var exp_id		=	e.getAttribute("data-ids");
+        	var exp_name	=	e.getAttribute("data-expname");
+       
+        	document.getElementById("popover-elements").innerHTML = '<code>&lt;div id="G-'+exp_name+'-'+exp_id+'"&gt;&lt;/div&gt;</code>';
+			document.getElementById("experience-element").innerHTML = 'Embed Code for <span class="badge badge-secondary">'+exp_name+'</span>';
+			$('#myModals').modal('show');
+	   }
+	   if(e.className && e.className.indexOf('hover')!=-1)
+	   {
+	
+   		
+   		var segment_id	=	e.getAttribute("id");
+    	
+    	console.log("segment=="+segment_id);
+		var exp_id		=	e.getAttribute("data-expid");
+		var seg_name    =   e.getAttribute("data-segname");
+		
+		
+		 var url	 = "/GeoReach/AjaxExpController"
+			 var params = "service="+segment_id+"&expid="+exp_id+"&exper=content";
+		 	  var response = "";
+		 
+				
+				var xhttp = new XMLHttpRequest(); 
+				
+				xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200
+							&& this.response != "null") {
+						
+						response = this.response; 
+						var json = JSON.parse(response);
+						var temp = json[0];
+					//	KTDatatableDataLocalDemo.init(response);
+						document.getElementById("popover-element").innerHTML = temp.content;
+						document.getElementById("segment-element").innerHTML = seg_name;
+						$('#myModal').modal('show');
+				//		$('#popover-element').popover();
+						
+						
+						
+				}};
+				xhttp.open("POST", url+"?"+params);
+				
+				xhttp.send();
+				return response;
+   		
+   		
+	   }
+	}
+
+/*document.body.onclick= function(e){
+	   e=window.event? event.srcElement: e.target;
+	   
+	}*/
+
 window.onclick = myFunction;
 function myFunction() {
 	
@@ -391,7 +459,7 @@ function myFunction() {
 	
 	
 	/*Code for Toggle ON and OFF*/	
-	var stat = document.getElementsByClassName("stat");
+	var stat = document.getElementsByClassName("x");
 	for(var i = 0; i < stat.length; i++) {
         var stats = stat[i];
         stats.onclick = function() {
@@ -408,7 +476,7 @@ function myFunction() {
 	   		 
 	   				
 	   				var xhttp = new XMLHttpRequest(); 
-	   				
+	   				 
 	   				xhttp.onreadystatechange = function() {
 	   				if (this.readyState == 4 && this.status == 200
 	   							&& this.response != "null") {
@@ -434,7 +502,7 @@ function myFunction() {
     }
     }
 	/*Code for Modal Popup*/
-	var anchors = document.getElementsByClassName("hover")
+/*	var anchors = document.getElementsByClassName("hover")
   
     	  for(var i = 0; i < anchors.length; i++) {
     	        var anchor = anchors[i];
@@ -445,9 +513,8 @@ function myFunction() {
 	        	console.log("segment=="+segment_id);
 	    		var exp_id		=	$(this).attr("data-expid");
 	    		var seg_name    =   $(this).attr("data-segname");
-	    		var xContents = $(this).html();
-	    		var lastCommaPos = xContents.lastIndexOf(',');
-	    		console.log("seg_name="+xContents);
+	    		
+	    		
 	    		 var url	 = "/GeoReach/AjaxExpController"
 	    			 var params = "service="+segment_id+"&expid="+exp_id+"&exper=content";
 	    		 	  var response = "";
@@ -465,8 +532,8 @@ function myFunction() {
 	    					//	KTDatatableDataLocalDemo.init(response);
 	    						document.getElementById("popover-element").innerHTML = temp.content;
 	    						document.getElementById("segment-element").innerHTML = seg_name;
-	    						$('#myModal').modal('show');
-	    						window.stop();
+	    				//		$('#myModal').modal('show');
+	    						$('#popover-element').popover();
 	    						
 	    						
 	    						
@@ -493,7 +560,7 @@ function myFunction() {
 				 
 	        }
 	  }
-	
+	*/
 	var clear = document.getElementsByClassName("kt-demo-panel__close")
 	
 	 for(var i = 0; i < clear.length; i++) {
@@ -719,7 +786,7 @@ function test()
         		 				var exp_name = row.experience;
         						var r = "";
         						 
-        						r+= '<button  id="myBtn" data-ids="'+exp_id+'" data-expname="'+exp_name+'" class="btn btn-outline-brand btn-pill" >View</button>'
+        						r+= '<button  id="myBtn"  dat-seg=""  onclick="javascript:embed(this)" data-ids="'+exp_id+'" data-expname="'+exp_name+'" class="btn btn-outline-brand btn-pill" >View</button>'
         							return r;
         					}
         				},  {
