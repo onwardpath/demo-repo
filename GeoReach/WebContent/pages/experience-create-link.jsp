@@ -55,6 +55,7 @@ function selectIndex()
 		}
 	}
 	//anchorClassName
+	anchorClassName = document.getElementById("anchorcustomclass").value
 	
 	console.log("imaheurl value is ::"+imageUrl+"Checked value is ::"+document.getElementById("imageChkBox").checked)
 }
