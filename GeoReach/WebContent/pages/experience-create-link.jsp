@@ -18,6 +18,8 @@ var segment_id = null;
 var segment_name = null;
 var content = null;
 var targetUrl = null;
+var anchorClassName = null;
+var anchorTarget = "self";
 var imageUrl = null;
 var linkText="";
 var linkHTMLElement =""
@@ -52,6 +54,8 @@ function selectIndex()
 			errorMsg = "Please provide image url in ImageUrl field";
 		}
 	}
+	//anchorClassName
+	
 	console.log("imaheurl value is ::"+imageUrl+"Checked value is ::"+document.getElementById("imageChkBox").checked)
 }
 function toggleCheckbox(element)
@@ -61,6 +65,7 @@ function toggleCheckbox(element)
 	
 			document.getElementById("linktext").style.display="none";
 			document.getElementById("imgalttext").style.display="block";
+			//document.getElementById("adv-settings").style.display = "none";
 			//document.getElementsByClassName("imagelinktext").innerText ="Alt Text";
 			//alert("sdfd"+document.getElementsByClassName("imagelinktext").innerText)
 			typeVal = "Image";
@@ -70,12 +75,16 @@ function toggleCheckbox(element)
 		document.getElementById("imageurl").style.display ="none"
 		document.getElementById("imgalttext").style.display ="none"
 		
+		
 	}
 }
 function getContentFromLinkExp(){
 	 var linkHTMLElemFormation = ""
 	 var createAnchor = document.createElement("a");
 	  createAnchor.href=targetUrl;
+	  //added for classname and target for the anchor
+	  createAnchor.className =anchorClassName
+	  createAnchor.target =anchorTarget
 	  createAnchor.id=segment_id+"_"+linkText
 	 
 	  if(typeVal == "Image"){
@@ -112,6 +121,7 @@ function add(event){
 			document.getElementById("linkContent").innerHTML = ""
 			document.getElementById("linktext").style.display="block";
 			document.getElementById("imgalttext").style.display="none";
+			document.getElementById("adv-settings").style.display = "none";
 			typeVal = "Link";
 			}
 			else{
@@ -136,6 +146,18 @@ function saveExperience(){
 	document.getElementById("experience-form").submit();
 }
 
+//Validate Advanced Settings Checkbox & return its content
+function isChecked(event) {
+	let el_id = event.target.attributes.for.value;	
+	//alert("el_id value is ::"+el_id);
+	if (event.currentTarget.checked == true)
+		document.getElementById(el_id).style.display = "block";
+	else
+		document.getElementById(el_id).style.display = "none";
+}
+function getTargetOption(target){
+	anchorTarget = target.value;
+}
 </script>
 
 <!--begin::Content-->
@@ -324,7 +346,53 @@ function saveExperience(){
 						<input type="text" id="targeturl" class="form-control col-lg-9 col-sm-12" placeholder="Provide Target Url" required/>																						
 					</div>
 				</div>
-				
+				<%-- Advanced Setting --%>
+				<div class="form-group row">
+						<label class="col-form-label col-lg-3 col-sm-12"></label>
+						<div class="col-lg-4 col-md-9 col-sm-12">
+							<div class="kt-checkbox-inline">
+								<label class="kt-checkbox"> <input
+									id="is-adv-settings" for="adv-settings" type="checkbox"
+									value="" onclick="isChecked(event);">Advanced
+									Settings<span></span>
+								</label>
+							</div>
+						</div>
+				</div>
+				<div id="adv-settings" style="display:none;">
+						<div class="form-group row">
+						<label class="col-form-label col-lg-3 col-sm-12">Classname</label>
+							<div class="col-lg-6 col-md-9 col-sm-12">
+								<input type="text" id="anchorcustomclass" class="form-control col-lg-9 col-sm-12" placeholder="Custom classname for anchor link" required/>																						
+							</div>
+						</div>
+						
+						
+						<div class="form-group row">
+						<label class="col-3 col-form-label">Target Page Open In</label>
+						<div class="col-9">
+							<div class="kt-radio-inline">
+								<label class="kt-radio">
+									<input type="radio" name="targetradio" checked value="_self" onclick="getTargetOption(this)"> Same Frame
+									<span></span>
+								</label>
+								<label class="kt-radio">
+									<input type="radio" name="targetradio"  value="_top" onclick="getTargetOption(this)"> Same Page
+									<span></span>
+								</label>
+								<label class="kt-radio">
+									<input type="radio" name="targetradio" value="_blank"onclick="getTargetOption(this)"> New Page
+									<span></span>
+								</label>
+								<label class="kt-radio">
+									<input type="radio" name="targetradio" value="_parent"onclick="getTargetOption(this)"> Parent Frame
+									<span></span>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%--Advanced Setting End --%>
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																					
