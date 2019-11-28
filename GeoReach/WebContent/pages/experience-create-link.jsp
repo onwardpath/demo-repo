@@ -385,10 +385,10 @@ function getTargetOption(target){
 									<input type="radio" name="targetradio" value="_blank"onclick="getTargetOption(this)"> New Page
 									<span></span>
 								</label>
-								<label class="kt-radio">
+								<!-- <label class="kt-radio">
 									<input type="radio" name="targetradio" value="_parent"onclick="getTargetOption(this)"> Parent Frame
 									<span></span>
-								</label>
+								</label> -->
 							</div>
 						</div>
 					</div>
