@@ -459,7 +459,7 @@ function myFunction() {
 	
 	
 	/*Code for Toggle ON and OFF*/	
-	var stat = document.getElementsByClassName("x");
+	var stat = document.getElementsByClassName("stat");
 	for(var i = 0; i < stat.length; i++) {
         var stats = stat[i];
         stats.onclick = function() {
