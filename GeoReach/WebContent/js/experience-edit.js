@@ -64,7 +64,7 @@ function addContent() {
 	if (segementContent.length > 0) {
 		var _segid = segment.value;
 		/*
-			User has has changed the from one segment(actionis)  to another(_segid).  hance delete the earlier segement(actionis) 
+			User has changed from one segment(actionis)  to another(_segid).Hence delete the earlier segement(actionis) 
 		 */
 		if (actionis && actionis!=_segid){
 			var listId = "#segmentlist-" + actionis;
