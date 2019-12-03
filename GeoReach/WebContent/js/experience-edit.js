@@ -126,13 +126,12 @@ function addUrl() {
 		Swal.fire('URL cannot be empty. Please enter an url')
 	}
 }
-
+ 
 function saveExperience() {
 	var finalexp_name = document.getElementById("form-expname").value;
 	if (finalexp_name) {
 		if (JSON.stringify(expDetailsObj) !== '{}') {
 			var experienceid =document.getElementsByName("expid");
-			alert(experienceid[0].value)
 			document.getElementById("form-contentdetails").value = JSON.stringify(expDetailsObj);
 			document.getElementById("form-urldetails").value = JSON.stringify(cfgDetailsObj);
 			document.getElementById("experience-form").method = "post";
@@ -146,3 +145,8 @@ function saveExperience() {
 	}
 
 }
+
+function cancelOperation() {	
+	location.replace("/GeoReach?view=pages/experience-view-content.jsp")
+   
+} 

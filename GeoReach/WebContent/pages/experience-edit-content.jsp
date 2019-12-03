@@ -20,7 +20,6 @@ var cfgDetailsObj 	= 	{};
  
 <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
 <script src="/GeoReach/js/experience-edit.js" type="text/javascript"></script> 
-
 <c:set var="all_segements" value="<%=segmentRepository.getOrgSegments(org_id) %>" />
 <c:set var="experience_contents" value="<%=expHelper.experienceContent(id) %>" />
 <c:set var="experience_name" value="<%=expHelper.getexperienceName(id) %>" />
