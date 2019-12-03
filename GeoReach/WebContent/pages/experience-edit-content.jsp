@@ -75,7 +75,7 @@ function addContent(){
          expDetailsObj[_segid] = segementContent;
          $("#segment_modal").modal("hide");  
      }else{
-       alert("Content required for the Segment");
+    	 swal.fire("Content required for the Segment");
      } 
 }
 
@@ -123,7 +123,7 @@ function addUrl(){
 		$("#PageURL_Modal").modal("hide");
 		url_id=null;
 		}else{
-			alert("Please enter an URL")
+			swal.fire("Please enter an URL")
 		}
 		  
 	} else {
@@ -145,6 +145,8 @@ function addUrl(){
           '</li>';
           $("#PageURL_Modal").modal("hide");	 
           index++;
+     }else{
+    	 swal.fire("Please enter an URL") 
      }    
 	}                         
 } 
@@ -153,21 +155,21 @@ function saveExperience(){
 	var finalexp_name =  document.getElementById("nameExp").value;
 	if (finalexp_name){
 		document.getElementById("form-expname").value=finalexp_name;	
-		if (JSON.stringify(expDetailsObj)!=='{}' && JSON.stringify(cfgDetailsObj)!=='{}' ){			
+		if (JSON.stringify(expDetailsObj)!=='{}'){			
 			document.getElementById("form-contentdetails").value=JSON.stringify(expDetailsObj);	
 			document.getElementById("form-urldetails").value=JSON.stringify(cfgDetailsObj); 
 			document.getElementById("experience-form").method = "post";
 			document.getElementById("experience-form").action = "ExperienceController";
 			document.getElementById("experience-form").submit();   
 		}else{
-			alert("Segmenet or Page URL cannot be empty")
+			swal.fire("Segmenet cannot be empty")
 		}
 	}else{
-		alert("Please enter a value for  Experience Name")
+		swal.fire("Please enter a value for  Experience Name")
 	}
 	 	
 }
-
+    
 function cancelOperation() {	
 	location.replace("/GeoReach?view=pages/experience-view-content.jsp")
    
