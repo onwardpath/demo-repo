@@ -10,7 +10,7 @@ var spanEnd			=   "</span>";
 
 var url_id,actionis;
 
-    
+   
 function delete_exp_content(type, id) {
 	var title = "Are you sure you want to delete the segment Content";
 	var text = document.getElementById(type+'-'+id + "-namespan").innerHTML

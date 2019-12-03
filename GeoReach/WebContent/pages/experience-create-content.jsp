@@ -52,9 +52,9 @@ function saveExperience(){
 		alert("Please enter atleast one content for this Experience")
 	}
 	}else{ 
-		alert("Please enter a value for  Experience Name")
+		swal.fire("Please enter a value for  Experience Name")
 	} 
-	
+	 
 }
 window.addEventListener("load", function(){
 	selectIndex();
