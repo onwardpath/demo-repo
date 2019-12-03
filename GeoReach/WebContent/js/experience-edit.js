@@ -15,11 +15,11 @@ function delete_exp_content(type, id) {
 	var title = "Are you sure you want to delete the segment Content";
 	var text = document.getElementById(type+'-'+id + "-namespan").innerHTML
 	var listId = "#" + type + "list-" + id;
-	var deleteConfirmation = "Segment Content " + text + " Deleted";
+	var deleteConfirmation = "Deleted";
 	if ("url" === type) {
 		title = "Are you sure you want to delete the Page URL";
 		text = cfgDetailsObj[id];
-		deleteConfirmation = "Page URL Deleted"
+		deleteConfirmation = "Deleted"
 	}
 	swal.fire({
 		title : title,
