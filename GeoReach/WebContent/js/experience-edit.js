@@ -1,11 +1,14 @@
 var index 			= 	1;
 var liStart			=	"<li class=\"list-group-item\" id="; 
-var ButtonStart 	= 	"<button type=\"button\" class=\"btn btn-outline-info btn-pill\"";
+var nameStart		=   "<div class=\"col-sm-9\"> <span class=\"text-break\" id= ";
+var nameEnd			=   "</span> </div>";
+var divRow			=   "<div class=\"row d-flex align-items-center\" >";
+var ButtonStart 	= 	"<div class=\"col-sm-1.5\"> <button type=\"button\" class=\"btn btn-outline-info btn-pill\"";
 var EditSpan 		= 	"<i class=\"fa fa-edit\"><span></span></i>";
 var DeleteSpan 		= 	"<i class=\"flaticon2-trash\"><span></span></i>";
-var ButtonEnd 		= 	"</button>";
-var NameSpan   		=   "<span style=\"width:60%\" id=";
-var ButtonSpan		=   "<span style=\"float:right;width:32%\" >";
+var ButtonEnd 		= 	"</button>&nbsp;</div>";
+var NameSpan   		=   "";
+
 var spanEnd			=   "</span>";
 
 var url_id,actionis;
@@ -86,12 +89,12 @@ function addContent() {
 function addtoSegment(segment_id, segment_name) {
 	var addsegment = document.getElementById("addonContent");
 	addsegment.innerHTML += liStart+"\"segmentlist-"+segment_id+"\">"
-		+ NameSpan +"\"segment-"+ segment_id+"-namespan\">" + segment_name + spanEnd 
-		+ ButtonSpan
-		+ ButtonStart + " data-toggle=\"modal\" data-target=\"#segment_modal\" onclick=\"setupModal('edit','"+ segment_id+"')\" >"
-		+ EditSpan +ButtonEnd + "&nbsp;"
-		+ ButtonStart+ " onclick=\"delete_exp_content('segment','"+ segment_id +"')\">" + DeleteSpan + ButtonEnd
-		+ spanEnd + "</li>";
+		+divRow
+		+nameStart  +  "\"segment-"+ segment_id+"-namespan\">" + segment_name + nameEnd
+		+ ButtonStart + " data-toggle=\"modal\" data-target=\"#segment_modal\" onclick=\"setupModal('edit','"+ segment_id+"')\" >" + EditSpan +ButtonEnd  
+		+ ButtonStart+ " onclick=\"delete_exp_content('segment','"+ segment_id +"')\">" + DeleteSpan + ButtonEnd.replace("&nbsp;",'')
+		+"</li>";
+		
 }
 
 function contenturl(urlID) {
@@ -110,12 +113,12 @@ function addUrl() {
 		if (!(url_id in cfgDetailsObj)) {
 			var addurl = document.getElementById("addonurl");
 			addurl.innerHTML += liStart+"\"urllist-"+url_id+"\">"
-				+ NameSpan +"\"url-"+ url_id+"-namespan\">" + pageUrl + spanEnd
-				+ ButtonSpan
-				+ ButtonStart + " data-toggle=\"modal\" data-target=\"#PageURL_Modal\" onclick=\"contenturl('"+ url_id+"')\">"				
-				+ EditSpan +ButtonEnd + "&nbsp;"
-				+ ButtonStart + " onclick=\"delete_exp_content('url','"+ url_id +"')\">" + DeleteSpan + ButtonEnd
-				+ spanEnd + "</li>";
+				+divRow
+				+ nameStart +"\"url-"+ url_id+"-namespan\">" + pageUrl + nameEnd
+				+  ButtonStart + " data-toggle=\"modal\" data-target=\"#PageURL_Modal\" onclick=\"contenturl('"+ url_id+"')\">"	+ EditSpan +ButtonEnd 			
+				
+				+ ButtonStart + " onclick=\"delete_exp_content('url','"+ url_id +"')\">" + DeleteSpan + ButtonEnd.replace("&nbsp;",'')
+				+ "</li>";
 		} else {
 			document.getElementById('url-'+url_id + '-namespan').innerHTML = pageUrl;
 		}

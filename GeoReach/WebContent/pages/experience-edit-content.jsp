@@ -13,6 +13,7 @@ ExperienceHelper expHelper = new ExperienceHelper();
 SegmentRepository segmentRepository = new SegmentRepository();
 int org_id = (Integer)session.getAttribute("org_id");
 %>
+  
 <script>
 var expDetailsObj 	= 	{};
 var cfgDetailsObj 	= 	{};
@@ -45,23 +46,28 @@ var cfgDetailsObj 	= 	{};
 			</div>
 			<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Segment</label>
-				<div class="kt-portlet__body">
+				<div class="col-sm-6 padding-top-12">
 					<div class="kt-section">
-						<div class="kt-section__content kt-section__content--border" style="width:490px;">
+						<div class="kt-section__content kt-section__content--border">
 							<ul class="list-group" id="addonContent">
 							<c:forEach items="${experience_contents}" var="content"  varStatus="counter">
 							<c:if test ="${not empty content.segmentName }">
-								<li class="list-group-item" id="segmentlist-${content.id}">
-									<span style="width:60%" id="segment-${content.id}-namespan"> ${content.segmentName} </span>
-									<span style="float:right;width:32%" >
-									<button type="button" class="btn btn-outline-info btn-pill" data-toggle="modal" data-target="#segment_modal" onclick="setupModal('edit','${content.id}')">
-										<i class="fa fa-edit"><span></span></i>
-									</button>
-									<button type="button" class="btn btn-outline-info btn-pill" onclick="delete_exp_content('segment','${content.id}')" >
-										<i class="flaticon2-trash" ><span></span></i>
-									</button>
-								</span>
-								</li>
+							<li class="list-group-item" id="segmentlist-${content.id}">
+								<div class="row d-flex align-items-center">
+								<div class="col-sm-9"><span id="segment-${content.id}-namespan"> ${content.segmentName} </span></div>
+								<div class="col-sm-1.5">
+								    <button type="button" class="btn btn-outline-info btn-pill" data-toggle="modal" data-target="#segment_modal" onclick="setupModal('edit','${content.id}')">
+								        <i class="fa fa-edit"><span></span></i>
+								    </button>&nbsp;
+								</div>
+								<div class="col-sm-1.5">
+								    <button type="button" class="btn btn-outline-info btn-pill" onclick="delete_exp_content('segment','${content.id}')">
+								            <i class="flaticon2-trash"><span></span></i>
+								        </button>
+								    </div>
+								</div>
+							</li>
+															
                          <script> expDetailsObj[escape('${content.id}')]= '${fn:replace(content.content, newLineChar, " ")}' ; </script>
                         </c:if>
                         </c:forEach> 
@@ -111,24 +117,28 @@ var cfgDetailsObj 	= 	{};
          
          <div class="form-group row">
             <label class="col-form-label col-lg-3 col-sm-12">Pages</label>
-            <div class="kt-portlet__body">
+            <div class="col-sm-6 padding-top-12">
                <div class="kt-section">
-                  <div class="kt-section__content kt-section__content--border" style="width:490px;">
+                  <div class="kt-section__content kt-section__content--border" >
                      <ul class="list-group" id="addonurl">
                      <c:forEach items="${experience_contents}" var="content" varStatus="counter">
 			              <c:if test ="${empty content.segmentName }">
-                        <li class="list-group-item" id="urllist-${counter.count}">
-                        	<span style="width:60%" id="url-${counter.count}-namespan"> ${content.content} </span>
-                        	 
-							<span style="float:right;width:32%" >
-								<button type="button" class="btn btn-outline-info btn-pill" data-toggle="modal" data-target="#PageURL_Modal"  onclick="contenturl('${counter.count}')">
-									<i class="fa fa-edit"><span></span></i>
-								</button>
-								<button type="button" class="btn btn-outline-info btn-pill" onclick="delete_exp_content('url','${counter.count}')" >
-									<i class="flaticon2-trash"><span></span></i>
-								</button>
+			              <li class="list-group-item" id="urllist-${counter.count}">
+			               <div class="row d-flex align-items-center" >
+	                        <div class="col-sm-9" ><span class="text-break" id="url-${counter.count}-namespan"> ${content.content} </span></div>	
+							<div class="col-sm-1.5" >
 								
-							</span>
+									<button type="button" class="btn btn-outline-info btn-pill" data-toggle="modal" data-target="#PageURL_Modal"  onclick="contenturl('${counter.count}')">
+										<i class="fa fa-edit"><span></span></i>
+									</button>&nbsp;
+							</div>
+							<div class="col-sm-1.5" >		
+									<button type="button" class="btn btn-outline-info btn-pill" onclick="delete_exp_content('url','${counter.count}')" >
+										<i class="flaticon2-trash"><span></span></i>
+									</button>
+							</div>
+						</div>		
+			              
                         </li> 
                          <script> cfgDetailsObj[index++]= '${fn:replace(content.content, newLineChar, " ")}' ; </script>
                         </c:if>
