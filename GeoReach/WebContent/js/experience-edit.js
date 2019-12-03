@@ -53,10 +53,11 @@ function setupModal(action, action_id) {
 		document.getElementById("content").value = expDetailsObj[action_id];
 	} else {
 		actionis = "";
+		$("#segment").val($("#segment option:first").val());
 		document.getElementById("content").value = "";
 		
 	}
-}
+} 
 function addContent() {
 	var segment = document.getElementById("segment");
 	var segementContent = document.getElementById("content").value
