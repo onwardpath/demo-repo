@@ -9,7 +9,7 @@ function add(){
 	errorMSg = rulevalue.replace(" ","").length  <=0 ? "Number/Duration in Seconds should not be empty" : ""; 
 	if(errorMSg !="" || isNaN(rulevalue) ){
 		errorMSg = errorMSg !="" ? errorMSg : "Please Provide only numeric value in the Number/Duration in Seconds" 
-		alert(errorMSg)
+			swal.fire(errorMSg)
 		document.getElementById("rulevalue").focus();
 	}else{
 	var behavior = rule+":"+type+":"+criteria+":"+rulevalue;	
@@ -29,7 +29,7 @@ function add(){
 			x.innerHTML += '<button id="'+type+criteria+rulevalue+'" data-condition="'+type+criteria+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+type+criteria+rulevalue+','+index+')">'+type+':'+criteria+':'+rulevalue+'<i class="la la-close"></i></button>&nbsp;';
 		}
 	}else{
-		alert("The Same condition has exist already.Please remove the conditon and add it again")
+		swal.fire("The Same condition has exist already.Please remove the conditon and add it again")
 	}
 	x.style.display = "block";			
 	document.getElementById("rule").focus();
@@ -82,11 +82,11 @@ function saveSegment() {
 		document.getElementById("segment-form").action = "SegmentController";
 		document.getElementById("segment-form").submit();
 	}else{
-		alert("Segment Name value should not be empty.")
+		swal.fire("Segment Name value should not be empty.")
 		document.getElementById("segmentName").focus()
 	}
 	}else{
-		alert("Rule should not be empty Please provide rule for the criteria.")
+		swal.fire("Rule should not be empty Please provide rule for the criteria.")
 		document.getElementById("criteria").focus()
 	}
 }

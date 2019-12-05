@@ -103,7 +103,7 @@ function addDynamically(georule,geotype,geoloc) {
 	  x.style.display = "block";
 	  
 	  }else{
-	    alert("Area value should not be empty.")
+		  swal.fire("Area value should not be empty.")
 	  }
 	  document.getElementById("geoloc").focus();
 	}

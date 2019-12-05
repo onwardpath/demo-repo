@@ -10,7 +10,7 @@ function add(){
 	var buttonid = pageurl.replace(/:/g, "");
 	buttonid = buttonid.replace(".", "");		
 	if (pageurl in cfgDetailsObj) {
-		alert("Page "+url+" already added. Add a different page.");	
+		swal.fire("Page "+url+" already added. Add a different page.");	
 	} else {					
 		cfgDetailsObj[index] = pageurl;
 		index++;
@@ -31,7 +31,7 @@ function saveConfig(){
 	document.getElementById("config-form").submit();
 }
 function preview() {
-	alert("Under Development");
+	swal.fire("Under Development");
 }
 </script>
 

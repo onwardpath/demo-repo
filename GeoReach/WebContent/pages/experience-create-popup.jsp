@@ -33,7 +33,7 @@
 	function add(event) {
 		selectIndex();
 		if (segment_id in expDetailsObj) {
-			alert("Segment " + segment_name
+			swal.fire("Segment " + segment_name
 					+ " already added please select a different segment.");
 		} else {
 			if (modalurl.value.length > 0 || modalcontent.value.length > 0) {
@@ -51,7 +51,7 @@
 						+ '<i class="la la-close"></i></button></div>';
 				stage.style.display = "block";
 			} else
-				alert("Please enter any content");
+				swal.fire("Please enter any content");
 		}
 
 	}
@@ -76,7 +76,7 @@
         
 		
 		if (Object.entries(expDetailsObj).length <= 0) {
-			alert("Please add atleast one content by Clicking ADD Button");
+			swal.fire("Please add atleast one content by Clicking ADD Button");
 		} else {
 			document.getElementById("experience-form").action = "ExperienceController";
 			document.getElementById("experience-form").submit();
