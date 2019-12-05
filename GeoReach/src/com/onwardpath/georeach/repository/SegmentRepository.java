@@ -137,7 +137,7 @@ public class SegmentRepository {
               while (result.next()) {
             	  
             	  segments.put(result.getInt("id"), result.getString("name"));
-           	  
+           	 
               }     
                       
           }	
