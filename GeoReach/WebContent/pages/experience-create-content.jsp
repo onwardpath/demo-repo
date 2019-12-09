@@ -19,7 +19,7 @@ function selectIndex()
 function add(event){
        selectIndex();	
 	   if (segment_id in expDetailsObj) {
-			alert("Segment "+segment_name+" already added. Select a different segment.");	
+		   swal.fire("Segment "+segment_name+" already added. Select a different segment.");	
 		} else {
 			if(content.length > 0)
 			{
@@ -29,7 +29,7 @@ function add(event){
 			stage.style.display = "block";
 			}
 			else
-			alert("Please enter any content");
+				swal.fire("Please enter any content");
 		}	
 	
 }
@@ -49,12 +49,12 @@ function saveExperience(){
 	document.getElementById("experience-form").action = "ExperienceController";
 	document.getElementById("experience-form").submit();
 	}else{
-		alert("Please enter atleast one content for this Experience")
+		swal.fire("Please enter atleast one content for this Experience")
 	}
 	}else{ 
-		alert("Please enter a value for  Experience Name")
+		swal.fire("Please enter a value for  Experience Name")
 	} 
-	
+	 
 }
 window.addEventListener("load", function(){
 	selectIndex();

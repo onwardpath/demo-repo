@@ -70,7 +70,7 @@
 		x.style.display = "block";
 		
 		}else{
-			alert("Area value should not be empty.")
+			swal.fire("Area value should not be empty.")
 		}
 		document.getElementById("geoloc").focus();
 	}
@@ -108,11 +108,11 @@
 		document.getElementById("segment-form").action = "SegmentController";
 		document.getElementById("segment-form").submit();
 		}else{
-			alert("Segment Name value should not be empty.")
+			swal.fire("Segment Name value should not be empty.")
 			document.getElementById("segmentName").focus()
 		}
 		}else{
-			alert("Area value should not be empty. Please Select any")
+			swal.fire("Area value should not be empty. Please Select any")
 			document.getElementById("geoloc").focus()
 		}
 	}

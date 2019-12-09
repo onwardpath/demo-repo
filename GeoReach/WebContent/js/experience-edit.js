@@ -1,143 +1,153 @@
-var expDetailsObj = {};
-var cfgDetailsObj = {};
-var index = 0;
-var segment = null;	
-var segment_id = null;	
-var segment_name = null;
-var content = null;
-var url_id = null;
-let segName =null;
+var index 			= 	1;
+var liStart			=	"<li class=\"list-group-item\" id="; 
+var nameStart		=   "<div class=\"col-sm-9\"> <span class=\"text-break\" id= ";
+var nameEnd			=   "</span> </div>";
+var divRow			=   "<div class=\"row d-flex align-items-center\" >";
+var ButtonStart 	= 	"<div class=\"col-sm-1.5\"> <button type=\"button\" class=\"btn btn-outline-info btn-pill\"";
+var EditSpan 		= 	"<i class=\"fa fa-edit\"><span></span></i>";
+var DeleteSpan 		= 	"<i class=\"flaticon2-trash\"><span></span></i>";
+var ButtonEnd 		= 	"</button>&nbsp;</div>";
+var NameSpan   		=   "";
 
-function selectIndex()
-{
-	var realVal = document.getElementById("realValue"); 
-    if (realVal.value=="Update")
-        realVal.value = "Add";
-        realVal.innerHTML = "Add";  
-	segment = document.getElementById("segment");
-	segment_id = segment.value;	
-	segment_name = segment.options[segment.selectedIndex].innerHTML;
-	content = document.getElementById("content").value;	
-	
-}
-function add(event){	
-       selectIndex();       
-	   if (segment_id in expDetailsObj) {
-		   if (content.length > 0){
-		   	expDetailsObj[segment_id] = content;
-		   }else{
-			   alert("Please enter any content")
-		   }
-		} else {
-			
-			if(content.length > 0)
-			{		
-				expDetailsObj[segment_id] = content;				
-				var stage = document.getElementById("stages");
-				stage.innerHTML += '<div id="'+segment_name+'" class="card-body">Edit Data&nbsp;'+
-					'<button type="button" class="btn btn-outline-info btn-pill" onclick="edit( \''+segment_id+')" > '+
-					'<i class="kt-menu__link-icon la flaticon2-edit"><span></span></i> </button> &nbsp;'+
-					'<button type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+segment_name+'\','+segment_id+')">'+segment_name+'<i class="la la-close"></i>'+
-					'</button></div>';
-					stage.style.display = "block";
-			}
-			else{
-				alert("Please enter any content");
-			}
-		}  
-}  
+var spanEnd			=   "</span>";
 
-function addEx(){
-	
-	var realVal = document.getElementById("urladdname"); 
-    if (realVal.value=="Update")
-        realVal.value = "Add";
-        realVal.innerHTML = "Add";  	 
-	var pageurl = document.getElementById("url").value;
-	
-	if (url_id in cfgDetailsObj) {
-		if (pageurl.length > 0){
-		
-		cfgDetailsObj[url_id] = pageurl;
-		var closeButton = '<i class="la la-close"></i>'
-		document.getElementById("button_remove_"+url_id).innerHTML=(pageurl + closeButton);
-		//document.getElementById("button_remove_"+url_id).value=pageurl+closeButton;
-		url_id=null;
-		}else{
-			alert("Please enter an URL")
-		}
-		
-	} else {
-		if (pageurl.length > 0){
-			url_id=index+'_new';
-			cfgDetailsObj[url_id] = pageurl;
-			var stage = document.getElementById("sta");
-			stage.innerHTML += '<div id="'+url_id+'" class="card-body">Edit Data&nbsp;'+
-			'<button type="button" class="btn btn-outline-info btn-pill" onclick="editurl(\''+url_id+'\')"> '+
-			'<i class="kt-menu__link-icon la flaticon2-edit"><span></span></i> </button> &nbsp;'+
-			'<button id="button_remove_'+url_id +'" type="button" class="btn btn-outline-info btn-pill" onclick="removeurl(\''+url_id+'\')">'+pageurl+'<i class="la la-close"></i>'+
-			'</button></div>';
-			
-			stage.style.display = "block";
-			index++;	
-		}else{
-			alert("Please enter an URL")
-		}
-	}	    
-}  
+var url_id,actionis;
 
-function remove(element, segment_id){		
-	var displayElement = document.getElementById(element);	
-	delete expDetailsObj[segment_id];	
-	displayElement.style.display = "none";		
-}
-function removeurl(id){
-	console.log(id)
-	var displayElement = document.getElementById(id);	
-	delete cfgDetailsObj[id];	
-	displayElement.style.display = "none";		
-}
-
-function edit(segment_id){
-	document.getElementById("segment").value=segment_id;
-	document.getElementById("content").value= expDetailsObj[segment_id];	 	
-	var realVal = document.getElementById("realValue"); 
-    if (realVal.value=="Add")
-        realVal.value = "Update";
-        realVal.innerHTML = "Update";          
-}    
    
-function editurl(urlid){
-	url_id = urlid;	
-	document.getElementById("url").value=cfgDetailsObj[urlid];
-	var realVals = document.getElementById("urladdname"); 
-	if (realVals.value=="Add")
-        realVals.value = "Update";
-        realVals.innerHTML = "Update";	
-}  
+function delete_exp_content(type, id) {
+	var title = "Are you sure you want to delete the segment Content";
+	var text = document.getElementById(type+'-'+id + "-namespan").innerHTML
+	var listId = "#" + type + "list-" + id;
+	var deleteConfirmation = "Deleted";
+	if ("url" === type) {
+		title = "Are you sure you want to delete the Page URL";
+		text = cfgDetailsObj[id];
+		deleteConfirmation = "Deleted"
+	}
+	swal.fire({
+		title : title,
+		text : text,
+		type : "warning",
+		showCancelButton : !0,
+		confirmButtonText : "Yes",
+		cancelButtonText : "No",
+		reverseButtons : !0
+	}).then(function(e) {
+		if (e.value) {
+			swal.fire(deleteConfirmation, text, "success")
+			$(listId).remove();
+			if ("url" === type) {
+				delete cfgDetailsObj[id];
+			} else {
+				delete expDetailsObj[id];
+			}
+		} else {
+			"cancel" === e.dismiss;
+			swal.fire("Cancelled", "Delete " + type, "error");
+		}
+
+	});
+}
+function setupModal(action, action_id) {
+	var segment = document.getElementById("segment");
+	if (action === "edit") {
+		segment.value = action_id;
+		actionis = action_id;
+		document.getElementById("content").value = expDetailsObj[action_id];
+	} else {
+		actionis = "";
+		$("#segment").val($("#segment option:first").val());
+		document.getElementById("content").value = "";
+		
+	}
+} 
+function addContent() {
+	var segment = document.getElementById("segment");
+	var segementContent = document.getElementById("content").value
+	if (segementContent.length > 0) {
+		var _segid = segment.value;
+	
+		if (actionis && actionis!=_segid){
+			var listId = "#segmentlist-" + actionis;
+			$(listId).remove();
+			delete expDetailsObj[actionis];
+			
+		}
+		
+		if (!(_segid in expDetailsObj)) {
+			segment_name = segment.options[segment.selectedIndex].innerHTML;
+			addtoSegment(_segid, segment_name, segementContent);
+		}
+		expDetailsObj[_segid] = segementContent;
+		$("#segment_modal").modal("hide");
+	} else {
+		swal.fire("Content required for the Segment");
+	}
+}
+function addtoSegment(segment_id, segment_name,segementContent ) {
+	var addsegment = document.getElementById("addonContent");
+	addsegment.innerHTML += liStart+"\"segmentlist-"+segment_id+"\">"
+		+divRow
+		+nameStart  +  "\"segment-"+ segment_id+"-namespan\" data-toggle=\"tooltip\" title='"+segementContent+"'>" + segment_name + nameEnd
+		+ ButtonStart + " data-toggle=\"modal\" data-target=\"#segment_modal\" onclick=\"setupModal('edit','"+ segment_id+"')\" >" + EditSpan +ButtonEnd  
+		+ ButtonStart+ " onclick=\"delete_exp_content('segment','"+ segment_id +"')\">" + DeleteSpan + ButtonEnd.replace("&nbsp;",'')
+		+"</li>";
+	  	
+}
+   
+function contenturl(urlID) {
+	if (urlID in cfgDetailsObj) {
+		document.getElementById("pageurl").value = cfgDetailsObj[urlID];
+		url_id = urlID;
+	} else {
+		document.getElementById("pageurl").value = '';
+		url_id = index;
+		index++;
+	}
+}
+function addUrl() {
+	var pageUrl = document.getElementById("pageurl").value;
+	if (pageUrl.length > 0) {
+		if (!(url_id in cfgDetailsObj)) {
+			var addurl = document.getElementById("addonurl");
+			addurl.innerHTML += liStart+"\"urllist-"+url_id+"\">"
+				+divRow
+				+ nameStart +"\"url-"+ url_id+"-namespan\">" + pageUrl + nameEnd
+				+  ButtonStart + " data-toggle=\"modal\" data-target=\"#PageURL_Modal\" onclick=\"contenturl('"+ url_id+"')\">"	+ EditSpan +ButtonEnd 			
+				
+				+ ButtonStart + " onclick=\"delete_exp_content('url','"+ url_id +"')\">" + DeleteSpan + ButtonEnd.replace("&nbsp;",'')
+				+ "</li>";
+		} else {
+			document.getElementById('url-'+url_id + '-namespan').innerHTML = pageUrl;
+		}
+		cfgDetailsObj[url_id] = pageUrl;
+		url_id = "";
+		$("#PageURL_Modal").modal("hide");
+	} else {
+		Swal.fire('URL cannot be empty. Please enter an url')
+	}
+}
+ 
+function saveExperience() {
+	var finalexp_name = document.getElementById("form-expname").value;
+	if (finalexp_name) {
+		if (JSON.stringify(expDetailsObj) !== '{}') {
+			var experienceid =document.getElementsByName("expid");
+			document.getElementById("form-contentdetails").value = JSON.stringify(expDetailsObj);
+			document.getElementById("form-urldetails").value = JSON.stringify(cfgDetailsObj);
+			document.getElementById("experience-form").method = "post";
+			document.getElementById("experience-form").action = "ExperienceController";
+			document.getElementById("experience-form").submit();
+		} else {
+			Swal.fire("Please enter atleast one content for this Experience")
+		}
+	} else {
+		Swal.fire("Please enter a value for  Experience Name")
+	}
+
+}
+
 function cancelOperation() {	
 	location.replace("/GeoReach?view=pages/experience-view-content.jsp")
    
 } 
-function saveExperience(){
-	var finalexp_name =  document.getElementById("nameExp").value;
-	if (finalexp_name){
-		document.getElementById("form-expname").value=finalexp_name;
-	
-		if (JSON.stringify(expDetailsObj)!=='{}'){
-			
-			document.getElementById("form-contentdetails").value=JSON.stringify(expDetailsObj);	
-			document.getElementById("form-urldetails").value=JSON.stringify(cfgDetailsObj); 
-			//alert("1"+JSON.stringify(expDetailsObj))     
-			//alert("2"+JSON.stringify(cfgDetailsObj)) 
-			document.getElementById("experience-form").method = "post";
-			document.getElementById("experience-form").action = "ExperienceController";
-			document.getElementById("experience-form").submit();   
-		}else{
-			alert("Please enter atleast one content for this Experience")
-		}
-	}else{
-		alert("Please enter a value for  Experience Name")
-	}
-	 	
-}

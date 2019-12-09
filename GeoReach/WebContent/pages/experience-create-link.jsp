@@ -108,7 +108,7 @@ function add(event){
        selectIndex();
 	console.log("After selectindex function ::"+expDetailsObj)
 	   if (segment_id in expDetailsObj) {
-			alert("Segment "+segment_name+" already added. Select a different segment.");	
+		   swal.fire("Segment "+segment_name+" already added. Select a different segment.");	
 		} else {
 			if(errorMsg=="")
 			{
@@ -126,7 +126,7 @@ function add(event){
 			typeVal = "Link";
 			}
 			else{
-				alert("Error:"+errorMsg);
+				swal.fire("Error:"+errorMsg);
 				//document.getElementById("targeturl").focus();
 			}
 		}		
@@ -150,7 +150,7 @@ function saveExperience(){
 //Validate Advanced Settings Checkbox & return its content
 function isChecked(event) {
 	let el_id = event.target.attributes.for.value;	
-	//alert("el_id value is ::"+el_id);
+	//swal.fire("el_id value is ::"+el_id);
 	if (event.currentTarget.checked == true)
 		document.getElementById(el_id).style.display = "block";
 	else

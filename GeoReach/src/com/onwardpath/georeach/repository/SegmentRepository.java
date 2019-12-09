@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import com.onwardpath.georeach.util.Database;
 import com.onwardpath.georeach.model.Segment;
 
@@ -126,20 +128,24 @@ public class SegmentRepository {
 	   * @return Map containing id and name of Segments
 	   */
 	  public Map<Integer,String> getOrgSegments(int org_id) throws SQLException {
-		  Map<Integer, String> segments = new HashMap<Integer, String>();	      
-          PreparedStatement prepStatement = dbConnection.prepareStatement("select id, name from segment where org_id = ?");
+		  Map<Integer, String> segments = new LinkedHashMap<Integer, String>();	  
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select id, name from segment where org_id = ? order by name asc");
           prepStatement.setInt(1, org_id); 
           System.out.println(Database.getTimestamp()+" @SegmentRepository.getOrgSegments>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
           if (result != null) {   
               while (result.next()) {
-            	  segments.put(result.getInt("id"), result.getString("name"));	           	                      	                              
-              }
-          }	          	          
+            	  
+            	  segments.put(result.getInt("id"), result.getString("name"));
+           	 
+              }     
+                      
+          }	
+            
           prepStatement.close();
           result.close();
 	      return segments;
-	  }
+	  } 
 	  
 	  /**
 	   * Method to get all segment objects of an organization 
@@ -148,8 +154,8 @@ public class SegmentRepository {
 	   * @return Map containing id and segment objects
 	   */
 	  public Map<Integer, Segment> loadOrgSegments(int org_id) throws SQLException {
-		  Map<Integer, Segment> orgSegments = new HashMap<Integer, Segment>();
-		  PreparedStatement prepStatement = dbConnection.prepareStatement("select * from segment where org_id = ?");
+		  Map<Integer, Segment> orgSegments = new LinkedHashMap<Integer, Segment>();
+		  PreparedStatement prepStatement = dbConnection.prepareStatement("select * from segment where org_id = ? order by name asc");
           prepStatement.setInt(1, org_id); 
           System.out.println(Database.getTimestamp()+" @SegmentRepository.loadOrgSegments>prepStatement: "+prepStatement.toString());
           ResultSet result = prepStatement.executeQuery();
@@ -168,7 +174,7 @@ public class SegmentRepository {
           result.close();
           return orgSegments;
 	  }	
-	  
+	   
 	  /**
 	   * Method to get all segment objects of a particular type (loc/beh/int/ref) of an organization 
 	   * 
@@ -177,8 +183,8 @@ public class SegmentRepository {
 	   */   
 	  public Map<Integer, Segment> loadOrgSegmentsByType(int org_id, String type) throws SQLException {
 		  //TODO: Check if type is only one of the following: loc/beh/int/ref
-		  Map<Integer, Segment> orgSegments = new HashMap<Integer, Segment>();
-		  PreparedStatement prepStatement = dbConnection.prepareStatement("select * from segment  where org_id = ? and geography like ? ");
+		  Map<Integer, Segment> orgSegments = new LinkedHashMap<Integer, Segment>();
+		  PreparedStatement prepStatement = dbConnection.prepareStatement("select * from segment  where org_id = ? and geography like ? order by name asc ");
           prepStatement.setInt(1, org_id);
           //prepStatement.setString(2, type); 
           prepStatement.setString(2, type + "%");

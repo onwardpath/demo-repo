@@ -20,6 +20,22 @@ private Connection dbConnection;
 		dbConnection = Database.getConnection();
 	}
 	
+	public  String getexperienceName(String id){
+		String name =null;
+		try {
+		PreparedStatement prepStatement = dbConnection.prepareStatement("select name from experience where id = ?");
+		prepStatement.setString(1, id);
+		ResultSet result = prepStatement.executeQuery();          
+        result.next();
+         name = result.getString(1);           
+        prepStatement.close();
+        result.close();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return name;	
+	}
+	
 	public List<ExperienceContent> experienceContent(String id) {
 	
 		StringBuffer sb = new StringBuffer();

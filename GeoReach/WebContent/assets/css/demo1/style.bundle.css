@@ -5,6 +5,7 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+ .padding-top-12 {padding-top: 12px;}
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -30935,4 +30936,10 @@ body {
       margin: 0 0 0.75rem 0; }
       .kt-footer .kt-footer__menu .kt-footer__menu-link:first-child {
         padding-left: 0;
-        margin-left: 0; } }
+        margin-left: 0; } 
+      
+   
+        
+        }
+        
+     

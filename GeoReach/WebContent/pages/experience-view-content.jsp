@@ -138,6 +138,29 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 				
 
 					<!-- end:: Header -->
+					<%
+		String message = (String) session.getAttribute("message");
+		if (message != null && !message.equals("")) {
+			String icon = "la la-thumbs-up";
+			if (message.startsWith("Error"))
+				icon = "flaticon-warning";
+	%>
+	<div class="row">
+		<div class="col">
+			<div class="alert alert-light alert-elevate fade show" role="alert">
+				<div class="alert-icon">
+					<i class="<%=icon%> kt-font-brand"></i>
+				</div>
+				<div class="alert-text">
+					<%=message%>
+				</div>
+			</div>
+		</div>
+	</div>
+	<%
+		session.setAttribute("message", "");
+		}
+	%>   
 					<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
 
 						<!-- begin:: Subheader -->
