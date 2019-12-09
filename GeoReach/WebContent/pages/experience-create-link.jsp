@@ -88,8 +88,8 @@ function getContentFromLinkExp(){
 	  createAnchor.target =anchorTarget
 	  createAnchor.id=segment_id+"_"+linkText
 	 
-	  if(typeVal == "Image"){
-		var createImg = document.createElement("img");
+	  if(typeVal == "Image"){    
+		var createImg = new Image();
 		createImg.src = imageUrl;
 		createImg.alt = linkText;
 		createImg.style.width = imgWidth+"px" ;
@@ -139,12 +139,20 @@ function remove(element, segment_id){
 function saveExperience(){	
 	console.log("expDetailsObj::"+JSON.stringify(expDetailsObj))
 	var name = document.getElementById('name').value;
+	if(name){	
 	var type = "link";
+	if (JSON.stringify(expDetailsObj)!=='{}'){
 	document.getElementById("experience-form").type.value=type;	
 	document.getElementById("experience-form").experienceDetails.value=JSON.stringify(expDetailsObj);	
 	document.getElementById("experience-form").method = "post";
 	document.getElementById("experience-form").action = "ExperienceController";
 	document.getElementById("experience-form").submit();
+	}else{
+		swal.fire("Please enter atleast one link for this Experience")
+	}
+	}else{ 
+		swal.fire("Please enter a value for  Experience Name")
+	} 
 }
 
 //Validate Advanced Settings Checkbox & return its content
