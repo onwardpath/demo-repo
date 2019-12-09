@@ -19,7 +19,7 @@ var segment_name = null;
 var content = null;
 var targetUrl = null;
 var anchorClassName = null;
-var anchorTarget = "self";
+var anchorTarget = "_self";
 var imageUrl = null;
 var linkText="";
 var linkHTMLElement =""
@@ -57,7 +57,7 @@ function selectIndex()
 	//anchorClassName
 	anchorClassName = document.getElementById("anchorcustomclass").value
 	
-	console.log("imaheurl value is ::"+imageUrl+"Checked value is ::"+document.getElementById("imageChkBox").checked)
+	//console.log("imaheurl value is ::"+imageUrl+"Checked value is ::"+document.getElementById("imageChkBox").checked)
 }
 function toggleCheckbox(element)
 {
