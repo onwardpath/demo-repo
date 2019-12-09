@@ -180,7 +180,7 @@ public class ExperienceController extends HttpServlet {
 			        	// Update  config Table 
 	           		  	updateconfig(experience_id, request,user_id);
 			        	  
-	           		 session.setAttribute("message", "Update Success"); 
+	           		 session.setAttribute("message", "Experience " +name+ " has been updated Successfully"); 
 		        	  forward = "?view=pages/experience-view-content.jsp";   
 					} catch (SQLException e) { 
 						// TODO Auto-generated catch block

@@ -66,9 +66,7 @@ function addContent() {
 	var segementContent = document.getElementById("content").value
 	if (segementContent.length > 0) {
 		var _segid = segment.value;
-		/*
-			User has changed from one segment(actionis)  to another(_segid).Hence delete the earlier segement(actionis) 
-		 */
+	
 		if (actionis && actionis!=_segid){
 			var listId = "#segmentlist-" + actionis;
 			$(listId).remove();
@@ -78,7 +76,7 @@ function addContent() {
 		
 		if (!(_segid in expDetailsObj)) {
 			segment_name = segment.options[segment.selectedIndex].innerHTML;
-			addtoSegment(_segid, segment_name);
+			addtoSegment(_segid, segment_name, segementContent);
 		}
 		expDetailsObj[_segid] = segementContent;
 		$("#segment_modal").modal("hide");
@@ -86,17 +84,17 @@ function addContent() {
 		swal.fire("Content required for the Segment");
 	}
 }
-function addtoSegment(segment_id, segment_name) {
+function addtoSegment(segment_id, segment_name,segementContent ) {
 	var addsegment = document.getElementById("addonContent");
 	addsegment.innerHTML += liStart+"\"segmentlist-"+segment_id+"\">"
 		+divRow
-		+nameStart  +  "\"segment-"+ segment_id+"-namespan\">" + segment_name + nameEnd
+		+nameStart  +  "\"segment-"+ segment_id+"-namespan\" data-toggle=\"tooltip\" title='"+segementContent+"'>" + segment_name + nameEnd
 		+ ButtonStart + " data-toggle=\"modal\" data-target=\"#segment_modal\" onclick=\"setupModal('edit','"+ segment_id+"')\" >" + EditSpan +ButtonEnd  
 		+ ButtonStart+ " onclick=\"delete_exp_content('segment','"+ segment_id +"')\">" + DeleteSpan + ButtonEnd.replace("&nbsp;",'')
 		+"</li>";
-		
+	  	
 }
-
+   
 function contenturl(urlID) {
 	if (urlID in cfgDetailsObj) {
 		document.getElementById("pageurl").value = cfgDetailsObj[urlID];

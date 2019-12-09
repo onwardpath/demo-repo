@@ -54,7 +54,7 @@ var cfgDetailsObj 	= 	{};
 							<c:if test ="${not empty content.segmentName }">
 							<li class="list-group-item" id="segmentlist-${content.id}">
 								<div class="row d-flex align-items-center">
-								<div class="col-sm-9"><span id="segment-${content.id}-namespan"> ${content.segmentName} </span></div>
+								<div class="col-sm-9"><span id="segment-${content.id}-namespan" data-toggle="tooltip"  title='${content.content}'> ${content.segmentName} </span></div>
 								<div class="col-sm-1.5">
 								    <button type="button" class="btn btn-outline-info btn-pill" data-toggle="modal" data-target="#segment_modal" onclick="setupModal('edit','${content.id}')">
 								        <i class="fa fa-edit"><span></span></i>
@@ -67,7 +67,7 @@ var cfgDetailsObj 	= 	{};
 								    </div>
 								</div>
 							</li>
-															
+							  								
                          <script> expDetailsObj[escape('${content.id}')]= '${fn:replace(content.content, newLineChar, " ")}' ; </script>
                         </c:if>
                         </c:forEach> 
