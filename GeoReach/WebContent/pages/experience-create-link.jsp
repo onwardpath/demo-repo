@@ -39,6 +39,12 @@ function selectIndex()
 	linkText = document.getElementById("linkTxt").value;	
 	targetUrl = document.getElementById("targeturl").value;
 	console.log("linkText value is ::"+(linkText.trim().length))
+	
+	//Validating url field(Targeturl,Imageurl).
+	var expression =  /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm; 
+   	//var regex = new RegExp(expression);
+        
+        
 	//errorMessage()
 	if(!document.getElementById("imageChkBox").checked && linkText.trim().length==0){
 		errorMsg = "Please provide value in linktext";
@@ -53,7 +59,16 @@ function selectIndex()
 		if(imageUrl.trim().length==0){
 			errorMsg = "Please provide image url in ImageUrl field";
 		}
+
+		if(!expression.test(imageUrl)){
+			errorMsg = "Please provide valid image url in ImageUrl field";
+		}
 	}
+	//alert("ksjdkdf"+targetUrl.match(regex))
+	if(!expression.test(targetUrl)){
+		errorMsg = "Please provide valid target url in TargetUrl field";
+	}	
+	
 	//anchorClassName
 	anchorClassName = document.getElementById("anchorcustomclass").value
 	
