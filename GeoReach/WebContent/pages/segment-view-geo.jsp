@@ -1,211 +1,456 @@
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="com.onwardpath.georeach.util.Database"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="java.util.Map, com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
- <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %> 
-<%@page import="java.util.*" session ="true" %>
-<!-- Modified by Gurujegan - Segment Geo Edit feature --Start-->
+<%@ page import="java.util.Map,com.onwardpath.georeach.repository.*,com.onwardpath.georeach.model.*" %>
+<!DOCTYPE html>
 
-<script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
-<script type="text/javascript"> 
-function edit(id)
-{
-	var form = document.getElementById("form-"+id);
-	sessionStorage.setItem('seg_id', form.seg_id.value);
-	sessionStorage.setItem('seg_rule', form.seg_rule.value);
-	sessionStorage.setItem('seg_name',  form.seg_name.value);
-	form.method = "post";
-	form.action = "/GeoReach?view=pages/segment-edit-geo.jsp";
-	form.submit();
+
+<html lang="en">
+
+	<!-- begin::Head -->
+	<head>
+
+		
+		<meta charset="utf-8" />
+		<title>Keen | Local Data</title>
+		<meta name="description" content="Initialized with local json data">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<style>
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
 }
-function showmodal(deletemodalid){
-	
+
+ul.pagination li {display: inline;}
+
+ul.pagination li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
 }
 
-function getsegmentname(id){
-	var form = document.getElementById("form-"+id);
-	document.getElementById("segmentTitle").innerHTML=form.seg_name.value;
-	 
-} 
+ul.pagination li a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+    
+}
 
-function deletesegment(id){
-	
+ul.pagination li a:hover:not(.active) {background-color: #ddd;}
+		
+		</style>
 
-	var form = document.getElementById("form-"+id);
-	//sessionStorage.setItem('seg_id', form.seg_id.value);  
-	form.method = "POST"; 
-	form.action = "/GeoReach/DeleteController";   
-	form.submit();                
-}    
+		<!--begin::Fonts -->
+		<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+		<script>
+			WebFont.load({
+				google: {
+					"families": ["Poppins:300,400,500,600,700"]
+				},
+				active: function() {
+					sessionStorage.fonts = true;
+				}
+			});
+		</script>
 
- 
-</script>
+		<!--end::Fonts -->
 
+		<!--begin:: Global Mandatory Vendors -->
+		<link href="/GeoReach/assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" type="text/css" />
 
-<!-- Modified by Gurujegan - Segment Geo Edit feature --End-->
+		<!--end:: Global Mandatory Vendors -->
+
+		<!--begin:: Global Optional Vendors -->
+		<link href="/GeoReach/assets/vendors/general/tether/dist/css/tether.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/bootstrap-datetime-picker/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/bootstrap-timepicker/css/bootstrap-timepicker.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/nouislider/distribute/nouislider.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/owl.carousel/dist/assets/owl.carousel.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/owl.carousel/dist/assets/owl.theme.default.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/dropzone/dist/dropzone.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/summernote/dist/summernote.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/bootstrap-markdown/css/bootstrap-markdown.min.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/animate.css/animate.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/toastr/build/toastr.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/morris.js/morris.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/sweetalert2/dist/sweetalert2.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/socicon/css/socicon.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/custom/vendors/line-awesome/css/line-awesome.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/custom/vendors/flaticon/flaticon.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/custom/vendors/flaticon2/flaticon.css" rel="stylesheet" type="text/css" />
+		<link href="/GeoReach/assets/vendors/general/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+
+		<!--end:: Global Optional Vendors -->
+
+		<!--begin::Global Theme Styles(used by all pages) -->
+		
+
+		<!--end::Global Theme Styles -->
+
+		
+
+		<!--end::Layout Skins -->
+		<link rel="shortcut icon" href="/GeoReach/assets/media/logos/favicon.ico" />
+	</head>
 
 <!-- begin:: Content -->
-<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
-		<%
-			//TODO: Resolve DataTable issue -- https://datatables.net/forums/discussion/32575/uncaught-typeerror-cannot-set-property-dt-cellindex-of-undefined
-			SegmentRepository segmentRepository = new SegmentRepository();
-			UserRepository userRepository = new UserRepository();
-			int org_id = (Integer)session.getAttribute("org_id");
-			//Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegments(org_id);
-			Map<Integer,Segment> orgSegments = segmentRepository.loadOrgSegmentsByType(org_id,"loc");
+
+		<div class="kt-portlet kt-portlet--mobile"><!-- begin::portlet -->
+		
 			
-			if (orgSegments.size() == 0) {
-				%>
-				<div class="alert alert-light alert-elevate" role="alert">
-					<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
-						<div class="alert-text">
-						No Segments Available for your Organization. Create a new segment <a class="kt-link kt-font-bold" href="?view=pages/segment-create-geo.jsp">here</a>.
-					</div>
-				</div>
-				<%
-					  
-			} else {
-				%>
+			
+			<!-- end::portlet-body -->
+			
+			
+
+	
+
+		<!-- begin:: Root -->
+		<div class="kt-grid kt-grid--hor kt-grid--root">
+
+			<!-- begin:: Page -->
+			
+
+				<!-- begin:: Aside -->
+				<button class="kt-aside-close " id="kt_aside_close_btn"><i class="la la-close"></i></button>
 				
+
+				<!-- end:: Aside -->
+
+				<!-- begin:: Wrapper -->
 				
-				 <c:if test='<%=session.getAttribute("experienceName")!=null %>' >
-				 		  
-				 		  <c:set var="dependantexperiences" value='<%=session.getAttribute("experienceName")%>'></c:set>
-				 		   <div class="modal fade" id="showdependantexperience" tabindex="-1" role="dialog" aria-labelledby="Dependant Experience Title" aria-hidden="true" style="display: none;">
-							<div class="modal-dialog modal-dialog-centered" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="ModalCenterTitle">This Segment cannot be deleted as it is used in the following Experiences. Please remove the segment from these experiences and then try again</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">×</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										<ul>
-										<c:forEach items="${dependantexperiences}" var="experience" varStatus="counter" >
-											<li> <h6>${experience} </h6> </li>
-										</c:forEach>
-										</ul>
+
+					<!-- begin:: Header -->
+				
+
+					<!-- end:: Header -->
+					<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+
+						<!-- begin:: Subheader -->
+						
+
+						<!-- end:: Subheader -->
+
+						<!-- begin:: Content -->
+						<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+							
+							<div class="kt-portlet kt-portlet--mobile">
+								
+								<div class="kt-portlet__body">
+
+									<!--begin: Search Form -->
+									<div class="kt-form kt-fork--label-right kt-margin-t-20 kt-margin-b-10">
+										<div class="row align-items-center">
+											<div class="col-xl-8 order-2 order-xl-1">
+												<div class="row align-items-center">
+													<div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+														<div class="kt-input-icon kt-input-icon--left">
+															<input type="text" onkeyup="javascript:search(this)" class="form-control" placeholder="Search..." id="generalSearch">
+															<span class="kt-input-icon__icon kt-input-icon__icon--left">
+																<span><i class="la la-search"></i></span>
+															</span>
+														</div>
+													</div>
+													
+																
+						 							<div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+														<div id = "delete" class="kt-form__group kt-form__group--inline">
+															<!-- <button class="btn btn-secondary" onclick="javascript:clear	(this)" type="button" id="kt_datatable_reload">Clear Search</button> -->
+														</div>
+													</div>
 										
+													
+												</div>
+											</div>
+										 
+										</div>
 									</div>
-									    
+
+									<!--end: Search Form -->
 								</div>
-							</div>
-						</div>
-						<%session.removeAttribute("experienceName");%>
-						<c:remove var="dependantexperiences"/>
-						    
-				</c:if>
-				<div class="kt-portlet kt-portlet--mobile">
-						<div class="kt-portlet__head">
-							<div class="kt-portlet__head-label">
-								<h3 class="kt-portlet__head-title">
-									Your Geo Segments
-								</h3>
-							</div>
+						<!-- 		<a id="popoverData" class="btn" href="#" data-content="Popover with data-trigger"  data-placement="bottom" data-original-title="Title" data-trigger="hover">Popover with data-trigger</a> -->
+							
+						<div class="popup_url" id="popup_page">
+						
+						
 						</div>
 						
-						<div class="kt-portlet__body">			
-							<!--begin: Datatable -->
-						<div class="row">
-      						<div class="col-sm-12">
-         						<table class="table table-striped- table-bordered table-hover table-checkable kt_table_1" id="kt_table_1">
-            						<thead>
-               							<tr role="row">
-											<th class="sorting_asc" tabindex="0" aria-controls="kt_table_1" aria-sort="ascending">Name</th>
-											<th class="sorting" tabindex="0" aria-controls="kt_table_1">Geography</th>
-											<th class="sorting"tabindex="0" aria-controls="kt_table_1">Created By</th>
-											<th class="sorting" tabindex="0" aria-controls="kt_table_1">Created On</th>																
-											<th class="sorting_disabled" tabindex="0" aria-controls="kt_table_1">Actions</th>
-										</tr>
-									</thead>						
-								
-				    			<tbody>
-				    			<%
-								for ( Map.Entry<Integer, Segment> entry : orgSegments.entrySet()) {
-									Integer key = entry.getKey();
-									Segment segment = entry.getValue();
-									User user = userRepository.getUser(segment.getUser_id());
-								    %>
-								     <tr role="row" class="odd">
-					<td tabindex="0" class="sorting_1"><%=segment.getName()%></td>
-					<td><%
-					String segmentRules = segment.getGeography();
-										//Remove "loc{" and "}"
-										if (segmentRules.indexOf("}") !=0) {
-											int beginIndex = segmentRules.indexOf("{")+1;
-											int endIndex = segmentRules.indexOf("}");											
-											segmentRules = segmentRules.substring(beginIndex, endIndex);
-										}
-										String [] rule = segmentRules.split("\\|"); 
-										for(String a:rule) {
-											String[] criteria = a.split(":");
-											String display = "";
-											if (criteria[0].startsWith("include")) {												
-												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-info btn-pill'>"+criteria[2]+"&nbsp;<i class='fa fa-map-marker-alt'></i></button>";	
-											} else {
-												display = "<button id='"+segment.getId()+"' type='button' class='btn btn-outline-danger btn-pill'>"+criteria[2]+"&nbsp;<i class='fa fa-map-marker-alt'></i></button>";
-											}																				
-											%>											
-											<%=display%>
-										<%}%>
-										<!-- 
-										include:City:Test2|include:City:Test3										
-										 -->									
-					</td>
-					<td><%=user.getFirstname()%>&nbsp;<%=user.getLastname()%></td>
-					<td>1/9/2019</td>										
-					<td nowrap>
-					<!-- Modified by Gurujegan - Segment Geo Edit feature --Start-->
-					<form id="form-<%=key%>">
-					<input type="hidden" name="seg_id" value="<%=segment.getId()%>"/>
-					<input type="hidden" name="seg_rule" value="<%=segment.getGeography()%>"/>
-					<input type="hidden" name="seg_name" value="<%=segment.getName()%>"/>
-					<input type="hidden" name="result_page" value="pages/segment-view-geo.jsp"/>
-					<button type="button" class="btn btn-outline-secondary btn-icon" onclick="javascript:edit(<%=segment.getId()%>)"><i class="fa fa-tools"></i></button>&nbsp;
-					<!-- <button type="button" class="btn btn-outline-secondary btn-icon"><i class="fa fa-trash-alt"></i></button> -->
-					  <%-- <button type="button" class="btn btn-outline-secondary btn-icon" onclick="javascript:deletesegment(<%=segment.getId()%>)"><i class="fa fa-tools"></i></button>&nbsp; --%>
-						<!-- Button trigger modal -->   
-						<button type="button" class="btn btn-outline-brand" data-toggle="modal" data-target='<%="#modal-"+key %>'  onclick="getsegmentname(<%=segment.getId()%>)">
-							<i class="fa fa-trash-alt"></i>
-						</button> 
-						<div class="modal fade" id='<%="modal-"+key%>' tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display: none;">
-							<div class="modal-dialog modal-dialog-centered" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalCenterTitle">Are you sure to delete Segment</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<!-- modal popup for segment  -->
+						
+						  <div class="modal" id="myModal" role="document">
+						    <div class="modal-dialog ">
+						      <div class="modal-content">
+						      
+						        <!-- Modal Header -->
+						        <div  class="modal-header">
+						          <h4 id="segment-element" class="modal-title">Modal Heading</h4>
+						          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 											<span aria-hidden="true">×</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										<p id="segmentTitle"><b><%=segment.getName()%></b></p> 
-									</div> 
-									 
-									<div class="modal-footer">
-										<button type="button" class="btn btn-outline-brand"  id="segmentId"   name="kv"  value="<%=segment.getId()%>" onclick="deletesegment('<%=key%>')">Yes</button>
-										<button type="button" class="btn btn-outline-brand" data-dismiss="modal">No</button>     
-									</div>     
-									    
+								  </button>
+						        </div>
+						        
+						        <!-- Modal body -->
+						        <div id="popover-element" data-trigger="hover" class="modal-body">
+						          Modal body..
+						        </div>
+						        
+						        <!-- Modal footer -->
+						        <div class="modal-footer">
+						          <button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+						        </div>
+						        
+						      </div>
+						    </div>
+						  </div>
+						  
+						  <!-- modal popup for view code  -->
+						  
+						  <div class="modal" id="myModals" role="document">
+						    <div class="modal-dialog ">
+						      <div class="modal-content">
+						      
+						        <!-- Modal Header -->
+						        <div  class="modal-header">
+						          <h4 id="experience-element" class="modal-title">Modal Heading</h4>
+						          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+								  </button>
+						        </div>
+						        
+						        <!-- Modal body -->
+						        <div id="popover-elements" class="modal-body">
+						          Modal body..
+						        </div>
+						        
+						        <!-- Modal footer -->
+						        <div class="modal-footer">
+						          <button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+						        </div>
+						        
+						      </div>
+						    </div>
+						  </div>
+						  
+						  
+						   <!-- modal popup for Page URL  -->
+						  
+						  <div class="modal" id="modalurls" role="document">
+						    <div class="modal-dialog ">
+						      <div class="modal-content">
+						      
+						        <!-- Modal Header -->
+						        <div  class="modal-header">
+						          <h4 id="experience-elements" class="modal-title">Modal Heading</h4>
+						          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+								  </button>
+						        </div>
+						        
+						        <!-- Modal body -->
+						        <div id="popurl-elements" class="modal-body">
+						          Modal body..
+						        </div>
+						        
+						        <!-- Modal footer -->
+						        <div class="modal-footer">
+						          <button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+						        </div>
+						        
+						      </div>
+						    </div>
+						  </div>
+								
+								
+								
+								<div class="kt-portlet__body kt-portlet__body--fit">
+								
+								<!-- <div id="spin" class="spinner-border" style="display:none;"></div> -->
+								
+								<!-- <div id="spin" class="col-sm" style="margin-left: 100px;">
+                                 <div class="kt-spinner kt-spinner--md kt-spinner--info"></div>
+                            	</div> -->
+                            	
+                            	<div id="spin" style="display:none; class="d-flex justify-content-center">
+                            	<button id="spinner"  class="btn btn-brand "  disabled>
+								  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+								  Loading...
+								</button>
+								</div>
+
+									<!--begin: Datatable -->
+									
+									
+									<div class="kt_datatable" id="local_data"></div>
+									
+			
+
+									<!--end: Datatable -->
+									<div id="count" class="kt-datatable__pager-info"><span class="kt-datatable__pager-detail"></span></div>
 								</div>
 							</div>
-						</div>   
-					      
-					</form>    
-					<!-- Modified by Gurujegan - Segment Geo Edit feature --End-->										
-					</td>
-				</tr>	<%
-								}
-								%>
-								</tbody>
-											
-							</table>
-							<!--end: Datatable -->
+							 
+				
 						</div>
+
+						<!-- end:: Content -->
 					</div>
-				    <%				    				   					
-			}			
-		%>
+
+					<!-- begin:: Footer -->
+				
+
+					<!-- end:: Footer -->
+				
+
+				<!-- end:: Wrapper -->
+			
+
+			<!-- end:: Page -->
+		</div>
+
+		<!-- end:: Root -->
+
+
+		<!-- begin::Demo Panel -->
+		
+
+		<!-- end::Demo Panel -->
+
+		<!-- begin::Global Config(global config for global JS sciprts) -->
+		<script>
+			var KTAppOptions = {
+				"colors": {
+					"state": {
+						"brand": "#5d78ff",
+						"metal": "#c4c5d6",
+						"light": "#ffffff",
+						"accent": "#00c5dc",
+						"primary": "#5867dd",
+						"success": "#34bfa3",
+						"info": "#36a3f7",
+						"warning": "#ffb822",
+						"danger": "#fd3995",
+						"focus": "#9816f4"
+					},
+					"base": {
+						"label": [
+							"#c5cbe3",
+							"#a1a8c3",
+							"#3d4465",
+							"#3e4466"
+						],
+						"shape": [
+							"#f0f3ff",
+							"#d9dffa",
+							"#afb4d4",
+							"#646c9a"
+						]
+					}
+				}
+			};
+		</script>
+
+		<!-- end::Global Config -->
+
+		<!--begin:: Global Mandatory Vendors -->
+		<script src="/GeoReach/assets/vendors/general/jquery/dist/jquery.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/jquery/dist/jquery.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/popper.js/dist/umd/popper.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/js-cookie/src/js.cookie.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/moment/min/moment.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/tooltip.js/dist/umd/tooltip.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/perfect-scrollbar/dist/perfect-scrollbar.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/sticky-js/dist/sticky.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/wnumb/wNumb.js" type="text/javascript"></script>
+
+		<!--end:: Global Mandatory Vendors -->
+
+		<!--begin:: Global Optional Vendors -->
+		<script src="/GeoReach/assets/vendors/general/jquery-form/dist/jquery.form.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/block-ui/jquery.blockUI.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/custom/js/vendors/bootstrap-datepicker.init.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/bootstrap-datetime-picker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/custom/js/vendors/bootstrap-timepicker.init.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/bootstrap-maxlength/src/bootstrap-maxlength.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/custom/vendors/bootstrap-multiselectsplitter/bootstrap-multiselectsplitter.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/bootstrap-select/dist/js/bootstrap-select.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/typeahead.js/dist/typeahead.bundle.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/handlebars/dist/handlebars.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/inputmask/dist/jquery.inputmask.bundle.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/inputmask/dist/inputmask/inputmask.date.extensions.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/inputmask/dist/inputmask/inputmask.numeric.extensions.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/nouislider/distribute/nouislider.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/owl.carousel/dist/owl.carousel.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/autosize/dist/autosize.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/clipboard/dist/clipboard.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/dropzone/dist/dropzone.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/summernote/dist/summernote.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/markdown/lib/markdown.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/bootstrap-markdown/js/bootstrap-markdown.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/custom/js/vendors/bootstrap-markdown.init.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/jquery-validation/dist/jquery.validate.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/jquery-validation/dist/additional-methods.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/custom/js/vendors/jquery-validation.init.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/toastr/build/toastr.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/raphael/raphael.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/morris.js/morris.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/chart.js/dist/Chart.bundle.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/custom/vendors/bootstrap-session-timeout/dist/bootstrap-session-timeout.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/custom/vendors/jquery-idletimer/idle-timer.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/waypoints/lib/jquery.waypoints.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/counterup/jquery.counterup.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/es6-promise-polyfill/promise.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/sweetalert2/dist/sweetalert2.min.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/custom/js/vendors/sweetalert2.init.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/jquery.repeater/src/lib.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/jquery.repeater/src/jquery.input.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/jquery.repeater/src/repeater.js" type="text/javascript"></script>
+		<script src="/GeoReach/assets/vendors/general/dompurify/dist/purify.js" type="text/javascript"></script>
+
+		<!--end:: Global Optional Vendors -->
+
+		<!--begin::Global Theme Bundle(used by all pages) -->
+		<script src="/GeoReach/assets/js/demo1/scripts.bundle.js" type="text/javascript"></script>
+		<!-- <script src="/GeoReach/assets/plugins/global/plugins.bundle.js" type="text/javascript"></script> -->
+
+		<!--end::Global Theme Bundle -->
+
+		<!--begin::Page Scripts(used by this page) -->
+				<script src="/GeoReach/assets/js/demo1/pages/components/base/popovers.js" type="text/javascript"></script>
+		<!-- <script src="/GeoReach/assets/js/demo1/pages/crud/keen-datatable/base/data-local.js" type="text/javascript"></script>
+		 -->
+		<script src="/GeoReach/assets/js/demo1/pages/crud/keen-datatable/base/segment.js" type="text/javascript"></script>
+       
+  
+		<!--end::Page Scripts -->
+		
+		<ul class="pagination" id ="page" style=" display: flex; padding-left: 0px; list-style: none; border-radius: 0.25rem; justify-content: center; cursor: pointer;margin: 10px;">
+		
+		</ul>
+		
 	
-</div>
-</div>
-</div> 
-<!-- end:: Content -->	 
+	</body>  
+			
+			
+		</div>
+						
+
+<!-- end:: Content -->

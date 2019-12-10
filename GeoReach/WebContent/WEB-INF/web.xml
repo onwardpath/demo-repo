@@ -70,7 +70,14 @@
     <servlet-name>ajaxExpServlet</servlet-name>
     <url-pattern>/AjaxExpController</url-pattern>
   </servlet-mapping> 
-  
+  <servlet>
+    <servlet-name>ajaxSegServlet</servlet-name>
+    <servlet-class>com.onwardpath.georeach.controller.AjaxSegController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ajaxSegServlet</servlet-name>
+    <url-pattern>/AjaxSegController</url-pattern>
+  </servlet-mapping>
   <session-config>
   	<session-timeout>-1</session-timeout>
   </session-config>
