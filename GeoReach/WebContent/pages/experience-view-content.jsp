@@ -217,7 +217,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 						        <div  class="modal-header">
 						          <h4 id="segment-element" class="modal-title">Modal Heading</h4>
 						          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">×</span>
+											<span aria-hidden="true">ï¿½</span>
 								  </button>
 						        </div>
 						        
@@ -245,12 +245,38 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 						        <div  class="modal-header">
 						          <h4 id="experience-element" class="modal-title">Modal Heading</h4>
 						          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">×</span>
+											<span aria-hidden="true">ï¿½</span>
 								  </button>
 						        </div>
 						        
 						        <!-- Modal body -->
 						        <div id="popover-elements" class="modal-body">
+						          Modal body..
+						        </div>
+						        
+						        <!-- Modal footer -->
+						        <div class="modal-footer">
+						          <button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+						        </div>
+						        
+						      </div>
+						    </div>
+						  </div>
+									  
+						  <div class="modal" id="modalurls" role="document">
+						    <div class="modal-dialog ">
+						      <div class="modal-content">
+						      
+						        <!-- Modal Header -->
+						        <div  class="modal-header">
+						          <h4 id="experience-elements" class="modal-title">Modal Heading</h4>
+						          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">ï¿½</span>
+								  </button>
+						        </div>
+						        
+						        <!-- Modal body -->
+						        <div id="popurl-elements" class="modal-body">
 						          Modal body..
 						        </div>
 						        
