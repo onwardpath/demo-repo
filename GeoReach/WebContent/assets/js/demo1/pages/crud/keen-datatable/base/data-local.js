@@ -666,7 +666,7 @@ function test()
         					title: 'Segments',
         					template: function(row) {
         						var exp_id = row.id;
-        					
+        						var pagetype ="";   
         						var exp_name = row.experience;
         						var segArray = row.segments.split(",");
         						segArray = segArray.slice(0,segArray.lastIndexOf(","));
@@ -712,7 +712,7 @@ function test()
         					title: 'Status',
         					template:function(row)
         					{
-        					
+        						pagetype =row.status
         						var exp_id = row.id;
         						experid = row.id;
         						expname = row.experience;
@@ -771,7 +771,7 @@ function test()
         					autoHide: false,
         					template: function() {
         						return '\
-        						<a <a href="/GeoReach?view=pages/experience-edit-content.jsp&id='+experid+'&exp_name='+expname+'" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">\
+        						<a <a href="/GeoReach?view=pages/experience-edit-'+pagetype+'.jsp&id='+experid+'" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">\
         							<i class="la la-edit"></i>\
         						</a>\
         						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">\
@@ -780,7 +780,7 @@ function test()
         					';
         					},
         				}],
-        		});
+        		}); 
 	}
 	
 	
