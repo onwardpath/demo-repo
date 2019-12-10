@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="com.onwardpath.georeach.model.User" %>
+
+
+
 <%
 String username = "";
 String profilepic = "";	
@@ -17,14 +20,16 @@ if ((User) session.getAttribute("user") != null) {
 }
 %>
 <!--begin: User Bar -->
-<div class="kt-header__topbar-item kt-header__topbar-item--user">
-    <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="0px, 0px">
-        <div class="kt-header__topbar-user">
+
+
+<div id="user" class="kt-header__topbar-item kt-header__topbar-item--user">
+    <div id="expand" class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="0px, 0px">
+        <div class="kt-header__topbar-user" onclick="loading()"> 
             <span class="kt-header__topbar-welcome kt-hidden-mobile">Hi,</span> 
-            <span class="kt-header__topbar-username kt-hidden-mobile">            
+            <span class="kt-header__topbar-username kt-hidden-mobile">              
                 <%=username%>	                                        	                   
-            </span> 
-            <%
+            </span>   
+            <%  
             if (!username.equals("") && profilepic.equals("")) {
             	%>
             	<!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
@@ -38,10 +43,11 @@ if ((User) session.getAttribute("user") != null) {
             	<% 
             }            
             %>                                    
-        </div>
+        </div> 
     </div>
-    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-sm">
+    <div id="show" class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-sm">
         <jsp:include page="_dropdown-user-solid.jsp" />
     </div>
 </div>
+
 <!--end: User Bar -->
