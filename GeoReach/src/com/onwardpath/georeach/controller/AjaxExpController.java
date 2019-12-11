@@ -333,8 +333,8 @@ public class AjaxExpController extends HttpServlet {
 					ResultSet ExpCount = prepStatement.executeQuery();
 
 					ExpCount.last();
-					int rows = ExpCount.getRow();
-					ExpCount.beforeFirst();
+					int rows = ExpCount.getRow(); 
+					ExpCount.beforeFirst();    
 					json.put("ExpCount", rows);
 
 					if (rst.getString(6).contains(",")) {
