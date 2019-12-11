@@ -131,9 +131,11 @@
             });
             $('#showdependantexperience').modal('show');
             //Below code is for left navigation to stay open as per the corresponding page.
-            var getPageName =  location.search.substring(location.search.indexOf("/")+1,location.search.indexOf("."));
-        	$("li#"+getPageName).addClass("kt-menu__item--active");
-        	$( "li#"+getPageName).parents("li").addClass( "kt-menu__item--open kt-menu__item--here");
+           if(location.search !=""){
+            	var getPageName =  location.search.substring(location.search.indexOf("/")+1,location.search.indexOf("."));
+        		$("li#"+getPageName).addClass("kt-menu__item--active");
+        		$( "li#"+getPageName).parents("li").addClass( "kt-menu__item--open kt-menu__item--here");
+           }
         });
         </script>
     </body>
