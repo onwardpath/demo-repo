@@ -110,7 +110,7 @@ public class AjaxExpController extends HttpServlet {
 				while (rst.next()) {
 					int exp_id = rst.getInt(1);
 					String tmp_exp_id = String.valueOf(exp_id);
-					String GetExpPageCountQuery = "select Group_concat(DISTINCT config.url) AS url,count as pageurl_count from config where experience_id = ?";
+					String GetExpPageCountQuery = "select Group_concat(DISTINCT config.url) AS url,count(*) as pageurl_count from config where experience_id = ?";
 					JSONObject json = new JSONObject();
 					prepStatement = con.prepareStatement(GetExpPageCountQuery);
 					prepStatement.setString(1, tmp_exp_id);
@@ -122,7 +122,7 @@ public class AjaxExpController extends HttpServlet {
 						json.put("pages", URLCount.getInt(2));
 					}
 
-					String ExpAllCount = "select count from user, experience, segment, content  where experience.id = content.experience_id  and content.segment_id = segment.id and user.org_id =  ? and experience.org_id = ?  GROUP BY experience.id ORDER BY experience.create_time DESC ";
+					String ExpAllCount = "select count(*) from user, experience, segment, content  where experience.id = content.experience_id  and content.segment_id = segment.id and user.org_id =  ? and experience.org_id = ?  GROUP BY experience.id ORDER BY experience.create_time DESC ";
 
 					prepStatement = con.prepareStatement(ExpAllCount);
 					prepStatement.setString(1, tmp_org_ids);
@@ -254,7 +254,7 @@ public class AjaxExpController extends HttpServlet {
 				System.out.println("session" + userId + orgId);
 				String tmp_org_id = String.valueOf(orgId);
 
-			
+			 
 				String limit = request.getParameter("limit");
 				
 				String Expquery = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT( distinct concat(segment.id ,':',segment.name) separator ',') as segmentname, experience.create_time as create_time, CONCAT(user.firstname, ' ', user.lastname) as name from user, experience, segment, content  where experience.id = content.experience_id  and content.segment_id = segment.id and user.org_id = ? and experience.org_id = ? and (experience.name  LIKE ? or segment.name LIKE ?) GROUP BY experience.id limit ?  ";
@@ -313,7 +313,7 @@ public class AjaxExpController extends HttpServlet {
 				while (rst.next()) {
 					int exp_id = rst.getInt(1);
 					String tmp_exp_id = String.valueOf(exp_id);
-					String GetExpPageCountQuery = "select Group_concat(DISTINCT config.url) AS url,count as pageurl_count from config where experience_id = ?";
+					String GetExpPageCountQuery = "select Group_concat(DISTINCT config.url) AS url,count(*) as pageurl_count from config where experience_id = ?";
 					JSONObject json = new JSONObject();
 					prepStatement = con.prepareStatement(GetExpPageCountQuery);
 					prepStatement.setString(1, tmp_exp_id);
@@ -325,7 +325,7 @@ public class AjaxExpController extends HttpServlet {
 						json.put("pages", URLCount.getInt(2));
 					}
 
-					String ExpAllCount = "select count from user, experience, segment, content  where experience.id = content.experience_id  and content.segment_id = segment.id and user.org_id =  ? and experience.org_id = ? GROUP BY experience.id ORDER BY experience.create_time DESC ";
+					String ExpAllCount = "select count(*) from user, experience, segment, content  where experience.id = content.experience_id  and content.segment_id = segment.id and user.org_id =  ? and experience.org_id = ? GROUP BY experience.id ORDER BY experience.create_time DESC ";
 
 					prepStatement = con.prepareStatement(ExpAllCount);
 					prepStatement.setString(1, tmp_org_ids);
