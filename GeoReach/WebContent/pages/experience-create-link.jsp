@@ -101,28 +101,27 @@ function getContentFromLinkExp(){
 	  createAnchor.target =anchorTarget
 	  createAnchor.id=segment_id+"_"+linkText
 	 
-	  if(typeVal == "Image"){ 
-		  var img = $('<img>').attr({
-	            'id': 'myImage',
+	  if(typeVal == "Image"){
+		linkHTMLElemFormation = document.getElementById("linkContent").appendChild(createAnchor)
+		var anchorIDVal = "#"+segment_id+"_"+linkText;
+		  var createImg = $('<img/>').attr({
 	            'src': imageUrl,
 	            'alt': linkText,
-	            'title': 'JSFiddle logo',
 	            'width': imgWidth+"px",
 	            'height':imgHeight+"px" 
-	        }).appendTo('#'+segment_id+"_"+linkText);
+	        }).appendTo(anchorIDVal);
 		
 	/* 	var createImg = new Image();
 		createImg.src = imageUrl;
 		createImg.alt = linkText;
 		createImg.style.width = imgWidth+"px" ;
 		createImg.style.height = imgHeight+"px" ; */
-		linkHTMLElemFormation = document.getElementById("linkContent").appendChild(createAnchor)
+		
 		//document.getElementById(segment_id+"_"+linkText).appendChild(createImg);
 	  }else{
 		  createAnchor.innerHTML = linkText;
 		  linkHTMLElemFormation = document.getElementById("linkContent").appendChild(createAnchor)
 	  }
-	 // alert("linkHTMLFormaton ::"+document.getElementById("linkContent").innerHTML)
 	  return document.getElementById("linkContent").innerHTML;
 }
 function add(event){
