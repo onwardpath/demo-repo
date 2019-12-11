@@ -25,22 +25,22 @@
 								<div class="kt-menu__submenu ">
 									<span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="segment-create-geo">
 											<a href="/GeoReach?view=pages/segment-create-geo.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Geo</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="segment-create-behavior">
 											<a href="/GeoReach?view=pages/segment-create-behavior.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Behavior</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="segment-create-interest">
 											<a href="/GeoReach?view=pages/segment-create-interest.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Interest</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="segment-create-source">
 											<a href="/GeoReach?view=pages/segment-create-source.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Source</span>
 											</a>
@@ -57,22 +57,22 @@
 								<div class="kt-menu__submenu ">
 									<span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="segment-view-geo">
 											<a href="/GeoReach?view=pages/segment-view-geo.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Geo</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="segment-view-behavior">
 											<a href="/GeoReach?view=pages/segment-view-behavior.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Behavior</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="segment-view-interest">
 											<a href="/GeoReach?view=pages/segment-view-interest.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Interest</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="segment-view-source">
 											<a href="/GeoReach?view=pages/segment-view-source.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Source</span>
 											</a>
@@ -105,33 +105,33 @@
 								<div class="kt-menu__submenu ">
 									<span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="experience-create-content">
 											<a href="/GeoReach?view=pages/experience-create-content.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Content</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="experience-create-image">
 											<a href="/GeoReach?view=pages/experience-create-image.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Image</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="experience-create-link">
 											<a href="/GeoReach?view=pages/experience-create-link.jsp" class="kt-menu__link ">
 												<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Link</span>
 											</a>
 										</li>
 										
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="experience-create-popup">
 											<a href="/GeoReach?view=pages/experience-create-popup.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Pop Up</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="experience-create-redirect">
 											<a href="#" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Redirect</span>
 											</a>
 										</li>
-										<li class="kt-menu__item " aria-haspopup="true">
+										<li class="kt-menu__item " aria-haspopup="true" id="experience-create-style">
 											<a href="#" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Style</span>
 											</a>

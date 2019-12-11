@@ -10,6 +10,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <!--begin::Fonts -->
         <script src="./assets/js/jscolor.js"></script> 
+         <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
              
         <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>        
         <script>
@@ -20,9 +21,7 @@
                 active: function() {
                     sessionStorage.fonts = true;                
                 }            
-		}); 
-       
-        
+		});
         </script>
         <!--end::Fonts -->
         <!--begin::Page Vendors Styles(used by this page) -->
@@ -115,6 +114,7 @@
         <script src="./assets/js/demo1/pages/crud/forms/widgets/bootstrap-select.js" type="text/javascript"></script>
         <script src="./assets/js/demo1/pages/components/extended/session-timeout.js" type="text/javascript"></script>
         
+        
         <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
         
         <!-- using below causes issues with bootstrap-select components -->        
@@ -130,8 +130,11 @@
             	  ]
             });
             $('#showdependantexperience').modal('show');
+            //Below code is for left navigation to stay open as per the corresponding page.
+            var getPageName =  location.search.substring(location.search.indexOf("/")+1,location.search.indexOf("."));
+        	$("li#"+getPageName).addClass("kt-menu__item--active");
+        	$( "li#"+getPageName).parents("li").addClass( "kt-menu__item--open kt-menu__item--here");
         });
-          
         </script>
     </body>
     <!-- end::Body -->
