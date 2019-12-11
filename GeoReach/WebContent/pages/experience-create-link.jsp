@@ -48,8 +48,8 @@ function selectIndex()
 	//errorMessage()
 	if(!document.getElementById("imageChkBox").checked && linkText.trim().length==0){
 		errorMsg = "Please provide value in linktext";
-	}else if(targetUrl.trim().length==0){
-		errorMsg = "Please provide url in TargetUrl field";
+	}else if(targetUrl.trim().length==0 && (!expression.test(targetUrl))){
+		errorMsg = "Please provide valid url in TargetUrl field";
 	}else if(document.getElementById("imageChkBox").checked){
 		//linkText = document.getElementById("imgaltlinkTxt").value;
 		imageUrl =  document.getElementById("image-url").value;
@@ -65,9 +65,7 @@ function selectIndex()
 		}
 	}
 	//alert("ksjdkdf"+targetUrl.match(regex))
-	if(!expression.test(targetUrl)){
-		errorMsg = "Please provide valid target url in TargetUrl field";
-	}	
+	
 	
 	//anchorClassName
 	anchorClassName = document.getElementById("anchorcustomclass").value
@@ -85,7 +83,7 @@ function toggleCheckbox(element)
 			//document.getElementsByClassName("imagelinktext").innerText ="Alt Text";
 			//alert("sdfd"+document.getElementsByClassName("imagelinktext").innerText)
 			typeVal = "Image";
-			//console.log("inside checked symbol")
+			//console.log("inside chekjbhkhcked symbol")
 	}else{
 		document.getElementById("linktext").style.display="block";
 		document.getElementById("imageurl").style.display ="none"
@@ -103,14 +101,23 @@ function getContentFromLinkExp(){
 	  createAnchor.target =anchorTarget
 	  createAnchor.id=segment_id+"_"+linkText
 	 
-	  if(typeVal == "Image"){    
-		var createImg = new Image();
+	  if(typeVal == "Image"){ 
+		  var img = $('<img>').attr({
+	            'id': 'myImage',
+	            'src': imageUrl,
+	            'alt': linkText,
+	            'title': 'JSFiddle logo',
+	            'width': imgWidth+"px",
+	            'height':imgHeight+"px" 
+	        }).appendTo('#'+segment_id+"_"+linkText);
+		
+	/* 	var createImg = new Image();
 		createImg.src = imageUrl;
 		createImg.alt = linkText;
 		createImg.style.width = imgWidth+"px" ;
-		createImg.style.height = imgHeight+"px" ;
+		createImg.style.height = imgHeight+"px" ; */
 		linkHTMLElemFormation = document.getElementById("linkContent").appendChild(createAnchor)
-		document.getElementById(segment_id+"_"+linkText).appendChild(createImg);
+		//document.getElementById(segment_id+"_"+linkText).appendChild(createImg);
 	  }else{
 		  createAnchor.innerHTML = linkText;
 		  linkHTMLElemFormation = document.getElementById("linkContent").appendChild(createAnchor)
@@ -141,7 +148,7 @@ function add(event){
 			typeVal = "Link";
 			}
 			else{
-				swal.fire("Error:"+errorMsg);
+				swal.fire(errorMsg);
 				//document.getElementById("targeturl").focus();
 			}
 		}		
@@ -183,7 +190,6 @@ function getTargetOption(target){
 	anchorTarget = target.value;
 }
 </script>
-
 <!--begin::Content-->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	
 	<%	
