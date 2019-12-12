@@ -278,7 +278,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 						        <!-- Modal body -->
 						        <div id="popurl-elements" class="modal-body">
 						          Modal body..
-						        </div>
+						        </div> 
 						        
 						        <!-- Modal footer -->
 						        <div class="modal-footer">

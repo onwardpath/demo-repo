@@ -53,6 +53,76 @@ $(window).ready(function() {
     	    		
     	    		page(page_id);
     	    		}
+					
+					  var l_total_page = $(this).attr("data-load");//on click call ajax controller(check page-id not equals to undefined)
+	    	    var l_next = $(this).attr("data-page");
+	    	    
+	    	  // Fast forward & Fast backward functionality
+			  
+	    	    if((total_page == l_total_page) && (l_next == "last_next") && (total_page >= 6))
+	    	    	{
+	    	    	console.log("page_id="+l_total_page);
+	    	    	
+	    	    	 var page_i = total_page - 4;
+	    	    	 var page_e = total_page - 1;
+	    	    	  for(var i=page_i,j=2,numt=page_i;i<=total_page;i++) 
+	    	    						{
+	    	    						j++;
+	    	    						var num = numt++;
+	    	    						 num = parseInt(num) ;	
+	    	    						var nums = 'test'+num;
+	    	    						if( i == total_page)
+	    	    							{
+	    	    							active_elm.removeClass('active');
+	    	    							var list = document.createElement("li");
+	    	    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+	    	    			    	    	
+	    	    							}
+	    	    						else
+	    	    							{
+	    	    						var list = document.createElement("li");
+	    	    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+	    	    							}
+	    	    	  var item = document.getElementById("page");
+	    	    	  item.replaceChild(list, item.childNodes[j]);
+	    	    	  
+	    	    	  
+	    	    						}
+	    	    	  
+	    	    	page(total_page);
+	    	    	}
+	    	    else if((total_page == l_total_page) && (l_next == "last_previous") && (total_page >= 6))
+	    	    {
+	    	    	console.log("page_id="+l_total_page);
+	    	    	
+	    	    	 
+	    	    	  for(var i=1,j=2,numt=1;i<=5;i++) 
+    						{
+	    	    		  var id = 1;
+    						j++;
+    						var num = numt++;
+	   						num = parseInt(num) ;	
+	   						var nums = 'test'+num;
+    						if( i == 1)
+    							{
+    							 
+    							var list = document.createElement("li");
+    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+    			    	    	document.getElementById("last").className="";  
+    							}
+    						else
+    							{
+    						var list = document.createElement("li");
+    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+    							}
+    	  var item = document.getElementById("page");
+    	  item.replaceChild(list, item.childNodes[j]);
+    	  
+    						}
+    	  
+    	page(id);
+    	}
+					
     	    var new_id = "";
     	    var custom_id = "";
     	   
@@ -137,6 +207,8 @@ $(window).ready(function() {
     	      }
     	    else {
     	        $(this).addClass('active');
+    	        document.getElementById("last").className="flaticon2-fast-next";
+	    	    document.getElementById("first").className="flaticon2-fast-back";
     	      }
     	      active_elm.removeClass('active');
     	 
@@ -335,11 +407,17 @@ var seg_beh = "beh";
 				console.log("seg=="+seg_display);
 				localStorage.setItem("totalpage", seg_display);
 				localStorage.setItem("pagecount", tot_segment);
+				var totalpage = localStorage.getItem("totalpage");
 				var mydiv = document.getElementById("page");
 				/*var ul = document.createElement('ul');
 				ul.setAttribute('class',"pagination");
 				ul.setAttribute('id',"lists");
 				ul.setAttribute("onclick","paginate();")*/
+				var lists=document.createElement('li');
+				lists.innerHTML='<a class="flaticon2-fast-back" id="first"  data-load = "'+seg_display+'"  data-page = "last_previous" >' + ""  + '</a>';
+				mydiv.appendChild(lists);
+				
+				
 				var list=document.createElement('li');
 				list.innerHTML='<a class="flaticon2-back"  id="prev"  data-page = "previous" >' + ""  + '</a>';
 				mydiv.appendChild(list);
@@ -380,6 +458,16 @@ var seg_beh = "beh";
 				var lists=document.createElement('li');
 				lists.innerHTML='<a class="flaticon2-next" id="next"  data-page = "next" >' + ""  + '</a>';
 				mydiv.appendChild(lists);
+				
+				var list_next=document.createElement('li');
+				list_next.innerHTML='<a class="flaticon2-fast-next" id="last"  data-load = "'+seg_display+'"  data-page = "last_next" >' + ""  + '</a>';
+				mydiv.appendChild(list_next);
+				
+				  if(totalpage < 5)
+					{
+					document.getElementById("first").style.pointerEvents  = "none";
+					document.getElementById("last").style.pointerEvents  = "none";
+					}
 
 				document.getElementById("count").innerHTML= 'Showing 1 - 10 of '+tot_segment+''
                
@@ -540,7 +628,7 @@ function ktDATA()
         					autoHide: false,
         					template: function() {
         						return '\
-        						<a <a href="/GeoReach?view=pages/experience-edit-content.jsp class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">\
+        						<a <a href="/GeoReach?view=pages/segment-edit-geo.jsp" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">\
         							<i class="la la-edit"></i>\
         						</a>\
         						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">\
