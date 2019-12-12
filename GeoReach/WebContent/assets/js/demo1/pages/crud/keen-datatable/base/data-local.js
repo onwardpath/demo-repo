@@ -3,15 +3,12 @@ var dataJSONArray = {};
 jQuery(document).ready(function() {
 	
 	test();
-	console.log(document.getElementById('popoverData').getAttribute('data-content'));
+/*	console.log(document.getElementById('popoverData').getAttribute('data-content'));
 	var myInput = document.getElementById('popoverData');
 	var sec = myInput.getAttribute('data-content');
 	myInput.setAttribute('data-content', 'custom-data');
 	console.log(myInput.setAttribute('data-content', 'custom-value'));
-	$('#popoverData').popover(); 
-	
-  
-	  
+	$('#popoverData').popover(); */	  
 });
 
 document.addEventListener("DOMContentLoaded", function(event) {
