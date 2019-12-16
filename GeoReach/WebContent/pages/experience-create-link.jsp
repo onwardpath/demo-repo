@@ -179,7 +179,7 @@ function saveExperience(){
 //Validate Advanced Settings Checkbox & return its content
 function isChecked(event) {
 	let el_id = event.target.attributes.for.value;	
-	//swal.fire("el_id value is ::"+el_id);
+	
 	if (event.currentTarget.checked == true)
 		document.getElementById(el_id).style.display = "block";
 	else
