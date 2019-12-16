@@ -147,6 +147,7 @@
 
 		var bgcolor = "background-color:#"
 				+ document.getElementById("bgcolor").value;
+		var bgcolor_txt =  "#"+document.getElementById("bgcolor_txt").value;
 		var bgimgurl = "url('" + document.getElementById("bgimgurl").value
 				+ "')";
 		var width = document.getElementById("width").value + "px";
@@ -159,9 +160,12 @@
 		prvw_style_el.style.backgroundSize = "contain";
 		prvw_style_el.style.width = width;
 		prvw_style_el.style.height = height;
-
+		
+		
+		
 		var ptype = popup.options[popup.selectedIndex].value;
 		prvw_el.style.padding = "0.25em";
+		prvw_el.style.color = bgcolor_txt;
 		if (ptype == "html") {
 			prvw_el.innerHTML = document.getElementById("content").value;
 		} else if (ptype == "iframe") {
@@ -229,270 +233,265 @@
 		session.setAttribute("message", "");
 		}
 	%>
-	<!--begin::Portlet-->
+	
 	<div class="kt-portlet">
 		<div class="kt-portlet__head">
 			<div class="kt-portlet__head-label">
 				<h3 class="kt-portlet__head-title">Create Popup Experience</h3>
 			</div>
 		</div>
-		<!--begin::Accordion-->
-		<div class="accordion accordion-outline" id="accordionExample3">
-			<div class="card">
-				<div class="card-header" id="headingOne3">
+		<!--begin::Content-->
+			<div id="basic" class="card-body-wrapper"
+				aria-labelledby="headingOne3" style="">
+				<div class="card-body">
+					<!--begin::Form-->
+					<form class="kt-form kt-form--label-right">
+						<div class="kt-portlet__body">
 
-					<div class="card-title" data-toggle="collapse" data-target="#basic"
-						aria-expanded="true" aria-controls="collapseOne3">Basic
-						Settings</div>
-				</div>
-				<div id="basic" class="card-body-wrapper collapse show"
-					aria-labelledby="headingOne3" data-parent="#accordionExample3"
-					style="">
-					<div class="card-body">
-						<!--begin::Form-->
-						<form class="kt-form">
-							<div class="kt-portlet__body">
-
-								<div class="form-group row">
-									<label class="col-form-label col-lg-3 col-sm-12">Segment</label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<select id="segment" class="custom-select form-control"
-											data-width="300" onchange="javascript:selectIndex()">
-											<%
-												for (Map.Entry<Integer, String> entry : segments.entrySet()) {
-													Integer key = entry.getKey();
-													String val = entry.getValue();
-													out.println("<option value='" + key + "'>" + val + "</option>");
-												}
-											%>
-										</select>
-									</div>
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3 col-sm-12">Segment</label>
+								<div class="col-lg-4 col-md-9 col-sm-12">
+									<select id="segment" class="custom-select form-control"
+										data-width="300" onchange="javascript:selectIndex()">
+										<%
+											for (Map.Entry<Integer, String> entry : segments.entrySet()) {
+												Integer key = entry.getKey();
+												String val = entry.getValue();
+												out.println("<option value='" + key + "'>" + val + "</option>");
+											}
+										%>
+									</select>
 								</div>
-
-								<div class="form-group row">
-									<label class="col-form-label col-lg-3 col-sm-12">Popup
-										Content</label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<select id="popup" class="custom-select form-control"
-											data-width="300" onchange="showChild(event)">
-											<option value="html">HTML Code</option>
-											<option value="iframe">URL</option>
-										</select>
-									</div>
-								</div>
-								<div class="form-group row">
-
-
-									<label class="col-lg-3 col-sm-12 col-form-label">Background
-										Color:</label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<input id="bgcolor" type="text" class="form-control jscolor">
-									</div>
-									<label class="col-lg-1 col-form-label">Width (px):</label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<input id="width" type="text" value="400" class="form-control">
-
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-lg-3 col-sm-12 col-form-label">Background
-										ImageURL:</label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<div class="kt-input-icon">
-											<input id="bgimgurl" type="text" class="form-control">
-										</div>
-									</div>
-									<label class="col-lg-1 col-form-label">Height (px):</label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<div class="kt-input-icon">
-											<input id="height" type="text" value="250"
-												class="form-control">
-										</div>
-									</div>
-								</div>
-
-								<!--  Preview Button -->
-								<div class="form-group row" id="for-html">
-									<label class="col-form-label col-lg-3 col-sm-12">Content
-										(Text/HTML)</label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<textarea id="content" type="text"
-											class="form-control col-lg-9 col-sm-12"
-											aria-describedby="emailHelp" placeholder="Enter Text"
-											rows="10" cols="10"></textarea>
-									</div>
-								</div>
-
-								<div class="form-group row">
-									<label class="col-form-label col-lg-3 col-sm-12"></label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<button type="button" class="btn btn-accent"
-											data-toggle="modal" data-target="#exampleModalLongInner"
-											onclick="javascript:preview(event)">Preview</button>
-									</div>
-									<!--  Iframe for External URL View -->
-									<div class="embed-responsive embed-responsive-16by9"
-										id="iframe-element" style="display: none; height: 100%">
-										<iframe class="embed-responsive-item" src=""></iframe>
-									</div>
-
-
-									<div class="modal fade" id="exampleModalLongInner"
-										tabindex="-1" role="dialog"
-										aria-labelledby="exampleModalLongTitle" aria-hidden="true"
-										style="display: none;">
-										<div class="modal-dialog modal-dialog-centered"
-											role="document">
-											<div class="modal-content" id="preview-style">
-												<div class="modal-body" id="preview">
-													<div id="preview" class="kt-scroll ps" data-scroll="true"
-														style="overflow: hidden;"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group row">
-									<label class="col-form-label col-lg-3 col-sm-12"></label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<div class="kt-checkbox-inline">
-											<label class="kt-checkbox"> <input
-												id="is-adv-settings" for="adv-settings" type="checkbox"
-												value="" onclick="isChecked(event);">Advanced
-												Settings<span></span>
-											</label>
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group row" id="for-iframe"
-									style="display: none;">
-									<label class="col-form-label col-lg-3 col-sm-12"> URL</label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<input id="iframe-url" type="text"
-											class="form-control col-lg-9 col-sm-12"
-											aria-describedby="emailHelp" data-toggle="tooltip"
-											data-original-title="Tooltip on bottom"
-											placeholder="Enter or Paste URL" />
-									</div>
-								</div>
-
-
-								<div class="form-group row" id="adv-settings" style="display:none;">
-									<div class="kt-section__content kt-section__content--border">
-										<div class="form-group">
-											<div class="card-header kt-font-bolder">Choose the Page
-												Events here</div>
-											<div class="kt-separator--space-md"></div>
-											</br>
-											<div class="kt-checkbox-inline" id="page_events">
-												<label class="kt-checkbox"> <input type="checkbox"
-													checked="" value="load" for="for-onload"
-													onclick="isChecked(event);">On Page Load<span></span></label>
-												<label class="kt-checkbox"> <input type="checkbox"
-													value="pageexit">On Page Exit<span></span></label> <label
-													class="kt-checkbox"> <input type="checkbox"
-													value="scroll">On Page Scroll<span></span></label> <label
-													class="kt-checkbox"> <input type="checkbox"
-													value="idle">On Page Idle<span></span></label>
-											</div>
-											<span class="form-text text-muted"></span>
-										</div>
-
-
-										
-
-											<div class="card-header kt-font-bolder">Popup Cookie</div>
-											<div class="form-group row">
-												<label class="col-3 col-form-label">Cookie Time
-													(hours)</label>
-												<div class="col-lg-4 col-md-9 col-sm-12">
-													<input id="popup_cookie" class="form-control" type="text"
-														value="0"> <span class="form-text text-muted">Shows
-														popup to visitor only once in the time period . Set to 0
-														to shown on every page visit.</span>
-												</div>
-											</div>
-											<div id="for-onload">
-											<div class="card-header kt-font-bolder">Popup Delay</div>
-											<div class="form-group row">
-												<label class="col-3 col-form-label">Delay Time
-													(seconds)</label>
-												<div class="col-lg-4 col-md-9 col-sm-12">
-													<input id="popup_delay" class="form-control" type="text"
-														value="0"> <span class="form-text text-muted">Delay
-														pop up from being displayed. Set 0 to show popup
-														instantly.</span>
-												</div>
-											</div>
-
-										</div>
-
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-form-label col-lg-3 col-sm-12"></label>
-									<div class="col-lg-4 col-md-9 col-sm-12">
-										<button type="button" class="btn btn-accent"
-											onclick="javascript:add(event)">Add</button>
-									</div>
-								</div>
-
-								<div class="kt-separator kt-separator--border-dashed"></div>
-								<div class="kt-separator kt-separator--height-sm"></div>
-
-								<div class="kt-section__content kt-section__content--border">
-									<div id="stage" style="display: none;"></div>
-								</div>
-
 							</div>
-							</form>
-						<!--end::Form-->
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--end::Accordion-->
+
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3 col-sm-12">Popup
+									Content</label>
+								<div class="col-lg-4 col-md-9 col-sm-12">
+									<select id="popup" class="custom-select form-control"
+										data-width="300" onchange="showChild(event)">
+										<option value="html">HTML Code</option>
+										<option value="iframe">URL</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+
+
+								<label class="col-lg-3 col-sm-12 col-form-label">Background
+									Color:</label>
+								<div class="col-lg-2 col-md-9 col-sm-12">
+									<input id="bgcolor" type="text" class="form-control jscolor">
+								</div>
+								<label class="col-lg-1 col-form-label">Width (px):</label>
+								<div class="col-lg-1 col-md-9 col-sm-12">
+									<input id="width" type="text" value="400" class="form-control">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-lg-3 col-sm-12 col-form-label">Text Color:</label>
+								<div class="col-lg-2 col-md-9 col-sm-12">
+									<div class="kt-input-icon">
+										<input id="bgcolor_txt" type="text" class="form-control jscolor">
+									</div>
+								</div>
+								<label class="col-lg-1 col-form-label">Height (px):</label>
+								<div class="col-lg-1 col-md-9 col-sm-12">
+									<div class="kt-input-icon">
+										<input id="height" type="text" value="250"
+											class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-lg-3 col-sm-12 col-form-label">Background
+									ImageURL:</label>
+								<div class="col-lg-4 col-md-9 col-sm-12">
+									<div class="kt-input-icon">
+										<input id="bgimgurl" type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+
+							<!--  Preview Button -->
+							<div class="form-group row" id="for-html">
+								<label class="col-form-label col-lg-3 col-sm-12">Content
+									(Text/HTML)</label>
+								<div class="col-lg-4 col-md-9 col-sm-12">
+									<textarea id="content" type="text"
+										class="form-control col-lg-9 col-sm-12"
+										aria-describedby="emailHelp" placeholder="Enter Text"
+										rows="10" cols="10"></textarea>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3 col-sm-12"></label>
+								<div class="col-lg-4 col-md-9 col-sm-12">
+									<button type="button" class="btn btn-accent"
+										data-toggle="modal" data-target="#exampleModalLongInner"
+										onclick="javascript:preview(event)">Preview</button>
+								</div>
+								<!--  Iframe for External URL View -->
+								<div class="embed-responsive embed-responsive-16by9"
+									id="iframe-element" style="display: none; height: 100%">
+									<iframe class="embed-responsive-item" src=""></iframe>
+								</div>
+
+
+								<div class="modal fade" id="exampleModalLongInner" tabindex="-1"
+									role="dialog" aria-labelledby="exampleModalLongTitle"
+									aria-hidden="true" style="display: none;">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content" id="preview-style">
+											<div class="modal-body" id="preview">
+												<div id="preview" class="kt-scroll ps" data-scroll="true"
+													style="overflow: hidden;"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3 col-sm-12"></label>
+								<div class="col-lg-4 col-md-9 col-sm-12">
+									<div class="kt-checkbox-inline">
+										<label class="kt-checkbox"> <input
+											id="is-adv-settings" for="adv-settings" type="checkbox"
+											value="" onclick="isChecked(event);">Advanced
+											Settings<span></span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group row" id="for-iframe"
+								style="display: none;">
+								<label class="col-form-label col-lg-3 col-sm-12"> URL</label>
+								<div class="col-lg-4 col-md-9 col-sm-12">
+									<input id="iframe-url" type="text"
+										class="form-control col-lg-9 col-sm-12"
+										aria-describedby="emailHelp" data-toggle="tooltip"
+										data-original-title="Tooltip on bottom"
+										placeholder="Enter or Paste URL" />
+								</div>
+							</div>
+
+
+							<div class="form-group row" id="adv-settings"
+								style="display: none;">
+								<div class="kt-section__content kt-section__content--border">
+									<div class="form-group">
+										<div class="card-header kt-font-bolder">Choose the Page
+											Events here</div>
+										<div class="kt-separator--space-md"></div>
+										</br>
+										<div class="kt-checkbox-inline" id="page_events">
+											<label class="kt-checkbox"> <input type="checkbox"
+												checked="" value="load" for="for-onload"
+												onclick="isChecked(event);">On Page Load<span></span></label>
+											<label class="kt-checkbox"> <input type="checkbox"
+												value="pageexit">On Page Exit<span></span></label> <label
+												class="kt-checkbox"> <input type="checkbox"
+												value="scroll">On Page Scroll<span></span></label> <label
+												class="kt-checkbox"> <input type="checkbox"
+												value="idle">On Page Idle<span></span></label>
+										</div>
+										<span class="form-text text-muted"></span>
+									</div>
 
 
 
-		<!--begin::Form-->
-		<form id="experience-form">
-			<div class="kt-portlet__body">
 
-				<div class="form-group row">
-					<label class="col-form-label col-lg-3 col-sm-12">Experience
-						Name</label>
-					<div class="col-lg-4 col-md-9 col-sm-12">
-						<input name="name" id="name" type="text" class="form-control"
-							aria-describedby="emailHelp" placeholder="Name"> <span
-							class="form-text text-muted">Give a name for this
-							experience</span>
-					</div>
-				</div>
+									<div class="card-header kt-font-bolder">Popup Cookie</div>
+									<div class="form-group row">
+										<label class="col-3 col-form-label">Cookie Time
+											(hours)</label>
+										<div class="col-lg-4 col-md-9 col-sm-12">
+											<input id="popup_cookie" class="form-control" type="text"
+												value="0"> <span class="form-text text-muted">Shows
+												popup to visitor only once in the time period . Set to 0 to
+												shown on every page visit.</span>
+										</div>
+									</div>
+									<div id="for-onload">
+										<div class="card-header kt-font-bolder">Popup Delay</div>
+										<div class="form-group row">
+											<label class="col-3 col-form-label">Delay Time
+												(seconds)</label>
+											<div class="col-lg-4 col-md-9 col-sm-12">
+												<input id="popup_delay" class="form-control" type="text"
+													value="0"> <span class="form-text text-muted">Delay
+													pop up from being displayed. Set 0 to show popup instantly.</span>
+											</div>
+										</div>
 
-				<div class="form-group row" class="kt-form">
-					<label class="col-form-label col-lg-3 col-sm-12"></label>
-					<div class="col-lg-4 col-md-9 col-sm-12">
-						<div id="hidden-form" style="display: none;">
-							<input type="hidden" name="pageName" value="create-experience">
-							<input type="hidden" name="type"> <input type="hidden"
-								name="experienceDetails"> <input type="hidden"
-								name="segment_id"> <input type="hidden" name="url">
-							<input type="hidden" name="page_events"> <input
-								type="hidden" name="popup_cookie"> <input type="hidden"
-								name="popup_delay">
+									</div>
+
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3 col-sm-12"></label>
+								<div class="col-lg-4 col-md-9 col-sm-12">
+									<button type="button" class="btn btn-accent"
+										onclick="javascript:add(event)">Add</button>
+								</div>
+							</div>
+
+							<div class="kt-separator kt-separator--border-dashed"></div>
+							<div class="kt-separator kt-separator--height-sm"></div>
+
+							<div class="kt-section__content kt-section__content--border">
+								<div id="stage" style="display: none;"></div>
+							</div>
+
 						</div>
-						<button type="reset" class="btn btn-primary"
-							onclick="saveExperience();">Save</button>
-						<button type="reset" class="btn btn-secondary">Cancel</button>
-					</div>
+					</form>
+					<!--end::Form-->
 				</div>
 			</div>
-		</form>
-		<!--end::Form-->
+
+			<!--end::Accordion-->
+
+
+
+			<!--begin::Form-->
+			<form id="experience-form">
+				<div class="kt-portlet__body">
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3 col-sm-12">Experience
+							Name</label>
+						<div class="col-lg-4 col-md-9 col-sm-12">
+							<input name="name" id="name" type="text" class="form-control"
+								aria-describedby="emailHelp" placeholder="Name"> <span
+								class="form-text text-muted">Give a name for this
+								experience</span>
+						</div>
+					</div>
+
+					<div class="form-group row" class="kt-form">
+						<label class="col-form-label col-lg-3 col-sm-12"></label>
+						<div class="col-lg-4 col-md-9 col-sm-12">
+							<div id="hidden-form" style="display: none;">
+								<input type="hidden" name="pageName" value="create-experience">
+								<input type="hidden" name="type"> <input type="hidden"
+									name="experienceDetails"> <input type="hidden"
+									name="segment_id"> <input type="hidden" name="url">
+								<input type="hidden" name="page_events"> <input
+									type="hidden" name="popup_cookie"> <input type="hidden"
+									name="popup_delay">
+							</div>
+							<button type="reset" class="btn btn-primary"
+								onclick="saveExperience();">Save</button>
+							<button type="reset" class="btn btn-secondary">Cancel</button>
+						</div>
+					</div>
+				</div>
+			</form>
+			<!--end::Form-->
+		</div>
+		<!--begin::Portlet-->
 	</div>
-	<!--begin::Portlet-->
-</div>
-<!--end::Content-->
+	<!--end::Content-->
