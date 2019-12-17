@@ -57,13 +57,13 @@ public class AjaxSegController extends HttpServlet {
 			String tmp_org_id = String.valueOf(orgId);
 
 			String location = request.getParameter("segtype");
-			String behaviour = request.getParameter("segbev");
+			String behaviour = request.getParameter("segbev"); 
 			System.out.println("output="+location+behaviour);
 
 			String offset = request.getParameter("offset");
 			String limit = request.getParameter("limit");
 			
-			String Segquery = "select segment.id as segmentid,segment.name as segmentname,segment.geography as seg_geography,CONCAT(user.firstname, ' ', user.lastname) as name from user,segment where user.org_id = ?  and segment.org_id =? and (segment.geography like ? or segment.geography like ? ) limit ?, ?  ";
+			String Segquery = "select segment.id as segmentid,segment.name as segmentname,segment.geography as seg_geography,CONCAT(user.firstname, ' ', user.lastname) as name from user,segment where user.org_id = segment.org_id AND USER.org_id = ? and (segment.geography like ? or segment.geography like ? ) AND USER.id = segment.user_id limit ?, ?  ";
 
 		    value = SegmentAllValues(tmp_org_id, location, behaviour, Segquery,offset,limit);
 			// ExperienceConfigValues();
@@ -104,11 +104,11 @@ public class AjaxSegController extends HttpServlet {
 			PreparedStatement prepStatement = con.prepareStatement(ExpAllValues);
 			
 			prepStatement.setString(1, tmp_org_ids);
-			prepStatement.setString(2, tmp_org_ids);
-			prepStatement.setString(3, seg_loc+ "%"); 
-			prepStatement.setString(4, seg_beh+ "%");
-			prepStatement.setInt(5, offsets); 
-			prepStatement.setInt(6, limits);
+			
+			prepStatement.setString(2, seg_loc+ "%"); 
+			prepStatement.setString(3, seg_beh+ "%");
+			prepStatement.setInt(4, offsets); 
+			prepStatement.setInt(5, limits);
 
 			ResultSet rst = prepStatement.executeQuery();
 
@@ -121,13 +121,13 @@ public class AjaxSegController extends HttpServlet {
 					
 
 					
-					  String ExpAllCount = "select count(*) as tot_count from user,segment where user.org_id = ? and segment.org_id = ? and (segment.geography like ? or segment.geography like ? )   " ;
+					  String ExpAllCount = "select count(*) as tot_count from user,segment where user.org_id = segment.org_id AND USER.org_id = ? and (segment.geography like ? or segment.geography like ? ) AND USER.id = segment.user_id   " ;
 					  
 					  prepStatement = con.prepareStatement(ExpAllCount); 
 					  prepStatement.setString(1, tmp_org_ids); 
-					  prepStatement.setString(2, tmp_org_ids); 
-					  prepStatement.setString(3, seg_loc+ "%"); 
-					  prepStatement.setString(4, seg_beh+ "%"); 
+					   
+					  prepStatement.setString(2, seg_loc+ "%"); 
+					  prepStatement.setString(3, seg_beh+ "%"); 
 					  ResultSet ExpCount = prepStatement.executeQuery();
 		
 					  if (ExpCount.next())
@@ -207,7 +207,7 @@ public class AjaxSegController extends HttpServlet {
 	  String contents = ""; 
 	  try {
 
-	  String Segquery = "select segment.id as segmentid,segment.name as segmentname,segment.geography as seg_geography,CONCAT(user.firstname, ' ', user.lastname) as name from user,segment where user.org_id = ? and segment.org_id = ?   and (segment.geography like ? or segment.geography like ? ) and (segment.geography like ? or segment.name like ? ) limit ? " ;
+	  String Segquery = "select segment.id as segmentid,segment.name as segmentname,segment.geography as seg_geography,CONCAT(user.firstname, ' ', user.lastname) as name from user,segment where user.org_id = segment.org_id AND USER.org_id = ? and (segment.geography like ? or segment.geography like ? ) and (segment.geography like ? or segment.name like ? ) AND USER.id = segment.user_id limit ?  ";
 	  
 	  value = SearchSegmentValues(tmp_org_id, location, behaviour, Segquery,searchvalue,limit);
 	  System.out.println("post value="+value);
@@ -252,12 +252,12 @@ public class AjaxSegController extends HttpServlet {
 				PreparedStatement prepStatement = con.prepareStatement(ExpAllValues);
 				
 				prepStatement.setString(1, tmp_org_ids);
-				prepStatement.setString(2, tmp_org_ids);
-				prepStatement.setString(3, seg_loc+ "%"); 
-				prepStatement.setString(4, seg_beh+ "%");
+				
+				prepStatement.setString(2, seg_loc+ "%"); 
+				prepStatement.setString(3, seg_beh+ "%");
+				prepStatement.setString(4,"%"+ searchvalue+ "%"); 
 				prepStatement.setString(5,"%"+ searchvalue+ "%"); 
-				prepStatement.setString(6,"%"+ searchvalue+ "%"); 
-				prepStatement.setInt(7, limits);
+				prepStatement.setInt(6, limits);
 
 				ResultSet rst = prepStatement.executeQuery();
 
@@ -270,13 +270,13 @@ public class AjaxSegController extends HttpServlet {
 						
 
 						
-						  String ExpAllCount = "select count(*) as tot_count from user,segment where user.org_id = ? and segment.org_id = ?  and (segment.geography like ? or segment.geography like ? )   " ;
+						  String ExpAllCount = "select count(*) as tot_count from user,segment where user.org_id = segment.org_id AND USER.org_id = ? and (segment.geography like ? or segment.geography like ? ) AND USER.id = segment.user_id   " ;
 						  
 						  prepStatement = con.prepareStatement(ExpAllCount); 
 						  prepStatement.setString(1, tmp_org_ids);
-						  prepStatement.setString(2, tmp_org_ids);
-						  prepStatement.setString(3, seg_loc+ "%"); 
-						  prepStatement.setString(4, seg_beh+ "%"); 
+						  
+						  prepStatement.setString(2, seg_loc+ "%"); 
+						  prepStatement.setString(3, seg_beh+ "%"); 
 						  ResultSet ExpCount = prepStatement.executeQuery();
 			
 						  if (ExpCount.next())

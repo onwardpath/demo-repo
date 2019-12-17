@@ -1,8 +1,17 @@
 var dataJSONArray = {};
 
 jQuery(document).ready(function() {
+	localStorage.clear();
 
-test();
+	var offset = 0;
+	var limit = 10;  
+	var record = 10;
+
+	test(offset,limit,record);
+	
+	localStorage.setItem("segpageload", "onload");
+	
+	
 	/*console.log(document.getElementById('popoverData').getAttribute('data-content'));
 	var myInput = document.getElementById('popoverData');
 	var sec = myInput.getAttribute('data-content');
@@ -12,6 +21,78 @@ test();
 	
 	  
 });
+
+// Custom Dropdown for selection of pageitem
+$(document).on("change","#mySelect", function() {
+	 let clickedOption = $(this).val();
+	 console.log("cliock="+clickedOption);
+	 console.log("value="+$(this).val());
+	 localStorage.setItem("pageload", "onlick");
+	 var tot_page = localStorage.getItem("pagecount");
+	 console.l
+
+	 var offset = 0;
+	 var seg_limit = $(this).val();
+	 var record = $(this).val();
+		
+		document.getElementById("spin").style.display= "block";
+		document.getElementById("spin").style.position= "relative";
+		document.getElementById("spin").style.top= "50%";
+		document.getElementById("spin").style.left= "40%"; 
+		document.getElementById("local_data").style.display= "none";
+		document.getElementById("mySelect").style.display = "none";
+		document.getElementById("count").style.display = "none";
+		var seg_geo = "loc";
+		var seg_beh = "beh";
+
+		$.ajax({
+            type : "GET", 
+           
+            url : "/GeoReach/AjaxSegController",
+            contentType: "application/json; charset=utf-8", 
+            data: { 
+            	'segtype':seg_geo, 
+            	'segbev':seg_beh,
+            	offset: offset, 
+            	limit:seg_limit
+            	
+              },
+          
+            async: true,
+          
+	            success : function(data) {    
+	            	document.getElementById("local_data").style.display= "block";
+	            	document.getElementById("spin").style.display= "none";
+	            	document.getElementById("mySelect").style.display = "unset";
+	            	document.getElementById("count").style.display = "unset";
+	                /*dataJSONArray = JSON.parse(data) ;
+	                ktDATA();*/
+	                
+	                response = this.response; 
+					
+					dataJSONArray = JSON.parse(data);
+					var table = $('.kt_datatable');
+					c = table.KTDatatable();
+
+					c.originalDataSet = dataJSONArray;
+
+					c.reload();
+	                var count = dataJSONArray[0];
+					var tot_segment = count.SegCount;
+					var recordsPerPage = record;
+					var seg_display = Math.ceil(tot_segment/recordsPerPage); 
+					console.log("page=="+seg_display);
+					localStorage.setItem("total_seg_page", seg_display);
+					localStorage.setItem("total_seg_count", tot_segment);
+					localStorage.setItem("total_seg_limit", seg_limit);
+					$('#page').empty();
+					paginate(seg_display,tot_segment,seg_limit);
+
+					
+	            }
+	        });
+	});
+
 
 function loading(){
 	if(document.getElementById('user').className == "kt-header__topbar-item kt-header__topbar-item--user")
@@ -38,8 +119,8 @@ $(window).ready(function() {
 	
 
     $('ul.pagination').on('click', 'a', function() {
-    	console.log("total_page="+ localStorage.getItem("totalpage"));
-    	var total_page = localStorage.getItem("totalpage");
+    	console.log("total_page="+ localStorage.getItem("total_seg_page"));
+    	var total_page = localStorage.getItem("total_seg_page");
     	   if($(this).hasClass('active')) return false;
     	    
     	    var active_elm = $('ul.pagination a.active');
@@ -55,74 +136,155 @@ $(window).ready(function() {
     	    		}
 					
 					  var l_total_page = $(this).attr("data-load");//on click call ajax controller(check page-id not equals to undefined)
-	    	    var l_next = $(this).attr("data-page");
+					  var l_next = $(this).attr("data-page");
 	    	    
 	    	  // Fast forward & Fast backward functionality
 			  
-	    	    if((total_page == l_total_page) && (l_next == "last_next") && (total_page >= 6))
-	    	    	{
-	    	    	console.log("page_id="+l_total_page);
-	    	    	
-	    	    	 var page_i = total_page - 4;
-	    	    	 var page_e = total_page - 1;
-	    	    	  for(var i=page_i,j=2,numt=page_i;i<=total_page;i++) 
-	    	    						{
-	    	    						j++;
-	    	    						var num = numt++;
-	    	    						 num = parseInt(num) ;	
-	    	    						var nums = 'test'+num;
-	    	    						if( i == total_page)
-	    	    							{
-	    	    							active_elm.removeClass('active');
-	    	    							var list = document.createElement("li");
-	    	    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
-	    	    			    	    	
-	    	    							}
-	    	    						else
-	    	    							{
-	    	    						var list = document.createElement("li");
-	    	    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
-	    	    							}
-	    	    	  var item = document.getElementById("page");
-	    	    	  item.replaceChild(list, item.childNodes[j]);
-	    	    	  
-	    	    	  
-	    	    						}
-	    	    	  
-	    	    	page(total_page);
-	    	    	}
-	    	    else if((total_page == l_total_page) && (l_next == "last_previous") && (total_page >= 6))
-	    	    {
-	    	    	console.log("page_id="+l_total_page);
-	    	    	
-	    	    	 
-	    	    	  for(var i=1,j=2,numt=1;i<=5;i++) 
-    						{
-	    	    		  var id = 1;
-    						j++;
-    						var num = numt++;
-	   						num = parseInt(num) ;	
-	   						var nums = 'test'+num;
-    						if( i == 1)
-    							{
-    							 
-    							var list = document.createElement("li");
-    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
-    			    	    	document.getElementById("last").className="";  
-    							}
-    						else
-    							{
-    						var list = document.createElement("li");
-    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
-    							}
-    	  var item = document.getElementById("page");
-    	  item.replaceChild(list, item.childNodes[j]);
-    	  
-    						}
-    	  
-    	page(id);
-    	}
-					
+					  var load = localStorage.getItem("segpageload");
+			    	    
+			    	    if((load != "onload"))
+			    	    	{
+			    	  
+			    	    if((total_page == l_total_page) && (l_next == "last_next")&& (total_page >= 6) )
+			    	    	{
+			    	    	console.log("page_id="+l_total_page);
+			    	    	
+			    	    	 var page_i = total_page - 4;
+			    	    	 var page_e = total_page - 1;
+			    	    	  for(var i=page_i,j=1,numt=page_i;i<=total_page;i++) 
+			    	    						{
+			    	    						j++;
+			    	    						var num = numt++;
+			    	    						 num = parseInt(num) ;	
+			    	    						var nums = 'test'+num;
+			    	    						if( i == total_page)
+			    	    							{
+			    	    							active_elm.removeClass('active');
+			    	    							var list = document.createElement("li");
+			    	    							list.setAttribute('class',"three_links");
+			    	    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+			    	    			    	    	
+			    	    							}
+			    	    						else
+			    	    							{
+			    	    						var list = document.createElement("li");
+			    	    						list.setAttribute('class',"three_links");
+			    	    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+			    	    							}
+			    	    	  var item = document.getElementById("page");
+			    	    	  item.replaceChild(list, item.childNodes[j]);
+			    	    	  
+			    	    	  
+			    	    						}
+			    	    	  
+			    	    	page(total_page);
+			    	    	}
+			    
+			    	    else if((total_page == l_total_page) && (l_next == "last_previous")&& (total_page >= 6))
+			    	    {
+			    	    	console.log("page_id="+l_total_page);
+			    	    	
+			    	    	 
+			    	    	  for(var i=1,j=1,numt=1;i<=5;i++) 
+		    						{
+			    	    		  var id = 1;
+		    						j++;
+		    						var num = numt++;
+			   						num = parseInt(num) ;	
+			   						var nums = 'test'+num;
+		    						if( i == 1)
+		    							{
+		    							 
+		    							var list = document.createElement("li");
+		    							list.setAttribute('class',"three_links");
+		    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+		    			    	    	document.getElementById("last").className="";  
+		    							}
+		    						else
+		    							{
+		    						var list = document.createElement("li");
+		    						list.setAttribute('class',"three_links");
+		    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+		    							}
+		    	  var item = document.getElementById("page");
+		    	  item.replaceChild(list, item.childNodes[j]);
+		    	  
+		    						}
+		    	  
+		    	page(id);
+		    	}
+			    	    	}
+			    	    else
+			    	    	{
+			    	    	 if((total_page == l_total_page) && (l_next == "last_next") && (total_page >= 6))
+				    	    	{
+				    	    	console.log("page_id="+l_total_page);
+				    	    	
+				    	    	 var page_i = total_page - 4;
+				    	    	 var page_e = total_page - 1;
+				    	    	  for(var i=page_i,j=2,numt=page_i;i<=total_page;i++) 
+				    	    						{
+				    	    						j++;
+				    	    						var num = numt++;
+				    	    						 num = parseInt(num) ;	
+				    	    						var nums = 'test'+num;
+				    	    						if( i == total_page)
+				    	    							{
+				    	    							active_elm.removeClass('active');
+				    	    							var list = document.createElement("li");
+				    	    							list.setAttribute('class',"three_links");
+				    	    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+				    	    			    	    	
+				    	    							}
+				    	    						else
+				    	    							{
+				    	    						var list = document.createElement("li");
+				    	    						list.setAttribute('class',"three_links");
+				    	    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+				    	    							}
+				    	    	  var item = document.getElementById("page");
+				    	    	  item.replaceChild(list, item.childNodes[j]);
+				    	    	  
+				    	    	  
+				    	    						}
+				    	    	  
+				    	    	page(total_page);
+				    	    	}
+				    	    else if((total_page == l_total_page) && (l_next == "last_previous") && (total_page >= 6))
+				    	    {
+				    	    	console.log("page_id="+l_total_page);
+				    	    	
+				    	    	 
+				    	    	  for(var i=1,j=2,numt=1;i<=5;i++) 
+			    						{
+				    	    		  var id = 1;
+			    						j++;
+			    						var num = numt++;
+				   						num = parseInt(num) ;	
+				   						var nums = 'test'+num;
+			    						if( i == 1)
+			    							{
+			    							 
+			    							var list = document.createElement("li");
+			    							list.setAttribute('class',"three_links");
+			    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+			    			    	    	document.getElementById("last").className="";  
+			    							}
+			    						else
+			    							{
+			    						var list = document.createElement("li");
+			    						list.setAttribute('class',"three_links");
+			    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+			    							}
+			    	  var item = document.getElementById("page");
+			    	  item.replaceChild(list, item.childNodes[j]);
+			    	  
+			    						}
+			    	  
+			    	page(id);
+			    	}
+			    	    	
+			    	    	}		
     	    var new_id = "";
     	    var custom_id = "";
     	   
@@ -222,23 +384,84 @@ function page(id)
 {
 	var page_id = id;
 	var page_end = "";
-	var page_count = localStorage.getItem("pagecount");
+	var page_count = localStorage.getItem("total_seg_count");
+	
 	var offset  = "";
-	var limit =  "";
+	var limit =  localStorage.getItem("total_seg_limit");
+	var offset_l = "";
 
-page_id  = page_id-1 ;
-if(page_id != '0'){
-offset = (page_id * 10) + 1;
-page_end = offset+9;
-limit = 10;
+//page_id  = page_id-1 ;
+
+if(limit == 20){
+	
+if(page_id != '1'){
+
+offset = (page_id * 20) - 19;
+
+page_end = offset+19;
+limit = limit;
 }
 
 else
 	{
 offset = 0; 
-limit =  10;
-page_end = offset+10;
+limit =  limit;
+page_end = limit;
 	}
+}
+
+else if(limit == 50){
+	
+if(page_id != '0'){
+
+offset = (page_id * 50) - 49;
+
+page_end = offset+49;
+limit = limit;
+}
+
+else
+	{
+offset = 0;  
+limit =  limit; 
+page_end = limit;
+	}
+}
+else if(limit == 100){
+	
+if(page_id != '0'){
+
+offset = (page_id * 100) - 99;
+
+page_end = offset+99;
+limit = limit;
+}
+
+else
+	{
+offset = 0; 
+limit =  limit;
+page_end = limit;
+	}
+}
+else if(limit == 10)
+{
+page_id  = page_id-1 ;
+if(page_id != '0'){
+
+offset = (page_id * 10) + 1;
+
+page_end = offset+9;
+limit = limit;
+}
+
+else
+	{
+offset = 0; 
+limit =  limit;
+page_end = limit;
+	}
+}
 
 
  		var url	 = "/GeoReach/AjaxSegController"
@@ -250,6 +473,7 @@ page_end = offset+10;
  		document.getElementById("spin").style.left= "40%"; 
  		document.getElementById("local_data").style.display= "none";
  		document.getElementById("count").style.display = "none";
+ 		document.getElementById("mySelect").style.display = "none";
 		
 		var xhttp = new XMLHttpRequest(); 
 		
@@ -258,7 +482,8 @@ page_end = offset+10;
 					&& this.response != "null") {
 			document.getElementById("spin").style.display= "none";
 			document.getElementById("local_data").style.display= "block";
-			document.getElementById("count").style.display = "block";
+			document.getElementById("count").style.display = "unset";
+			document.getElementById("mySelect").style.display = "unset";
 				response = this.response; 
 				
 				dataJSONArray = JSON.parse(response);
@@ -298,6 +523,7 @@ function search() {
 	document.getElementById("local_data").style.display= "none";
 	document.getElementById("page").style.display = "none";
 	document.getElementById("count").style.display = "none";
+	document.getElementById("mySelect").style.display = "none";
     clearTimeout(timer) // clear the request from the previous event
     timer = setTimeout(function() {
      	var values =  document.getElementById("generalSearch").value;
@@ -327,6 +553,7 @@ function search() {
 					document.getElementById("page").style.display = "none";
 					document.getElementById("spin").style.display= "none";
 					document.getElementById("count").style.display = "none";
+					document.getElementById("mySelect").style.display = "none";
 					document.getElementById("local_data").style.display= "block";
 					
 					response = this.response; 
@@ -368,9 +595,78 @@ if(e.className && e.className.indexOf('flaticon2-delete')!=-1)
 		}
 }
 
+function paginate(seg_display,tot_segment,seg_limit)
+{ 
+	var total_seg_page = localStorage.getItem("total_seg_page");
+	var mydiv = document.getElementById("page");
+	/*var ul = document.createElement('ul');
+	ul.setAttribute('class',"pagination");
+	ul.setAttribute('id',"lists");
+	ul.setAttribute("onclick","paginate();")*/
+	var lists=document.createElement('li');
+	lists.innerHTML='<a class="flaticon2-fast-back" id="first"  data-load = "'+seg_display+'"  data-page = "last_previous" >' + ""  + '</a>';
+	mydiv.appendChild(lists);
+	
+	
+	var list=document.createElement('li');
+	list.innerHTML='<a class="flaticon2-back"  id="prev"  data-page = "previous" >' + ""  + '</a>';
+	mydiv.appendChild(list);
 
-function test()
+	var x = document.getElementsByClassName("page-link");
+	for(var i = 1; i <= seg_display; i++) 
 	{
+
+		if(i > 5)
+		{
+		for (var p = 5; p < x.length; p++) {
+		document.getElementsByClassName("three_links")[p].style.display = 'none';
+		}
+		}
+		else
+			{
+		var mydiv = document.getElementById("page");
+		
+		
+		var li=document.createElement('li');
+		li.setAttribute('class',"three_links");
+		
+		if(i == 1)
+		{
+		li.innerHTML='<a  class="active" id="test'+i+'"  data-pageid='+i+' data-page = "'+seg_display+'" >' + i  + '</a>';
+		
+		console.log("true="+i);
+		}
+		else
+			{
+			li.innerHTML='<a id="test'+i+'" data-pageid='+i+'  data-page = "'+seg_display+'" >' + i  + '</a>';	
+			}
+		mydiv.appendChild(li);
+			
+			}
+		
+	}
+	var lists=document.createElement('li');
+	lists.innerHTML='<a class="flaticon2-next" id="next"  data-page = "next" >' + ""  + '</a>';
+	mydiv.appendChild(lists);
+	
+	var list_next=document.createElement('li');
+	list_next.innerHTML='<a class="flaticon2-fast-next" id="last"  data-load = "'+seg_display+'"  data-page = "last_next" >' + ""  + '</a>';
+	mydiv.appendChild(list_next);
+	
+	  if(total_seg_page < 5)
+		{
+		document.getElementById("first").style.pointerEvents  = "none";
+		document.getElementById("last").style.pointerEvents  = "none";
+		}
+
+	document.getElementById("count").innerHTML= 'Showing 1 - '+seg_limit+' of '+tot_segment+''
+}
+
+
+function test(offset,limit,record)
+{
+var offset = offset;
+var seg_limit = limit;
 document.getElementById("spin").style.display= "block";
 document.getElementById("spin").style.position= "relative";
 document.getElementById("spin").style.top= "50%";
@@ -387,8 +683,8 @@ var seg_beh = "beh";
             data: { 
             	'segtype':seg_geo, 
             	'segbev':seg_beh,
-            	offset: 0, 
-            	limit:10
+            	offset: offset, 
+            	limit:seg_limit
             	
               },
           
@@ -397,6 +693,9 @@ var seg_beh = "beh";
             success : function(data) {    
             	document.getElementById("local_data").style.display= "block";
             	document.getElementById("spin").style.display= "none";
+            	document.getElementById("mySelect").style.visibility = "visible";
+            	document.getElementById("mySelect").style.display = "unset";
+            	document.getElementById("search").style.display = "block";
             	
                 dataJSONArray = JSON.parse(data) ;
                 ktDATA();
@@ -405,73 +704,28 @@ var seg_beh = "beh";
 				var recordsPerPage = 10;
 				var seg_display = Math.ceil(tot_segment/recordsPerPage); 
 				console.log("seg=="+seg_display);
-				localStorage.setItem("totalpage", seg_display);
-				localStorage.setItem("pagecount", tot_segment);
-				var totalpage = localStorage.getItem("totalpage");
-				var mydiv = document.getElementById("page");
-				/*var ul = document.createElement('ul');
-				ul.setAttribute('class',"pagination");
-				ul.setAttribute('id',"lists");
-				ul.setAttribute("onclick","paginate();")*/
-				var lists=document.createElement('li');
-				lists.innerHTML='<a class="flaticon2-fast-back" id="first"  data-load = "'+seg_display+'"  data-page = "last_previous" >' + ""  + '</a>';
-				mydiv.appendChild(lists);
+				localStorage.setItem("total_seg_page", seg_display);
+				localStorage.setItem("total_seg_count", tot_segment);
+				localStorage.setItem("total_seg_limit", seg_limit);
+				var tot_page = localStorage.getItem("total_seg_count");
+				if(tot_page <= 10)
+				 {
+				 $('option[value=20]').prop('disabled', true);
+				 $('option[value=50]').prop('disabled', true);
+				 $('option[value=100]').prop('disabled', true);
+				 }
+			 else if(tot_page <= 20)
+				 {
+				 $('option[value=50]').prop('disabled', true);
+				 $('option[value=100]').prop('disabled', true);
+				 }
+			 else if(tot_page <= 50)
+				 {
+				 $('option[value=100]').prop('disabled', true);
+				 }
 				
-				
-				var list=document.createElement('li');
-				list.innerHTML='<a class="flaticon2-back"  id="prev"  data-page = "previous" >' + ""  + '</a>';
-				mydiv.appendChild(list);
-
-				var x = document.getElementsByClassName("page-link");
-				for(var i = 1; i <= seg_display; i++) 
-				{
-
-					if(i > 5)
-					{
-					for (var p = 5; p < x.length; p++) {
-					document.getElementsByClassName("three_links")[p].style.display = 'none';
-					}
-					}
-					else
-						{
-					var mydiv = document.getElementById("page");
-					
-					
-					var li=document.createElement('li');
-					li.setAttribute('class',"three_links");
-					
-					if(i == 1)
-					{
-					li.innerHTML='<a  class="active" id="test'+i+'"  data-pageid='+i+' data-page = "'+seg_display+'" >' + i  + '</a>';
-					
-					console.log("true="+i);
-					}
-					else
-						{
-						li.innerHTML='<a id="test'+i+'" data-pageid='+i+'  data-page = "'+seg_display+'" >' + i  + '</a>';	
-						}
-					mydiv.appendChild(li);
-						
-						}
-					
-				}
-				var lists=document.createElement('li');
-				lists.innerHTML='<a class="flaticon2-next" id="next"  data-page = "next" >' + ""  + '</a>';
-				mydiv.appendChild(lists);
-				
-				var list_next=document.createElement('li');
-				list_next.innerHTML='<a class="flaticon2-fast-next" id="last"  data-load = "'+seg_display+'"  data-page = "last_next" >' + ""  + '</a>';
-				mydiv.appendChild(list_next);
-				
-				  if(totalpage < 5)
-					{
-					document.getElementById("first").style.pointerEvents  = "none";
-					document.getElementById("last").style.pointerEvents  = "none";
-					}
-
-				document.getElementById("count").innerHTML= 'Showing 1 - 10 of '+tot_segment+''
                
-				
+				paginate(seg_display,tot_segment,seg_limit);
             }
         });
                 
