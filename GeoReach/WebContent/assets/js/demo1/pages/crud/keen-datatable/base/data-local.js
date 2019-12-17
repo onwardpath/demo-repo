@@ -2,21 +2,147 @@ var dataJSONArray = {};
 
 jQuery(document).ready(function() {
 	
-	test();
-/*	console.log(document.getElementById('popoverData').getAttribute('data-content'));
-	var myInput = document.getElementById('popoverData');
-	var sec = myInput.getAttribute('data-content');
-	myInput.setAttribute('data-content', 'custom-data');
-	console.log(myInput.setAttribute('data-content', 'custom-value'));
-	$('#popoverData').popover(); */	  
-});
+	var offset = 0;
+	var limit = 10;  
+	var record = 10;
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    // - Code to execute when all DOM content is loaded. 
-    // - including fonts, images, etc.
+	test(offset,limit,record); 
 	
+	localStorage.setItem("pageload", "onload");
+	$('.hover').mouseover(function() {
+		 
+		});
+	/*$('#popoverData').popover(); 
+	container: 'body'*/
+	 
 });
 
+$(document).on('mouseenter', '.hover', function () {
+    //do
+	//alert("coming true="+this.id);
+	var segment_id	=	$(this).attr('id');
+	/*var theID = $(this).attr('id');
+	var myInput = $('#' + theID );
+	var sec = myInput.attr('data-content', 'custom-data');
+
+	$('#' + theID ).popover(); */
+	
+	console.log("segment=="+segment_id);
+	var exp_id		=	$(this).attr('data-expid')
+	var seg_name    =   $(this).attr('data-segname');
+	
+	
+	 var url	 = "/GeoReach/AjaxExpController"
+		 var params = "service="+segment_id+"&expid="+exp_id+"&exper=content";
+	 	  var response = "";
+	 
+			
+			var xhttp = new XMLHttpRequest(); 
+			
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200
+						&& this.response != "null") {
+					
+					response = this.response; 
+					var json = JSON.parse(response);
+					var temp = json[0];
+				//	KTDatatableDataLocalDemo.init(response);
+					console.log("content="+temp.content);
+					document.getElementById("popover-element").innerHTML = temp.content;
+					document.getElementById("segment-element").innerHTML = seg_name;
+					$('#myModal').modal('show');
+			//		$('#popover-element').popover();
+					var theID = $(this).attr('id');
+					var myInput = $('#' + theID );
+					var sec = myInput.attr('data-content', temp.content);
+					$('#' + theID ).popover(); 
+					
+					
+					
+					
+			}};
+			xhttp.open("POST", url+"?"+params);
+			
+			xhttp.send();
+			return response;
+}).on('mouseleave', '.dynamic', function () {
+    console.log("leave ");
+});
+
+
+/*$('.hover').mouseover(function() {
+	   var theID = $(this).attr('data-expid');
+	   $('#' + theID + '#myModal').modal('show');
+	});*/
+
+$('.hover').mouseover(function() {
+	 
+	});
+
+$(document).on("change","#mySelect", function() {
+	 let clickedOption = $(this).val();
+	 console.log("cliock="+clickedOption);
+	 console.log("value="+$(this).val());
+	 localStorage.setItem("pageload", "onlick");
+	 var tot_page = localStorage.getItem("pagecount");
+	 console.l
+
+	 var offset = 0;
+	 var limit = $(this).val();
+	 var record = $(this).val();
+		
+		document.getElementById("spin").style.display= "block";
+		document.getElementById("spin").style.position= "relative";
+		document.getElementById("spin").style.top= "50%";
+		document.getElementById("spin").style.left= "40%"; 
+		document.getElementById("local_data").style.display= "none";
+		document.getElementById("mySelect").style.display = "none";
+		document.getElementById("count").style.display = "none";
+			$.ajax({
+	            type : "GET", 
+	           
+	            url : "/GeoReach/AjaxExpController",
+	            contentType: "application/json; charset=utf-8", 
+	            data: { 
+	            	offset: offset, 
+	            	limit:limit  
+	            	
+	              },
+	          
+	            async: true,
+	          
+	            success : function(data) {    
+	            	document.getElementById("local_data").style.display= "block";
+	            	document.getElementById("spin").style.display= "none";
+	            	document.getElementById("mySelect").style.display = "unset";
+	            	document.getElementById("count").style.display = "unset";
+	                /*dataJSONArray = JSON.parse(data) ;
+	                ktDATA();*/
+	                
+	                response = this.response; 
+					
+					dataJSONArray = JSON.parse(data);
+					var table = $('.kt_datatable');
+					c = table.KTDatatable();
+
+					c.originalDataSet = dataJSONArray;
+
+					c.reload();
+	                var expcount = dataJSONArray[0];
+	            	var exp = expcount.ExpCount;
+					var recordsPerPage = record;
+					var page_display = Math.ceil(exp/recordsPerPage); 
+					console.log("page=="+page_display);
+					localStorage.setItem("totalpage", page_display);
+					localStorage.setItem("pagecount", exp);
+					localStorage.setItem("pagelimit", record);
+					$('#page').empty();
+					paginate(page_display,exp,limit);
+
+					
+	            }
+	        });
+	});
 
 
 function loading(){
@@ -46,6 +172,7 @@ $(window).ready(function() {
 	    $('ul.pagination').on('click', 'a', function() {
 	    	console.log("total_paged="+ localStorage.getItem("totalpage"));
 	    	var total_page = localStorage.getItem("totalpage");
+	    //	localStorage.setItem("pageload", "onlick");
 	    	   if($(this).hasClass('active')) return false;
 	    	    
 	    	    var active_elm = $('ul.pagination a.active');
@@ -62,15 +189,18 @@ $(window).ready(function() {
 	    	    
 	    	    var l_total_page = $(this).attr("data-load");//on click call ajax controller(check page-id not equals to undefined)
 	    	    var l_next = $(this).attr("data-page");
+	    	    var load = localStorage.getItem("pageload");
 	    	    
+	    	    if((load != "onload"))
+	    	    	{
 	    	  
-	    	    if((total_page == l_total_page) && (l_next == "last_next") && (total_page > 6))
+	    	    if((total_page == l_total_page) && (l_next == "last_next")&& (total_page >= 6) )
 	    	    	{
 	    	    	console.log("page_id="+l_total_page);
 	    	    	
 	    	    	 var page_i = total_page - 4;
 	    	    	 var page_e = total_page - 1;
-	    	    	  for(var i=page_i,j=2,numt=page_i;i<=total_page;i++) 
+	    	    	  for(var i=page_i,j=1,numt=page_i;i<=total_page;i++) 
 	    	    						{
 	    	    						j++;
 	    	    						var num = numt++;
@@ -80,12 +210,14 @@ $(window).ready(function() {
 	    	    							{
 	    	    							active_elm.removeClass('active');
 	    	    							var list = document.createElement("li");
+	    	    							list.setAttribute('class',"three_links");
 	    	    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
 	    	    			    	    	
 	    	    							}
 	    	    						else
 	    	    							{
 	    	    						var list = document.createElement("li");
+	    	    						list.setAttribute('class',"three_links");
 	    	    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
 	    	    							}
 	    	    	  var item = document.getElementById("page");
@@ -96,12 +228,13 @@ $(window).ready(function() {
 	    	    	  
 	    	    	page(total_page);
 	    	    	}
-	    	    else if((total_page == l_total_page) && (l_next == "last_previous") && (total_page > 6))
+	    
+	    	    else if((total_page == l_total_page) && (l_next == "last_previous")&& (total_page >= 6))
 	    	    {
 	    	    	console.log("page_id="+l_total_page);
 	    	    	
 	    	    	 
-	    	    	  for(var i=1,j=2,numt=1;i<=5;i++) 
+	    	    	  for(var i=1,j=1,numt=1;i<=5;i++) 
     						{
 	    	    		  var id = 1;
     						j++;
@@ -112,12 +245,14 @@ $(window).ready(function() {
     							{
     							 
     							var list = document.createElement("li");
+    							list.setAttribute('class',"three_links");
     			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
     			    	    	document.getElementById("last").className="";  
     							}
     						else
     							{
     						var list = document.createElement("li");
+    						list.setAttribute('class',"three_links");
     						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
     							}
     	  var item = document.getElementById("page");
@@ -127,7 +262,78 @@ $(window).ready(function() {
     	  
     	page(id);
     	}
-	    
+	    	    	}
+	    	    else
+	    	    	{
+	    	    	 if((total_page == l_total_page) && (l_next == "last_next") && (total_page > 6))
+		    	    	{
+		    	    	console.log("page_id="+l_total_page);
+		    	    	
+		    	    	 var page_i = total_page - 4;
+		    	    	 var page_e = total_page - 1;
+		    	    	  for(var i=page_i,j=2,numt=page_i;i<=total_page;i++) 
+		    	    						{
+		    	    						j++;
+		    	    						var num = numt++;
+		    	    						 num = parseInt(num) ;	
+		    	    						var nums = 'test'+num;
+		    	    						if( i == total_page)
+		    	    							{
+		    	    							active_elm.removeClass('active');
+		    	    							var list = document.createElement("li");
+		    	    							list.setAttribute('class',"three_links");
+		    	    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+		    	    			    	    	
+		    	    							}
+		    	    						else
+		    	    							{
+		    	    						var list = document.createElement("li");
+		    	    						list.setAttribute('class',"three_links");
+		    	    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+		    	    							}
+		    	    	  var item = document.getElementById("page");
+		    	    	  item.replaceChild(list, item.childNodes[j]);
+		    	    	  
+		    	    	  
+		    	    						}
+		    	    	  
+		    	    	page(total_page);
+		    	    	}
+		    	    else if((total_page == l_total_page) && (l_next == "last_previous") && (total_page > 6))
+		    	    {
+		    	    	console.log("page_id="+l_total_page);
+		    	    	
+		    	    	 
+		    	    	  for(var i=1,j=2,numt=1;i<=5;i++) 
+	    						{
+		    	    		  var id = 1;
+	    						j++;
+	    						var num = numt++;
+		   						num = parseInt(num) ;	
+		   						var nums = 'test'+num;
+	    						if( i == 1)
+	    							{
+	    							 
+	    							var list = document.createElement("li");
+	    							list.setAttribute('class',"three_links");
+	    			    	    	list.innerHTML='<a class="active"  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+	    			    	    	document.getElementById("last").className="";  
+	    							}
+	    						else
+	    							{
+	    						var list = document.createElement("li");
+	    						list.setAttribute('class',"three_links");
+	    						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
+	    							}
+	    	  var item = document.getElementById("page");
+	    	  item.replaceChild(list, item.childNodes[j]);
+	    	  
+	    						}
+	    	  
+	    	page(id);
+	    	}
+	    	    	
+	    	    	}
 	    	    var new_id = "";
 	    	    var custom_id = "";
 	    	  
@@ -226,28 +432,89 @@ $(window).ready(function() {
 });
 
 /*Ajax Call for Custom Pagination*/
-
 function page(id)
 {
 	var page_id = id;
 	var page_end = "";
 	var page_count = localStorage.getItem("pagecount");
+	
 	var offset  = "";
-	var limit =  "";
+	var limit =  localStorage.getItem("pagelimit");
+	var offset_l = "";
 
-page_id  = page_id-1 ;
-if(page_id != '0'){
-offset = (page_id * 10) + 1;
-page_end = offset+9;
-limit = 10;
+//page_id  = page_id-1 ;
+
+if(limit == 20){
+	
+if(page_id != '1'){
+
+offset = (page_id * 20) - 19;
+
+page_end = offset+19;
+limit = limit;
 }
 
 else
 	{
 offset = 0; 
-limit =  10;
-page_end = offset+10;
+limit =  limit;
+page_end = limit;
 	}
+}
+
+else if(limit == 50){
+	
+if(page_id != '0'){
+
+offset = (page_id * 50) - 49;
+
+page_end = offset+49;
+limit = limit;
+}
+
+else
+	{
+offset = 0; 
+limit =  limit;
+page_end = limit;
+	}
+}
+else if(limit == 100){
+	
+if(page_id != '0'){
+
+offset = (page_id * 100) - 99;
+
+page_end = offset+99;
+limit = limit;
+}
+
+else
+	{
+offset = 0; 
+limit =  limit;
+page_end = limit;
+	}
+}
+else if(limit == 10)
+{
+page_id  = page_id-1 ;
+if(page_id != '0'){
+
+offset = (page_id * 10) + 1;
+
+page_end = offset+9;
+limit = limit;
+}
+
+else
+	{
+offset = 0; 
+limit =  limit;
+page_end = limit;
+	}
+}
+
 
 
  		var url	 = "/GeoReach/AjaxExpController"
@@ -259,7 +526,8 @@ page_end = offset+10;
  		document.getElementById("spin").style.left= "40%"; 
  		document.getElementById("local_data").style.display= "none";
  		document.getElementById("count").style.display = "none";
-		
+ 		document.getElementById("mySelect").style.display = "none";
+ 		
 		var xhttp = new XMLHttpRequest(); 
 		
 		xhttp.onreadystatechange = function() {
@@ -267,7 +535,8 @@ page_end = offset+10;
 					&& this.response != "null") {
 			document.getElementById("spin").style.display= "none";
 			document.getElementById("local_data").style.display= "block";
-			document.getElementById("count").style.display = "block";
+			document.getElementById("count").style.display = "unset";
+			document.getElementById("mySelect").style.display = "unset";
 				response = this.response; 
 				
 				dataJSONArray = JSON.parse(response);
@@ -308,6 +577,7 @@ function search() {
 	document.getElementById("local_data").style.display= "none";
 	document.getElementById("page").style.display = "none";
 	document.getElementById("count").style.display = "none";
+	document.getElementById("mySelect").style.display = "none";
     clearTimeout(timer) // clear the request from the previous event
     timer = setTimeout(function() {
      	var values =  document.getElementById("generalSearch").value;
@@ -337,7 +607,9 @@ function search() {
 					document.getElementById("page").style.display = "none";
 					document.getElementById("spin").style.display= "none";
 					document.getElementById("count").style.display = "none";
+					document.getElementById("mySelect").style.display = "none";
 					document.getElementById("local_data").style.display= "block";
+					
 					
 					response = this.response; 
 					
@@ -420,7 +692,7 @@ document.body.onclick= function(e){
 	   }
 	   if(e.className && e.className.indexOf('hover')!=-1)
 	   {
-	
+		   
    		
    		var segment_id	=	e.getAttribute("id");
     	
@@ -472,6 +744,15 @@ document.body.onclick= function(e){
 			 
 			
 	   }
+	   
+	   /*if(e.className && e.className.indexOf('select')!=-1)
+	   {
+		   var select = document.getElementById("mySelect");
+			var selectedText = select.options[select.selectedIndex].text;
+			console.log("onclick select text="+selectedText);
+			
+			
+	   }*/
 	}
 
 /*document.body.onclick= function(e){
@@ -525,9 +806,10 @@ function myFunction() {
 
  
 }
-function paginate(page_display,exp)
+function paginate(page_display,exp,limit)
 {
 	var mydiv = document.getElementById("page");
+	var limit = limit;
 	/*var ul = document.createElement('ul');
 	ul.setAttribute('class',"pagination");
 	ul.setAttribute('id',"lists");
@@ -591,25 +873,28 @@ function paginate(page_display,exp)
 	document.getElementById("last").style.pointerEvents  = "none";
 	}
 	
-	document.getElementById("count").innerHTML= 'Showing 1 - 10 of '+exp+''	
+	document.getElementById("count").innerHTML= 'Showing 1 - '+limit+' of '+exp+''	
 	
 }
 
-function test()
+function test(offset,limit,record)
 	{
+	var offset = offset;
+	var limit = limit;
 	document.getElementById("spin").style.display= "block";
 	document.getElementById("spin").style.position= "relative";
 	document.getElementById("spin").style.top= "50%";
 	document.getElementById("spin").style.left= "40%"; 
 	document.getElementById("local_data").style.display= "none";
+	
 		$.ajax({
             type : "GET", 
            
             url : "/GeoReach/AjaxExpController",
             contentType: "application/json; charset=utf-8", 
             data: { 
-            	offset: 0, 
-            	limit:10  
+            	offset: offset, 
+            	limit:limit  
             	
               },
           
@@ -618,72 +903,39 @@ function test()
             success : function(data) {    
             	document.getElementById("local_data").style.display= "block";
             	document.getElementById("spin").style.display= "none";
+            	document.getElementById("mySelect").style.visibility = "visible";
+            	document.getElementById("mySelect").style.display = "unset";
+            	document.getElementById("search").style.display = "block";
                 dataJSONArray = JSON.parse(data) ;
                 ktDATA();
                 var expcount = dataJSONArray[0];
             	var exp = expcount.ExpCount;
-				var recordsPerPage = 10;
+				var recordsPerPage = record;
 				var page_display = Math.ceil(exp/recordsPerPage); 
 				console.log("page=="+page_display);
 				localStorage.setItem("totalpage", page_display);
 				localStorage.setItem("pagecount", exp);
+				localStorage.setItem("pagelimit", limit);
+				
+				var tot_page = localStorage.getItem("pagecount");
+				if(tot_page <= 10)
+				 {
+				 $('option[value=20]').prop('disabled', true);
+				 $('option[value=50]').prop('disabled', true);
+				 $('option[value=100]').prop('disabled', true);
+				 }
+			 else if(tot_page <= 20)
+				 {
+				 $('option[value=50]').prop('disabled', true);
+				 $('option[value=100]').prop('disabled', true);
+				 }
+			 else if(tot_page <= 50)
+				 {
+				 $('option[value=100]').prop('disabled', true);
+				 }
 
-				paginate(page_display,exp);
-				/*var mydiv = document.getElementById("page");
-				var ul = document.createElement('ul');
-				ul.setAttribute('class',"pagination");
-				ul.setAttribute('id',"lists");
-				ul.setAttribute("onclick","paginate();")
-				var lists=document.createElement('li');
-				lists.innerHTML='<a class="flaticon2-fast-back"   data-load = "'+page_display+'"  data-page = "last_previous" >' + ""  + '</a>';
-				mydiv.appendChild(lists);
-				
-				var list=document.createElement('li');
-				list.innerHTML='<a class="flaticon2-back"  id="prev"  data-page = "previous" >' + ""  + '</a>';
-				mydiv.appendChild(list);
-				
-				
-				var x = document.getElementsByClassName("page-link");
-				for(var i = 1; i <= page_display; i++) 
-				{
-				
-					if(i > 5)
-					{
-					for (var p = 5; p < x.length; p++) {
-					document.getElementsByClassName("three_links")[p].style.display = 'none';
-					}
-					}
-					else
-						{
-					var mydiv = document.getElementById("page");
-					
-					
-					var li=document.createElement('li');
-					li.setAttribute('class',"three_links");
-					
-					if(i == 1)
-					{
-			        li.innerHTML='<a  class="active" id="test'+i+'"  data-pageid='+i+' data-page = "'+page_display+'" >' + i  + '</a>';
-					
-					console.log("true="+i);
-					}
-					else
-			 			{
-						li.innerHTML='<a id="test'+i+'" data-pageid='+i+'  data-page = "'+page_display+'" >' + i  + '</a>';	
-						}
-					mydiv.appendChild(li);
-						
-						}
-					
-				}
-				var lists=document.createElement('li');
-				lists.innerHTML='<a class="flaticon2-next" id="next"  data-page = "next" >' + ""  + '</a>';
-				mydiv.appendChild(lists);
-				var list_next=document.createElement('li');
-				list_next.innerHTML='<a class="flaticon2-fast-next"  data-load = "'+page_display+'"  data-page = "last_next" >' + ""  + '</a>';
-				mydiv.appendChild(list_next);
-				
-				document.getElementById("count").innerHTML= 'Showing 1 - 10 of '+exp+''*/
+				paginate(page_display,exp,limit);
+
 				
             }
         });

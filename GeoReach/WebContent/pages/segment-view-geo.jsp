@@ -109,7 +109,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 
 <!-- begin:: Content -->
 
-		<div class="kt-portlet kt-portlet--mobile"><!-- begin::portlet -->
+		
 		
 			
 			
@@ -154,11 +154,11 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 
 									<!--begin: Search Form -->
 									<div class="kt-form kt-fork--label-right kt-margin-t-20 kt-margin-b-10">
-										<div class="row align-items-center">
-											<div class="col-xl-8 order-2 order-xl-1">
-												<div class="row align-items-center">
+										<div class="row align-items-center"> 
+						  			<div class="col-xl-8 order-2 order-xl-1">
+					 							<div class="row align-items-center">
 													<div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
-														<div class="kt-input-icon kt-input-icon--left">
+														<div id="search" class="kt-input-icon kt-input-icon--left" style="display:none;">
 															<input type="text" onkeyup="javascript:search(this)" class="form-control" placeholder="Search..." id="generalSearch">
 															<span class="kt-input-icon__icon kt-input-icon__icon--left">
 																<span><i class="la la-search"></i></span>
@@ -299,8 +299,19 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 			
 
 									<!--end: Datatable -->
-									<div id="count" class="kt-datatable__pager-info"><span class="kt-datatable__pager-detail"></span></div>
-								</div>
+									
+								<div id ="custom" class="kt-datatable__pager-info" >
+									 <select class="select" id="mySelect" style="margin-left : 10px;margin-bottom: 10px;visibility:hidden">
+    <option value="10">10</option>
+    <option value="20">20</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+  </select>
+								<span id="count" class="kt-datatable__pager-detail" style="
+								    
+								    bottom: 25px;
+								    margin: 10px
+								"></span></div>
 							</div>
 							 
 				
@@ -450,7 +461,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 	</body>  
 			
 			
-		</div>
+		
 						
 
 <!-- end:: Content -->
