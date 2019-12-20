@@ -27,7 +27,7 @@ $(document).on("change","#mySelect", function() {
 	 let clickedOption = $(this).val();
 	 console.log("cliock="+clickedOption);
 	 console.log("value="+$(this).val());
-	 localStorage.setItem("pageload", "onlick");
+	 localStorage.setItem("segpageload", "onclick");
 	 var tot_page = localStorage.getItem("pagecount");
 	 console.l
 
@@ -176,7 +176,12 @@ $(window).ready(function() {
 			    	    	  
 			    	    	  
 			    	    						}
-			    	    	  
+							
+		    	    	  if(total_page == l_total_page)
+		    	    		  {
+		    	    		  document.getElementById("next").style.pointerEvents  = "none";
+		  	    	    	  document.getElementById("last").style.pointerEvents  = "none";
+		    	    		  }
 			    	    	page(total_page);
 			    	    	}
 			    
@@ -291,6 +296,7 @@ $(window).ready(function() {
     	    if(this.id == 'next'){
     	      var _next = active_elm.parent().next().children('a');
     	      var page_idn = $(_next).attr('data-pageid');//on move  call ajax controller(check page-id not equals to undefined)
+    	      var next = true;
     	      if(page_idn == null)
     	    	{
     	    //	console.log("page_idn="+page_idn);
@@ -306,6 +312,7 @@ $(window).ready(function() {
     	        var testing = $('a.active').last();
     	        var count = (testing.prevObject[0].dataset.pageid);
     	        var num = parseInt(count) + 1;
+    	        var next_num = num;
     	        
     	        if(num <= total_page){
     	        	var nums = 'test'+num;
@@ -319,7 +326,11 @@ $(window).ready(function() {
     				
     				page(num);
     				
-    				
+    				if((next_num == total_page))
+	    	    	{
+	    	    	document.getElementById("next").style.pointerEvents  = "none";
+	    	    	document.getElementById("last").style.pointerEvents  = "none";
+	    	    	}
     	        }
     	  			return; 
     	      }
@@ -333,6 +344,8 @@ $(window).ready(function() {
     	    else if(this.id == 'prev') {
     	        var _prev = active_elm.parent().prev().children('a');
     	        var page_idp = $(_prev).attr('data-pageid');//on move  call ajax controller(check page-id not equals to undefined)
+    	        localStorage.setItem("segpage_idp", page_idp);
+    	        var prev = true;
     	        if(page_idp == null)
     	    	{
     	//    	console.log("page_idp="+page_idp);
@@ -346,8 +359,10 @@ $(window).ready(function() {
     	        	var page_idps = $(_prev).attr('data-pageid');
     	     //   	var num = parseInt($('a.active').text())-1;
     	        	 var testing = $('a.active').first();
+    	        	 
  	    	        var count = (testing.prevObject[0].dataset.pageid);
  	    	        var num = parseInt(count) - 1;
+ 	    	       var prev_num = num;
  	    	       
     	          if(num > 0){
     	        	  var nums = 'test'+num;
@@ -361,9 +376,13 @@ $(window).ready(function() {
     	    				
     	    				page(num);
     	    				
-    	    				
+    	    				if((prev_num == 1))
+    		    	    	{
+	    					document.getElementById("prev").style.pointerEvents  = "none";
+			    	    	document.getElementById("first").style.pointerEvents  = "none";	
+    		    	    	}
     	          }
-    	          return;
+    	          return; 
     	        }
     	        _prev.addClass('active');   
     	      }
@@ -371,9 +390,60 @@ $(window).ready(function() {
     	        $(this).addClass('active');
     	        document.getElementById("last").className="flaticon2-fast-next";
 	    	    document.getElementById("first").className="flaticon2-fast-back";
+	    	    if(((total_page == l_total_page) && (l_next == "last_next")) && (total_page >= 6))
+	    		  {
+	    	    document.getElementById("next").style.pointerEvents  = "none";
+    	    	document.getElementById("last").style.pointerEvents  = "none";
+    	    	document.getElementById("prev").style.pointerEvents  = "unset";
+    	    	document.getElementById("first").style.pointerEvents  = "unset";	
+	    		  }
+	    	    else if(((total_page == l_total_page) &&(l_next == "last_previous")) && (total_page >= 6))
+	    	    {
+    	    	document.getElementById("prev").style.pointerEvents  = "none";
+    	    	document.getElementById("first").style.pointerEvents  = "none";	
+    	    	document.getElementById("next").style.pointerEvents  = "unset";
+	    	    document.getElementById("last").style.pointerEvents  = "unset";
+	    	    }
+	    	    else if(total_page >= 6)
+	    	    	{
+	    	    	document.getElementById("next").style.pointerEvents  = "unset";
+	    	    	document.getElementById("last").style.pointerEvents  = "unset";
+	    	    	document.getElementById("prev").style.pointerEvents  = "unset";
+	    	    	document.getElementById("first").style.pointerEvents  = "unset";	
+	    	    	console.log("previous page")
+	    	    	}
+	    	    
     	      }
     	      active_elm.removeClass('active');
-    	 
+    	      localStorage.getItem("page_idp", page_idp);
+    	      if((page_idn == total_page) && (total_page >= 6))//onclick disable last_next adn next button
+	    	     {
+	    	    	document.getElementById("next").style.pointerEvents  = "none";
+	    	    	document.getElementById("last").style.pointerEvents  = "none";
+	    	     }
+    	      else if(((page_idp == 1) ||(page_id == 1)) && (total_page >= 6))
+    	    	  {
+    	    	  	document.getElementById("prev").style.pointerEvents  = "none";
+	    	    	document.getElementById("first").style.pointerEvents  = "none";	
+    	    	  }
+    	     
+    	      else if((page_id == total_page )&& (total_page >= 6))
+    	    	  {
+    	    	  document.getElementById("next").style.pointerEvents  = "none";
+    	    	  document.getElementById("last").style.pointerEvents  = "none";
+    	    	  }
+    	      else if((prev)&& (total_page >= 6))
+	    	  {
+	    	  document.getElementById("next").style.pointerEvents  = "unset";
+    	      document.getElementById("last").style.pointerEvents  = "unset";
+    	     
+	    	  }
+	      else if((next)&& (total_page >= 6))
+    	  {
+	    	document.getElementById("prev").style.pointerEvents  = "unset";
+    	    document.getElementById("first").style.pointerEvents  = "unset";	
+    	   
+    	  }
     	       
         
     });
@@ -599,6 +669,7 @@ function paginate(seg_display,tot_segment,seg_limit)
 { 
 	var total_seg_page = localStorage.getItem("total_seg_page");
 	var mydiv = document.getElementById("page");
+	var load = localStorage.getItem("segpageload");
 	/*var ul = document.createElement('ul');
 	ul.setAttribute('class',"pagination");
 	ul.setAttribute('id',"lists");
@@ -658,7 +729,11 @@ function paginate(seg_display,tot_segment,seg_limit)
 		document.getElementById("first").style.pointerEvents  = "none";
 		document.getElementById("last").style.pointerEvents  = "none";
 		}
-
+	  if(((load == "onload")|| (load == "onclick"))&&(total_seg_page >=6))
+		 {
+		 document.getElementById("prev").style.pointerEvents  = "none";
+	     document.getElementById("first").style.pointerEvents  = "none";	
+		 }
 	document.getElementById("count").innerHTML= 'Showing 1 - '+seg_limit+' of '+tot_segment+''
 }
 

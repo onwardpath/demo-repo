@@ -61,7 +61,7 @@ public class AjaxExpController extends HttpServlet {
 			/*
 			 * String load = request.getParameter("load"); System.out.println("load"+load);
 			 */
-			String Expquery = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT( distinct concat(segment.id ,':',segment.name) separator ',') as segmentname, experience.create_time as create_time, CONCAT(user.firstname, ' ', user.lastname) as name from user, experience, segment, content ,config where experience.id = content.experience_id and  content.segment_id = segment.id and user.org_id = ? and experience.org_id = ? GROUP BY experience.id ORDER BY experience.create_time DESC limit ?, ?  ";
+			String Expquery = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT( distinct concat(segment.id ,':',segment.name) separator ',') as segmentname,GROUP_CONCAT( distinct concat(content.content) separator ',' ) as content,  experience.create_time as create_time, CONCAT(user.firstname, ' ', user.lastname) as name from user, experience, segment, content ,config where experience.id = content.experience_id and  content.segment_id = segment.id and user.org_id = ? and experience.org_id = ? GROUP BY experience.id ORDER BY experience.create_time DESC limit ?, ?  ";
 
 		    value = ExperienceAllValues(tmp_org_id, offset, limit, Expquery);
 			// ExperienceConfigValues();
@@ -159,7 +159,8 @@ public class AjaxExpController extends HttpServlet {
 					json.put("segments", segments);
 					// json.put("segments_id",rst.getString(6));
 					json.put("org_id", tmp_org_ids);
-					json.put("name", rst.getString(7));
+					json.put("content", rst.getString("content"));
+					json.put("name", rst.getString(8));
 					
 					
 					jarray.put(json);
