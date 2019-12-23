@@ -19,16 +19,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
-import com.google.protobuf.Type;
-
-import org.apache.tomcat.util.json.JSONParser;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -59,24 +52,41 @@ public class AjaxController extends HttpServlet {
 			throws ServletException, IOException {
 		String service_name = request.getParameter("service");
 		if (!service_name.isEmpty() && service_name != null) {
-			// String selectionValues = service_name.equals("city_suggestions") ? "city" :
-			// "state";
-			String selectionValues = service_name.equals("city_suggestions") ? "city"
-					: service_name.equals("state_suggestions") ? "state" : "country";
-			String geoloc = request.getParameter("geoloc");
-			try {
-				String jsonString = SuggestionListValues(geoloc, selectionValues);
-				System.out.println("jsonString ::" + jsonString);
-				response.getWriter().write(jsonString);
-			} catch (Exception e) {
-				e.printStackTrace();
-				// TODO: Return error message in JSON format to caller
+
+			if (service_name.contains("_suggestions")) {
+				// String selectionValues = service_name.equals("city_suggestions") ? "city" :
+				// "state";
+				String selectionValues = service_name.equals("city_suggestions") ? "city"
+						: service_name.equals("state_suggestions") ? "state" : "country";
+				String geoloc = request.getParameter("geoloc");
+				try {
+					String jsonString = SuggestionListValues(geoloc, selectionValues);
+					System.out.println("jsonString ::" + jsonString);
+					response.getWriter().write(jsonString);
+				} catch (Exception e) {
+					e.printStackTrace();
+					// TODO: Return error message in JSON format to caller
+				}
+
 			}
+			// Updated By Gurujegan
+			else if(service_name.equals("get_contents"))
+			{
+				String cnt_id = request.getParameter("id");
+				
+     			try {
+     				response.getWriter().write(getContent(cnt_id));
+     				System.out.println("Response sent for content id"+cnt_id);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
 		}
+
 	}
-	
-	
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
@@ -92,7 +102,7 @@ public class AjaxController extends HttpServlet {
 			System.out.println(Database.getTimestamp() + " @AjaxController.doPost>pageUrl: " + pageUrl);
 			Document doc = Jsoup.connect(pageUrl).get();
 
-			//	doc.select("script").remove();
+			// doc.select("script").remove();
 			// Convert all src/href attributes for image, style-sheet and script elements to
 			// absolute path
 			Elements media = doc.select("img[src]");
@@ -112,7 +122,7 @@ public class AjaxController extends HttpServlet {
 
 			String head = doc.head().html();
 			String body = doc.body().html();
-			
+
 			String html = "<html><head>" + head + "</head><body>" + body + "</body></html>";
 			// html = Jsoup.clean(html, Whitelist.basic());
 			HttpSession session = request.getSession();
@@ -121,7 +131,7 @@ public class AjaxController extends HttpServlet {
 				ArrayList<String> child_list = new ArrayList<String>();
 				ArrayList<JSONObject> parent_list = new ArrayList<JSONObject>();
 				String result_json = "[";
-				
+
 				int org_id = (Integer) session.getAttribute("org_id");
 				ExperienceRepository exp = new ExperienceRepository();
 				Map<Integer, Experience> orgExp = new HashMap<Integer, Experience>();
@@ -129,52 +139,54 @@ public class AjaxController extends HttpServlet {
 				for (Entry<Integer, Experience> exp_entry : orgExp.entrySet()) {
 					String key = String.valueOf(exp_entry.getKey());
 					Experience e = exp_entry.getValue();
-					//System.out.println("Expid : " + exp_entry.getKey() + " ExpName : " + ":" + e.getName());
-    				Map<Integer, Content> orgCont = e.getContents();
-    				child_list.clear();
+					// System.out.println("Expid : " + exp_entry.getKey() + " ExpName : " + ":" +
+					// e.getName());
+					Map<Integer, Content> orgCont = e.getContents();
+					child_list.clear();
+
+					// Content tree generation - Child
 					for (Entry<Integer, Content> cnt_entry : orgCont.entrySet()) {
 						Content c = cnt_entry.getValue();
-						
+
 						JSONObject cnt_obj = new JSONObject();
 						JSONArray cnt_array = new JSONArray();
-						cnt_obj.put("name",c.getSegmentName());
-						cnt_obj.put("id","c-"+c.getId());
-						//cnt_array.put(cnt_obj);
-						child_list.add(cnt_obj.toString());
-						//System.out.println("Content ID : " + cnt_entry.getKey() + " Value : " + ":" + c.getSegmentName());
-                          
-					}
-			
-					//JSONArray child_arr = new JSONArray();
-					//child_arr.put(child_list);
-					
+						cnt_obj.put("name", c.getSegmentName());
+						cnt_obj.put("id", "c-" + c.getId());
 
-					
-					JSONObject exp_obj = new JSONObject();
-					JSONArray exp_array = new JSONArray();	
-					exp_obj.put("name",e.getName());
-					exp_obj.put("id","e-"+exp_entry.getKey());
-					exp_obj.put("children",child_list.toString());
-					
-					if(!(child_list.isEmpty()))
-					{
-					parent_list.add(exp_obj);
+						// cnt_array.put(cnt_obj);
+						child_list.add(cnt_obj.toString());
+						// System.out.println("Content ID : " + cnt_entry.getKey() + " Value : " + ":" +
+						// c.getSegmentName());
+
 					}
-					
+
+					// JSONArray child_arr = new JSONArray();
+					// child_arr.put(child_list);
+
+					// Expreince Tree generation - Parent
+					JSONObject exp_obj = new JSONObject();
+					JSONArray exp_array = new JSONArray();
+					exp_obj.put("name", e.getName());
+					exp_obj.put("id", "e-" + exp_entry.getKey());
+					exp_obj.put("children", child_list.toString());
+
+					if (!(child_list.isEmpty())) {
+						parent_list.add(exp_obj);
+					}
+
 				}
-				
+
 				Iterator<JSONObject> iter = parent_list.iterator();
 				String tmp_json = "";
-				while (iter.hasNext()) { 
-		           tmp_json += iter.next() + ",";
-		        }
-				//Formatting result json to populate treeview
+				while (iter.hasNext()) {
+					tmp_json += iter.next() + ",";
+				}
+				// Formatting result json to populate treeview
 				result_json += tmp_json.substring(0, tmp_json.length() - 1) + "]";
-                String tree_data = result_json.replace("\"[", "[").replace("]\"", "]");
-				session.setAttribute("tree_data", tree_data); 
-				System.out.print(tree_data); 
-				 
-				
+				String tree_data = result_json.replace("\"[", "[").replace("]\"", "]");
+				session.setAttribute("tree_data", tree_data);
+				System.out.print(tree_data);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -221,6 +233,36 @@ public class AjaxController extends HttpServlet {
 		sw.close();
 
 		if (citieslist.size() == 0) {
+			jsonstring = "null";
+		}
+
+		return jsonstring;
+	}
+	
+	//Added by Gurujegan
+	private String getContent(String id)
+			throws SQLException, JsonGenerationException, JsonMappingException, IOException {
+		final StringWriter sw = new StringWriter();
+		final ObjectMapper mapper = new ObjectMapper();
+		Connection con = Database.getConnection();
+		String result = null;
+		String sql_query = "select content from content where id = ?";
+		try {
+            
+			PreparedStatement prepStatement = con.prepareStatement(sql_query);
+			prepStatement.setString(1, id);
+			ResultSet rst = prepStatement.executeQuery();
+			while(rst.next())  {
+				result = rst.getString(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		mapper.writeValue(sw, result);
+		String jsonstring = sw.toString();
+		sw.close();
+
+		if (result == null) {
 			jsonstring = "null";
 		}
 

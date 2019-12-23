@@ -25,13 +25,13 @@ ul.jqtree-tree {
 
     ul.jqtree-tree .jqtree-toggler {
         border-bottom: none;
-        color: #333;
+        color:#4d65dc;
         text-decoration: none;
         vertical-align: middle;
     }
 
     ul.jqtree-tree .jqtree-toggler:hover {
-            color: #000;
+            color: #989385;
             text-decoration: none;
         }
 
@@ -55,7 +55,7 @@ ul.jqtree-tree {
     }
 
     ul.jqtree-tree .jqtree-title {
-        color: #1C4257;
+        color:#ffffff;;
         vertical-align: middle;
         margin-left: 1.5em;
     }
