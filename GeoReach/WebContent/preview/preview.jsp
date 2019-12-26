@@ -11,21 +11,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/GeoReach/preview/tree.jquery.js"></script>
-<title>Insert title here</title>
+<title>Preview Page</title>
 </head>
 <style>
 /* Clear floats after the columns */
 .leftside-tree {
-	left: 0;
-	width: 10%;
-	height: 100%;
-	position: fixed;
-	top: 0;
+	left: inherit;
+	width: inherit;
+	height: inherit;
+	position: inherit;
+	top: inherit;
 }
 
-.sidenav {
+.sidenav  {
 	height: 100%;
-	width: 10%;
+	width: 15%;
 	position: fixed;
 	z-index: 1;
 	top: 0;
@@ -46,7 +46,7 @@
 }
 
 .external-page {
-	width: 89%;
+	width: 85%;
 	right: 0;
 	height: 100%;
 	position: fixed;
@@ -56,12 +56,13 @@
 <script>
 	 var iframe;
          window.addEventListener('load', (event) => {
+        	
         	 var iframe = document.getElementById('ifrm');
         	 var content = document.getElementById("content").innerHTML;
      	  	 var frameDoc = iframe.document;
         	 if (iframe.contentWindow)
         			frameDoc = iframe.contentWindow.document;
-        	
+        	  
              	frameDoc.open();
         		frameDoc.writeln(content);
         		 
@@ -70,7 +71,15 @@
         		//iframe.contentWindow.document.body.contentEditable = "true";
         		iframe.contentWindow.document.designMode = "on"; 
         		
+        		
+        		
      	});
+
+     	function onDrop(event) {
+     	console.log("DHGF");
+     		event.dataTransfer.clearData();
+
+     	}
             
      </script>
 
@@ -79,11 +88,11 @@
 		<iframe class="leftside-tree"
 			src="/GeoReach/preview/leftside-iframe-treeview.jsp" frameborder="0"></iframe>
 	</div>
-	<div class="main">
+	<div class="main" ondragover='onDragOver(event);' ondrop='onDrop(event);'>
 		<div id="content" style="display: none">
 			<%=html%>
 		</div>
-		<iframe id="ifrm" class="external-page" frameborder="0"></iframe>
+		<iframe id="ifrm" class="external-page" frameborder="0"'></iframe>
 	</div>
 
 </body>

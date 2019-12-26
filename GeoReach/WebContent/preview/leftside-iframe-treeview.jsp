@@ -11,7 +11,7 @@
 
 <head>
 <style>
-.tree1, button {
+.exp-tree, button {
 	font-family: Poppins;
 }
 </style>
@@ -39,11 +39,13 @@
 	var data = tree_data.innerText.replace(/\\/g, '');
 	
 	$(function() {
-		$('#tree1').tree({
+		localStorage.removeItem("tree");
+		$('#exp-tree').tree({
 			data : JSON.parse(data),
 			saveState : true,
 			selectable : true,
 			autoOpen : false,
+			animationSpeed: 1000,
 			onDragMove : handleMove,
 			onCreateLi : function(node, $li, is_selected) {
 				// Add 'icon' span before title
@@ -53,7 +55,7 @@
 					c = $li.find('.jqtree-title');
 					c[0].draggable = "true";
 					c[0].setAttribute("ondragstart", "onDragStart(event);");
-
+				    c[0].id = node.id;
 				}
 			}
 
@@ -63,7 +65,7 @@
 			console.log("DFG");
 		}
 
-		$('#tree1').on('tree.open', function(e) {
+		$('#exp-tree').on('tree.open', function(e) {
 			var child = e.node.children;
 			var tot_childs = e.node.children.length;
 			         
@@ -74,14 +76,16 @@
 				if (is_loaded == undefined) {
 					getContentByID(cnt_id,child[i],function(response,obj){
 						obj.content = response;
+						
 						});;
 				}
 				
 			}
+			console.log("Child contents loaded");
 
 		});
 
-		console.log($('#tree1').tree('getSelectedNode'));
+		console.log($('#exp-tree').tree('getSelectedNode'));
 	});
 
 	//AJAX call with callback to returning specific contents by its ID
@@ -131,20 +135,23 @@
 	}
 
 	function onDrop(event) {
+		
 		event.dataTransfer.clearData();
 
 	}
 
 	function onDragStart(event) {
-
-		// let v = '<img alt="Element getting dragged with no dropzone" data-original="https://d33wubrfki0l68.cloudfront.net/6c8a12cc7be91b8682bbfa4c0bbbdfc3161cf7d6/e3d26/images/js/drag-and-drop-vanilla-js/dragnodrop.gif" class="loaded" src="https://d33wubrfki0l68.cloudfront.net/6c8a12cc7be91b8682bbfa4c0bbbdfc3161cf7d6/e3d26/images/js/drag-and-drop-vanilla-js/dragnodrop.gif">';
-		let v = '<div id="xy4kyueFt0aa7c7sdi3Fyw" class="a-cardui fluid-fat-image-link fluid-card fluid-fat-image-link" data-a-card-type="basic"><div class="a-cardui-header"><h2 class="a-color-base headline truncate-2line">Explore mirrorless cameras</h2></div><div class="a-cardui-body"><a class="a-link-normal center-image aok-block image-window" href="/b?node=17432892031&amp;pf_rd_p=38f8e32d-26d5-4c1f-a28d-2c6f1ceef3f3&amp;pf_rd_r=QH9GZGS9GG41MQ91RZKS"><div class="a-section a-spacing-none fluid-image-container"><img alt="Mirrorless cameras" src="https://images-eu.ssl-images-amazon.com/images/G/31/img19/Cameras/Gateway/Sony_Cat_Card_1x._SY304_CB448539687_.jpg" class="landscape-image" data-a-hires="https://images-eu.ssl-images-amazon.com/images/G/31/img19/Cameras/Gateway/Sony_Cat_Card_2X._SY608_CB448539687_.jpg"></div></a></div><div class="a-cardui-footer"><a class="a-link-normal see-more truncate-1line" href="/b?node=1388977031&amp;pf_rd_p=38f8e32d-26d5-4c1f-a28d-2c6f1ceef3f3&amp;pf_rd_r=QH9GZGS9GG41MQ91RZKS">See more</a></div></div>';
-
+		
+		
+		const dragging_node =  $('#exp-tree').tree('getNodeById', event.target.id);
+		console.log(dragging_node);
+				
+             
 		var newdiv_elem = document.createElement("DIV");
-		newdiv_elem.innerHTML = v;
-		newdiv_elem.className = "test";
-		newdiv_elem.id = "test";
-
+		newdiv_elem.innerHTML = dragging_node.content;
+		newdiv_elem.className = "cnt_dragged";
+		newdiv_elem.id = "cnt_dragged";
+		
 		event.dataTransfer.setData('text/html', newdiv_elem.outerHTML);
 
 		//event.currentTarget.style.backgroundColor = 'yellow';
@@ -152,28 +159,17 @@
 	}
 	function onDragOver(event) {
 		var get = event.dataTransfer.getData('text/html');
-
+		
 		event.preventDefault();
 	}
-	//  document.addEventListener('DOMContentLoaded', (event) => {
-	// var iframe = document.getElementById('ifrm');
-	//	 var content = document.getElementById("iframeContent").innerHTML;
 
-	//	 var frameDoc = iframe.document;
-	//	 if (iframe.contentWindow)
-	//			frameDoc = iframe.contentWindow.document;
-	//     	frameDoc.open();
-	//		frameDoc.writeln(content);
-	//	    frameDoc.close();
-	//		document.getElementById("iframeContent").remove();
-	//});
 </script>
 
 
 <body>
 	<button type="button" name="toggleContentEditable"
 		onclick="toggleevent(event)">Disable Contenteditable</button>
-	<div id="tree1" class="tree1" style=""></div>
+	<div id="exp-tree" class="exp-tree" style=""></div>
 	<script src="/GeoReach/preview/tree.jquery.js"></script>
 </body>
 </html>
