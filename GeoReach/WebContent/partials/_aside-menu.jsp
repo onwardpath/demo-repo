@@ -35,6 +35,11 @@
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Behavior</span>
 											</a>
 										</li>
+										<li class="kt-menu__item " aria-haspopup="true" id="segment-create-technology">
+											<a href="/GeoReach?view=pages/segment-create-technology.jsp" class="kt-menu__link ">
+												<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Technology</span>
+											</a>
+										</li>
 										<li class="kt-menu__item " aria-haspopup="true" id="segment-create-interest">
 											<a href="/GeoReach?view=pages/segment-create-interest.jsp" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Interest</span>
