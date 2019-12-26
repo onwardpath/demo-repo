@@ -54,12 +54,12 @@
 								</div>
 							</li>
 							<li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
-								<a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+								<a href="/GeoReach?view=pages/segment-view-geo.jsp" class="kt-menu__link kt-menu__toggle">
 									<i class="kt-menu__link-icon la flaticon-eye"><span></span></i>
 									<span class="kt-menu__link-text">View</span>
 									<i class="kt-menu__ver-arrow la la-angle-right"></i>
 								</a>
-								<div class="kt-menu__submenu ">
+								<!-- <div class="kt-menu__submenu ">
 									<span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
 										<li class="kt-menu__item " aria-haspopup="true" id="segment-view-geo">
@@ -83,7 +83,7 @@
 											</a>
 										</li>
 									</ul>
-								</div>
+								</div> -->
 							</li>
 					</ul>
 			</div>					

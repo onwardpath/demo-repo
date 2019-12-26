@@ -340,33 +340,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 								
 							</div>
 							
-							<div class="row">
-        <button  id ="popoverData" type="button"
-                class="hover"
-                style="visibility:hidden;"
-                data-container="body" 
-                data-toggle="popover" 
-                data-placement="right" 
-                data-html="true" 
-                data-trigger="hover"
-                data-original-title="Popover on right"
-                data-content="<img src='http://www.smallwebsites.co/wp-content/uploads/smbusiness_sm.jpg'  width='250px' height='250px' alt='Seattle'/>Vivamus sagittis lacus vel augue laoreet rutrum faucibus."> 
-                    Popover on right
-        </button> 
-        
-         <button  id ="popoverData" type="button"
-                class="hover"
-                data-container="body" 
-                style="visibility:hidden;"
-                data-toggle="popover" 
-                data-placement="right" 
-                data-html="true" 
-                data-trigger="hover"
-                data-original-title="Popover on right"
-                data-content="<img src='https://images.unsplash.com/photo-1535498730771-e735b998cd64?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'  width='250px' height='250px' alt='Seattle'/>Vivamus sagittis lacus vel augue laoreet rutrum faucibus."> 
-                    Popover on right
-        </button>    
-</div>    
+							   
 							 
 				
 						</div>

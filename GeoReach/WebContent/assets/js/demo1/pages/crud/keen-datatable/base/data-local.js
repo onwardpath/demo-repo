@@ -9,14 +9,14 @@ jQuery(document).ready(function() {
 	test(offset,limit,record); 
 	
 	localStorage.setItem("pageload", "onload");
-	$('.hover').mouseover(function() {
-		 
-		});
+	
 	/*$('#popoverData').popover(); 
 	container: 'body'*/
 	 
 });
-
+/*$(document).on('mouseenter', '.hover', function () {
+	$("[data-toggle=popover]").popover();
+})*/
 $(document).on('mouseenter', '.hover', function () {
     //do
 	//alert("coming true="+this.id);
@@ -45,17 +45,17 @@ $(document).on('mouseenter', '.hover', function () {
 					
 					response = this.response; 
 					var json = JSON.parse(response);
-					var temp = json[0];
+					var temp = json[0]; 
 				//	KTDatatableDataLocalDemo.init(response);
 					console.log("content="+temp.content);
 					document.getElementById("popover-element").innerHTML = temp.content;
 					document.getElementById("segment-element").innerHTML = seg_name;
 					$('#myModal').modal('show');
-			//		$('#popover-element').popover();
+			/*//		$('#popover-element').popover();
 					var theID = $(this).attr('id');
-					var myInput = $('#' + theID );
+					var myInput = $('#' + segment_id );
 					var sec = myInput.attr('data-content', temp.content);
-					$('#' + theID ).popover(); 
+					myInput.popover();*/ 
 					
 					
 					
@@ -75,15 +75,15 @@ $(document).on('mouseenter', '.hover', function () {
 	   $('#' + theID + '#myModal').modal('show');
 	});*/
 
-$('.hover').mouseover(function() {
+/*$('.hover').mouseover(function() {
 	 
 	});
-
+*/
 $(document).on("change","#mySelect", function() {
 	 let clickedOption = $(this).val();
 	 console.log("cliock="+clickedOption);
 	 console.log("value="+$(this).val());
-	 localStorage.setItem("pageload", "onlick");
+	 localStorage.setItem("pageload", "onclick");
 	 var tot_page = localStorage.getItem("pagecount");
 	 console.l
 
@@ -190,7 +190,7 @@ $(window).ready(function() {
 	    	    var l_total_page = $(this).attr("data-load");//on click call ajax controller(check page-id not equals to undefined)
 	    	    var l_next = $(this).attr("data-page");
 	    	    var load = localStorage.getItem("pageload");
-	    	    
+	    	    var c_page = $(this).attr("data-pageid");
 	    	    if((load != "onload"))
 	    	    	{
 	    	  
@@ -225,6 +225,11 @@ $(window).ready(function() {
 	    	    	  
 	    	    	  
 	    	    						}
+	    	    	  if(total_page == l_total_page)
+	    	    		  {
+	    	    		  document.getElementById("next").style.pointerEvents  = "none";
+	  	    	    	  document.getElementById("last").style.pointerEvents  = "none";
+	    	    		  }
 	    	    	  
 	    	    	page(total_page);
 	    	    	}
@@ -255,8 +260,8 @@ $(window).ready(function() {
     						list.setAttribute('class',"three_links");
     						list.innerHTML='<a class=""  id="'+nums+'" data-pageid="'+num+'" >' + i  + '</a>';
     							}
-    	  var item = document.getElementById("page");
-    	  item.replaceChild(list, item.childNodes[j]);
+					    	  var item = document.getElementById("page");
+					    	  item.replaceChild(list, item.childNodes[j]);
     	  
     						}
     	  
@@ -296,8 +301,13 @@ $(window).ready(function() {
 		    	    	  
 		    	    	  
 		    	    						}
-		    	    	  
+		    	    	  /*if(total_page == l_total_page)
+	    	    		  {
+	    	    		  document.getElementById("next").style.pointerEvents  = "none";
+	  	    	    	  document.getElementById("last").style.pointerEvents  = "none";
+	    	    		  }*/
 		    	    	page(total_page);
+		    	    	
 		    	    	}
 		    	    else if((total_page == l_total_page) && (l_next == "last_previous") && (total_page > 6))
 		    	    {
@@ -340,6 +350,7 @@ $(window).ready(function() {
 	    	    if(this.id == 'next'){
 	    	      var _next = active_elm.parent().next().children('a');
 	    	      var page_idn = $(_next).attr('data-pageid');//on move  call ajax controller(check page-id not equals to undefined)
+	    	      var next = true;
 	    	      if(page_idn == null)
 	    	    	{
 	    	    //	console.log("page_idn="+page_idn);
@@ -355,6 +366,7 @@ $(window).ready(function() {
 	    	        var testing = $('a.active').last();
 	    	        var count = (testing.prevObject[0].dataset.pageid);
 	    	        var num = parseInt(count) + 1;
+	    	        var next_num = num;
 	    	        
 	    	        if(num <= total_page){
 	    	        	var nums = 'test'+num;
@@ -368,20 +380,27 @@ $(window).ready(function() {
 	    				
 	    				page(num);
 	    				
+	    				if((next_num == total_page))
+		    	    	{
+		    	    	document.getElementById("next").style.pointerEvents  = "none";
+		    	    	document.getElementById("last").style.pointerEvents  = "none";
+		    	    	}
+	    				
 	    				
 	    	        }
 	    	  			return; 
 	    	      }
 	    	      _next.addClass('active');   
 	    	      
-	    	      
-	    	      
+	    	    
 	    	      
 	    	    }
 	    	    
 	    	    else if(this.id == 'prev') {
 	    	        var _prev = active_elm.parent().prev().children('a');
 	    	        var page_idp = $(_prev).attr('data-pageid');//on move  call ajax controller(check page-id not equals to undefined)
+	    	        localStorage.setItem("page_idp", page_idp);
+	    	        var prev = true;
 	    	        if(page_idp == null)
 	    	    	{
 	    	//    	console.log("page_idp="+page_idp);
@@ -397,6 +416,7 @@ $(window).ready(function() {
 	    	        	 var testing = $('a.active').first();
 	 	    	        var count = (testing.prevObject[0].dataset.pageid);
 	 	    	        var num = parseInt(count) - 1;
+	 	    	        var prev_num = num;
 	 	    	       
 	    	          if(num > 0){
 	    	        	  var nums = 'test'+num;
@@ -407,6 +427,12 @@ $(window).ready(function() {
 	    	    		//		new_idp = new_element[0].textContent;//on move of newly created element call ajax controller(check page-id not equals to undefined)
 	    	    			/*	var r = new_element[0].innerHTML;
 	    	    				new_idp = r.substring(27,28);*/
+	    	    				
+	    	    				if((prev_num == 1))
+	    		    	    	{
+    	    					document.getElementById("prev").style.pointerEvents  = "none";
+    			    	    	document.getElementById("first").style.pointerEvents  = "none";	
+	    		    	    	}
 	    	    				
 	    	    				page(num);
 	    	    				
@@ -420,11 +446,58 @@ $(window).ready(function() {
 	    	        $(this).addClass('active');
 	    	        document.getElementById("last").className="flaticon2-fast-next";
 		    	    document.getElementById("first").className="flaticon2-fast-back";
+		    	    if(((total_page == l_total_page) && (l_next == "last_next")) && (total_page >= 6))
+  	    		  {
+		    	    document.getElementById("next").style.pointerEvents  = "none";
+	    	    	document.getElementById("last").style.pointerEvents  = "none";
+	    	    	document.getElementById("prev").style.pointerEvents  = "unset";
+	    	    	document.getElementById("first").style.pointerEvents  = "unset";	
+  	    		  }
+		    	    else if(((total_page == l_total_page) &&(l_next == "last_previous"))&& (total_page >= 6))
+		    	    {
+	    	    	document.getElementById("prev").style.pointerEvents  = "none";
+	    	    	document.getElementById("first").style.pointerEvents  = "none";	
+	    	    	document.getElementById("next").style.pointerEvents  = "unset";
+		    	    document.getElementById("last").style.pointerEvents  = "unset";
+		    	    }
+		    	    else if(total_page >= 6)
+		    	    	{
+		    	    	document.getElementById("next").style.pointerEvents  = "unset";
+		    	    	document.getElementById("last").style.pointerEvents  = "unset";
+		    	    	document.getElementById("prev").style.pointerEvents  = "unset";
+		    	    	document.getElementById("first").style.pointerEvents  = "unset";	
+		    	    	console.log("previous page")
+		    	    	}
+		    	    
 	    	      }
 	    	    
 	    	      active_elm.removeClass('active');
-	    	    	
-	    	 
+	    	      localStorage.getItem("page_idp", page_idp);
+	    	      if((page_idn == total_page) && (total_page >= 6))//onclick disable last_next adn next button
+		    	     {
+		    	    	document.getElementById("next").style.pointerEvents  = "none";
+		    	    	document.getElementById("last").style.pointerEvents  = "none";
+		    	     }
+	    	      else if(((page_idp == 1) ||(page_id == 1))&& (total_page >= 6))
+	    	    	  {
+	    	    	  	document.getElementById("prev").style.pointerEvents  = "none";
+		    	    	document.getElementById("first").style.pointerEvents  = "none";	
+	    	    	  }
+	    	      else if((page_id == total_page )&& (total_page >= 6))
+		    	  {
+			    	  document.getElementById("next").style.pointerEvents  = "none";
+			    	  document.getElementById("last").style.pointerEvents  = "none";
+		    	  }
+	    	      else if((prev)&& (total_page >= 6))
+	    	    	  {
+	    	    	  document.getElementById("next").style.pointerEvents  = "unset";
+		    	      document.getElementById("last").style.pointerEvents  = "unset";
+	    	    	  }
+	    	      else if((next)&& (total_page >= 6))
+    	    	  {
+	    	    	document.getElementById("prev").style.pointerEvents  = "unset";
+		    	    document.getElementById("first").style.pointerEvents  = "unset";	
+    	    	  }
 	    	       
 	        
 	    });
@@ -720,7 +793,7 @@ document.body.onclick= function(e){
 						document.getElementById("popover-element").innerHTML = temp.content;
 						document.getElementById("segment-element").innerHTML = seg_name;
 						$('#myModal').modal('show');
-				//		$('#popover-element').popover();
+				//		$('#popover-element').popover(); 
 						
 						
 						
@@ -809,6 +882,7 @@ function myFunction() {
 function paginate(page_display,exp,limit)
 {
 	var mydiv = document.getElementById("page");
+	var load = localStorage.getItem("pageload");
 	var limit = limit;
 	/*var ul = document.createElement('ul');
 	ul.setAttribute('class',"pagination");
@@ -872,6 +946,11 @@ function paginate(page_display,exp,limit)
 	document.getElementById("first").style.pointerEvents  = "none";
 	document.getElementById("last").style.pointerEvents  = "none";
 	}
+	 if(((load == "onload")|| (load == "onclick")) &&(total_page >= 6))
+		 {
+		 document.getElementById("prev").style.pointerEvents  = "none";
+	     document.getElementById("first").style.pointerEvents  = "none";	
+		 }
 	
 	document.getElementById("count").innerHTML= 'Showing 1 - '+limit+' of '+exp+''	
 	
@@ -993,17 +1072,18 @@ function test(offset,limit,record)
         						var exp_id = row.id;
         						var pagetype ="";   
         						var exp_name = row.experience;
+        						
         						var segArray = row.segments.split(",");
         						segArray = segArray.slice(0,segArray.lastIndexOf(","));
         					
         						
         						var s = "";
         						var seg	=	"";
-        						for(var i=0;i<segArray.length;++i)
+        						for(var i=0;(i<segArray.length);++i)
         							{  
         							
         							var segname = segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length); 
-        							s += '<a href="" class="hover" data-expname="'+exp_name+'" data-toggle="modal"  title="Experience contents" data-segname="'+segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length)+'"  data-expid="'+exp_id+'" id="' + segArray[i].slice(0,segArray[i].lastIndexOf(":")) + '" >' + segname +",  " + '</a>';
+        							s += '<a href="" class="hover" data-expname="'+exp_name+'" data-toggle="modal"      title="Experience contents" data-segname="'+segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length)+'"  data-expid="'+exp_id+'" id="' + segArray[i].slice(0,segArray[i].lastIndexOf(":")) + '" >' + segname +",  " + '</a>';
         							
         							}
         						

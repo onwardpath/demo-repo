@@ -1,12 +1,79 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%String html = (String) session.getAttribute("content");%>
-<div style="float: left;">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 h1:hover, h2:hover, p:hover, img:hover {		
 	background: #05f;
 	opacity: 0.25;
 }
+ul, #myUL {
+  list-style-type: none;
+}
+
+#myUL {
+  margin: 0;
+  padding: 0;
+}
+
+.caret {
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+
+.caret::before {
+  content: "\25B6";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.caret-down::before {
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari */'
+  transform: rotate(90deg);  
+}
+
+.nested {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+/* end tree view styles */
+.sidenav {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 6px 6px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  margin-left: 200px; /* Same as the width of the sidenav */
+}
 </style>
+
 <script src="./assets/js/jquery-3.4.1.min.js"></script>
 <script>
 function close() {	
@@ -96,9 +163,37 @@ function getStyle(el, styleProp) {
 }
 </script>
 
-<body>
-<a href="javascript:close();">Close</a>&nbsp;
-<button onclick="javascript:add()">Add Experience</button>
 
+<div class="sidenav">
+  <a href="#">About</a>
+  <a href="#">Services</a>
+  <a href="#">Clients</a>
+  <a href="#">Contact</a>
+  <ul id="myUL">
+  <li><span class="caret">Beverages</span>
+    <ul class="nested">
+      <li>Water</li>
+      <li>Coffee</li>
+
+    </ul>
+  </li>
+</ul>
 </div>
-<%=html%>
+
+
+<div class="main">
+   <%=html%>
+</div>
+<script>
+var toggler = document.getElementsByClassName("caret");
+var i;
+debugger;
+for (i = 0; i < toggler.length; i++) {
+  toggler[i].addEventListener("click", function() {
+    this.parentElement.querySelector(".nested").classList.toggle("active");
+    this.classList.toggle("caret-down");
+  });
+}
+</script>
+
+
