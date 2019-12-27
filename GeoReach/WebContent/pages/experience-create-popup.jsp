@@ -37,7 +37,7 @@
 					+ " already added please select a different segment.");
 		} else {
 			if (modalurl.value.length > 0 || modalcontent.value.length > 0) {
-				debugger;
+				
 				expDetailsObj[segment_id] = content;
 				var stage = document.getElementById("stage");
 				stage.innerHTML += '<div id="'+segment_name+'" class="card-body">'
