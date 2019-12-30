@@ -48,7 +48,7 @@ public class SegmentController extends HttpServlet {
 	        		int userId = (Integer)session.getAttribute("user_id");	              
 		            int orgId = (Integer)session.getAttribute("org_id");
 		            String segmentName = request.getParameter("segmentName");
-		            String segmentRules = request.getParameter("segmentRules");		              
+		            String segmentRules = request.getParameter("segmentRules");	
 		            System.out.println("segmentName: "+segmentName);
 		            System.out.println("segmentRules: "+segmentRules);
 		            if (segmentRepository.findBySegmentNameInOrg(segmentName ,orgId)) {	                  

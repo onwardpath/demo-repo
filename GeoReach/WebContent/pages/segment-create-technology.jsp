@@ -119,8 +119,8 @@ var buttonlabelArr = new Array();
 			document.getElementById("segmentName").focus()
 		}
 		}else{
-			swal.fire("Area value should not be empty. Please Select any")
-			document.getElementById("geoloc").focus()
+			swal.fire(" Provide value for technology rule. Please Select any")
+			document.getElementById("technologyrule").focus()
 		}
 	}
 
@@ -276,7 +276,7 @@ var buttonlabelArr = new Array();
 					<div class="col-lg-4 col-md-9 col-sm-12">
 						<div id="hidden-form" style="display: none;">
 							<input type="hidden" name="pageName"
-								value="segment-create-geo.jsp">
+								value="segment-create-technology.jsp">
 							<!-- input type="hidden" id = "segmentName" name="segmentName"  -->
 							<input type="hidden" id="segmentRules" name="segmentRules">
 							<select id="dynamic-select" size="2"></select>
