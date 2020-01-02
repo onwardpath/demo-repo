@@ -65,9 +65,9 @@ var buttonlabelArr = new Array();
 		
 		if(($.inArray(buttonlabel, buttonlabelArr) == -1)){
 		if(techRule == "include") {		
-			x.innerHTML += '<button id="'+buttonlabel+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove('+buttonlabel+','+index+')">'+techCondition+'<i class="la la-close"></i></button>&nbsp;';		
+			x.innerHTML += '<button id="'+buttonlabel+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove(this)">'+techCondition+'<i class="la la-close"></i></button>&nbsp;';		
 		} else {		
-			x.innerHTML += '<button id="'+buttonlabel+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove('+buttonlabel+','+index+')">'+techCondition+'<i class="la la-close"></i></button>&nbsp;';		
+			x.innerHTML += '<button id="'+buttonlabel+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove(this)">'+techCondition+'<i class="la la-close"></i></button>&nbsp;';		
 		}
 			x.style.display = "block";
 			document.getElementById("technologyrule").focus();
@@ -75,18 +75,16 @@ var buttonlabelArr = new Array();
 		}else{
 		 swal.fire("The Same Criteria already exist for technology segment.")
 		}
-		
-	
-		
 	}
-	function remove(element, index) {
+	function remove(buttonId) {
 		//alert(element);
 		//alert(index);
-		var select = document.getElementById("dynamic-select");
-		
-		select.remove(index);
-		element.style.display = "none";
-		buttonlabelArr.splice($.inArray(element, buttonlabelArr),1);
+		//alert("buttonid::"+element111.id);
+		//var select = document.getElementById("dynamic-select");
+		$('#'+buttonId.id).remove();
+		//select.remove(index);
+		//element.style.display = "none";
+		buttonlabelArr.splice($.inArray(buttonId, buttonlabelArr),1);
 	}
 	function removeAll() {
 		var select = document.getElementById("dynamic-select");
