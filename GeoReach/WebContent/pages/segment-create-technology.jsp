@@ -14,8 +14,7 @@ obj.os = ["MacOS", "Windows", "Linux","Mobile"];
 obj.browser = ["chrome","firefox","safari","edge","IE","Opera"];
 console.log(obj["devices"])
 var buttonlabelArr = new Array();
-
-
+var techTypeArr = new Array();
 
 	function suggestArea(obj) {
 		var geoloc = document.getElementById("geoloc").value;
@@ -51,40 +50,54 @@ var buttonlabelArr = new Array();
 		var techDynamicSelection = document.getElementById("dynamicselection").value;
 		console.log("tech value is :"+techRule+" and :: "+techList+" and ksjdn:"+techDynamicSelection)
 
-		var techCondition = techRule + ":" + techList + ":" + techDynamicSelection;
-		var buttonlabel = techCondition.replace(/:/g, "");
-		buttonlabel = buttonlabel.replace(".", "");	
-		var select = document.getElementById("dynamic-select");
-		var index = select.options.length;
-		select.options[index] = new Option(techCondition, techCondition);
-		//Reset value into it.	
-		document.getElementById("technologyrule").reset;
-		document.getElementById("technologylist").reset;
-		document.getElementById("dynamicselection").reset;
-		var x = document.getElementById("technologybucket");
+		//This variable is to checking the restriction to allow user to choose only one device,os and browser
+		/* if($.inArray(techList,techTypeArr) == 0){
+			
+		} */
 		
-		if(($.inArray(buttonlabel, buttonlabelArr) == -1)){
-		if(techRule == "include") {		
-			x.innerHTML += '<button id="'+buttonlabel+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove(this)">'+techCondition+'<i class="la la-close"></i></button>&nbsp;';		
-		} else {		
-			x.innerHTML += '<button id="'+buttonlabel+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove(this)">'+techCondition+'<i class="la la-close"></i></button>&nbsp;';		
-		}
-			x.style.display = "block";
-			document.getElementById("technologyrule").focus();
-			buttonlabelArr.push(buttonlabel);
+		console.log("techTypeArr value is ::"+techTypeArr+" and its techlist is ::"+techList);
+		if($.inArray(techList,techTypeArr) != -1){
+			swal.fire("Only one time the "+techList+" value added in technology");
 		}else{
-		 swal.fire("The Same Criteria already exist for technology segment.")
+			
+			
+			var techCondition = techRule + "-" + techList + "-" + techDynamicSelection;
+			var buttonlabel = techCondition.replace(/:/g, "");
+			buttonlabel = techCondition.replace(".", "");	
+			var select = document.getElementById("dynamic-select");
+			var index = select.options.length;
+			select.options[index] = new Option(techCondition, techCondition);
+			//Reset value into it.	
+			document.getElementById("technologyrule").reset;
+			document.getElementById("technologylist").reset;
+			document.getElementById("dynamicselection").reset;
+			var x = document.getElementById("technologybucket");
+			
+			if(($.inArray(buttonlabel, buttonlabelArr) == -1)){
+			if(techRule == "include") {		
+				x.innerHTML += '<button id="'+buttonlabel+'" data-typeval="'+techList+'" type="button" class="btn btn-outline-info btn-pill" onclick="remove(this)">'+techCondition+'<i class="la la-close"></i></button>&nbsp;';		
+			} else {		
+				x.innerHTML += '<button id="'+buttonlabel+'" data-typeval="'+techList+'" type="button" class="btn btn-outline-danger btn-pill" onclick="remove(this)">'+techCondition+'<i class="la la-close"></i></button>&nbsp;';		
+			}
+				x.style.display = "block";
+				document.getElementById("technologyrule").focus();
+				buttonlabelArr.push(buttonlabel);
+				techTypeArr.push(techList);
+			}else{
+			 swal.fire("The Same Criteria already exist for technology segment.")
+			}
 		}
 	}
 	function remove(buttonId) {
-		//alert(element);
-		//alert(index);
-		//alert("buttonid::"+element111.id);
-		//var select = document.getElementById("dynamic-select");
+		var tecType = buttonId.id.split("-")[1];
+		var buttonIdName = buttonId.id
 		$('#'+buttonId.id).remove();
-		//select.remove(index);
-		//element.style.display = "none";
-		buttonlabelArr.splice($.inArray(buttonId, buttonlabelArr),1);
+		techTypeArr = $.grep(techTypeArr, function(value) {
+  			return value != tecType;
+		});
+		buttonlabelArr = $.grep(buttonlabelArr, function(value) {
+  			return value != buttonIdName;
+		});
 	}
 	function removeAll() {
 		var select = document.getElementById("dynamic-select");
