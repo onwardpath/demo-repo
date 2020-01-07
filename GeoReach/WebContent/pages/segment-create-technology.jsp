@@ -56,8 +56,8 @@ var techTypeArr = new Array();
 		} */
 		
 		console.log("techTypeArr value is ::"+techTypeArr+" and its techlist is ::"+techList);
-		if($.inArray(techList,techTypeArr) != -1){
-			swal.fire("Only one time the "+techList+" value added in technology");
+		if($.inArray(techRule+"-"+techList,techTypeArr) != -1){
+			swal.fire("Only one time the "+techRule+"-"+techList+" value added in technology");
 		}else{
 			
 			
@@ -82,18 +82,19 @@ var techTypeArr = new Array();
 				x.style.display = "block";
 				document.getElementById("technologyrule").focus();
 				buttonlabelArr.push(buttonlabel);
-				techTypeArr.push(techList);
+				techTypeArr.push(techRule+"-"+techList);
 			}else{
 			 swal.fire("The Same Criteria already exist for technology segment.")
 			}
 		}
 	}
 	function remove(buttonId) {
+		var tecRule = buttonId.id.split("-")[0];
 		var tecType = buttonId.id.split("-")[1];
 		var buttonIdName = buttonId.id
 		$('#'+buttonId.id).remove();
 		techTypeArr = $.grep(techTypeArr, function(value) {
-  			return value != tecType;
+  			return value != tecRule+"-"+tecType;
 		});
 		buttonlabelArr = $.grep(buttonlabelArr, function(value) {
   			return value != buttonIdName;
@@ -141,6 +142,23 @@ var techTypeArr = new Array();
 	};
 	
 	//Created new function for dropdown(City/State/Country) - Sre.
+	
+function selectedCriteria(selectedValue){
+		var selectedTagId = selectedValue.getAttribute("id")
+		//console.log("selectedTagId ::"+selectedTagId)
+		var setSelectedValue = document.getElementById(selectedTagId)
+		var optionSelectedVal = setSelectedValue.options[setSelectedValue.selectedIndex].getAttribute("value") 
+		//console.log("optionSelectedVal::"+optionSelectedVal)
+		
+		$("#"+selectedTagId+" option").each(function(){
+			if(optionSelectedVal == $(this).val()){
+				$(this).attr("selected","selected")
+			}else{
+				$(this).removeAttr("selected")
+			}
+	    });
+	}
+	
 	function selectedValue(selectedValue){
 		var selectedTagId = selectedValue.getAttribute("id")
 		console.log("selectedTagId ::"+selectedTagId)
@@ -220,8 +238,8 @@ var techTypeArr = new Array();
 					<div class="col-lg-4 col-md-9 col-sm-12">
 						<select id="technologyrule"
 							class="form-control form-control--fixed kt_selectpicker"
-							data-width="100">
-							<option value="include">Include</option>
+							data-width="100" onchange="selectedCriteria(this)">
+							<option value="include" selected>Include</option>
 							<option value="exclude">Exclude</option>
 						</select>
 						 <select id="technologylist"
