@@ -31,6 +31,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/GeoReach/preview/tree.jquery.js"></script>
+
 <script type="text/template" id="tree_data">	
    <%=tree_data%>
 	</script>
@@ -40,7 +41,7 @@
 	
 	$(function() {
 		localStorage.removeItem("tree");
-		$('#exp-tree').tree({
+		$('.exp-tree').tree({
 			data : JSON.parse(data),
 			saveState : true,
 			selectable : true,
@@ -48,14 +49,15 @@
 			animationSpeed: 1000,
 			onDragMove : handleMove,
 			onCreateLi : function(node, $li, is_selected) {
+		
 				// Add 'icon' span before title
 				//  debugger;
 				//  $li.find('.jqtree-title').before('<span class="icon"></span>');
 				if (!(node.parent.name == "")) {
 					c = $li.find('.jqtree-title');
-					c[0].draggable = "true";
-					c[0].setAttribute("ondragstart", "onDragStart(event);");
-				    c[0].id = node.id;
+					$li[0].draggable = "true";
+					//$li[0].setAttribute("ondragstart", "onDragStart(event);");
+					$li[0].id = node.id;
 				}
 			}
 
@@ -65,10 +67,10 @@
 			console.log("DFG");
 		}
 
-		$('#exp-tree').on('tree.open', function(e) {
+		$('.exp-tree').on('tree.open', function(e) {
 			var child = e.node.children;
 			var tot_childs = e.node.children.length;
-			         
+		       
 			for (i = 0; i < tot_childs; i++) {
 				let cnt_id = child[i].id.split("c-")[1];
 				let is_loaded = child[i].content;
@@ -76,8 +78,8 @@
 				if (is_loaded == undefined) {
 					getContentByID(cnt_id,child[i],function(response,obj){
 						obj.content = response;
-						
-						});;
+						obj.element.setAttribute("data-insert-html",response);
+					});;
 				}
 				
 			}
@@ -85,7 +87,7 @@
 
 		});
 
-		console.log($('#exp-tree').tree('getSelectedNode'));
+		console.log($('.exp-tree').tree('getSelectedNode'));
 	});
 
 	//AJAX call with callback to returning specific contents by its ID
@@ -102,10 +104,9 @@
 		xhttp.send();
 	}
 	
-	
 </script>
 <script>
-	function toggleevent(evt) {
+	/* function toggleevent(evt) {
 		var allnodes_true = document.querySelectorAll('[contenteditable=true]');
 		var allnodes_false = document
 				.querySelectorAll('[contenteditable=false]');
@@ -161,15 +162,13 @@
 		var get = event.dataTransfer.getData('text/html');
 		
 		event.preventDefault();
-	}
+	} */
 
 </script>
-
-
 <body>
-	<button type="button" name="toggleContentEditable"
-		onclick="toggleevent(event)">Disable Contenteditable</button>
-	<div id="exp-tree" class="exp-tree" style=""></div>
+<!-- 	<button type="button" name="toggleContentEditable"
+		onclick="toggleevent(event)">Disable Contenteditable</button> -->
+	<div id="dragitemslistcontainer" class="exp-tree" style=""></div>
 	<script src="/GeoReach/preview/tree.jquery.js"></script>
 </body>
 </html>

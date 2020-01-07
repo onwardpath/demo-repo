@@ -70,20 +70,19 @@ public class AjaxController extends HttpServlet {
 
 			}
 			// Updated By Gurujegan
-			else if(service_name.equals("get_contents"))
-			{
+			else if (service_name.equals("get_contents")) {
 				String cnt_id = request.getParameter("id");
-				
-     			try {
-     				response.getWriter().write(getContent(cnt_id));
-     				System.out.println("Response sent for content id"+cnt_id);
+
+				try {
+					response.getWriter().write(getContent(cnt_id));
+					System.out.println("Response sent for content id" + cnt_id);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
-			
+
 		}
 
 	}
@@ -100,7 +99,7 @@ public class AjaxController extends HttpServlet {
 			String pageUrl = request.getParameter("pageUrl");
 			System.out.println(Database.getTimestamp() + " @AjaxController.doPost>service: " + service);
 			System.out.println(Database.getTimestamp() + " @AjaxController.doPost>pageUrl: " + pageUrl);
-			Document doc = Jsoup.connect(pageUrl).get();
+			Document doc = Jsoup.connect(pageUrl).followRedirects(true).get();
 
 			// doc.select("script").remove();
 			// Convert all src/href attributes for image, style-sheet and script elements to
@@ -108,8 +107,8 @@ public class AjaxController extends HttpServlet {
 			Elements media = doc.select("img[src]");
 			for (Element e1 : media) {
 				e1.attr("src", e1.absUrl("src"));
-			}
-
+				}
+					
 			Elements style = doc.getElementsByTag("link");
 			for (Element e2 : style) {
 				e2.attr("href", e2.absUrl("href"));
@@ -122,6 +121,7 @@ public class AjaxController extends HttpServlet {
 
 			String head = doc.head().html();
 			String body = doc.body().html();
+
 
 			String html = "<html><head>" + head + "</head><body>" + body + "</body></html>";
 			// html = Jsoup.clean(html, Whitelist.basic());
@@ -136,6 +136,7 @@ public class AjaxController extends HttpServlet {
 				ExperienceRepository exp = new ExperienceRepository();
 				Map<Integer, Experience> orgExp = new HashMap<Integer, Experience>();
 				orgExp = exp.getOrgExperiences(org_id);
+				System.out.println("Total Experinces:"+orgExp.size());
 				for (Entry<Integer, Experience> exp_entry : orgExp.entrySet()) {
 					String key = String.valueOf(exp_entry.getKey());
 					Experience e = exp_entry.getValue();
@@ -144,20 +145,20 @@ public class AjaxController extends HttpServlet {
 					Map<Integer, Content> orgCont = e.getContents();
 					child_list.clear();
 
-					// Content tree generation - Child
-					for (Entry<Integer, Content> cnt_entry : orgCont.entrySet()) {
-						Content c = cnt_entry.getValue();
+					if (!(e.getType().equalsIgnoreCase("popup"))) {
+						// Content tree generation - Child for Experience
+						for (Entry<Integer, Content> cnt_entry : orgCont.entrySet()) {
+							Content c = cnt_entry.getValue();
 
-						JSONObject cnt_obj = new JSONObject();
-						JSONArray cnt_array = new JSONArray();
-						cnt_obj.put("name", c.getSegmentName());
-						cnt_obj.put("id", "c-" + c.getId());
+							JSONObject cnt_obj = new JSONObject();
+							JSONArray cnt_array = new JSONArray();
+							cnt_obj.put("name", c.getSegmentName());
+							cnt_obj.put("id", "c-" + c.getId());
 
-						// cnt_array.put(cnt_obj);
-						child_list.add(cnt_obj.toString());
-						// System.out.println("Content ID : " + cnt_entry.getKey() + " Value : " + ":" +
-						// c.getSegmentName());
-
+							// cnt_array.put(cnt_obj);
+							child_list.add(cnt_obj.toString());
+							
+						}
 					}
 
 					// JSONArray child_arr = new JSONArray();
@@ -176,6 +177,7 @@ public class AjaxController extends HttpServlet {
 
 				}
 
+				System.out.println("after filter"+parent_list.size());
 				Iterator<JSONObject> iter = parent_list.iterator();
 				String tmp_json = "";
 				while (iter.hasNext()) {
@@ -192,6 +194,8 @@ public class AjaxController extends HttpServlet {
 			}
 
 			session.setAttribute("content", html); // passing as parameter is not working
+			// RequestDispatcher view =
+			// request.getRequestDispatcher("/preview/preview.jsp");
 			RequestDispatcher view = request.getRequestDispatcher("/preview/preview.jsp");
 			view.forward(request, response);
 		}
@@ -238,8 +242,8 @@ public class AjaxController extends HttpServlet {
 
 		return jsonstring;
 	}
-	
-	//Added by Gurujegan
+
+	// Added by Gurujegan
 	private String getContent(String id)
 			throws SQLException, JsonGenerationException, JsonMappingException, IOException {
 		final StringWriter sw = new StringWriter();
@@ -248,11 +252,11 @@ public class AjaxController extends HttpServlet {
 		String result = null;
 		String sql_query = "select content from content where id = ?";
 		try {
-            
+
 			PreparedStatement prepStatement = con.prepareStatement(sql_query);
 			prepStatement.setString(1, id);
 			ResultSet rst = prepStatement.executeQuery();
-			while(rst.next())  {
+			while (rst.next()) {
 				result = rst.getString(1);
 			}
 		} catch (SQLException e) {
