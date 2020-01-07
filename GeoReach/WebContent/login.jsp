@@ -189,7 +189,7 @@
 							<a href="#">Contact</a>
 						</div>
 						<div class="kt-login-v1__copyright">
-							<a href="#">&copy; 2020 OnwardPath</a>
+							<a href="https://www.onwardpath.com/">&copy; 2020 OnwardPath</a>
 						</div>
 					</div>
 				</div>
