@@ -131,6 +131,22 @@ public class ExperienceRepository {
           prepStatement.close();          
 	  }	
 	  
+	  
+	  public void saveredirect(int experience_id, String url ,int segment_id , String allsubpage ,String popuptext , String popuptime, String username, String usernam) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.redirect (experience_id,redirect_url,segment_id,allsubpage,popup,popuptime,create_by,mod_by,create_time,mod_time) values (?,?,?,?,?,?,?,?,now(),now())");                    
+          prepStatement.setInt(1, experience_id);
+          prepStatement.setString(2, url);
+          prepStatement.setInt(3, segment_id); 
+          prepStatement.setString(4, allsubpage);
+          prepStatement.setString(5, popuptext);
+          prepStatement.setString(6, popuptime); 
+          prepStatement.setString(7, username);
+          prepStatement.setString(8, usernam);
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveImage>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
+	  }	  
+	  
 	  /**
 	   * Save a Content experience detail to the Content table
 	   * 
