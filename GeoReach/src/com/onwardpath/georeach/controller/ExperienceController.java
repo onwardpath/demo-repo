@@ -12,6 +12,7 @@ import java.util.Map;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.repository.ConfigRepository;
 import com.onwardpath.georeach.repository.ExperienceRepository;
 import com.onwardpath.georeach.util.Database;
@@ -80,7 +81,8 @@ public class ExperienceController extends HttpServlet {
 	  	  HttpSession session = request.getSession();
 	      int org_id = (Integer)session.getAttribute("org_id");
     	  int user_id = (Integer)session.getAttribute("user_id");
-    	  
+    	  User user = (User) session.getAttribute("user");
+    	  String username = user.getFirstname() + " " + user.getLastname();
 	      if (experienceRepository != null) {
 	          if (pageName.equals("create-experience")) {		        	  	        	 
 	        	  try {
@@ -102,7 +104,26 @@ public class ExperienceController extends HttpServlet {
 	            	  
 	            	  
 	            	  //2. Save multiple entries to Image/Content table (experience_id, segment_id, url/content, create_time)
-	            	  if (type.contentEquals("image")) {	            		  
+	            	  if (type.contentEquals("redirect")) {	
+	            		  String allsubpage = request.getParameter("subpage");
+	            		  String popevents = request.getParameter("subpagepopup");
+	            		  String popuptime = request.getParameter("popuptime");
+	            		  
+						  String experienceDetails = request.getParameter("experienceDetails");
+						  ObjectMapper mapper = new ObjectMapper(); 
+						  Map<String, String> map = mapper.readValue(experienceDetails, Map.class); 
+						  System.out.println(map); 
+						  for(Map.Entry<String, String> entry : map.entrySet()) { 
+							  int segment_id = Integer.parseInt(entry.getKey()); 
+							  String url = entry.getValue();
+						 System.out.println("Segment ID = " + segment_id + ", URL = " + url.substring(1, 2));
+						 experienceRepository.saveredirect(experience_id,url,segment_id,allsubpage,popevents,popuptime,username,username); 
+						 }  
+						  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
+						           
+	            	  }  
+	            	   
+	            	  else if (type.contentEquals("image")) {	            		  
 	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
 	            		  ObjectMapper mapper = new ObjectMapper();	            		  
 	            		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
@@ -129,7 +150,20 @@ public class ExperienceController extends HttpServlet {
 	            				  experienceRepository.saveLink(content.split("#")[1], content.split("#")[2],content.split("#")[3],content.split("#")[4]);
 	            			  }
 	            		  }		            		  
-	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";	            		  
+	            		  SAVE_FAILURE = "?view=pages/experience-create-link.jsp";	            		  
+	            	  }else if (type.equals("bar")) {
+	            		  System.out.println("coming");
+	            		  String experienceDetails = request.getParameter("experienceDetails");	
+	            		  ObjectMapper mapper = new ObjectMapper();	            		  
+	               		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+	               		  System.out.println(map);	            		  
+	               		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+	               			  int segment_id = Integer.parseInt(entry.getKey());
+	               			  System.out.println("map="+entry.getKey());
+	               			  String content = entry.getValue();
+	               			  experienceRepository.saveContent(experience_id, segment_id, content);	
+	               		  }	
+	               		 SAVE_FAILURE = "?view=pages/experience-create-bar.jsp";	
 	            	  }else if (type.equals("popup")) {
 	            		  
 	            		  String pop_events = request.getParameter("page_events");
