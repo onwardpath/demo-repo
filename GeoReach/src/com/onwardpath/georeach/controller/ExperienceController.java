@@ -150,7 +150,20 @@ public class ExperienceController extends HttpServlet {
 	            				  experienceRepository.saveLink(content.split("#")[1], content.split("#")[2],content.split("#")[3],content.split("#")[4]);
 	            			  }
 	            		  }		            		  
-	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";	            		  
+	            		  SAVE_FAILURE = "?view=pages/experience-create-link.jsp";	            		  
+	            	  }else if (type.equals("bar")) {
+	            		  System.out.println("coming");
+	            		  String experienceDetails = request.getParameter("experienceDetails");	
+	            		  ObjectMapper mapper = new ObjectMapper();	            		  
+	               		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+	               		  System.out.println(map);	            		  
+	               		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+	               			  int segment_id = Integer.parseInt(entry.getKey());
+	               			  System.out.println("map="+entry.getKey());
+	               			  String content = entry.getValue();
+	               			  experienceRepository.saveContent(experience_id, segment_id, content);	
+	               		  }	
+	               		 SAVE_FAILURE = "?view=pages/experience-create-bar.jsp";	
 	            	  }else if (type.equals("popup")) {
 	            		  
 	            		  String pop_events = request.getParameter("page_events");
