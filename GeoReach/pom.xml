@@ -5,16 +5,17 @@
 	<groupId>GeoReach</groupId>
 	<artifactId>GeoReach</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
-		 <resources>
-      <resource>
-        <directory>src</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
+		<resources>
+			<resource>
+				<directory>src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -24,10 +25,22 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.2.3</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<!-- Relative path to the pom.xml directory -->
+							<directory>WebContent</directory>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
-	
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
