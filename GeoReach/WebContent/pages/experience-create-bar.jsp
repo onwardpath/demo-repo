@@ -16,7 +16,8 @@
 
 </style>  
 <script type="text/javascript">
-var expDetailsObj =  new Array();
+//var expDetailsObj =  new Array();
+var expDetailsObj = {};
 var segment = null;	
 var segment_id = null;	
 var segment_name = null;
@@ -112,11 +113,7 @@ function add(event) {
 		}
 			if((content.length > 0)){
 				
-				
-					
-					
-					
-					notify_bar(position, screen);
+				notify_bar(position, screen);
 					
 					bar_content = $('.container')[0].outerHTML;
 			expDetailsObj[segment_id] = bar_content;
@@ -135,7 +132,7 @@ function add(event) {
 					+ '<i class="la la-close"></i></button>';
 			stage.style.display = "block";
 			var dropDown = document.getElementById("segment");
-			dropDown.selectedIndex = 0;content
+			dropDown.selectedIndex = 0;
 
 			document.getElementById("content").value="";
 			document.getElementById("buttoncontent").value="";
@@ -157,6 +154,7 @@ function saveExperience() {
 	var name = document.getElementById('name').value;
 	if(name){	
 	var type = "bar"; 
+//	if ((JSON.stringify(expDetailsObj)!='[]') || (JSON.stringify(expDetailsObj)!= null)){
 	if (JSON.stringify(expDetailsObj)!=='{}'){
 		console.log("bar="+JSON.stringify(expDetailsObj))
 	document.getElementById("experience-form").type.value=type;	

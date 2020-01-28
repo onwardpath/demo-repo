@@ -61,7 +61,10 @@ public class AjaxExpController extends HttpServlet {
 			/*
 			 * String load = request.getParameter("load"); System.out.println("load"+load);
 			 */
-			String Expquery = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT( distinct concat(segment.id ,':',segment.name) separator ',') as segmentname,GROUP_CONCAT( distinct concat(content.content) separator ',' ) as content,  experience.create_time as create_time, CONCAT(user.firstname, ' ', user.lastname) as name from user, experience, segment, content ,config where experience.id = content.experience_id and  content.segment_id = segment.id and user.org_id = ? and experience.org_id = ? GROUP BY experience.id ORDER BY experience.create_time DESC limit ?, ?  ";
+			String Expquery = "SELECT  * FROM  (select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, content where   experience.id = content.experience_id   and content.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ?  GROUP BY   experience.id union all \r\n" + 
+					"				 select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, image where   experience.id = image.experience_id   and image.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ?  GROUP BY   experience.id union all\r\n" + 
+					"				 select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, redirect where   experience.id = redirect.experience_id   and redirect.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ?  GROUP BY   experience.id ) experience\r\n" + 
+					"				 GROUP BY experience.id ORDER BY experience.create_time DESC limit ?, ?  ";
 
 		    value = ExperienceAllValues(tmp_org_id, offset, limit, Expquery);
 			// ExperienceConfigValues();
@@ -77,13 +80,13 @@ public class AjaxExpController extends HttpServlet {
 
 	}
 
-//	Code for Populating Datatables values  -- START --
+//	Code for Populating Datatables values  -- START -- 
 	public String ExperienceAllValues(String tmp_org_id, String offset, String limit,String Expquery)
 			throws SQLException, JsonGenerationException, JsonMappingException, IOException, JSONException {
 
 		Connection con = Database.getConnection();
 		JSONArray jarray = new JSONArray();
-
+ 
 		String[] segment_names;
 		String[] segment_ids;
 		String segments = "";
@@ -100,8 +103,12 @@ public class AjaxExpController extends HttpServlet {
 			
 			prepStatement.setString(1, tmp_org_ids);
 			prepStatement.setString(2, tmp_org_ids);
-			prepStatement.setInt(3, offsets); 
-			prepStatement.setInt(4, limits);
+			prepStatement.setString(3, tmp_org_ids);
+			prepStatement.setString(4, tmp_org_ids);
+			prepStatement.setString(5, tmp_org_ids);
+			prepStatement.setString(6, tmp_org_ids);
+			prepStatement.setInt(7, offsets); 
+			prepStatement.setInt(8, limits);
 			
 
 			ResultSet rst = prepStatement.executeQuery();
@@ -122,11 +129,19 @@ public class AjaxExpController extends HttpServlet {
 						json.put("pages", URLCount.getInt(2));
 					}
 
-					String ExpAllCount = "select count(*) from user, experience, segment, content  where experience.id = content.experience_id  and content.segment_id = segment.id and user.org_id =  ? and experience.org_id = ?  GROUP BY experience.id ORDER BY experience.create_time DESC ";
+					String ExpAllCount = "SELECT  * FROM  (select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, content where   experience.id = content.experience_id   and content.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ?  GROUP BY   experience.id union all\r\n" + 
+							"									 select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, image where   experience.id = image.experience_id   and image.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ?  GROUP BY   experience.id union all\r\n" + 
+							"									 select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, redirect where   experience.id = redirect.experience_id   and redirect.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ?  GROUP BY   experience.id ) experience\r\n" + 
+							"									 GROUP BY experience.id ORDER BY experience.create_time DESC";
 
 					prepStatement = con.prepareStatement(ExpAllCount);
 					prepStatement.setString(1, tmp_org_ids);
 					prepStatement.setString(2, tmp_org_ids);
+					prepStatement.setString(3, tmp_org_ids);
+					prepStatement.setString(4, tmp_org_ids);
+					prepStatement.setString(5, tmp_org_ids);
+					prepStatement.setString(6, tmp_org_ids);
+					
 
 					ResultSet ExpCount = prepStatement.executeQuery();
 
@@ -159,8 +174,8 @@ public class AjaxExpController extends HttpServlet {
 					json.put("segments", segments);
 					// json.put("segments_id",rst.getString(6));
 					json.put("org_id", tmp_org_ids);
-					json.put("content", rst.getString("content"));
-					json.put("name", rst.getString(8));
+					
+					json.put("name", rst.getString(7));
 					
 					
 					jarray.put(json);
@@ -199,7 +214,7 @@ public class AjaxExpController extends HttpServlet {
 		try {
 
 			// Code for Modal Popup getting Content from DB Tables -- START --
-			if (experience.equals("content")) {
+			if ((experience.equals("content")) || (experience.equals("bar")) || (experience.equals("popup")) || (experience.equals("link"))) {
 				System.out.println("exper=" + experience);
 				if ((service != null) && (exp_id != null)) {
 					String contentvalues = "select content from content where content.experience_id = ? and content.segment_id = ?";
@@ -221,6 +236,52 @@ public class AjaxExpController extends HttpServlet {
 					rst.close();
 				}
 			} // Code for Modal Popup getting Content from DB Tables -- END --
+			// Code for Modal Popup getting Content from DB Tables -- START --
+			else if ((experience.equals("image"))) {
+							System.out.println("exper=" + experience);
+							if ((service != null) && (exp_id != null)) {
+								String contentvalues = "select url from image where image.experience_id = ? and image.segment_id = ?";
+								PreparedStatement prepStatement = con.prepareStatement(contentvalues);
+								prepStatement.setString(1, tmp_exp_id);
+								prepStatement.setString(2, tmp_seg_id);
+
+								ResultSet rst = prepStatement.executeQuery();
+								if (rst != null) {
+									while (rst.next()) {
+										JSONObject json = new JSONObject();
+										json.put("content", rst.getString(1));
+										jarray.put(json);
+									}
+
+									contents = jarray.toString();
+								}
+								prepStatement.close();
+								rst.close();
+							}
+						} // Code for Modal Popup getting Content from DB Tables -- END --
+						// Code for Modal Popup getting Content from DB Tables -- START --
+			else if ((experience.equals("redirect"))) {
+							System.out.println("exper=" + experience);
+							if ((service != null) && (exp_id != null)) {
+								String contentvalues = "select redirect_url from redirect where redirect.experience_id = ? and redirect.segment_id = ?";
+								PreparedStatement prepStatement = con.prepareStatement(contentvalues);
+								prepStatement.setString(1, tmp_exp_id);
+								prepStatement.setString(2, tmp_seg_id);
+
+								ResultSet rst = prepStatement.executeQuery();
+								if (rst != null) {
+									while (rst.next()) {
+										JSONObject json = new JSONObject();
+										json.put("content", rst.getString(1));
+										jarray.put(json);
+									}
+
+									contents = jarray.toString();
+								}
+								prepStatement.close();
+								rst.close();
+							}
+						} // Code for Modal Popup getting Content from DB Tables -- END --
 
 			// Code for Toggle ON and OFF and setting in DB tables -- START --
 			else if (experience.equals("status"))    
@@ -258,7 +319,10 @@ public class AjaxExpController extends HttpServlet {
 			 
 				String limit = request.getParameter("limit");
 				
-				String Expquery = "select  experience.id as id, experience.name as name, experience.type as type, experience.status as status, GROUP_CONCAT( distinct concat(segment.id ,':',segment.name) separator ',') as segmentname, experience.create_time as create_time, CONCAT(user.firstname, ' ', user.lastname) as name from user, experience, segment, content  where experience.id = content.experience_id  and content.segment_id = segment.id and user.org_id = ? and experience.org_id = ? and (experience.name  LIKE ? or segment.name LIKE ?) GROUP BY experience.id limit ?  ";
+				String Expquery = "SELECT  * FROM  (select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, content where   experience.id = content.experience_id   and content.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ? and (experience.name  LIKE ? or segment.name LIKE ?) GROUP BY   experience.id union all \r\n" + 
+						"				 select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, image where   experience.id = image.experience_id   and image.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ? and (experience.name  LIKE ? or segment.name LIKE ?)  GROUP BY   experience.id union all\r\n" + 
+						"				 select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, redirect where   experience.id = redirect.experience_id   and redirect.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ? and (experience.name  LIKE ? or segment.name LIKE ?) GROUP BY   experience.id ) experience\r\n" + 
+						"				 GROUP BY experience.id  limit ?  ";
 
 				value = SearchExperienceValues(tmp_org_id, searchvalue, limit, Expquery);
 				System.out.println("post value="+value);
@@ -303,8 +367,15 @@ public class AjaxExpController extends HttpServlet {
 			prepStatement.setString(2, tmp_org_ids);
 			prepStatement.setString(3,"%"+ searchvalues + "%"); 
 			prepStatement.setString(4,"%"+ searchvalues + "%");
-			
-			prepStatement.setInt(5, limits);
+			prepStatement.setString(5, tmp_org_ids);
+			prepStatement.setString(6, tmp_org_ids);
+			prepStatement.setString(7,"%"+ searchvalues + "%"); 
+			prepStatement.setString(8,"%"+ searchvalues + "%");
+			prepStatement.setString(9, tmp_org_ids);
+			prepStatement.setString(10, tmp_org_ids);
+			prepStatement.setString(11,"%"+ searchvalues + "%"); 
+			prepStatement.setString(12,"%"+ searchvalues + "%");
+			prepStatement.setInt(13, limits);
 			
 			 
 
@@ -326,11 +397,18 @@ public class AjaxExpController extends HttpServlet {
 						json.put("pages", URLCount.getInt(2));
 					}
 
-					String ExpAllCount = "select count(*) from user, experience, segment, content  where experience.id = content.experience_id  and content.segment_id = segment.id and user.org_id =  ? and experience.org_id = ? GROUP BY experience.id ORDER BY experience.create_time DESC ";
+					String ExpAllCount = "SELECT  * FROM  (select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, content where   experience.id = content.experience_id   and content.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ?  GROUP BY   experience.id union all\r\n" + 
+							"									 select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, image where   experience.id = image.experience_id   and image.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ?  GROUP BY   experience.id union all\r\n" + 
+							"									 select  experience.id as id, experience.name as Experience,  experience.type as type,   experience.status as status,  GROUP_CONCAT(   distinctrow concat(segment.id ,':',segment.name) separator ',' ) as segmentname,  experience.create_time as create_time,  CONCAT(  user.firstname, ' ', user.lastname ) as name from  user, experience, segment, redirect where   experience.id = redirect.experience_id   and redirect.segment_id = segment.id   and user.org_id = ?  and experience.org_id = ?  GROUP BY   experience.id ) experience\r\n" + 
+							"									 GROUP BY experience.id ORDER BY experience.create_time DESC";
 
 					prepStatement = con.prepareStatement(ExpAllCount);
 					prepStatement.setString(1, tmp_org_ids);
 					prepStatement.setString(2, tmp_org_ids);
+					prepStatement.setString(3, tmp_org_ids);
+					prepStatement.setString(4, tmp_org_ids);
+					prepStatement.setString(5, tmp_org_ids);
+					prepStatement.setString(6, tmp_org_ids);
 					ResultSet ExpCount = prepStatement.executeQuery();
 
 					ExpCount.last();

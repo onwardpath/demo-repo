@@ -30,10 +30,10 @@ $(document).on('mouseenter', '.hover', function () {
 	console.log("segment=="+segment_id);
 	var exp_id		=	$(this).attr('data-expid')
 	var seg_name    =   $(this).attr('data-segname');
-	
+	var exp_type	=	$(this).attr('data-exptype');
 	
 	 var url	 = "/GeoReach/AjaxExpController"
-		 var params = "service="+segment_id+"&expid="+exp_id+"&exper=content";
+		 var params = "service="+segment_id+"&expid="+exp_id+"&exper="+exp_type+"";
 	 	  var response = "";
 	 
 			
@@ -985,7 +985,10 @@ function test(offset,limit,record)
             	document.getElementById("mySelect").style.visibility = "visible";
             	document.getElementById("mySelect").style.display = "unset";
             	document.getElementById("search").style.display = "block";
+            	console.log("string data="+JSON.stringify(data));
+            	console.log("parse data="+JSON.parse(data));
                 dataJSONArray = JSON.parse(data) ;
+                console.log("data="+JSON.stringify(data));
                 ktDATA();
                 var expcount = dataJSONArray[0];
             	var exp = expcount.ExpCount;
@@ -1072,7 +1075,7 @@ function test(offset,limit,record)
         						var exp_id = row.id;
         						var pagetype ="";   
         						var exp_name = row.experience;
-        						
+        						var exp_type = row.status;
         						var segArray = row.segments.split(",");
         						segArray = segArray.slice(0,segArray.lastIndexOf(","));
         					
@@ -1083,7 +1086,7 @@ function test(offset,limit,record)
         							{  
         							
         							var segname = segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length); 
-        							s += '<a href="" class="hover" data-expname="'+exp_name+'" data-toggle="modal"      title="Experience contents" data-segname="'+segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length)+'"  data-expid="'+exp_id+'" id="' + segArray[i].slice(0,segArray[i].lastIndexOf(":")) + '" >' + segname +",  " + '</a>';
+        							s += '<a href="" class="hover" data-exptype="'+exp_type+'" data-expname="'+exp_name+'" data-toggle="modal"      title="Experience contents" data-segname="'+segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length)+'"  data-expid="'+exp_id+'" id="' + segArray[i].slice(0,segArray[i].lastIndexOf(":")) + '" >' + segname +",  " + '</a>';
         							
         							}
         						

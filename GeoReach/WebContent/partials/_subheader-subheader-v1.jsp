@@ -8,6 +8,8 @@ if (currentView != null) {
 	String breadCrumb = currentView.substring(currentView.indexOf("/")+1, currentView.indexOf("."));
 	breadCrumbs = breadCrumb.split("-");
 	showBreadCrumbs = true;
+	System.out.println("getvalue=" + breadCrumbs[1].substring(0, 1).toUpperCase() + breadCrumbs[1].substring(1));
+	
 }
 %>
 <!-- begin:: Subheader -->
@@ -17,7 +19,7 @@ if (currentView != null) {
             Dashboard
         </h3 -->
         <span class="kt-subheader__separator kt-hidden"></span> 
-        <%if (showBreadCrumbs) {%>
+        <%if (showBreadCrumbs) {%> 
         <div class="kt-subheader__breadcrumbs">
             <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
             <span class="kt-subheader__breadcrumbs-separator"></span> 
@@ -28,13 +30,21 @@ if (currentView != null) {
             	<span class="kt-subheader__breadcrumbs-separator"></span> 
             	<a href="" class="kt-subheader__breadcrumbs-link">            	 	
 	            		<%=breadCrumbs[1].substring(0, 1).toUpperCase() + breadCrumbs[1].substring(1)%>
+	            		
             	</a>
-            	<%if (breadCrumbs.length > 2) {%> 
-            		<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">            		
-	            		>> <%=breadCrumbs[2].substring(0, 1).toUpperCase() + breadCrumbs[2].substring(1)%>            	
-            		</span>
+            	<%if (breadCrumbs.length > 2 && (breadCrumbs[1].substring(0, 1).toUpperCase() + breadCrumbs[1].substring(1)).equals("Create")){%> 
+            		 <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">            		
+	            		>>  <%=breadCrumbs[2].substring(0, 1).toUpperCase() + breadCrumbs[2].substring(1)%>            	
+            		</span> 
             	<%}%>
-        </div>
+            		<%if (breadCrumbs.length > 2 && (breadCrumbs[1].substring(0, 1).toUpperCase() + breadCrumbs[1].substring(1)).equals("View")){%> 
+            		 <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">            		
+	            		<%-- >> print <%=breadCrumbs[2].substring(0, 1).toUpperCase() + breadCrumbs[2].substring(1)%> --%>            	
+            		</span> 
+            	<%}%>
+            	
+            	
+        </div> 
         <%}%>
     </div>
     <div class="kt-subheader__toolbar">

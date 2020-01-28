@@ -141,6 +141,11 @@
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Bar</span>
 											</a>
 										</li>
+										<li class="kt-menu__item " aria-haspopup="true" id="experience-create-block">
+											<a href="/GeoReach?view=pages/experience-create-block.jsp" class="kt-menu__link ">
+											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Block</span>
+											</a>
+										</li>
 										<li class="kt-menu__item " aria-haspopup="true" id="experience-create-style">
 											<a href="#" class="kt-menu__link ">
 											<i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Style</span>
