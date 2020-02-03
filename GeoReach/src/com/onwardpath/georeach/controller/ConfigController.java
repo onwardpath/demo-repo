@@ -3,6 +3,9 @@ package com.onwardpath.georeach.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.MDC;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,8 +14,10 @@ import java.util.Map;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.repository.ConfigRepository;
 import com.onwardpath.georeach.util.Database;
+import org.apache.log4j.MDC;
 
 @SuppressWarnings("serial")
 public class ConfigController extends HttpServlet {
@@ -43,7 +48,11 @@ public class ConfigController extends HttpServlet {
 			System.out.println(Database.getTimestamp()+" @ConfigController.doPost>pageName: "+pageName);			        	     
 	  	  	HttpSession session = request.getSession();
 	  	  	int org_id = (Integer)session.getAttribute("org_id");
-	  	  	int user_id = (Integer)session.getAttribute("user_id");    	  
+	  	  	int user_id = (Integer)session.getAttribute("user_id");
+	  	  User user = (User) session.getAttribute("user");
+	  	  String orgname = user.getOrganization_domain();
+    	  MDC.put("user", user_id);
+    	  MDC.put("org", orgname);
 	  	  	if (configRepository != null) {
 	  	  		if (pageName.startsWith("experience-create-enable")) {		        	  	        	 
 	  	  			try {	  	  				

@@ -17,13 +17,16 @@ import com.onwardpath.georeach.repository.ConfigRepository;
 import com.onwardpath.georeach.repository.ExperienceRepository;
 import com.onwardpath.georeach.util.Database;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.MDC;
+
 @SuppressWarnings("serial")
 public class ExperienceController extends HttpServlet {
 	private ExperienceRepository experienceRepository;	
 		 
 	private static String SAVE_SUCCESS = "?view=pages/experience-create-enable.jsp";
 	private static String SAVE_FAILURE = "?view=pages/experience-create-content.jsp";		
-		
+	final static Logger logger =  Logger.getLogger(ExperienceController.class);		
 	  /**
 	   * @see HttpServlet#HttpServlet()
 	   */
@@ -83,6 +86,9 @@ public class ExperienceController extends HttpServlet {
     	  int user_id = (Integer)session.getAttribute("user_id");
     	  User user = (User) session.getAttribute("user");
     	  String username = user.getFirstname() + " " + user.getLastname();
+    	  String orgname = user.getOrganization_domain();
+    	  MDC.put("user", user_id);
+    	  MDC.put("org", orgname);
 	      if (experienceRepository != null) {
 	          if (pageName.equals("create-experience")) {		        	  	        	 
 	        	  try {
@@ -118,6 +124,7 @@ public class ExperienceController extends HttpServlet {
 							  String url = entry.getValue();
 						 System.out.println("Segment ID = " + segment_id + ", URL = " + url.substring(1, 2));
 						 experienceRepository.saveredirect(experience_id,url,segment_id,allsubpage,popevents,popuptime,username,username); 
+						 logger.info("Save Sucesss");
 						 }  
 						  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
 						           

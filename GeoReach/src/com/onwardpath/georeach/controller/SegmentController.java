@@ -8,8 +8,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.sql.SQLException;
+
+import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.repository.SegmentRepository;
 import com.onwardpath.georeach.util.Database;
+import org.apache.log4j.MDC;
 
 @SuppressWarnings("serial")
 public class SegmentController extends HttpServlet {
@@ -37,16 +40,21 @@ public class SegmentController extends HttpServlet {
 	*/
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		segmentRepository = new SegmentRepository();
-		  
+		HttpSession session = request.getSession();
+		 User user = (User) session.getAttribute("user");
+	  	  String orgname = user.getOrganization_domain();
+	  	int userId = (Integer)session.getAttribute("user_id");	              
+        int orgId = (Integer)session.getAttribute("org_id");
+        MDC.put("user", userId);
+   	  MDC.put("org", orgname);  
 	    String pageName = request.getParameter("pageName");	      	      
 	    System.out.println(Database.getTimestamp()+" @SegmentController.doPost>pageName: "+pageName);
-	    HttpSession session = request.getSession();	      
+	          
 	    if (segmentRepository != null) {	          
 	    	if (pageName.startsWith("segment-create")) {
 	    		System.out.println("@SegmentController.doPost called from page:"+pageName);
 	        	try {
-	        		int userId = (Integer)session.getAttribute("user_id");	              
-		            int orgId = (Integer)session.getAttribute("org_id");
+	        		
 		            String segmentName = request.getParameter("segmentName");
 		            String segmentRules = request.getParameter("segmentRules");	
 		            System.out.println("segmentName: "+segmentName);
@@ -67,8 +75,8 @@ public class SegmentController extends HttpServlet {
 	    	else if (pageName.startsWith("segment-edit")) {
 	    		System.out.println("@SegmentController.doPost called from page:"+pageName);
 	        	try {
-	        		int userId = (Integer)session.getAttribute("user_id");	              
-		            int orgId = (Integer)session.getAttribute("org_id");
+	        		//int userId = (Integer)session.getAttribute("user_id");	              
+		            //int orgId = (Integer)session.getAttribute("org_id");
 		            String segmentName = request.getParameter("segmentName");
 		            String segmentRules = request.getParameter("segmentRules");
 		            String segmentId = request.getParameter("segmentId");

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import org.apache.log4j.MDC;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.onwardpath.georeach.model.Experience;
+import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.util.Database;
 
 @SuppressWarnings("serial")
@@ -53,6 +54,10 @@ public class AjaxSegController extends HttpServlet {
 			HttpSession session = request.getSession();
 			int userId = (Integer) session.getAttribute("user_id");
 			int orgId = (Integer) session.getAttribute("org_id");
+			User user = (User) session.getAttribute("user");
+		    String orgname = user.getOrganization_domain();
+			MDC.put("user", userId);
+		   	MDC.put("org", orgname);
 			System.out.println("session" + userId + orgId);
 			String tmp_org_id = String.valueOf(orgId);
 
