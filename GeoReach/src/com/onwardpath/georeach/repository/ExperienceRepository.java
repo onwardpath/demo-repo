@@ -145,8 +145,22 @@ public class ExperienceRepository {
           System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveImage>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();          
-	  }	  
+	  }
 	  
+	     
+	  public void saveStyle(int experience_id, String url , String allsubpages, int segment_id , String username, String usernam) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.style (experience_id,csslink,allsubpage,segment_id,create_by,mod_by,create_time,mod_time) values (?,?,?,?,?,?,now(),now())");                    
+          prepStatement.setInt(1, experience_id);
+          prepStatement.setString(2, url);
+          prepStatement.setString(3, allsubpages);
+          prepStatement.setInt(4, segment_id);  
+          prepStatement.setString(5, username);
+          prepStatement.setString(6, usernam);
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveImage>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
+	  }	
+	     
 	  /**
 	   * Save a Content experience detail to the Content table
 	   * 
