@@ -1,37 +1,133 @@
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="com.onwardpath.georeach.util.Database"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.util.LinkedList"%>
+<%@page import="java.util.TimeZone"%>
+<%@page import="java.util.concurrent.TimeUnit"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.Map, com.onwardpath.georeach.repository.SegmentRepository" %>    
+
+<%!
+
+LinkedList<String> timezoneLst = new LinkedList<String>();
+private Connection dbConnection;
+String[] timeZoneIds = TimeZone.getAvailableIDs();
+private LinkedList<String> getTimeZone() throws SQLException {
+	dbConnection = Database.getConnection();
+	String displayName ="";
+	PreparedStatement prepStatement = dbConnection.prepareStatement("select * from timezone");
+	ResultSet result = prepStatement.executeQuery();  
+	while(result.next()){
+		displayName = result.getString("zone_id")+"@("+result.getString("utcoffset")+") "+result.getString("displayname")+" ("+result.getString("zone_id")+" )" ;
+		timezoneLst.add(displayName);
+	} 
+	result.close();
+    prepStatement.close();
+    dbConnection.close();
+
+	return timezoneLst;
+
+}
+%>
+<style>
+.mr20{
+	margin-right :20px;
+}
+.ml50{
+	margin-left :50px
+}
+.tac{
+	text-align :center;
+}
+#dateformation{
+display:none;
+}
+</style>
 <script type="text/javascript">
 
 var cfgDetailsObj = {};
 var index = 0;
 
 function add(){	
-	var pageurl = document.getElementById("url").value;		
-	var buttonid = pageurl.replace(/:/g, "");
-	buttonid = buttonid.replace(".", "");		
-	if (pageurl in cfgDetailsObj) {
-		swal.fire("Page "+url+" already added. Add a different page.");	
-	} else {					
-		cfgDetailsObj[index] = pageurl;
-		index++;
-		var stage = document.getElementById("stage");	
-		stage.innerHTML += '<button id = '+buttonid+' type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+buttonid+'\','+index+')">'+pageurl+'<i class="la la-close"></i></button>&nbsp;';
-		stage.style.display = "block";		
-	}	
+	var pageurl = document.getElementById("url").value;	
+	if(pageurl !=""){
+		var buttonid = pageurl.replace(/:/g, "");
+		buttonid = buttonid.replace(".", "");		
+		if (pageurl in cfgDetailsObj) {
+			swal.fire("Page "+url+" already added. Add a different page.");	
+		} else {					
+			cfgDetailsObj[index] = pageurl;
+			index++;
+			var stage = document.getElementById("stage");	
+			stage.innerHTML += '<button id = '+buttonid+' type="button" class="btn btn-outline-info btn-pill" onclick="remove(\''+buttonid+'\','+index+')">'+pageurl+'<i class="la la-close"></i></button>&nbsp;';
+			stage.style.display = "block";		
+		}
+	}else{
+		swal.fire("Page URL should not be empty.Please add valid page url");	
+	}
 }
 function remove(element, index){		
 	var displayElement = document.getElementById(element);	
 	delete cfgDetailsObj[index];	
 	displayElement.style.display = "none";		
 }
-function saveConfig(){				
-	document.getElementById("config-form").urlList.value=JSON.stringify(cfgDetailsObj);	
-	document.getElementById("config-form").method = "post";
-	document.getElementById("config-form").action = "ConfigController";
-	document.getElementById("config-form").submit();
-}
+function saveConfig(){
+	console.log(cfgDetailsObj)
+	var passStatus = true
+	var startDate = document.getElementById("kt_datepicker_1").value
+	var endDate = document.getElementById("kt_datepicker_2").value
+	var timeZoneList = document.getElementById("Timezonelist").value
+	console.log("Startdate ::"+startDate+"and endddate::"+endDate);
+	if($("#scheduleChkBox").prop("checked") == true){
+		document.getElementById("config-form").status.value="scheduled";	
+		if(startDate =="" && endDate==""){
+			passStatus = false
+			swal.fire("Please provide either startdate or enddate for scheduling")
+		}else{
+			if(startDate !=""){
+				document.getElementById("config-form").startdate.value = startDate+":00";
+			}
+			if(endDate !=""){
+				document.getElementById("config-form").enddate.value = endDate+":00";
+			}
+			if(timeZoneList !=""){
+				document.getElementById("config-form").timezoneval.value = timeZoneList;
+			}
+			
+		}
+	} 
+	if(passStatus){
+		console.log("TimeZone value is ::"+document.getElementById("Timezonelist").value)
+		//console.log("inside passtatus check ::"+jQuery.isEmptyObject(cfgDetailsObj))
+		if(jQuery.isEmptyObject(cfgDetailsObj)){
+			passStatus = false
+			swal.fire("Page Url should not be empty");
+		}else{
+			
+			console.log("startdate value is ::"+document.getElementById("kt_datepicker_1").value)
+			console.log("startdate value is ::"+document.getElementById("kt_datepicker_2").value)
+			console.log("cfgDetailsObj Value is ::"+JSON.stringify(cfgDetailsObj));
+			document.getElementById("config-form").urlList.value=JSON.stringify(cfgDetailsObj);	
+			document.getElementById("config-form").method = "post";
+			document.getElementById("config-form").action = "ConfigController";
+			document.getElementById("config-form").submit();
+		}
+	}
+		
+	}
 function preview() {
 	swal.fire("Under Development");
+}
+function toggleCheckbox(){
+	if($("#scheduleChkBox").prop("checked") == true){
+      	$("#dateformation").show();
+    }else{
+    	$("#dateformation").hide();
+    }
 }
 </script>
 
@@ -142,15 +238,73 @@ function preview() {
 							<span class="form-text text-muted">Enter the URL of the page that will display this experience</span>					
 						</div>
 				</div>
+			
+			<%-- <div class="form-group row" id="timezoneoption">
+				<label class="col-form-label col-lg-3 col-sm-12 ttc">Time Zone</label>
+				<div class="col-lg-4 col-md-9 col-sm-12">
+					<select id="dynamicselection" class=" ttc form-control form-control--fixed kt_selectpicker">
+							<%for (String id : timeZoneIds) {%>
+						<option class="ttc" value='<%=displayTimeZone(TimeZone.getTimeZone(id))%>'><%=displayTimeZone(TimeZone.getTimeZone(id))%></option><%}%>
+					</select>
+				</div>
+			</div> --%>
 				
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																					
 						<button type="reset" class="btn btn-accent" onclick="javascript:preview()">Preview</button>																									
-						<button type="reset" class="btn btn-accent" onclick="javascript:add()">Add</button>
+						<button type="button" class="btn btn-accent" onclick="javascript:add()">Add</button>
 					</div>
 				</div>
-				
+					<%-- Scheduling Experience --%>	
+				<div class="form-group row">
+						<div class="col-lg-6 col-md-9 col-sm-12 tac ml50">	
+							<label class="kt-checkbox mr20">
+								<input type="checkbox" id="scheduleChkBox" name="scheduleCheckbox" value="showenable" onchange="toggleCheckbox()">Schedule<span></span>
+							 </label>																					
+						</div>
+				</div>
+			<div id="dateformation">
+			<div class="form-group row">
+				<label class="col-form-label col-lg-3 col-sm-12">Start Date</label>
+				<div class="col-lg-3 col-md-9 col-sm-12">
+					<div class="input-group date">
+						<input type="text" class="form-control "value="" placeholder="Select date" id="kt_datepicker_1">
+						<div class="input-group-append">
+							<span class="input-group-text">
+								<i class="la la-calendar-check-o"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="form-group row">
+				<label class="col-form-label col-lg-3 col-sm-12">End Date</label>
+				<div class="col-lg-3 col-md-9 col-sm-12">
+					<div class="input-group date">
+						<input type="text" class="form-control "  value="" placeholder="Select date" id="kt_datepicker_2">
+						<div class="input-group-append">
+							<span class="input-group-text">
+								<i class="la la-calendar-check-o"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+					<label class="col-form-label col-lg-3 col-sm-12">TimeZone</label>
+					<div class="col-lg-3 col-md-9 col-sm-12" id="exampleSelect2">
+						<select class="form-control" placeholder="Select Your favourite" data-search="true" id="Timezonelist">
+							<option value="">--Select--</option>
+							<c:forEach items="<%=getTimeZone()%>" var="timezoneVal">
+								<option value='${fn:split(timezoneVal,"@")[0]}'>${fn:split(timezoneVal,"@")[1]}</option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+			</div>
 				<div class="kt-separator kt-separator--border-dashed"></div>
 				<div class="kt-separator kt-separator--height-sm"></div>
 				
@@ -173,7 +327,11 @@ function preview() {
 								<input type="hidden" name="pageName" value="experience-create-enable.jsp">								
 								<input type="hidden" name="experience_id" value="<%=experience%>">
 								<input type="hidden" name="experience_name" value="<%=name%>">								
-								<input type="hidden" name="urlList">																																																																																																			
+								<input type="hidden" name="urlList">
+								<input type="hidden" name="startdate">
+								<input type="hidden" name="enddate">
+								<input type="hidden" name="status">	
+								<input type="hidden" name="timezoneval">																																																																																																	
 							</div>											
 							<button type="reset" class="btn btn-primary" onclick="saveConfig();">Save</button>
 							<button type="reset" class="btn btn-secondary">Cancel</button>

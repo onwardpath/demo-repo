@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ExperienceRepository {
 	   * @return id
 	   */
 	  public int save(String name, String type, String status, String schedule_start, String schedule_end, String header_code, String body_code, int org_id, int user_id) throws SQLException {	      	         
-    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.experience (name, type, status, schedule_start, schedule_end, header_code, body_code, org_id, user_id, create_time) values (?,?,?,now(),now(),?,?,?,?,now())");
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.experience (name, type, status, schedule_start, header_code, body_code, org_id, user_id, create_time) values (?,?,?,now(),?,?,?,?,now())");
           prepStatement.setString(1, name);
           prepStatement.setString(2, type);
           prepStatement.setString(3, status);          
@@ -184,7 +185,10 @@ public class ExperienceRepository {
           prepStatement.setString(4, imgurl);
           System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveLink>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
-          prepStatement.close();          
+          prepStatement.close();
+          
+          
+          
 	  }
 	  
 	  

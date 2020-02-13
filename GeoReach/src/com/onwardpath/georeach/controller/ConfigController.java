@@ -16,12 +16,14 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.repository.ConfigRepository;
+import com.onwardpath.georeach.repository.ExperienceRepository;
 import com.onwardpath.georeach.util.Database;
 import org.apache.log4j.MDC;
 
 @SuppressWarnings("serial")
 public class ConfigController extends HttpServlet {
-		private ConfigRepository configRepository;	
+		private ConfigRepository configRepository;
+		private ExperienceRepository expController;
 		 			
 		/**
 		 * @see HttpServlet#HttpServlet()
@@ -69,7 +71,23 @@ public class ConfigController extends HttpServlet {
 			            	String url = entry.getValue();
 			            	System.out.println("index = " + index + ", URL = " + url);
 			            	configRepository.save(experience_id, url, user_id);	            			  	            			 
-			            }	
+			            }
+			            /* Update Schedule startdate and endate for experience table */
+			            //System.out.println("Startdate in config controler ::"+request.getParameter("startdate"));
+			            expController = new ExperienceRepository();
+			            if(request.getParameter("status")!=null && request.getParameter("status") !="") {
+			            	expController.update(experience_id, 3, "status",request.getParameter("status"));
+			            	if(request.getParameter("startdate") != null && request.getParameter("startdate") !="") {
+			            		expController.update(experience_id, 4, "schedule_start",request.getParameter("startdate"));	
+			            	}
+			            	if(request.getParameter("enddate") != null && request.getParameter("enddate") !="") {
+			            		expController.update(experience_id, 5, "schedule_end",request.getParameter("enddate"));	
+			            	}
+			            	if(request.getParameter("timezoneval") != null && request.getParameter("timezoneval") !="") {
+			            		expController.update(experience_id, 6, "timezone_id",request.getParameter("timezoneval"));	
+			            	}
+			            }
+			     
 			            System.out.println(Database.getTimestamp()+"Page configuration for <b>"+experience_name+"</b> saved succesfully.#n="+experience_name+"#e="+experience_id+"#o="+org_id);
 			            
 			            session.setAttribute("message", "Page configuration for <b>"+experience_name+"</b> saved succesfully.#n="+experience_name+"#e="+experience_id+"#o="+org_id);
