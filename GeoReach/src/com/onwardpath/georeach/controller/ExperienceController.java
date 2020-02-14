@@ -127,9 +127,23 @@ public class ExperienceController extends HttpServlet {
 						 logger.info("Save Sucesss");
 						 }  
 						  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
-						           
-	            	  }  
-	            	   
+						            
+	            	  } 
+	            	  
+	            	  else if (type.contentEquals("style")) {	            		  
+	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
+	            		  ObjectMapper mapper = new ObjectMapper();	            		  
+	            		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+	            		  System.out.println(map);	            		  
+	            		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+	            			  int segment_id = Integer.parseInt(entry.getKey());
+	            			  String url = entry.getValue();
+	            			  System.out.println("Segment ID = " + segment_id + ", URL = " + url);
+	            			  experienceRepository.saveStyle(experience_id,url.split("#")[0],url.split("#")[1],segment_id,username,username);	            			  	            			 
+	            		  }		            		  
+	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
+	            	  }
+	            	     
 	            	  else if (type.contentEquals("image")) {	            		  
 	            		  String experienceDetails = request.getParameter("experienceDetails");	            		  	            		 
 	            		  ObjectMapper mapper = new ObjectMapper();	            		  
