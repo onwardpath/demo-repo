@@ -43,7 +43,7 @@ public class MatomoUtil {
     	System.out.println("fullurl"+MatomoUtil.url);
     }
    
-    public static String getVisitorDurationLog(String attribName) throws IOException {
+   /* public static String getVisitorDurationLog(String attribName) throws IOException {
         String URL = getHttpApiUrl("API", "Live.getVisitorProfile", "1");
         System.out.println(URL);
         String rsJsonfromURL = getLocationDetails(URL);
@@ -57,7 +57,7 @@ public class MatomoUtil {
         rsJsonStr = resultjson.get(attribName).toString();
         }
         return rsJsonStr;
-    }
+    } */
 
     public static String getHttpApiUrl(String module, String method, String idSite) throws IOException {
         MatomoUtil.module = "module=" + module + "&";
@@ -68,7 +68,7 @@ public class MatomoUtil {
         return fullURL;
     }
     
-    public static String getVisitorType(String arrayAttribute,String attribName) throws IOException {
+    /* public static String getVisitorType(String arrayAttribute,String attribName) throws IOException {
         String URL = getHttpApiUrl("API", "Live.getVisitorProfile", "1");
         String rsJsonfromURL = getLocationDetails(URL);
         String rsJsonStr = null;
@@ -85,7 +85,7 @@ public class MatomoUtil {
         }
        
         return rsJsonStr;
-    }
+    } */
     
     //This method helps to getting & serving JSON response from the URL 
     public static String getLocationDetails(String fullURL) {

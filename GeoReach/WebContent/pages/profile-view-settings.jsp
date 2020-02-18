@@ -76,14 +76,13 @@ function myCopy(){
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12">Header Embed Code</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
-					
-																													
-						<code id="myInput">
+					<code id="myInput">
 						&lt;script&gt;
 					  var _gr = window._gr || {};
 					  _gr.orgID = "<%=org_id%>";
+					  _gr.url = "http://demo.onwardpath.com/GeoTargetService/";
 					  (function() {
-					    var u="http://demo.onwardpath.com/GeoTargetService/";
+					    var u= _gr.url;
 					    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
 					    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'georeach.js'; s.parentNode.insertBefore(g,s);
 					  })();
