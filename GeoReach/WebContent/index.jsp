@@ -38,7 +38,8 @@
         <link href="./assets/css/demo1/skins/header/menu/light.css" rel="stylesheet" type="text/css" />
         <link href="./assets/css/demo1/skins/brand/brand.css" rel="stylesheet" type="text/css" />
         <link href="./assets/css/demo1/skins/aside/navy.css" rel="stylesheet" type="text/css" />
-        
+     
+       
         <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
         <!--end::Layout Skins -->
         <!-- link rel="shortcut icon" href="./assets/media/logos/favicon.ico" / -->
@@ -49,7 +50,7 @@
     		border: 1px solid #5d78ff;
 		}
         </style>
-        
+           <link href="./assets/css/selectstyle.css" rel="stylesheet" type="text/css" />
     </head>
     <!-- end::Head -->
     <!-- begin::Body -->
@@ -121,7 +122,15 @@
         <!-- script src="./assets/js/demo1/pages/crud/datatables/data-sources/html.js" type="text/javascript"></script>        
         <script src="./assets/js/demo1/pages/crud/datatables/advanced/multiple-controls.js" type="text/javascript"></script -->
         <!--end::Page Scripts -->
+       <script src=" ./assets/js/bootstrap-datepicker.js"></script>
+        
+     <!--   <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+        
+       <script src="./assets/js/selectstyle.js" type="text/javascript"></script>
+       <!-- <script src="https://keenthemes.com/keen/themes/keen/theme/demo1/dist/assets/js/pages/components/forms/widgets/bootstrap-daterangepicker.js"></script> -->
+       
         <script>
+        
          $(document).ready(function() {
             $('.kt_table_1').DataTable({
                 "order": [[ 0, "asc"]],
@@ -136,6 +145,7 @@
         		$("li#"+getPageName).addClass("kt-menu__item--active");
         		$( "li#"+getPageName).parents("li").addClass( "kt-menu__item--open kt-menu__item--here");
            }
+           $("select#exampleSelect1").select2({})
         });
         </script>
     </body>
