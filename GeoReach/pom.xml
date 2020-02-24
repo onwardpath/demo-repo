@@ -48,7 +48,7 @@
 							<outputDirectory>WebContent/assets/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>C:\WebPersonify\assets\</directory>
+									<directory>C:\webpersonify\assets\</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>
