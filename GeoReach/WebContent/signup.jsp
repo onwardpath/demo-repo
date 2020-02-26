@@ -51,7 +51,7 @@
 		<!-- link rel="shortcut icon" href="./GeoReach/assets/media/logos/favicon.ico" / -->
 		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
 	</head>
-
+ 
 	<!-- end::Head -->
 
 	<!-- begin::Body -->
