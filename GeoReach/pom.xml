@@ -30,13 +30,36 @@
 				<version>3.2.1</version>
 				<configuration>
 					<!-- Relative path to the pom.xml directory -->
-							<warSourceDirectory>WebContent</warSourceDirectory>
+					<warSourceDirectory>WebContent</warSourceDirectory>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>WebContent/assets/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>C:\webpersonify\assets\</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
-			<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -69,9 +92,9 @@
 			<version>2.9.10.1</version>
 		</dependency>
 		<dependency>
-    <groupId>log4j</groupId>
-    <artifactId>log4j</artifactId>
-    <version>1.2.17</version>
- </dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
 	</dependencies>
 </project>
