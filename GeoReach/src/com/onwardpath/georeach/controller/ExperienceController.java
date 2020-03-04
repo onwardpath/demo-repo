@@ -204,6 +204,22 @@ public class ExperienceController extends HttpServlet {
 	            		  }		            		  
 	            		  SAVE_FAILURE = "?view=pages/experience-create-popup.jsp";	            		  
 	            	  }
+	            	  else if (type.equals("block")) {
+	            		  String allsubpage = request.getParameter("subpage");
+	            		  System.out.println("coming");
+	            		  String experienceDetails = request.getParameter("experienceDetails");	
+	            		  ObjectMapper mapper = new ObjectMapper();	            		  
+	               		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+	               		  System.out.println(map);	            		  
+	               		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+	               			  int segment_id = Integer.parseInt(entry.getKey());
+	               			  System.out.println("map="+entry.getKey());
+	               			 String block_url = entry.getValue();
+	               			  experienceRepository.saveBlock(experience_id, segment_id,block_url,allsubpage);	
+	        //       			session.setAttribute("block_url",block_url);  
+	               		  }	
+	               		 SAVE_FAILURE = "?view=pages/experience-create-block.jsp";	
+	            	  }
 	            	  	            	  
 	            	  //3. Generate header_code & body_code and save to Experience table
 	            	  String header_code = "<javascript></javascript>";
@@ -214,7 +230,7 @@ public class ExperienceController extends HttpServlet {
 	            	  //4. Save schedule_start, schedule_start & status
 	              	  //TODO: Save schedule
 	            	  	            	  			              	            	  		              
-		              session.setAttribute("message", "Experience <b>"+name+"</b> saved. You can now configure the pages for this experience. #n="+name+"#e="+experience_id+"#o="+org_id); 
+	            	  session.setAttribute("message", "Experience <b>"+name+"</b> saved. You can now configure the pages for this experience. #n="+name+"#e="+experience_id+"#o="+org_id); 
 		              forward = SAVE_SUCCESS;	        		  
 	        	  } catch (SQLException e) {
 	        		  session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");

@@ -204,7 +204,29 @@ public class ExperienceRepository {
           
           
 	  }
-	  
+	  /**
+	   * Save a Block experience detail to the Link table
+	   * 
+	   * @param experience_id
+	   * @param segment_id
+	   * @param block_url
+	   * @param allsubpage
+	   
+	   * @throws SQLException
+	   */
+	  public void saveBlock(int experience_id,int segment_id,String block_url,String allsubpage) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.block (experience_id,segment_id,block_url,allsubpage) values (?,?,?,?)");                    
+          prepStatement.setInt(1,experience_id);
+          prepStatement.setInt(2, segment_id);
+          prepStatement.setString(3, block_url);
+          prepStatement.setString(4, allsubpage);
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveLink>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();
+          
+          
+          
+	  }
 	  
 	  /**
 	   * Check weather an experience exists

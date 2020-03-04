@@ -1,7 +1,7 @@
 <%@page import="com.onwardpath.georeach.model.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<%
 	User user = (User) session.getAttribute("user");
 	System.out.println("heyssss:"+user.getOrganization_id());     
@@ -16,7 +16,7 @@
   z-index: 2;
   cursor:pointer;
 }
- 
+
 .container{
   padding-top:50px;
   margin: auto;
@@ -44,6 +44,7 @@
 		});    
       });
       
+     
        var loadFile = function(event) {
     		var image = document.getElementById('output');
     		image.src = URL.createObjectURL(event.target.files[0]);
@@ -59,16 +60,37 @@
     			if(password.value != confirm_password.value) {
     	    	    confirm_password.setCustomValidity("Passwords Don't Match");
     	    	  } else {
-    	    		 if (confirm_password.value){
-    	    		  document.getElementById("password-field").value=confirm_password.value
-    	    	  	 }
+    	    		 
     	    	    confirm_password.setCustomValidity('');
     	    	  }	
     		}
-    		document.getElementById("password-field").disabled = false;
+    		
     		
     	} 
-      	  	
+    	function getpassword(event) {
+    		let el_id = event.target.attributes.for.value;	
+    		
+    		if (event.currentTarget.checked == true)
+    			{
+    			document.getElementById(el_id).style.display = "block";
+    			document.getElementById("check").value = "show" ;  
+    			localStorage.setItem("password_button", "show");
+    			}
+    		else
+    			{
+    			document.getElementById(el_id).style.display = "none";
+    			document.getElementById("check").value = "hide" ; 
+    			localStorage.setItem("password_button", "hide");
+    			}
+    	}	
+    	
+    	window.addEventListener("load", function() {
+    		localStorage.setItem("password_button", "hide");
+    		document.getElementById("check").value = "hide" ;  
+    	 
+    	
+
+    	});
 </script>                
  
 
@@ -102,6 +124,7 @@
 							<form class="kt-form" id="kt_form" action="UserController" method="post" class="needs-validation" enctype="multipart/form-data">
 							<input type="hidden" name="pageName" value="profile">
 							 <input type="hidden" name="role" value="1">  
+							 <input id="check" type="hidden" name="cross_pass" >  
 							    <input type="hidden" name="orgid" value="<%=user.getOrganization_id()%>">  
 								<div class="kt-portlet__body">																																		
 										<div class="row">
@@ -163,20 +186,32 @@
 																	<img alt="Pic" id ="output" src='/GeoReach/DisplayImageController?id=<%=session.getAttribute("user_id")%>' height="100" width="100"/>
 																</div>
 																 
-															</div> 
-															 
+															</div>
+
+									<div id="screen" class="form-group row">
+										<label class="col-3 col-form-label"></label>
+										<div class="col-9"> 
+											<div class="kt-checkbox-inline">
+												<label class="kt-checkbox"> <input type="checkbox"
+													id="yes" name="show_password" for="check_pass" onclick="getpassword(event)"
+													value="yes"> Change Password <span></span>
+												</label>
+
+
+											</div>
+										</div>
+									</div>
+															<div id="check_pass" style="display:none;">
+
 															<div class="form-group row">
-																<label class="col-3 col-form-label">Password</label>
+																<label class="col-3 col-form-label">Old Password</label>
 																<div class="col-9">
-																<%-- <div class="input-group">
-																	<input class="form-control" id="password-field" type="password" name="password" required value="<%=user.getPassword()%>"  disabled="disabled" >
-																	<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-																	</div> --%>
+																<div class="input-group">
+																	<input class="form-control" id="password-field" type="password" name="old_password"  >
 																	
-																	<div class="col-md-6" style="max-width: unset">
-              <input id="password-field" type="password" class="form-control" name="password" required value="<%=user.getPassword()%>"  disabled="disabled">
-              <span toggle="#password-field" class="fa fa-lg fa-eye field-icon toggle-password"></span>
-            </div> 
+																	</div>
+																	
+																
 																
 																</div> 
 																
@@ -187,7 +222,7 @@
 																<div class="col-9">
 																	<div class="input-group">
 																		
-																		 <input id="passwords"  type="password" class="form-control" name="newpassword" >
+																		 <input id="passwords"  type="password" class="form-control" name="newpassword"  >
                                                                          
 																	</div>																	
 																</div>
@@ -203,7 +238,7 @@
 																	</div>																	
 																</div>
 															</div> 
-															  
+															  </div>
 															<div class="form-group form-group-last row"> 
 																
 																<button type="submit" class="btn btn-primary" onclick="validatePassword()">Update</button>&nbsp;
@@ -222,4 +257,5 @@
 						</div>  
 					
 
+		
 		

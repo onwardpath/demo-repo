@@ -109,10 +109,10 @@ public class UserRepository {
 	  }
 	  
 	  
-	  public void updateUser(String firstName, String lastName, String phone, String password, int role, InputStream inputStream, int orgid) throws SQLException {	
+	  public void updateUser(String firstName, String lastName, String phone, String check, String password, int role, InputStream inputStream, int orgid) throws SQLException {	
 		  System.out.println("MyImage:"+inputStream);
 		  PreparedStatement prepStatement ;
-		  if (inputStream != null) {
+		  if (inputStream != null && check.equals("show")) {
           prepStatement = dbConnection.prepareStatement("update user SET firstname = ?, lastname =?, phone1 =?, password=?, role_id=?, profile_pic=? where org_id = ?");
           prepStatement.setString(1, firstName);
           prepStatement.setString(2, lastName);
@@ -120,20 +120,70 @@ public class UserRepository {
           prepStatement.setString(4, password);	          
           prepStatement.setInt(5, role); //1=Administrator, 2=User
           prepStatement.setBlob(6, inputStream);
-          prepStatement.setInt(7, orgid);
+          prepStatement.setInt(7, orgid); 
           System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
           prepStatement.executeUpdate(); 
           prepStatement.close();  
-            } else {
-            	 prepStatement = dbConnection.prepareStatement("update user SET firstname = ?, lastname =?, phone1 =?, password=?, role_id=? where org_id = ?");
-               
-          prepStatement.setString(1, firstName);
+            } 
+		  
+		  else if ((inputStream == null) &&(check.equals("show")))
+		  {
+		  prepStatement = dbConnection.prepareStatement("update user SET firstname = ?, lastname =?, phone1 =?, password=?, role_id=? where org_id = ?");
+		  prepStatement.setString(1, firstName);
           prepStatement.setString(2, lastName);
           prepStatement.setString(3, phone);
           prepStatement.setString(4, password);	          
           prepStatement.setInt(5, role); //1=Administrator, 2=User
           prepStatement.setInt(6, orgid);
           System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
+          prepStatement.executeUpdate(); 
+          prepStatement.close();  
+		  }
+		  
+		/*
+		 * else if ((inputStream == null) &&(check.equals("hide"))) { prepStatement =
+		 * dbConnection.
+		 * prepareStatement("update user SET firstname = ?, lastname =?, phone1 =?,  role_id=? where org_id = ?"
+		 * );
+		 * 
+		 * prepStatement.setString(1, firstName); prepStatement.setString(2, lastName);
+		 * prepStatement.setString(3, phone); prepStatement.setInt(4, role);
+		 * //1=Administrator, 2=User prepStatement.setInt(5, orgid);
+		 * System.out.println(Database.getTimestamp()
+		 * +" @UserRepository.saveUserInOrg>prepStatement3: "+prepStatement.toString());
+		 * prepStatement.executeUpdate(); prepStatement.close(); }
+		 */
+	  } 
+	  
+	  public void updateUserNoPassword(String firstName, String lastName, String phone, String check, int role, InputStream inputStream, int orgid) throws SQLException {	
+		  System.out.println("MyImage:"+inputStream);
+		  PreparedStatement prepStatement ;
+		
+		  
+		  if ((inputStream == null) &&(check.equals("hide")))
+				  {
+			  prepStatement = dbConnection.prepareStatement("update user SET firstname = ?, lastname =?, phone1 =?,  role_id=? where org_id = ?");
+               
+          prepStatement.setString(1, firstName);
+          prepStatement.setString(2, lastName);
+          prepStatement.setString(3, phone);   
+          prepStatement.setInt(4, role); //1=Administrator, 2=User
+          prepStatement.setInt(5, orgid);
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement3: "+prepStatement.toString());
+          prepStatement.executeUpdate(); 
+          prepStatement.close();
+            }
+			 else if ((inputStream != null) &&(check.equals("hide")))
+				  {
+			  prepStatement = dbConnection.prepareStatement("update user SET firstname = ?, lastname =?, phone1 =?,  role_id=?,  profile_pic=?  where org_id = ?");
+               
+          prepStatement.setString(1, firstName);
+          prepStatement.setString(2, lastName);
+          prepStatement.setString(3, phone);   
+          prepStatement.setInt(4, role); //1=Administrator, 2=User
+          prepStatement.setBlob(5, inputStream);
+          prepStatement.setInt(6, orgid);
+          System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement3: "+prepStatement.toString());
           prepStatement.executeUpdate(); 
           prepStatement.close();
             }
@@ -207,6 +257,25 @@ public class UserRepository {
 	   * @param password
 	   * @return boolean
 	   */
+	  public String findByLogins(String login, String password) throws SQLException {
+		  String passwords = null;
+          PreparedStatement prepStatement = dbConnection.prepareStatement("select password from user where login = ?");
+          prepStatement.setString(1, login);  
+          System.out.println(Database.getTimestamp()+" @UserRepository.findByLogin>prepStatement: "+prepStatement.toString());
+          ResultSet result = prepStatement.executeQuery();
+          if (result != null) {
+              while (result.next()) {
+                  
+                	  passwords = result.getString(1);
+                  
+              }               
+          }
+          prepStatement.close();
+          result.close(); 
+	      return passwords;
+	  }
+	 
+	  
 	  public boolean findByLogin(String login, String password) throws SQLException {
 		  boolean userAuthenticated = false;	      
           PreparedStatement prepStatement = dbConnection.prepareStatement("select password from user where login = ?");
@@ -226,7 +295,6 @@ public class UserRepository {
           result.close(); 
 	      return userAuthenticated;
 	  }
-	 
 	  /**
 	   * Get User object will all user details loaded
 	   * 
