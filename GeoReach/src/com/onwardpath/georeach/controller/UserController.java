@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 
 import com.onwardpath.georeach.model.User;
-import com.onwardpath.georeach.repository.UserRepository;
+import com.onwardpath.georeach.repository.*;
 import com.onwardpath.georeach.util.Database;
 import com.onwardpath.georeach.util.MatomoUtil;
 
