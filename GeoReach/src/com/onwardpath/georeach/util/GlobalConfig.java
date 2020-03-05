@@ -12,7 +12,7 @@ import java.util.Properties;
  */
 
 /**
- *
+ * Singleton Class for global configuration file
  * @author Gurujegan
  */
 public class GlobalConfig {

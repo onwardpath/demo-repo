@@ -15,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 import com.onwardpath.georeach.model.User;
-import com.onwardpath.georeach.repository.UserRepository;
+import com.onwardpath.georeach.repository.*;
 import com.onwardpath.georeach.util.Database;
 import com.onwardpath.georeach.util.MatomoUtil;
 
@@ -24,6 +24,7 @@ import com.onwardpath.georeach.util.MatomoUtil;
 @MultipartConfig(maxFileSize = 16177215)
 public class UserController extends HttpServlet {
 	private UserRepository userRepository;
+	private MatomoRepository MatamoRepository;
  
 	private static String USER_SIGNUP = "signup.jsp";
 	private static String USER_LOGIN = "login.jsp";	  
@@ -63,6 +64,7 @@ public class UserController extends HttpServlet {
 	   */
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		  userRepository = new UserRepository();
+		  
 		  
 		  String pageName = request.getParameter("pageName");	      
 	      System.out.println(Database.getTimestamp()+" @UserController.doPost>pageName: "+pageName);
