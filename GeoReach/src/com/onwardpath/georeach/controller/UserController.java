@@ -24,7 +24,7 @@ import com.onwardpath.georeach.util.MatomoUtil;
 @MultipartConfig(maxFileSize = 16177215)
 public class UserController extends HttpServlet {
 	private UserRepository userRepository;
-	private MatomoRepository MatamoRepository;
+	private MatomoRepository matamoRepository;
  
 	private static String USER_SIGNUP = "signup.jsp";
 	private static String USER_LOGIN = "login.jsp";	  
@@ -64,8 +64,11 @@ public class UserController extends HttpServlet {
 	   */
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		  userRepository = new UserRepository();
+		  matamoRepository = new MatomoRepository();
+		  System.out.println("adduserurl="+matamoRepository.registerNewUser());
 		  
-		  
+		 
+		  		  
 		  String pageName = request.getParameter("pageName");	      
 	      System.out.println(Database.getTimestamp()+" @UserController.doPost>pageName: "+pageName);
 	      String forward = "";        
@@ -122,7 +125,13 @@ public class UserController extends HttpServlet {
 	            		  String password = request.getParameter("password");
 	            		 
 	            		  String hasp = test.signup(password); 
-	            		 
+	            		  
+	            		  String orgName = request.getParameter("orgName");
+	            		  String domain = request.getParameter("domain");
+	            		  
+	            		 // System.out.println(matamoRepository.registerWebsite(orgName,domain));
+	            		  
+	            		  
 	            		  userRepository.saveUserandOrg(request.getParameter("orgName"), request.getParameter("domain"), "logoUrl", 
 			            		  request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("email"), request.getParameter("phone"), 
 			            		  hasp,Integer.parseInt(request.getParameter("role")),inputStream );
