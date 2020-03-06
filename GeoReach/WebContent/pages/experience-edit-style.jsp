@@ -100,7 +100,7 @@ function addContent() {
 	 var checkedValue = "";
    	var inputElements = document.getElementById('page_events')
    			.getElementsByTagName("input");
-   alert("Hey:"+ inputElements)
+   //alert("Hey:"+ inputElements)
    	for (var i = 0; inputElements[i]; ++i) {
    		if (inputElements[i].checked != "") {
    			checkedValue += inputElements[i].value;
