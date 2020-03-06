@@ -6,6 +6,14 @@ public class ExperienceContent {
 	private String segmentName;
 	private String content;
 	private String type;
+	private String checkboxvalue;
+	
+	public String getCheckboxvalue() {
+		return checkboxvalue;
+	}
+	public void setCheckboxvalue(String checkboxvalue) {
+		this.checkboxvalue = checkboxvalue;
+	}
 	
 	public String getExperienceName() {
 		return experienceName;
