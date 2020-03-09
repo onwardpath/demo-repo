@@ -65,7 +65,8 @@ public class UserController extends HttpServlet {
 	  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		  userRepository = new UserRepository();
 		  matamoRepository = new MatomoRepository();
-		  System.out.println("adduserurl="+matamoRepository.registerNewUser());
+		  matamoRepository.saveSiteInfo("10");
+		//  System.out.println("adduserurl=");
 		  
 		 
 		  		  
@@ -128,9 +129,8 @@ public class UserController extends HttpServlet {
 	            		  
 	            		  String orgName = request.getParameter("orgName");
 	            		  String domain = request.getParameter("domain");
-	            		  
-	            		 // System.out.println(matamoRepository.registerWebsite(orgName,domain));
-	            		  
+	            		 // String siteID = matamoRepository.registerWebsite(orgName,domain);
+	            	      
 	            		  
 	            		  userRepository.saveUserandOrg(request.getParameter("orgName"), request.getParameter("domain"), "logoUrl", 
 			            		  request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("email"), request.getParameter("phone"), 
