@@ -39,7 +39,7 @@ public class UserRepository {
 	   * @param profile_pic
 	   * @throws SQLException
 	   */
-	  public void saveUserandOrg (String orgName, String domain, String logoUrl, String firstName, String lastName, String email, String phone, String password, int role, InputStream inputStream) throws SQLException {		  		 
+	  public void saveUserandOrg (String orgName, String domain, String logoUrl, String firstName, String lastName, String email, String phone, String password, int role, InputStream inputStream, int analytics_id) throws SQLException {		  		 
 		  //1. Save Organization
 		  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into organization (name, domain, logo) values (?, ?, ?)");
 		  prepStatement.setString(1, orgName);
@@ -54,7 +54,7 @@ public class UserRepository {
           orgResult.next();
           int org_id = orgResult.getInt(1);                    
           //2. Save User
-          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id,profile_pic) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id,profile_pic,analytics_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
           prepStatement.setInt(1, org_id);
           prepStatement.setString(2, firstName);
           prepStatement.setString(3, lastName);
@@ -64,6 +64,7 @@ public class UserRepository {
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
           prepStatement.setBlob(9, inputStream);
+          prepStatement.setInt(10, analytics_id);
           System.out.println(Database.getTimestamp()+" @UserRepository.saveUserandOrg>prepStatement3: "+prepStatement.toString());
           prepStatement.executeUpdate();              
           prepStatement.close();
@@ -198,6 +199,25 @@ public class UserRepository {
           prepStatement.executeUpdate();  
           prepStatement.close();
 	  } 
+	  
+	   
+	  /**
+	   *  Update the column analytics_site_id into user table. To be called after analytics site is successfully created
+	   * 
+	   * @param analytics_site_id
+	   *  @param userid
+	   * @return void
+	   */
+	  
+	  public void updateUserSiteID (int analytics_site_id, int userid) throws SQLException {	
+		  PreparedStatement prepStatement = dbConnection.prepareStatement("update user SET analytics_site_id = ? where id = ?");
+		  prepStatement.setInt(1, analytics_site_id);
+		  prepStatement.setInt(2, userid);
+          System.out.println(Database.getTimestamp()+" @UserRepository.updateUserSiteID>prepStatement1: "+prepStatement.toString());                   
+          prepStatement.executeUpdate();  
+          prepStatement.close();
+	  } 
+	   
 	   
 	  /**
 	   * Check if an Organization exists based on domain
