@@ -90,7 +90,8 @@ function setupModal(action, action_id) {
 		actionis = "";
 		$("#segment").val($("#segment option:first").val());
 		document.getElementById("content").value = "";
-		 
+		$("#subpages").prop('checked', false);
+		  
 	}
 }  
 function addContent() {

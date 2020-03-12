@@ -52,9 +52,32 @@ function add(event){
 		} else {
 			if(content.length > 0)
 			{
+				var allsubpagetext = document.querySelector('#subpages').checked;
+				 if(allsubpagetext === true){
+					 allsubpagetext = "Yes" 
+				 }else{
+					 allsubpagetext = "No";
+				 }
+			  
+				var popuptext = document.getElementById('popuptext').value;
+				if(popuptext){
+					popuptext = popuptext; 
+				 }else{
+					 popuptext = "N/A";
+				 }
+				
+				 
+				var popuptime = document.getElementById('popuptime').value;
+				
+				if(popuptime){
+					popuptime = popuptime; 
+				 }else{
+					 popuptime = "N/A";
+				 }
+				     
 				//allsupage = getCheckedEvents();
 				//alerttext = document.getElementById('subpopup').value 
-				expDetailsObj[segment_id] = content
+				expDetailsObj[segment_id] = content+"#"+allsubpagetext+"#"+popuptext+"#"+popuptime;
 			//expDetailsObj[segment_id] = content+"#allsubpage:"+allsupage+"#popup:"+alerttext;	
 			var stage = document.getElementById("stage");
 			stage.innerHTML += '&nbsp;<button type="button" id="'+segment_name+'" class="btn btn-outline-info btn-pill" onclick="remove(\''+segment_name+'\','+segment_id+')"><b>'+segment_name+'</b>:<b style="color:#3d4e5e"> '+content+'<b><i class="la la-close"></i></button>';
@@ -303,7 +326,7 @@ function saveExperience(){
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12"></label>
 					<div class="col-lg-4 col-md-9 col-sm-12">																					
-						<button type="button" class="btn btn-accent" onclick="javascript:add(event)">Add</button>
+						<button type="reset" class="btn btn-accent" onclick="javascript:add(event)">Add</button>
 					</div>
 				</div>
 				

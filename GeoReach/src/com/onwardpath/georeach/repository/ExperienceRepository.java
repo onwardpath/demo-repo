@@ -145,16 +145,14 @@ public class ExperienceRepository {
 	   * @throws SQLException
 	   */
 	  
-	  public void saveredirect(int experience_id, String url ,int segment_id , String allsubpage ,String popuptext , String popuptime, String username, String usernam) throws SQLException {	      	         
-    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.redirect (experience_id,redirect_url,segment_id,allsubpage,popup,popuptime,create_by,mod_by,create_time,mod_time) values (?,?,?,?,?,?,?,?,now(),now())");                    
+	  public void saveredirect(int experience_id, String url ,int segment_id , String allsubpage ,String popuptext , String popuptime) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.redirect (experience_id,redirect_url,segment_id,allsubpage,popup,popuptime) values (?,?,?,?,?,?)");                    
           prepStatement.setInt(1, experience_id);
           prepStatement.setString(2, url);
           prepStatement.setInt(3, segment_id); 
           prepStatement.setString(4, allsubpage);
           prepStatement.setString(5, popuptext);
           prepStatement.setString(6, popuptime); 
-          prepStatement.setString(7, username);
-          prepStatement.setString(8, usernam);
           System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveImage>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();          
@@ -171,14 +169,12 @@ public class ExperienceRepository {
 	   * @throws SQLException
 	   */
 	     
-	  public void saveStyle(int experience_id, String url , String allsubpages, int segment_id , String username, String usernam) throws SQLException {	      	         
-    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.style (experience_id,csslink,allsubpage,segment_id,create_by,mod_by,create_time,mod_time) values (?,?,?,?,?,?,now(),now())");                    
+	  public void saveStyle(int experience_id, String url , String allsubpages, int segment_id) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.style (experience_id,csslink,allsubpage,segment_id) values (?,?,?,?)");                    
           prepStatement.setInt(1, experience_id);
           prepStatement.setString(2, url);
           prepStatement.setString(3, allsubpages);
           prepStatement.setInt(4, segment_id);  
-          prepStatement.setString(5, username);
-          prepStatement.setString(6, usernam);
           System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveImage>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();          
@@ -234,19 +230,42 @@ public class ExperienceRepository {
 	   * @throws SQLException
 	   */
 	    
-	  public void saveEditstyle(int experience_id, int segment_id, String content, String allsubapge, String username, String usernames) throws SQLException {	      	         
-    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.style (experience_id, segment_id, csslink, allsubpage,create_by,mod_by,create_time,mod_time) values (?,?,?,?,?,?,now(),now())");                    
+	  public void saveEditstyle(int experience_id, int segment_id, String content, String allsubapge) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.style (experience_id, segment_id, csslink, allsubpage) values (?,?,?,?)");                    
           prepStatement.setInt(1, experience_id);
           prepStatement.setInt(2, segment_id);
           prepStatement.setString(3, content);
           prepStatement.setString(4, allsubapge);
-          prepStatement.setString(5, username);
-          prepStatement.setString(6, usernames);
           System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveContent>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();
           prepStatement.close();          
 	  }
 	  
+	  
+	  /**
+	   * Save a Edit redirect experience detail to the Content table
+	   * 
+	   * @param experience_id
+	   * @param segment_id
+	   * @param content
+	   * @param allsubapge
+	   * @param username
+	   * @throws SQLException
+	   */
+	     
+	  public void saveEditredirect(int experience_id, int segment_id, String content, String allsubapge, String popup,String popuptime) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.redirect (experience_id, segment_id, redirect_url, allsubpage,popup,popuptime) values (?,?,?,?,?,?)");                    
+          prepStatement.setInt(1, experience_id);
+          prepStatement.setInt(2, segment_id);
+          prepStatement.setString(3, content);
+          prepStatement.setString(4, allsubapge);
+          prepStatement.setString(5, popup);
+          prepStatement.setString(6, popuptime);
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveContent>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
+	  }
+	   
 	  /**
 	   * Save a Link experience detail to the Link table
 	   * 
@@ -409,6 +428,21 @@ public class ExperienceRepository {
 	  
 	  public void deletestyle(int experience_id) throws SQLException {	      	         
     	  PreparedStatement prepStatement = dbConnection.prepareStatement("delete from georeachdb.style where experience_id =?");                    
+          prepStatement.setInt(1, experience_id);   
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveContent>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
+	  }
+	  
+	  
+	  /**
+	   * Delete redirect
+	   * 
+	   * @param id
+	   */
+	  
+	  public void deleteredirect(int experience_id) throws SQLException {	      	         
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement("delete from georeachdb.redirect where experience_id =?");                    
           prepStatement.setInt(1, experience_id);   
           System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveContent>prepStatement: "+prepStatement.toString());
           prepStatement.executeUpdate();

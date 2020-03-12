@@ -88,7 +88,7 @@ public class ExperienceController extends HttpServlet {
 	   * @param request
 	   */
 	  
-	  private void addEditstyle(int experience_id,HttpServletRequest request, String username, String usernames) throws IOException, SQLException {
+	  private void addEditstyle(int experience_id,HttpServletRequest request) throws IOException, SQLException {
 		  String experienceDetails = request.getParameter("experienceDetails");	
 		  ObjectMapper mapper = new ObjectMapper();	            		  
    		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
@@ -96,10 +96,29 @@ public class ExperienceController extends HttpServlet {
    		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
    			  int segment_id = Integer.parseInt(entry.getKey());
    			  String content = entry.getValue();
-   			experienceRepository.saveEditstyle(experience_id, segment_id, content.split("#")[0],content.split("#")[1],username, usernames);	
+   			experienceRepository.saveEditstyle(experience_id, segment_id, content.split("#")[0],content.split("#")[1]);	
    		  }	
 	  }
 	  
+	  /**
+	   * Save a EditPage - redirect experience detail to the Image table
+	   * 
+	   * @param experience_id
+	   * @param request
+	   */
+	  
+	  private void addEditredirect(int experience_id,HttpServletRequest request) throws IOException, SQLException {
+		  String experienceDetails = request.getParameter("experienceDetails");	
+		  ObjectMapper mapper = new ObjectMapper();	            		  
+   		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+   		  System.out.println(map);	            		  
+   		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+   			  int segment_id = Integer.parseInt(entry.getKey());
+   			  String content = entry.getValue();
+   			experienceRepository.saveEditredirect(experience_id, segment_id, content.split("#")[0],content.split("#")[1],content.split("#")[2],content.split("#")[3]);	
+   		  }	
+	  } 
+	   
 	  /**
 	   * Save a EditPage - config experience detail to the Image table
 	   * 
@@ -175,11 +194,11 @@ public class ExperienceController extends HttpServlet {
 							  int segment_id = Integer.parseInt(entry.getKey()); 
 							  String url = entry.getValue();
 						 System.out.println("Segment ID = " + segment_id + ", URL = " + url.substring(1, 2));
-						 experienceRepository.saveredirect(experience_id,url,segment_id,allsubpage,popevents,popuptime,username,username); 
+						 experienceRepository.saveredirect(experience_id,url.split("#")[0],segment_id,url.split("#")[1],url.split("#")[2],url.split("#")[3]); 
 						 logger.info("Save Sucesss");
 						 }  
 						  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
-						            
+						             
 	            	  } 
 	            	  
 	            	  else if (type.contentEquals("style")) {	            		  
@@ -191,7 +210,7 @@ public class ExperienceController extends HttpServlet {
 	            			  int segment_id = Integer.parseInt(entry.getKey());
 	            			  String url = entry.getValue();
 	            			  System.out.println("Segment ID = " + segment_id + ", URL = " + url);
-	            			  experienceRepository.saveStyle(experience_id,url.split("#")[0],url.split("#")[1],segment_id,username,username);	            			  	            			 
+	            			  experienceRepository.saveStyle(experience_id,url.split("#")[0],url.split("#")[1],segment_id);	            			  	            			 
 	            		  }		            		  
 	            		  SAVE_FAILURE = "?view=pages/experience-create-image.jsp";
 	            	  }
@@ -342,7 +361,7 @@ public class ExperienceController extends HttpServlet {
 			        	 experienceRepository.update(experience_id, 1, "name", name);	        	
 			        	// Update  Style Table 
 			        	 experienceRepository.deletestyle(experience_id);
-			        	 addEditstyle(experience_id, request,username,username);  
+			        	 addEditstyle(experience_id, request);  
 			        	// Update  config Table  
 			        	 updateconfig(experience_id, request,user_id);        	    
 	           		 session.setAttribute("message", "Experience " +name+ " has been updated Successfully"); 
@@ -354,6 +373,27 @@ public class ExperienceController extends HttpServlet {
 					}
 	  
 		          }
+	          
+	          else if (pageName.equals("edit-redirect-experience")) { 
+		        	 try {
+		        		 // update the experience name
+		        		 int experience_id = Integer.parseInt(request.getParameter("expid"));
+			        	 String name = request.getParameter("expName");
+			        	 experienceRepository.update(experience_id, 1, "name", name);	        	
+			        	// Update  Redirect Table 
+			        	 experienceRepository.deleteredirect(experience_id);
+			        	 addEditredirect(experience_id, request);  
+			        	// Update  config Table  
+			        	 updateconfig(experience_id, request,user_id);        	    
+	           		 session.setAttribute("message", "Experience " +name+ " has been updated Successfully"); 
+		        	  forward = "?view=pages/experience-view-content.jsp";   
+					} catch (SQLException e) { 
+						// TODO Auto-generated catch block
+						session.setAttribute("message", "Update Fail.Please try later or contact the administrator"); 
+						e.printStackTrace(); 
+					}
+	  
+		          }  
 	          
 	      }	      
 	      RequestDispatcher view = request.getRequestDispatcher(forward);

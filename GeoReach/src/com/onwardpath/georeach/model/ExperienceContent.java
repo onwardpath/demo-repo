@@ -7,6 +7,20 @@ public class ExperienceContent {
 	private String content;
 	private String type;
 	private String checkboxvalue;
+	private String popupText;
+	public String getPopupText() {
+		return popupText;
+	}
+	public void setPopupText(String popupText) {
+		this.popupText = popupText;
+	}
+	public String getPopupTime() {
+		return popupTime;
+	}
+	public void setPopupTime(String popupTime) {
+		this.popupTime = popupTime;
+	}
+	private String popupTime;
 	
 	public String getCheckboxvalue() {
 		return checkboxvalue;
