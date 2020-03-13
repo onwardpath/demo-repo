@@ -37,6 +37,7 @@ public class UserRepository {
 	   * @param password
 	   * @param role
 	   * @param profile_pic
+	   * @param analytics_id
 	   * @throws SQLException
 	   */
 	  public void saveUserandOrg (String orgName, String domain, String logoUrl, String firstName, String lastName, String email, String phone, String password, int role, InputStream inputStream, int analytics_id) throws SQLException {		  		 
@@ -82,9 +83,10 @@ public class UserRepository {
 	   * @param password
 	   * @param role
 	   * @param profile_pic
+	   * @param analytics_id
 	   * @throws SQLException
 	   */
-	  public void saveUserInOrg (String domain, String firstName, String lastName, String email, String phone, String password, int role, InputStream inputStream) throws SQLException {			 		  
+	  public void saveUserInOrg (String domain, String firstName, String lastName, String email, String phone, String password, int role, InputStream inputStream, int analytics_id) throws SQLException {			 		  
 		  //1. Find Organization ID from given domain name		  		                     		          	                                                                                                    
           PreparedStatement prepStatement = dbConnection.prepareStatement("select id from organization where domain = ?");
           prepStatement.setString(1, domain);
@@ -93,7 +95,7 @@ public class UserRepository {
           orgResult.next();
           int org_id = orgResult.getInt(1);                   
           //2. Save User
-          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id, profile_pic) values (?, ?, ?, ?, ?, ?, ?, ?,?)");
+          prepStatement = dbConnection.prepareStatement("insert into user (org_id, firstname, lastname, email, phone1, login, password, role_id, profile_pic,analytics_id) values (?, ?, ?, ?, ?, ?, ?, ?,?,?)");
           prepStatement.setInt(1, org_id);
           prepStatement.setString(2, firstName);
           prepStatement.setString(3, lastName);
@@ -103,6 +105,7 @@ public class UserRepository {
           prepStatement.setString(7, password);	          
           prepStatement.setInt(8, role); //1=Administrator, 2=User
           prepStatement.setBlob(9, inputStream);
+          prepStatement.setInt(10, analytics_id);
           System.out.println(Database.getTimestamp()+" @UserRepository.saveUserInOrg>prepStatement2: "+prepStatement.toString());
           prepStatement.executeUpdate(); 
           prepStatement.close();

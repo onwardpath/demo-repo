@@ -115,10 +115,12 @@ public class UserController extends HttpServlet {
 						String password = request.getParameter("password");
 
 						String hasp = test.signup(password);
+						String root_domain = matamoRepository.getRootDomain(orgDomain);
+						int analytics_id = matamoRepository.getRowIdbyRootDomain(root_domain);
 						userRepository.saveUserInOrg(request.getParameter("domain"), request.getParameter("firstName"),
 								request.getParameter("lastName"), request.getParameter("email"),
 								request.getParameter("phone"), hasp, Integer.parseInt(request.getParameter("role")),
-								inputStream);
+								inputStream,analytics_id);
 
 						System.out.println("New User from existing organization");
 					} else {
@@ -134,7 +136,8 @@ public class UserController extends HttpServlet {
 
 						String orgName = request.getParameter("orgName");
 						String domain = request.getParameter("domain");
-																
+						
+						//Getting row id of newly inserted from the Anlaytics table after completing Matomo process
 						int analytics_id = matamoRepository.registerWebsite(orgName, domain);
 					
 						

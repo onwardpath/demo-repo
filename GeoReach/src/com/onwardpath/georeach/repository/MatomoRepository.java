@@ -58,7 +58,7 @@ public class MatomoRepository {
 	}
 
 	/**
-	 * Get User object will all user details loaded
+	 * Generate HTTP qualified URL to execute
 	 * 
 	 * @param API Module
 	 * @return User
@@ -106,7 +106,10 @@ public class MatomoRepository {
 	/**
 	 * Add website into Matomo in order to track
 	 * 
-	 * @param orgName @param domain @return siteID @throws
+	 * @param orgName
+	 * @param domain
+	 * @return siteID
+	 * 
 	 */
 	public int registerWebsite(String orgName, String domain) {
 
@@ -147,6 +150,15 @@ public class MatomoRepository {
 		return analytics_id;
 
 	}
+
+	/**
+	 * Save collected matomo information into analytics table & return row id
+	 * 
+	 * @param siteID
+	 * @param root_domain
+	 * @return rowID
+	 * 
+	 */
 
 	private int saveSiteInfo(String siteID, String root_domain) throws IOException {
 
@@ -218,7 +230,7 @@ public class MatomoRepository {
 	/**
 	 * @throws IOException Add website into Matomo in order to track
 	 * 
-	 * @param orgName @param domain @return siteID @throws
+	 * 
 	 */
 	public String registerNewUser() throws IOException {
 
@@ -232,10 +244,18 @@ public class MatomoRepository {
 
 	}
 
+	/**
+	 * 
+	 * @throws MalformedURLException
+	 * @param domain
+	 * 
+	 * Domain val should contain www in the start Eg: http://www.google.com
+	 */
+	
 	public String getRootDomain(String domain) throws MalformedURLException {
 
 		String root_domain = null;
-		String fq_domain = null;
+		String fq_domain = null; // fully qualified domain
 		final URL u = new URL(domain);
 		fq_domain = u.getHost();
 		if (u.getHost().contains(("www"))) {
@@ -244,10 +264,40 @@ public class MatomoRepository {
 			int beginIndex = u.getHost().indexOf(".") + 1;
 			root_domain = fq_domain.substring(beginIndex, fq_domain.length());
 		}
-
 		return root_domain;
 
 	}
+
+	/**
+	 * Check if an Organization exists based on domain
+	 * 
+	 * @param domain
+	 * @return boolean
+	 */
+	public int getRowIdbyRootDomain(String root_domain) throws SQLException {
+		int analytics_id = 0;
+		PreparedStatement prepStatement = dbConnection
+				.prepareStatement("select id from analytics where root_domain = ?");
+		prepStatement.setString(1, root_domain);
+		System.out.println(
+				Database.getTimestamp() + " @UserRepository.orgExists>prepStatement: " + prepStatement.toString());
+		ResultSet result = prepStatement.executeQuery();
+		if (result != null) {
+			while (result.next()) {
+				analytics_id = result.getInt(1);
+			}
+		}
+		prepStatement.close();
+		result.close();
+		return analytics_id;
+	}
+
+	/**
+	 * Convert JSON response to String from URL response
+	 * 
+	 * @param fullURL
+	 * @return String
+	 */
 
 	public static String getJSONfromURL(String fullURL) {
 		StringBuilder responseJson = null;
