@@ -10,6 +10,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -262,9 +263,9 @@ public class UserController extends HttpServlet {
 
 				}
 
-			} catch (SQLException | NoSuchAlgorithmException e) {
+			} catch (SQLException | NoSuchAlgorithmException |NullPointerException |ConnectException e) {
 				System.out.println(e.getMessage());
-				;
+	
 				session.setAttribute("message",
 						"Error: " + e.getMessage() + " Please try again later or contact the administrator");
 				if (pageName.equals("signup"))

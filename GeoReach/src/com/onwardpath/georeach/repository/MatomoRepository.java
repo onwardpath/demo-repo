@@ -124,7 +124,8 @@ public class MatomoRepository {
 			if ((orgName != null && domain != null)) {
 				http_x_URL = getAddWebsiteURL("API", "SitesManager.addSite", orgName, domain);
 				rsJsonfromURL = getJSONfromURL(http_x_URL);
-				System.out.println("Result JSON length" + rsJsonfromURL);
+				System.out.println("API URL:" + http_x_URL);
+				System.out.println("Result JSON length:" + rsJsonfromURL);
 				if (!(rsJsonfromURL.equals("{}") || rsJsonfromURL.equals("[]"))
 						&& !(rsJsonfromURL.equalsIgnoreCase("error"))) {
 					Gson gson = new Gson();
@@ -142,7 +143,7 @@ public class MatomoRepository {
 
 			}
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -328,7 +329,7 @@ public class MatomoRepository {
 			}
 
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println("sfsdfs"+e);
 		}
 		return responseJson.toString();
 
