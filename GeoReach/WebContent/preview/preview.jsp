@@ -54,37 +54,26 @@
 }
 </style>
 <script>
-
-</script>
-<script>
 	  var iframe;
-	  window.addEventListener('DOMContentLoaded', (event) => {
-           	 var iframe = document.getElementById('clientframe');
+         window.addEventListener('load', (event) => {
+        	
+        	 var iframe = document.getElementById('clientframe');
         	 var content = document.getElementById("content").innerHTML;
      	  	 var frameDoc = iframe.document;
         	 if (iframe.contentWindow)
         			frameDoc = iframe.contentWindow.document;
-        	 
-        	 $.ajaxSetup({
-        		  url: "ping.php"
-        		});
-  
-        	 debugger;
-        	          	 
-
+        	  
              	frameDoc.open();
         		frameDoc.writeln(content);
         		 
            	    frameDoc.close();
-        		document.getElementById("content").remove(); 
+        		document.getElementById("content").remove();
         		activateDnD(); //Activating DnD operation here
         		localStorage.clear();
         		//iframe.contentWindow.document.body.contentEditable = "true";
         		//iframe.contentWindow.document.designMode = "on"; 
-        		
-           });
+        });
 
-                  
          function activateDnD()
          {
         	 //Merging two Objects
@@ -136,6 +125,7 @@
         	    });
         	    $('#clientframe').on('load', function()
         	    {
+        	    	
         	        //Add CSS File to iFrame
         	        var style = $("<style data-reserved-styletag></style>").html(GetInsertionCSS());
         	        $(clientFrameWindow.document.head).append(style);
@@ -181,10 +171,7 @@
         	            //   var textData = e.dataTransfer.getData('text');
         	             //Setting Experinece data into another iframe using Localstorage
         	               var getLS_obj = JSON.parse(localStorage.getItem("insertingHTML"));
-        	               var div_el = document.createElement("div");
-        	               div_el.id ="dnditem-"+ Object.keys(getLS_obj);
-        	               div_el.innerHTML = Object.values(getLS_obj);
-        	               var textData = div_el.outerHTML; 
+        	               var textData = "<span>" + Object.values(getLS_obj) + "</span>"; 
         	         
         	                       	           
         	                var insertionPoint = $("#clientframe").contents().find(".drop-marker");
