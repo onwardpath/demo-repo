@@ -15,6 +15,7 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
+import com.onwardpath.georeach.model.Analytics;
 import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.repository.*;
 import com.onwardpath.georeach.util.Database;
@@ -164,10 +165,13 @@ public class UserController extends HttpServlet {
 						int user_id = userRepository.findUserId(request.getParameter("userName"));
 						int org_id = userRepository.findOrgId(request.getParameter("userName"));
 						User user = userRepository.getUser(user_id);
+						Analytics analytics =  matamoRepository.getSiteInfo(user.getAnalytics_id());
 						session.setAttribute("authenticated", "true");
 						session.setAttribute("user", user);
 						session.setAttribute("user_id", user_id);
 						session.setAttribute("org_id", org_id);
+						session.setAttribute("site_id", analytics.getSite_id());
+						System.out.println("Get Matomo ID:"+analytics.getSite_id());
 						forward = LOGIN_SUCCESS;
 					} else {
 						String array1[] = results.split("/");
@@ -179,10 +183,13 @@ public class UserController extends HttpServlet {
 							int user_id = userRepository.findUserId(request.getParameter("userName"));
 							int org_id = userRepository.findOrgId(request.getParameter("userName"));
 							User user = userRepository.getUser(user_id);
+							Analytics analytics =  matamoRepository.getSiteInfo(user.getAnalytics_id());
 							session.setAttribute("authenticated", "true");
 							session.setAttribute("user", user);
 							session.setAttribute("user_id", user_id);
 							session.setAttribute("org_id", org_id);
+							session.setAttribute("site_id", analytics.getSite_id());
+							System.out.println("Get Matomo ID:"+analytics.getSite_id());
 							forward = LOGIN_SUCCESS;
 						} else {
 							session.setAttribute("message",

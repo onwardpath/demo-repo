@@ -19,6 +19,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.onwardpath.georeach.model.Analytics;
+import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.util.Database;
 import com.onwardpath.georeach.util.GlobalConfig;
 import com.onwardpath.georeach.util.MatomoUtil;
@@ -153,6 +155,36 @@ public class MatomoRepository {
 	}
 
 	/**
+	 * Get User object will all user details loaded
+	 * 
+	 * @param id
+	 * @return Analytics
+	 * @throws SQLException
+	 */
+	public Analytics getSiteInfo(int id) throws SQLException {
+		Analytics analytics = new Analytics();
+		String query = "select * from analytics where id = ?";
+		PreparedStatement prepStatement = dbConnection.prepareStatement(query);
+		prepStatement.setInt(1, id);
+		// System.out.println(Database.getTimestamp()+"
+		// @UserRepository.getUser>prepStatement: "+prepStatement.toString());
+		ResultSet result = prepStatement.executeQuery();
+		if (result != null && result.next()) {
+			int site_id = result.getInt("site_id");
+			String site_name = result.getString("site_name");
+			String root_domain = result.getString("root_domain");
+			String urls = result.getString("urls");
+			analytics.setSite_id(site_id);
+			analytics.setSite_name(site_name);
+			analytics.setRoot_domain(root_domain);
+			analytics.setUrls(urls);
+		}
+		prepStatement.close();
+		result.close();
+		return analytics;
+	}
+
+	/**
 	 * Save collected matomo information into analytics table & return row id
 	 * 
 	 * @param siteID
@@ -200,7 +232,7 @@ public class MatomoRepository {
 			try {
 				if (array.size() > 0) {
 					PreparedStatement prepStatement = dbConnection.prepareStatement(
-							"insert into analytics (siteid, sitename,root_domain, urls) values  (?, ?, ?, ?)");
+							"insert into analytics (site_id, site_name,root_domain, urls) values  (?, ?, ?, ?)");
 					prepStatement.setString(1, siteID);
 					prepStatement.setString(2, sitename);
 					prepStatement.setString(3, root_domain);
@@ -250,9 +282,10 @@ public class MatomoRepository {
 	 * @throws MalformedURLException
 	 * @param domain
 	 * 
-	 * Domain val should contain www in the start Eg: http://www.google.com
+	 *               Domain val should contain www in the start Eg:
+	 *               http://www.google.com
 	 */
-	
+
 	public String getRootDomain(String domain) throws MalformedURLException {
 
 		String root_domain = null;
@@ -329,7 +362,7 @@ public class MatomoRepository {
 			}
 
 		} catch (Exception e) {
-			System.out.println("sfsdfs"+e);
+			System.out.println("sfsdfs" + e);
 		}
 		return responseJson.toString();
 

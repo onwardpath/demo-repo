@@ -39,7 +39,7 @@
 				<executions>
 					<execution>
 						<id>copy-resources</id>
-						<!-- here the phase you need -->
+						<!-- Copying Web assets from the local filesystem while building -->
 						<phase>validate</phase>
 						<goals>
 							<goal>copy-resources</goal>
