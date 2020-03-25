@@ -83,6 +83,40 @@ private Connection dbConnection;
 		
 	}
 	
+	
+	public List<ExperienceContent> scheduleDate(String id) {
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("SELECT status,schedule_start,schedule_end,timezone_id")
+		   .append(" from experience where id =?");
+		  List<ExperienceContent> returnlist = new ArrayList<ExperienceContent>();
+		try {
+			PreparedStatement prepStatement = dbConnection.prepareStatement(sb.toString());
+			prepStatement.setString(1, id);
+	        ResultSet result = prepStatement.executeQuery();          
+	        System.out.println("Row count  " +result.getRow() );    
+	        if (result != null) {   
+	              while (result.next()) {
+	            	  ExperienceContent content = new ExperienceContent();
+	            	  //content.setContent(result.getString("content"));
+	            	  content.setStatus(result.getString("status"));
+	            	  content.setStartDate(result.getString("schedule_start"));
+	            	  content.setEndDate(result.getString("schedule_end"));
+	            	  content.setTimeZonevalue(result.getString("timezone_id"));
+	            	  returnlist.add(content);         
+	              }   
+	          }      
+	                
+	        prepStatement.close();
+	        result.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return returnlist;
+		
+	}
+	
 public List<ExperienceContent> experienceImage(String id) {
 		
 		StringBuffer sb = new StringBuffer();
@@ -237,7 +271,7 @@ public List<ExperienceContent> experienceredirect(String id) {
 } 
 	public static void main (String [] a) {
 		ExperienceHelper expHelper = new ExperienceHelper();
-		List Test = expHelper.experienceContent("209");
-		System.out.println("size : " + Test.size());
+		List Test = expHelper.scheduleDate("495");
+		System.out.println("size : " + Test); 
 	}
 }

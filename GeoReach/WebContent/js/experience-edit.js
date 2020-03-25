@@ -13,10 +13,13 @@ var spanEnd			=   "</span>";
 
 var url_id,actionis;
 
-   
+     
 function delete_exp_content(type, id) {
 	var title = "Are you sure you want to delete the segment Content";
+	alert(type);
+	alert(id);
 	var text = document.getElementById(type+'-'+id + "-namespan").innerHTML
+	alert(text);   
 	var listId = "#" + type + "list-" + id;
 	var deleteConfirmation = "Deleted";
 	if ("url" === type) {
@@ -38,16 +41,24 @@ function delete_exp_content(type, id) {
 			$(listId).remove();
 			if ("url" === type) {
 				delete cfgDetailsObj[id];
-			} else {
+			} else if ("segment" === type) {
 				delete expDetailsObj[id];
+			}else{
+				delete schDetailsObj[id];
+				//document.getElementById("blockstyle").style.display = "block";
+				//document.getElementById("ablockstylesss").style.display = "block";
+				     
+				let elem = document.querySelector('#ablockstylesss');
+				elem.style.setProperty('display', 'block', 'important');
+			 	          
 			}
 		} else {
 			"cancel" === e.dismiss;
 			swal.fire("Cancelled", "Delete " + type, "error");
 		}
 
-	});
-}
+	}); 
+} 
 function setupModal(action, action_id) {
 	var segment = document.getElementById("segment");
 	if (action === "edit") {
@@ -135,6 +146,7 @@ function saveExperience() {
 			var experienceid =document.getElementsByName("expid");
 			document.getElementById("form-contentdetails").value = JSON.stringify(expDetailsObj);
 			document.getElementById("form-urldetails").value = JSON.stringify(cfgDetailsObj);
+			document.getElementById("form-schdetails").value = JSON.stringify(schDetailsObj);
 			document.getElementById("experience-form").method = "post";
 			document.getElementById("experience-form").action = "ExperienceController";
 			document.getElementById("experience-form").submit();
@@ -144,9 +156,9 @@ function saveExperience() {
 	} else {
 		Swal.fire("Please enter a value for  Experience Name")
 	}
-
+ 
 }
-
+      
 function cancelOperation() {	
 	location.replace("/GeoReach?view=pages/experience-view-content.jsp")
    

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.util.StringUtils;
 import com.onwardpath.georeach.model.User;
 import com.onwardpath.georeach.repository.ConfigRepository;
 import com.onwardpath.georeach.repository.ExperienceRepository;
@@ -100,6 +101,27 @@ public class ExperienceController extends HttpServlet {
    		  }	
 	  }
 	  
+	  
+	  
+	  /**
+	   * Save a Schedule detail 
+	   * 
+	   * @param experience_id
+	   * @param request
+	   */
+	  
+	  private void updateschedule(int experience_id,HttpServletRequest request) throws IOException, SQLException {
+		  String experienceDetails = request.getParameter("schList");	
+		  ObjectMapper mapper = new ObjectMapper();	            		  
+   		  Map<String, String> map = mapper.readValue(experienceDetails, Map.class);
+   		  System.out.println(map);	            		  
+   		  for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+   			  int segment_id = Integer.parseInt(entry.getKey());
+   			  String content = entry.getValue();
+   			experienceRepository.updatemutiple(experience_id,content.split("#")[0],content.split("#")[1],content.split("#")[2]);	
+   		  }	
+	  }
+	   
 	  /**
 	   * Save a EditPage - redirect experience detail to the Image table
 	   * 
@@ -321,7 +343,28 @@ public class ExperienceController extends HttpServlet {
 			        	 addContent(experience_id, request);           		  	            		 
 			        	// Update  config Table 
 	           		  	updateconfig(experience_id, request,user_id);
-			        	  
+	           		 String schListDetails = request.getParameter("schList");
+	           		 
+	           		    if(!"{}".equals(schListDetails)) {
+	           		    	System.out.println("inside  if"+schListDetails);
+	           		    	experienceRepository.update(experience_id, 3, "status", "scheduled");
+	           		    	if(request.getParameter("startdate") != null && request.getParameter("startdate") !="") {
+	           		    		experienceRepository.update(experience_id, 4, "schedule_start",request.getParameter("startdate"));	
+			            	}
+			            	if(request.getParameter("enddate") != null && request.getParameter("enddate") !="") {
+			            		experienceRepository.update(experience_id, 5, "schedule_end",request.getParameter("enddate"));	
+			            	}
+			            	if(request.getParameter("timezoneval") != null && request.getParameter("timezoneval") !="") {
+			            		experienceRepository.update(experience_id, 6, "timezone_id",request.getParameter("timezoneval"));
+			            		//expController.update(experience_id, 7, "timezone_value",request.getParameter("fulltimezoneval"));
+			            	}    
+	           		    //updateschedule(experience_id,request); 
+	           		    }else {
+	           		    	experienceRepository.resetschedule(experience_id);
+	           		    	      
+	           		    	System.out.println("coming Inside else");
+	           		    }    
+	                                      
 	           		 session.setAttribute("message", "Experience " +name+ " has been updated Successfully"); 
 		        	  forward = "?view=pages/experience-view-content.jsp";   
 					} catch (SQLException e) { 
@@ -343,7 +386,28 @@ public class ExperienceController extends HttpServlet {
 			        	 experienceRepository.deleteimage(experience_id);			        	 
 			        	 addEditImage(experience_id, request);  
 			        	// Update  config Table  
-			        	 updateconfig(experience_id, request,user_id);			        	    
+			        	 updateconfig(experience_id, request,user_id);
+			        	 String schListDetails = request.getParameter("schList");
+		           		 
+		           		    if(!"{}".equals(schListDetails)) {
+		           		    	System.out.println("inside  if"+schListDetails);
+		           		    	experienceRepository.update(experience_id, 3, "status", "scheduled");
+		           		    	if(request.getParameter("startdate") != null && request.getParameter("startdate") !="") {
+		           		    		experienceRepository.update(experience_id, 4, "schedule_start",request.getParameter("startdate"));	
+				            	}
+				            	if(request.getParameter("enddate") != null && request.getParameter("enddate") !="") {
+				            		experienceRepository.update(experience_id, 5, "schedule_end",request.getParameter("enddate"));	
+				            	}
+				            	if(request.getParameter("timezoneval") != null && request.getParameter("timezoneval") !="") {
+				            		experienceRepository.update(experience_id, 6, "timezone_id",request.getParameter("timezoneval"));
+				            		//expController.update(experience_id, 7, "timezone_value",request.getParameter("fulltimezoneval"));
+				            	}    
+		           		    //updateschedule(experience_id,request); 
+		           		    }else {
+		           		    	experienceRepository.resetschedule(experience_id);
+		           		    	      
+		           		    	System.out.println("coming Inside else");
+		           		    }    
 	           		 session.setAttribute("message", "Experience " +name+ " has been updated Successfully"); 
 		        	  forward = "?view=pages/experience-view-content.jsp";   
 					} catch (SQLException e) { 
@@ -365,6 +429,27 @@ public class ExperienceController extends HttpServlet {
 			        	// Update  config Table  
 			        	 updateconfig(experience_id, request,user_id);        	    
 	           		 session.setAttribute("message", "Experience " +name+ " has been updated Successfully"); 
+	           		String schListDetails = request.getParameter("schList");
+	           		 
+           		    if(!"{}".equals(schListDetails)) {
+           		    	System.out.println("inside  if"+schListDetails);
+           		    	experienceRepository.update(experience_id, 3, "status", "scheduled");
+           		    	if(request.getParameter("startdate") != null && request.getParameter("startdate") !="") {
+           		    		experienceRepository.update(experience_id, 4, "schedule_start",request.getParameter("startdate"));	
+		            	}
+		            	if(request.getParameter("enddate") != null && request.getParameter("enddate") !="") {
+		            		experienceRepository.update(experience_id, 5, "schedule_end",request.getParameter("enddate"));	
+		            	}
+		            	if(request.getParameter("timezoneval") != null && request.getParameter("timezoneval") !="") {
+		            		experienceRepository.update(experience_id, 6, "timezone_id",request.getParameter("timezoneval"));
+		            		//expController.update(experience_id, 7, "timezone_value",request.getParameter("fulltimezoneval"));
+		            	}    
+           		    //updateschedule(experience_id,request); 
+           		    }else {
+           		    	experienceRepository.resetschedule(experience_id);
+           		    	      
+           		    	System.out.println("coming Inside else");
+           		    }    
 		        	  forward = "?view=pages/experience-view-content.jsp";   
 					} catch (SQLException e) { 
 						// TODO Auto-generated catch block
@@ -384,7 +469,28 @@ public class ExperienceController extends HttpServlet {
 			        	 experienceRepository.deleteredirect(experience_id);
 			        	 addEditredirect(experience_id, request);  
 			        	// Update  config Table  
-			        	 updateconfig(experience_id, request,user_id);        	    
+			        	 updateconfig(experience_id, request,user_id);
+			        	 String schListDetails = request.getParameter("schList");
+		           		 
+		           		    if(!"{}".equals(schListDetails)) {
+		           		    	System.out.println("inside  if"+schListDetails);
+		           		    	experienceRepository.update(experience_id, 3, "status", "scheduled");
+		           		    	if(request.getParameter("startdate") != null && request.getParameter("startdate") !="") {
+		           		    		experienceRepository.update(experience_id, 4, "schedule_start",request.getParameter("startdate"));	
+				            	}
+				            	if(request.getParameter("enddate") != null && request.getParameter("enddate") !="") {
+				            		experienceRepository.update(experience_id, 5, "schedule_end",request.getParameter("enddate"));	
+				            	}
+				            	if(request.getParameter("timezoneval") != null && request.getParameter("timezoneval") !="") {
+				            		experienceRepository.update(experience_id, 6, "timezone_id",request.getParameter("timezoneval"));
+				            		//expController.update(experience_id, 7, "timezone_value",request.getParameter("fulltimezoneval"));
+				            	}    
+		           		    //updateschedule(experience_id,request); 
+		           		    }else {
+		           		    	experienceRepository.resetschedule(experience_id);
+		           		    	      
+		           		    	System.out.println("coming Inside else");
+		           		    }    
 	           		 session.setAttribute("message", "Experience " +name+ " has been updated Successfully"); 
 		        	  forward = "?view=pages/experience-view-content.jsp";   
 					} catch (SQLException e) { 

@@ -1,11 +1,11 @@
-<%@page import="java.sql.SQLException"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="com.onwardpath.georeach.util.Database"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="java.util.LinkedList"%>
 <%@page import="java.util.TimeZone"%>
 <%@page import="java.util.concurrent.TimeUnit"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="com.onwardpath.georeach.util.Database"%>
 <%@page import="com.onwardpath.georeach.repository.SegmentRepository"
 %><%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"
 %><%@ page import="java.util.Map, com.onwardpath.georeach.helper.ExperienceHelper" 
@@ -22,31 +22,30 @@ SegmentRepository segmentRepository = new SegmentRepository();
 int org_id = (Integer)session.getAttribute("org_id");
 %>
   
-  <%!
-
-LinkedList<String> timezoneLst = new LinkedList<String>();
-private Connection dbConnection;
-String[] timeZoneIds = TimeZone.getAvailableIDs();
-private LinkedList<String> getTimeZone() throws SQLException {
-	dbConnection = Database.getConnection();
-	String displayName ="";
-	PreparedStatement prepStatement = dbConnection.prepareStatement("select * from timezone");
-	ResultSet result = prepStatement.executeQuery();  
-	while(result.next()){
-		displayName = result.getString("zone_id")+"@("+result.getString("utcoffset")+") "+result.getString("displayname")+" ("+result.getString("zone_id")+" )" ;
-		timezoneLst.add(displayName);
-	} 
-	result.close();
-    prepStatement.close();
-    dbConnection.close();
-
-	return timezoneLst;
-
-} 
-%>
 <script>
 var expDetailsObj 	= 	{};
 var cfgDetailsObj 	= 	{};
+var allsubDetailsObj 	= 	{};
+</script>
+ 
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+
+
+var index 			= 	1;
+var liStart			=	"<li class=\"list-group-item\" id="; 
+var nameStart		=   "<div class=\"col-sm-9\"> <span class=\"text-break\" id= ";
+var nameEnd			=   "</span> </div>";
+var divRow			=   "<div class=\"row d-flex align-items-center\" >";
+var ButtonStart 	= 	"<div class=\"col-sm-1.5\"> <button type=\"button\" class=\"btn btn-outline-info btn-pill\"";
+var EditSpan 		= 	"<i class=\"fa fa-edit\"><span></span></i>";
+var DeleteSpan 		= 	"<i class=\"flaticon2-trash\"><span></span></i>";
+var ButtonEnd 		= 	"</button>&nbsp;</div>";
+var NameSpan   		=   "";
+
+var spanEnd			=   "</span>";
+
+var url_id,actionis;
 var schDetailsObj 	= 	{};
 
 function setupSchedule(action, action_id) {
@@ -111,20 +110,269 @@ function addtoSchdeule(segment_id,timezone,startdate,endate) {
 		+ ButtonStart+ " onclick=\"delete_exp_content('schedule','"+ segment_id +"')\">" + DeleteSpan + ButtonEnd.replace("&nbsp;",'')
 		+"</li>";   	          	
 } 
-</script>
-         
-<!-- <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script> -->
-<script src="/GeoReach/js/experience-edit.js" type="text/javascript"></script> 
-<c:set var="all_segements" value="<%=segmentRepository.getOrgSegments(org_id) %>" />
-<c:set var="experience_contents" value="<%=expHelper.experienceContent(id) %>" />
-<c:set var="scheduleValue" value="<%=expHelper.scheduleDate(id) %>" />
-<c:set var="experience_name" value="<%=expHelper.getexperienceName(id) %>" />
 
+
+   
+function delete_exp_content(type, id) {
+	var title = "Are you sure you want to delete the segment Content";
+	var text = document.getElementById(type+'-'+id + "-namespan").innerHTML
+	var listId = "#" + type + "list-" + id;
+	var deleteConfirmation = "Deleted";
+	if ("url" === type) {
+		title = "Are you sure you want to delete the Page URL";
+		text = cfgDetailsObj[id];
+		deleteConfirmation = "Deleted"
+	}
+	swal.fire({
+		title : title,
+		text : text,
+		type : "warning",
+		showCancelButton : !0,
+		confirmButtonText : "Yes",
+		cancelButtonText : "No",
+		reverseButtons : !0
+	}).then(function(e) {
+		if (e.value) {
+			swal.fire(deleteConfirmation, text, "success")
+			$(listId).remove();
+			if ("url" === type) {
+				delete cfgDetailsObj[id];
+			} else if ("segment" === type) {
+				delete expDetailsObj[id];
+			}else{
+				delete schDetailsObj[id];
+				//document.getElementById("blockstyle").style.display = "block";
+				//document.getElementById("ablockstylesss").style.display = "block";
+				     
+				let elem = document.querySelector('#ablockstylesss');
+				elem.style.setProperty('display', 'block', 'important');
+			 	          
+			}
+		} else {
+			"cancel" === e.dismiss;
+			swal.fire("Cancelled", "Delete " + type, "error");
+		}
+
+	});
+}
+function setupModal(action, action_id) {
+	var segment = document.getElementById("segment");
+	if (action === "edit") {
+		//document.getElementById("adv-settings").style.display = "block";
+		//document.getElementById("adv-setting").style.display = "block";    
+		segment.value = action_id; 
+		actionis = action_id;
+		document.getElementById("content").value = expDetailsObj[action_id].split("#")[0];
+		//alert(document.getElementById("content").value)
+		if(document.getElementById("subpages").value === expDetailsObj[action_id].split("#")[1]){
+			  $("#subpages").prop('checked', true);
+	 		}else{
+	 			$("#subpages").prop('checked', false); 
+	 		}
+		if(expDetailsObj[action_id].split("#")[2] != 'N/A'){
+			document.getElementById("popuptext").value = expDetailsObj[action_id].split("#")[2];	
+		} else{
+			document.getElementById("popuptext").value =""
+		}
+		
+		if(expDetailsObj[action_id].split("#")[2] != 'N/A'){
+			document.getElementById("popuptime").value = expDetailsObj[action_id].split("#")[3];	
+		} else{
+			document.getElementById("popuptime").value =""
+		} 
+	   	  
+	} else { 
+		actionis = "";
+		$("#segment").val($("#segment option:first").val());
+		document.getElementById("content").value = "";
+		document.getElementById("popuptext").value = "";
+		document.getElementById("popuptime").value = "";
+		$("#subpages").prop('checked', false);
+		//document.getElementById("adv-settings").style.display = "none";
+		//document.getElementById("adv-setting").style.display = "none";
+		document.querySelector('#adv-settings').unchecked;
+		document.querySelector('#adv-setting').unchecked;
+            
+	}
+	  	     
+	}
+   
+function addContent() {
+	var segment = document.getElementById("segment");
+	var segementContent = document.getElementById("content").value
+	var segementcheckbox = document.getElementById("subpages").value
+	var addpopuptext = document.getElementById("popuptext").value
+	if(addpopuptext){
+		addpopuptext = document.getElementById("popuptext").value
+	}else{
+		addpopuptext = 'N/A'
+	}
+	var addpopuptime = document.getElementById("popuptime").value
+	if(addpopuptime){
+		addpopuptime = document.getElementById("popuptime").value
+	}else{
+		addpopuptime = 'N/A'
+	} 
+	/*  var checkedValue = "";
+   	var inputElements = document.getElementById('page_events')
+   			.getElementsByTagName("input");
+   //alert("Hey:"+ inputElements)
+   	for (var i = 0; inputElements[i]; ++i) {
+   		if (inputElements[i].checked != "") {
+   			checkedValue += inputElements[i].value;
+   		}else{
+   			checkedValue ="No"
+   		}
+   	} */
+   
+   	var allsubpagetext = document.querySelector('#subpages').checked;
+	 if(allsubpagetext === true){
+		 allsubpagetext = "Yes" 
+	 }else{
+		 allsubpagetext = "No";
+	 }
+     
+	if (segementContent.length > 0) {
+		var _segid = segment.value;
+	
+		if (actionis && actionis!=_segid){
+			var listId = "#segmentlist-" + actionis;
+			$(listId).remove();
+			delete expDetailsObj[actionis];
+			
+		}
+		
+		if (!(_segid in expDetailsObj)) {
+			
+			segment_name = segment.options[segment.selectedIndex].innerHTML;
+			addtoSegment(_segid, segment_name, segementContent+"#"+allsubpagetext+"#"+addpopuptext+"#"+addpopuptime);
+		} 
+		expDetailsObj[_segid] = segementContent+"#"+allsubpagetext+"#"+addpopuptext+"#"+addpopuptime;
+		$("#segment_modal").modal("hide");
+	} else {
+		swal.fire("Content required for the Segment");
+	}
+}    
+function addtoSegment(segment_id, segment_name,segementContent ) {
+	var addsegment = document.getElementById("addonContent");
+	addsegment.innerHTML += liStart+"\"segmentlist-"+segment_id+"\">"
+		+divRow
+		+nameStart  +  "\"segment-"+ segment_id+"-namespan\" data-toggle=\"tooltip\" title='"+segementContent+"'>" + segment_name + nameEnd
+		+ ButtonStart + " data-toggle=\"modal\" data-target=\"#segment_modal\" onclick=\"setupModal('edit','"+ segment_id+"')\" >" + EditSpan +ButtonEnd  
+		+ ButtonStart+ " onclick=\"delete_exp_content('segment','"+ segment_id +"')\">" + DeleteSpan + ButtonEnd.replace("&nbsp;",'')
+		+"</li>";
+	  	
+}
+   
+function contenturl(urlID) {
+	if (urlID in cfgDetailsObj) {
+		document.getElementById("pageurl").value = cfgDetailsObj[urlID];
+		url_id = urlID;
+	} else {
+		document.getElementById("pageurl").value = '';
+		url_id = index;
+		index++;
+	}
+}
+function addUrl() {
+	var pageUrl = document.getElementById("pageurl").value;
+	if (pageUrl.length > 0) {
+		if (!(url_id in cfgDetailsObj)) {
+			var addurl = document.getElementById("addonurl");
+			addurl.innerHTML += liStart+"\"urllist-"+url_id+"\">"
+				+divRow
+				+ nameStart +"\"url-"+ url_id+"-namespan\">" + pageUrl + nameEnd
+				+  ButtonStart + " data-toggle=\"modal\" data-target=\"#PageURL_Modal\" onclick=\"contenturl('"+ url_id+"')\">"	+ EditSpan +ButtonEnd 			
+				
+				+ ButtonStart + " onclick=\"delete_exp_content('url','"+ url_id +"')\">" + DeleteSpan + ButtonEnd.replace("&nbsp;",'')
+				+ "</li>";
+		} else {
+			document.getElementById('url-'+url_id + '-namespan').innerHTML = pageUrl;
+		}
+		cfgDetailsObj[url_id] = pageUrl;
+		url_id = "";
+		$("#PageURL_Modal").modal("hide");
+	} else {
+		Swal.fire('URL cannot be empty. Please enter an url')
+	}
+}
+ 
+function saveExperience() {
+	var finalexp_name = document.getElementById("form-expname").value;
+	if (finalexp_name) {
+		if (JSON.stringify(expDetailsObj) !== '{}') {
+			var experienceid =document.getElementsByName("expid");
+			document.getElementById("form-contentdetails").value = JSON.stringify(expDetailsObj);
+			document.getElementById("form-urldetails").value = JSON.stringify(cfgDetailsObj);
+			document.getElementById("experience-form").method = "post";
+			document.getElementById("experience-form").action = "ExperienceController";
+			document.getElementById("experience-form").submit();
+		} else {
+			Swal.fire("Please enter atleast one content for this Experience")
+		}
+	} else {
+		Swal.fire("Please enter a value for  Experience Name")
+	}
+
+}
+
+function cancelOperation() {	
+	location.replace("/GeoReach?view=pages/experience-view-content.jsp")
+   
+} 
+
+function isChecked(event) {
+	let el_id = event.target.attributes.for.value;		
+	if (event.currentTarget.checked == true)
+		document.getElementById(el_id).style.display = "block";
+	else
+		document.getElementById(el_id).style.display = "none";
+
+}
+ 
+
+function ispopChecked(event) {
+	let el_id = event.target.attributes.for.value;		
+	if (event.currentTarget.checked == true)
+		document.getElementById(el_id).style.display = "block";
+	else
+		document.getElementById(el_id).style.display = "none";
+
+}
+
+</script> 
+
+ <%!
+
+LinkedList<String> timezoneLst = new LinkedList<String>();
+private Connection dbConnection;
+String[] timeZoneIds = TimeZone.getAvailableIDs();
+private LinkedList<String> getTimeZone() throws SQLException {
+	dbConnection = Database.getConnection();
+	String displayName ="";
+	PreparedStatement prepStatement = dbConnection.prepareStatement("select * from timezone");
+	ResultSet result = prepStatement.executeQuery();  
+	while(result.next()){
+		displayName = result.getString("zone_id")+"@("+result.getString("utcoffset")+") "+result.getString("displayname")+" ("+result.getString("zone_id")+" )" ;
+		timezoneLst.add(displayName);
+	} 
+	result.close();
+    prepStatement.close();
+    dbConnection.close();
+
+	return timezoneLst;
+
+} 
+%>
+<c:set var="all_segements" value="<%=segmentRepository.getOrgSegments(org_id) %>" />
+<c:set var="experience_contents" value="<%=expHelper.experienceredirect(id) %>" />
+<c:set var="experience_name" value="<%=expHelper.getexperienceName(id) %>" />
+ <c:set var="scheduleValue" value="<%=expHelper.scheduleDate(id) %>" />    
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
 	<div class="kt-portlet">
 		<div class="kt-portlet__head">
 			<div class="kt-portlet__head-label">
-				<h3 class="kt-portlet__head-title">Edit Content Experience </h3>
+				<h3 class="kt-portlet__head-title">Edit redirect Experience </h3>
 			</div>
 		</div>
 		<div class="kt-portlet__body">
@@ -135,15 +383,11 @@ function addtoSchdeule(segment_id,timezone,startdate,endate) {
 					<input type="text"		id="form-expname"			name="expName"   class="form-control" aria-describedby="Experience Name"  placeholder="Expereince Name"  value='${experience_name}'>
 					<input type="hidden" 	id="form-contentdetails"	name="experienceDetails"  />
 					<input type="hidden"	id="form-urldetails"		name="urlList"   />
-					<input type="hidden"	id="form-schdetails"		name="schList"   />
-					            <input type="hidden" id="form-startdate" name="startdate">
-								<input type="hidden" id="form-enddate" name="enddate">
-								
-								<input type="hidden" id="form-timezoneval" name="timezoneval">
-					<input type="hidden"	name="pageName"  value="edit-experience"  />
+					
+					<input type="hidden"	name="pageName"  value="edit-redirect-experience"  />
 					<input type="hidden"	name="expid"  value="<%=id%>"  />
 				</div> 
-			</div>
+			</div>  
 			<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Segment</label>
 				<div class="col-sm-6 padding-top-12">
@@ -151,7 +395,9 @@ function addtoSchdeule(segment_id,timezone,startdate,endate) {
 						<div class="kt-section__content kt-section__content--border">
 							<ul class="list-group" id="addonContent">
 							<c:forEach items="${experience_contents}" var="content"  varStatus="counter">
+							
 							<c:if test ="${not empty content.segmentName }">
+							
 							<li class="list-group-item" id="segmentlist-${content.id}">
 								<div class="row d-flex align-items-center">
 								<div class="col-sm-9"><span id="segment-${content.id}-namespan" data-toggle="tooltip"  title='${content.content}'> ${content.segmentName} </span></div>
@@ -168,18 +414,18 @@ function addtoSchdeule(segment_id,timezone,startdate,endate) {
 								</div>
 							</li>
 							  								
-                         <script> expDetailsObj[escape('${content.id}')]= '${fn:replace(content.content, newLineChar, " ")}' ; </script>
-                        </c:if>
+                         <script> expDetailsObj[escape('${content.id}')]= '${fn:replace(content.content, newLineChar, " ")}#${content.checkboxvalue}#${content.popupText}#${content.popupTime}' ; </script>
+                        </c:if> 
                         </c:forEach> 
-                     </ul>
-                     <br/>
-                     <a href="" class="btn btn-success btn-pill" data-toggle="modal"  data-target="#segment_modal" onclick="setupModal('add','')">Add</a>
+                     </ul> 
+                     <br/>  
+                     <a href="" class="btn btn-success btn-pill" data-toggle="modal" data-target="#segment_modal" onclick="setupModal('add','')">Add</a>
                      
                      <div class="modal fade show" id="segment_modal" role="dialog" aria-labelledby="" style="display:none;padding-right: 16px;top:20%" aria-modal="true">
                         <div class="modal-dialog modal-lg" role="document">
                            <div class="modal-content">
                               <div class="modal-header">
-                                 <h5 class="modal-title" id="">New Segment</h5>
+                                 <h5 class="modal-title" id="">Segment</h5>
                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                  <span aria-hidden="true" class="la la-remove"></span>
                                  </button>
@@ -196,12 +442,66 @@ function addtoSchdeule(segment_id,timezone,startdate,endate) {
                                        </select> 
                                     </div>
                                  </div>
+                                 
+                                 
                                  <div class="form-group row kt-margin-t-20" >
-                                    <label class="col-form-label col-lg-3 col-sm-12">Content</label>
+                                    <label class="col-form-label col-lg-3 col-sm-12">Redirect URL</label>
                                     <div class="col-lg-9 col-md-9 col-sm-12" >
-                                       <textarea id="content" class="form-control col-lg-9 col-sm-12" aria-describedby="emailHelp" placeholder="Enter Text" rows="" cols="" style="height:200px"></textarea>
+                                       <input id="content" type="text"
+							class="form-control col-lg-9 col-sm-12"
+							aria-describedby="emailHelp" placeholder="URL" data-width="100">
                                     </div>
-                                 </div>
+                                 </div> 
+                                 
+                                 
+                                 <div class="form-group row kt-margin-t-20">
+									<label class="col-form-label col-lg-3 col-sm-12"></label>
+									<div class="col-lg-4 col-md-9 col-sm-12">
+										<div class="kt-checkbox-inline">
+											<label class="kt-checkbox"> <input
+												id="is-adv-settings" for="adv-settings" type="checkbox"
+												value="" onclick="isChecked(event);">Advanced
+												Settings<span></span>
+											</label>
+										</div>
+									</div>
+								</div> 
+                                 
+                                 <div  id="adv-settings" style="display:none;">
+								       <div class="form-group row kt-margin-t-20">
+						               <label class="col-form-labe col-lg-3 col-sm-12"></label>
+						               <div class="col-9">
+											<div class="kt-checkbox-inline" id="page_events">
+												<label class="kt-checkbox"> 
+												<input type="checkbox" value="Yes" id="subpages" >Redirect Sub Pages<span></span></label>
+					
+											 
+											
+			                                
+												<label class="kt-checkbox"> 
+												<input type="checkbox" value="Yes" id="popup" for="adv-setting" onclick="ispopChecked(event);">Display Alert<span></span></label>	 
+										<div  id="adv-setting" style="display:none;">
+																																		
+						           <input name="redirectURL" id="popuptext" type="text" class="form-control" style="width:20%;display:unset" aria-describedby="emailHelp" placeholder="Alert Text" >
+						           <input name="redirectURL" id="popuptime" type="text" class="form-control" style="width:20%;display:unset"  aria-describedby="emailHelp" placeholder="Alert Close second" >		
+						              </div> 
+					    
+											
+						                   </div>
+										</div>   
+										
+										</div>
+								</div>	
+                                 
+                                 <!-- <div class="form-group row kt-margin-t-20">
+				<label class="col-form-labe col-lg-3 col-sm-12">Apply to all Pages</label>
+					<div class="col-lg-6 col-md-9 col-sm-12" id="page_events">	
+						<label class="kt-checkbox mr20">
+                           	<input type="checkbox" id="subpages" name="imageCheckbox" value="Yes"><span></span>
+		                 </label>
+		                 		  																			
+					</div>
+				</div> -->
                               </div>
                               <div class="modal-footer">
                                  <button type="button" class="btn btn-brand" data-dismiss="modal">Close</button>
@@ -276,10 +576,7 @@ function addtoSchdeule(segment_id,timezone,startdate,endate) {
             </div>
          </div>
          
-          
-         
-         
-         <div class="form-group row">
+        <div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12">Schedule</label>
 				<div class="col-sm-6 padding-top-12">
 					<div class="kt-section">
@@ -379,7 +676,98 @@ function addtoSchdeule(segment_id,timezone,startdate,endate) {
                   </div>
                </div>
             </div>
-         </div>
+         </div> 
+         
+         
+         <%-- <div class="form-group row">
+				<label class="col-form-label col-lg-3 col-sm-12">Scheduling</label>
+				<div class="col-sm-6 padding-top-12">
+					<div class="kt-section">
+						<div class="kt-section__content kt-section__content--border">
+							<ul class="list-group" id="addonContent">
+							
+							<li class="list-group-item" id="segmentlist-${content.id}">
+								<div class="row d-flex align-items-center">
+								<div class="col-sm-9"><span id="segment-${content.id}-namespan" data-toggle="tooltip"  title='${content.content}'> ${content.segmentName} </span></div>
+								<div class="col-sm-1.5">
+								    <button type="button" class="btn btn-outline-info btn-pill" data-toggle="modal" data-target="#schdeulding" onclick="setupModal('edit','${content.id}')">
+								        <i class="fa fa-edit"><span></span></i>
+								    </button>&nbsp;
+								</div>
+								<div class="col-sm-1.5">
+								    <button type="button" class="btn btn-outline-info btn-pill" onclick="delete_exp_content('segment','${content.id}')">
+								            <i class="flaticon2-trash"><span></span></i>
+								        </button>
+								    </div>
+								</div>
+							</li>
+							  								
+                         <script> expDetailsObj[escape('${content.id}')]= '${fn:replace(content.content, newLineChar, " ")}' ; </script>
+
+                     </ul>
+                     <br/>
+                     <a href="" class="btn btn-success btn-pill" data-toggle="modal" data-target="#schdeulding" onclick="setupModal('add','')">Add</a>
+                     
+                     <div class="modal fade show" id="schdeulding" role="dialog" aria-labelledby="" style="display:none;padding-right: 16px;top:20%" aria-modal="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="">Scheduling</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true" class="la la-remove"></span>
+                                 </button>
+                              </div>  
+                              
+                              <div class="modal-body">
+                                 <div class="form-group row">
+                                    <label class="col-form-label col-lg-3 col-sm-12">TimeZone</label>
+                                    <div class="col-lg-9 col-md-9 col-sm-12">
+                                       <select id="segment" class="form-control kt-select2 select2-hidden-accessible" name="segment-dropdown" style="width: 75%">
+                                          <c:forEach items="${all_segements}" var="segment" >
+							                      <option value="${segment.key}">${segment.value} </option>
+						                    </c:forEach>	
+                                       </select> 
+                                    </div>
+                                 </div>
+                                 <div class="form-group row" >
+                                    <label class="col-form-label col-lg-3 col-sm-12">Start Date</label>
+                                     <div class="col-lg-3 col-md-9 col-sm-12">
+                                    <div class="input-group date">
+						<input type="text" class="form-control "value="" placeholder="Select date" id="kt_datepicker_1">
+						<div class="input-group-append">
+							<span class="input-group-text">
+								<i class="la la-calendar-check-o"></i>
+							</span>
+						</div>
+					</div> 
+					</div>
+                                 </div>  
+                                 
+                                 <div class="form-group row">
+                                    <label class="col-form-label col-lg-3 col-sm-12">End Date</label>
+                                    <div class="col-lg-3 col-md-9 col-sm-12">
+                                    <div class="input-group date">
+						<input type="text" class="form-control "value="" placeholder="Select date" id="kt_datepicker_1">
+						<div class="input-group-append">
+							<span class="input-group-text">
+								<i class="la la-calendar-check-o"></i>
+							</span>
+						</div>
+					</div>
+                           </div>      
+                           </div>
+                              </div>
+                              <div class="modal-footer">
+                                 <button type="button" class="btn btn-brand" data-dismiss="modal">Close</button>
+                                 <button type="button" class="btn btn-secondary" onclick="addContent()">Submit</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div> --%>
           
          <%-- <div id="dateformation">
 			<div class="form-group row">
