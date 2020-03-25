@@ -135,6 +135,11 @@ function addtoSchdeule(segment_id,timezone,startdate,endate) {
 					<input type="text"		id="form-expname"			name="expName"   class="form-control" aria-describedby="Experience Name"  placeholder="Expereince Name"  value='${experience_name}'>
 					<input type="hidden" 	id="form-contentdetails"	name="experienceDetails"  />
 					<input type="hidden"	id="form-urldetails"		name="urlList"   />
+					<input type="hidden"	id="form-schdetails"		name="schList"   />
+					            <input type="hidden" id="form-startdate" name="startdate">
+								<input type="hidden" id="form-enddate" name="enddate">
+								
+								<input type="hidden" id="form-timezoneval" name="timezoneval">
 					
 					<input type="hidden"	name="pageName"  value="edit-image-experience"  />
 					<input type="hidden"	name="expid"  value="<%=id%>"  />
