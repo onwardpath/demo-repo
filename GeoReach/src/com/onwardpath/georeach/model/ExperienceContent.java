@@ -12,7 +12,7 @@ public class ExperienceContent {
 	private String startDate;
 	private String endDate;
 	private String timeZonevalue;
-	
+	 
 	public String getStatus() {
 		return status;
 	}
