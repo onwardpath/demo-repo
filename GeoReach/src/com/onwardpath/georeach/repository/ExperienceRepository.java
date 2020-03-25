@@ -115,6 +115,48 @@ public class ExperienceRepository {
 	  }
 	  
 	  /**
+	   * Update experience table mutiple column data for edit feature
+	   * 
+	   * @param id
+	   * @param columnType timezone_id,schedule_start,schedule_end
+	   * @throws SQLException
+	   */
+	  
+	  public void updatemutiple (int id, String timezone_value, String startvalue,String endvalue) throws SQLException {
+		  //String updateSql = "update experience set timezone_id "="'"+timezone_value+"',schedule_start "= "'"+startvalue+"',schedule_end "= "'"+endvalue+"' where id = "+id;
+		  String updateSql = "update experience set timezone_id = ?,schedule_start=?,schedule_end=? where id=?"	;	  
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement(updateSql); 
+    	  prepStatement.setString(1, timezone_value);
+          prepStatement.setString(2, startvalue);
+          prepStatement.setString(3, endvalue);
+          prepStatement.setInt(4, id);
+    	  System.out.println(Database.getTimestamp()+" @ExperienceRepository.update>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
+	  }
+	  
+	  
+	  /**
+	   * Delete Schedule option from  experience table 
+	   * 
+	   * @param experience_id
+	   * @param segment_id
+	   * @param url
+	   * @throws SQLException
+	   */
+	  public void resetschedule(int id) throws SQLException {	
+		  
+    	  //PreparedStatement prepStatement = dbConnection.prepareStatement("insert into georeachdb.experience (id, status, schedule_start, schedule_end,timezone_id) values (?,?,?,?,?)");
+		  String updateSql = "update experience set status = 'off',schedule_start= NULL,schedule_end= NULL,timezone_id = NULL where id=?"	;	  
+    	  PreparedStatement prepStatement = dbConnection.prepareStatement(updateSql); 
+          prepStatement.setInt(1, id);   
+          System.out.println(Database.getTimestamp()+" @ExperienceRepository.saveImage>prepStatement: "+prepStatement.toString());
+          prepStatement.executeUpdate();
+          prepStatement.close();          
+	  }	
+	      
+	    
+	  /**
 	   * Save a Image experience detail to the Image table
 	   * 
 	   * @param experience_id
