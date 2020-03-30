@@ -53,13 +53,59 @@ public class ConfigController extends HttpServlet {
 	  	  	int user_id = (Integer)session.getAttribute("user_id");
 	  	  User user = (User) session.getAttribute("user");
 	  	  String orgname = user.getOrganization_domain();
+	  	 
     	  MDC.put("user", user_id);
     	  MDC.put("org", orgname);
+    	  try {	
 	  	  	if (configRepository != null) {
 	  	  		if (pageName.startsWith("experience-create-enable")) {		        	  	        	 
-	  	  			try {	  	  				
+	  	  			  	  				
 			            int experience_id = Integer.parseInt(request.getParameter("experience_id"));
 			            String experience_name = request.getParameter("experience_name");
+			            String experience_type = request.getParameter("experience_type");
+			           
+			            if(experience_type.equals("block"))
+			            {
+			            String block_url=(String)session.getAttribute("block_url");  	 
+							 
+						ObjectMapper mapper = new ObjectMapper();	            		  
+			            @SuppressWarnings("unchecked")
+						Map<String, String> map = mapper.readValue(block_url, Map.class);
+			            System.out.println(map);	            		  
+			            for (Map.Entry<String, String> entry : map.entrySet()) {	            			  
+			            	int index = Integer.parseInt(entry.getKey());
+			            	String url = entry.getValue();
+			            	System.out.println("index = " + index + ", URL = " + url);
+			            	String array1[]= url.split("-");
+	               			
+	               			String array2= array1[0];
+	               			String array3= array1[1];
+			            	configRepository.save(experience_id, array2, user_id);	            			  	            			 
+			            }
+			            /* Update Schedule startdate and endate for experience table */
+			            //System.out.println("Startdate in config controler ::"+request.getParameter("startdate"));
+			            expController = new ExperienceRepository();
+			            if(request.getParameter("status")!=null && request.getParameter("status") !="") {
+			            	expController.update(experience_id, 3, "status",request.getParameter("status"));
+			            	if(request.getParameter("startdate") != null && request.getParameter("startdate") !="") {
+			            		expController.update(experience_id, 4, "schedule_start",request.getParameter("startdate"));	
+			            	}
+			            	if(request.getParameter("enddate") != null && request.getParameter("enddate") !="") {
+			            		expController.update(experience_id, 5, "schedule_end",request.getParameter("enddate"));	
+			            	}
+			            	if(request.getParameter("timezoneval") != null && request.getParameter("timezoneval") !="") {
+			            		expController.update(experience_id, 6, "timezone_id",request.getParameter("timezoneval"));	
+			            	}
+			            }
+			     
+			            System.out.println(Database.getTimestamp()+"Page configuration for <b>"+experience_name+"</b> saved succesfully.#n="+experience_name+"#e="+experience_id+"#o="+org_id+"#t="+experience_type);
+			            
+			            session.setAttribute("message", "Page configuration for <b>"+experience_name+"</b> saved succesfully.#n="+experience_name+"#e="+experience_id+"#o="+org_id+"#t="+experience_type);
+	        	      
+			            }
+			            
+			            else
+			            {
 			            String configDetails = request.getParameter("urlList");	            		
 			            
 			            ObjectMapper mapper = new ObjectMapper();	            		  
@@ -88,14 +134,15 @@ public class ConfigController extends HttpServlet {
 			            	}
 			            }
 			     
-			            System.out.println(Database.getTimestamp()+"Page configuration for <b>"+experience_name+"</b> saved succesfully.#n="+experience_name+"#e="+experience_id+"#o="+org_id);
+			            System.out.println(Database.getTimestamp()+"Page configuration for <b>"+experience_name+"</b> saved succesfully.#n="+experience_name+"#e="+experience_id+"#o="+org_id+"#t="+experience_type);
 			            
-			            session.setAttribute("message", "Page configuration for <b>"+experience_name+"</b> saved succesfully.#n="+experience_name+"#e="+experience_id+"#o="+org_id);
-	        	  } catch (SQLException e) {
-	        		  session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");	                  
-	        	  }        	                	             	              	              	              	           	             	              	              	   	                         
+			            session.setAttribute("message", "Page configuration for <b>"+experience_name+"</b> saved succesfully.#n="+experience_name+"#e="+experience_id+"#o="+org_id+"#t="+experience_type);
+	  	  		}	                	             	              	              	              	           	             	              	              	   	                         
 	          }	          
 	      }
+	  	  } catch (SQLException e) {
+    		  session.setAttribute("message", "Error: "+e.getMessage()+". Please try later or contact the administrator.");	                  
+    	  } 
 	      RequestDispatcher view = request.getRequestDispatcher("?view=pages/"+pageName);
 	      view.forward(request, response);
 	  }	  	 

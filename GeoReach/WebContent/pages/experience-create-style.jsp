@@ -129,7 +129,10 @@ function saveExperience(){
 	}  
 	 
 }
- 
+window.addEventListener("load", function() {
+
+	localStorage.setItem("exp_type", "style");
+});
  
 </script>
  

@@ -135,6 +135,7 @@ function add(event){
 			{
 			content = getContentFromLinkExp()	
 			expDetailsObj[segment_id] = content +"#"+typeVal+"#"+linkText+"#"+targetUrl+"#"+imageUrl;
+			console.log("expDetailsObj="+expDetailsObj[segment_id]);
 			var stage = document.getElementById("stage");
 			stage.innerHTML += '<button type="button" id="'+segment_name+'" class="btn btn-outline-info btn-pill mr10 mt10" onclick="remove(\''+segment_name+'\','+segment_id+')"><b>'+typeVal+'</b>:<b style="color:#3d4e5e">'+ segment_name+ '</b>:'+linkText +'<i class="la la-close"></i></button>';
 			stage.style.display = "block";
@@ -188,6 +189,12 @@ function isChecked(event) {
 function getTargetOption(target){
 	anchorTarget = target.value;
 }
+
+window.addEventListener("load", function() {
+	
+	localStorage.setItem("exp_type", "link");
+});
+
 </script>
 <!--begin::Content-->
 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">	

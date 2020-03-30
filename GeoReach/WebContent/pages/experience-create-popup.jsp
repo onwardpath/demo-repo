@@ -179,6 +179,9 @@
 	window.addEventListener("load", function() {
 		selectIndex();
 		document.getElementById("adv-settings").style.display = "none";
+		
+			localStorage.setItem("exp_type", "popup");
+		
 	});
 </script>
 

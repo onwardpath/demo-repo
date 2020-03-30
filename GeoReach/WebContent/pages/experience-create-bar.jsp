@@ -456,6 +456,11 @@ function saveExperience() {
 	window.addEventListener("load", function() {
 		localStorage.setItem("Not_button", "hide");
 	 	localStorage.setItem("screen", "top"); 
+	 	localStorage.setItem("exp_type", "bar");
+
+
+	 	
+
 	
 
 	});

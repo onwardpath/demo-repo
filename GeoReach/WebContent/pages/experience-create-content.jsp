@@ -58,6 +58,12 @@ function saveExperience(){
 }
 window.addEventListener("load", function(){
 	selectIndex();
+	
+	localStorage.setItem("exp_type", "content");
+
+
+	
+
 	});
 
 </script>

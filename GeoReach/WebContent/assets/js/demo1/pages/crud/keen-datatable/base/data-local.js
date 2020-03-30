@@ -17,7 +17,7 @@ jQuery(document).ready(function() {
 /*$(document).on('mouseenter', '.hover', function () {
 	$("[data-toggle=popover]").popover();
 })*/
-$(document).on('mouseenter', '.hover', function () {
+$(document).on('mouseenter', '.flaticon-eye', function () {
     //do
 	//alert("coming true="+this.id);
 	var segment_id	=	$(this).attr('id');
@@ -714,7 +714,7 @@ document.body.onclick= function(e){
 	   
 	   
    
-	   if(e.className && e.className.indexOf('page')!=-1)
+	   if(e.className && e.className.indexOf('fa fa-inverse fa-stack-1x')!=-1)
 	   {
 	   
 		   var url		=	e.getAttribute("data-seg");
@@ -763,7 +763,7 @@ document.body.onclick= function(e){
 			document.getElementById("experience-element").innerHTML = 'Embed Code for <span class="badge badge-secondary">'+exp_name+'</span>';
 			$('#myModals').modal('show');
 	   }
-	   if(e.className && e.className.indexOf('hover')!=-1)
+	   if(e.className && e.className.indexOf('flaticon-eye')!=-1)
 	   {
 		   
    		
@@ -1024,171 +1024,240 @@ function test(offset,limit,record)
                 
 	}
 	
-	function ktDATA()
-	{
-	 
-                var datatable = $('.kt_datatable').KTDatatable({
-        			// datasource definition
-                	
-        			data: {
-        				type: 'local',
-        				source: dataJSONArray,
-        				
-        			},
-        			
-        			// layout definition
-        			layout: {
-        				scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
-        				// height: 450, // datatable's body's fixed height
-        				footer: false, // display/hide footer
-        			},
+function ktDATA()
+{
+ 
+            var datatable = $('.kt_datatable').KTDatatable({
+    			// datasource definition
+            	
+    			data: {
+    				type: 'local',
+    				source: dataJSONArray,
+    				
+    			},
+    			
+    			// layout definition
+    			layout: {
+    				scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
+    				// height: 450, // datatable's body's fixed height
+    				footer: false, // display/hide footer
+    			},
 
-        			// column sorting
-        			sortable: true,
+    			// column sorting
+    			sortable: true,
 
-        			pagination: false,
-        			
-        			searching: false,
+    			pagination: false,
+    			
+    			searching: false,
 
-        			/*search: {
-        				input: $('#generalSearch'),
-        			},*/
+    			/*search: {
+    				input: $('#generalSearch'),
+    			},*/
 
-        			// columns definition
-        			columns: [
-        				{
-        					
-        					field: 'id',
-        					title: '#',
-        					sortable: false,
-        					width: 20,
-        					type: 'number',
-        					selector: {class: 'kt-checkbox--solid'},
-        					textAlign: 'center',
-        				}, {
-        					field: 'experience',
-        					title: 'Experience',
-        				}, {
-        					field: 'segment',
-        					title: 'Segments',
-        					template: function(row) {
-        						var exp_id = row.id;
-        						var pagetype ="";   
-        						var exp_name = row.experience;
-        						var exp_type = row.status;
-        						var segArray = row.segments.split(",");
-        						segArray = segArray.slice(0,segArray.lastIndexOf(","));
-        					
-        						
-        						var s = "";
-        						var seg	=	"";
-        						for(var i=0;(i<segArray.length);++i)
-        							{  
-        							
-        							var segname = segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length); 
-        							s += '<a href="" class="hover" data-exptype="'+exp_type+'" data-expname="'+exp_name+'" data-toggle="modal"      title="Experience contents" data-segname="'+segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length)+'"  data-expid="'+exp_id+'" id="' + segArray[i].slice(0,segArray[i].lastIndexOf(":")) + '" >' + segname +",  " + '</a>';
-        							
-        							}
-        						
-        						return s.slice(0,s.lastIndexOf(",")) ;
-        					
-        					},
-        				}, {
-        					field: 'pages',
-        					title: 'Pages',
-        					template:function(row)
-        					{
-        					
-        		 				var exp_id = row.id;
-        		 				var exp_name = row.experience;
-        		 				var page_url = row.url;
-        		 				var page_url_count = row.pages;
-        		 				
-        		 				var url_count = row.pages;
-        		 				console.log("page URL="+page_url);
-        						var r = "";
-        						 
-        						r+= '<a  href="" data-toggle="modal"  data-count="'+page_url_count+'" data-seg="'+page_url+'"  data-ids="'+exp_id+'" data-expname="'+exp_name+'" class="page" >'+url_count+'</a>'
-        							return r;
-        					}
-        				}, {
-        					field: 'status', 
-        					title: 'Type',
-        					// callback function support for column rendering
-        				}, {
-        					field: 'type',
-        					title: 'Status',
-        					template:function(row)
-        					{
-        						pagetype =row.status
-        						var exp_id = row.id;
-        						experid = row.id;
-        						expname = row.experience;
-        					
-        						if ((row.type == 'on') ) 
-        						{
-        						  return '\
-        						  <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">\
-        							<label> <input id="'+exp_id+'" name="statexp" class="stat"  type="checkbox"  checked="checked" name="">\
-        						  <span></span>\
-        						  </label>\
-        						  </span>\
-        						  ';
-        						  
-        						
-        						} 
-        						else if ((row.type == 'off') ) 
-        							{
-        							
-        							  return '\
-        							  <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">\
-        								<label> <input id="'+exp_id+'" name="statexp" class="stat"  type="checkbox"  name="">\
-        							  <span></span>\
-        							  </label>\
-        							  </span>\
-        							  ';
-        							  
-        							
-        							
-        							}
-        					},
-        					
-        				
-        				},{
-        					field: 'statuss',
-        					title: 'Embed Code', 
-        					template:function(row)
-        					{
-        					
-        		 				var exp_id = row.id;
-        		 				var exp_name = row.experience;
-        						var r = "";
-        						 
-        						r+= '<button  id="myBtn"  dat-seg=""  onclick="javascript:embed(this)" data-ids="'+exp_id+'" data-expname="'+exp_name+'" class="btn btn-outline-brand btn-pill" >View</button>'
-        							return r;
-        					}
-        				},  {
-        					field: 'name',
-        					title: 'Created By',
-        				},{
-        					field: 'Actions',
-        					title: 'Actions',
-        					sortable: false,
-        					width: 110,
-        					overflow: 'visible',
-        					autoHide: false,
-        					template: function() {
-        						return '\
-        						<a <a href="/GeoReach?view=pages/experience-edit-'+pagetype+'.jsp&id='+experid+'" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">\
-        							<i class="la la-edit"></i>\
-        						</a>\
-        						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">\
-        							<i class="la la-trash"></i>\
-        						</a>\
-        					';
-        					},
-        				}],
-        		}); 
-	}
-	
-	
+    			// columns definition
+    			columns: [
+    				{
+    					
+    					field: 'id',
+    					title: '#',
+    					sortable: false,
+    					width: 20, 
+    					type: 'number',
+    					selector: {class: 'kt-checkbox--solid'},
+    					textAlign: 'center',
+    				},{
+    					field: 'status', 
+    					title: 'Type',
+    					// callback function support for column rendering
+    					template:function(exp)
+    					{
+    						if((exp.status == 'content')) 
+							{
+							return '\
+							  <i class="flaticon2-paper" style="vertical-align: middle;font-size: 2.5rem!important;margin-left: 2px;"></i>\
+							  ';
+							}
+    						if((exp.status == 'image') || ((exp.status == 'Image')))
+							{
+							return '\
+							  <i class="fa fa-file-image" style="vertical-align: middle;font-size: 2.5rem!important;margin-left: 5px;"></i>\
+							  ';
+							}
+    						if((exp.status == 'popup'))
+							{
+							return '\
+							  <i class="fas fa-external-link-alt" style="vertical-align: middle;font-size: 2.5rem!important;margin-left: 5px;"></i>\
+							  ';
+							}
+    						if((exp.status == 'link'))
+							{
+							return '\
+							  <i class="fa fa-link" style="vertical-align: middle;font-size: 2.5rem!important;margin-left: 5px;"></i>\
+							  ';
+							}
+    						if((exp.status == 'bar'))
+							{
+							return '\
+							  <i class="fa fa-bars" style="vertical-align: middle;font-size: 2.5rem!important;margin-left: 5px;"></i>\
+							  ';
+							}
+    						if((exp.status == 'redirect'))
+							{
+							return '\
+							  <i class="fa fa-mail-forward" style="vertical-align: middle;font-size: 2.5rem!important;margin-left: 5px;"></i>\
+							  ';
+							}
+    						if((exp.status == 'block'))
+							{
+							return '\
+							  <i class="fa fa-ban" style="vertical-align: middle;font-size: 2.5rem!important;margin-left: 5px;"></i>\
+							  ';
+							}
+    						if((exp.status == 'style'))
+							{
+							return '\
+							  <i class="fa fa-border-style" style="vertical-align: middle;font-size: 2.5rem!important;margin-left: 5px;"></i>\
+							  ';
+							}
+    				},
+    				}, {
+    					field: 'experience',
+    					title: 'Experience/Created By',
+    					template: function(row) {
+    						var exp_name = row.experience;
+    						var create_name = row.name;
+    						
+    						return '\
+   						 	 <span>\
+							 <span style="font-weight: bold;">'+exp_name+'</span>\
+							 <div style="margin-left: 30px;font-style: italic;font color: blue;color: darkturquoise;">'+create_name+'\
+							 </div></span>\
+   						  ';
+    						 
+    					}, 
+    				}, {
+    					field: 'pages',
+    					title: 'Pages',
+    					template:function(row)
+    					{ 
+    					
+    		 				var exp_id = row.id;
+    		 				var exp_name = row.experience;
+    		 				var page_url = row.url;
+    		 				var page_url_count = row.pages;
+    		 				
+    		 				var url_count = row.pages;
+    		 				console.log("page URL="+page_url);
+    						var r = "";
+    						 
+    						r+= '<a  href="javascript:void(0); class="page" ><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i  href="javascript:void(0); data-toggle="modal"  data-count="'+page_url_count+'" data-seg="'+page_url+'"  data-ids="'+exp_id+'" data-expname="'+exp_name+'"  class="fa fa-inverse fa-stack-1x" style="cursor: pointer;">'+url_count+'</i></span></a>'
+    							return r;
+    					}
+    				},{
+    					field: 'segment',
+    					title: 'Segments',
+    					template: function(row) {
+    						var exp_id = row.id;
+    						var pagetype ="";   
+    						var exp_name = row.experience;
+    						var exp_type = row.status;
+    						var segArray = row.segments.split(",");
+    						segArray = segArray.slice(0,segArray.lastIndexOf(","));
+    					
+    						
+    						var s = "";
+    						var seg	=	"";
+    						for(var i=0;(i<segArray.length);++i)
+    							{  
+    							
+    							var segname = segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length); 
+    							s += '<div  class="hover"  >' + segname +'<i class="flaticon-eye" data-exptype="'+exp_type+'" data-expname="'+exp_name+'" data-toggle="modal"      title="Experience contents" data-segname="'+segArray[i].slice(segArray[i].indexOf(":")+1,segArray[i].length)+'"  data-expid="'+exp_id+'" id="' + segArray[i].slice(0,segArray[i].lastIndexOf(":")) + '" style="line-height: 0;vertical-align: middle;cursor: pointer;margin-left: 5px;"></i>'+",  " + '</div>';		  
+    							
+    							}
+    						
+    						return s.slice(0,s.lastIndexOf(",")) ;
+    					
+    					},
+    				},   {
+    					field: 'type',
+    					title: 'Status',
+    					template:function(row)
+    					{
+    						pagetype =row.status
+    						var exp_id = row.id;
+    						experid = row.id;
+    						expname = row.experience;
+    					
+    						if ((row.type == 'on') ) 
+    						{
+    						  return '\
+    						  <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">\
+    							<label> <input id="'+exp_id+'" name="statexp" class="stat"  type="checkbox"  checked="checked" name="">\
+    						  <span></span>\
+    						  </label>\
+    						  </span>\
+    						  ';
+    						  
+    						
+    						} 
+    						else if ((row.type == 'off') ) 
+    							{
+    							
+    							  return '\
+    							  <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">\
+    								<label> <input id="'+exp_id+'" name="statexp" class="stat"  type="checkbox"  name="">\
+    							  <span></span>\
+    							  </label>\
+    							  </span>\
+    							  ';
+    							  
+    							
+    							
+    							}
+    						else if ((row.type == 'scheduled') ) 
+							{
+							  return '\
+							  <i class="flaticon-time" style="line-height: 0;vertical-align: middle;font-size: 2.5rem!important;margin-left: 10px;"></i>\
+							  ';
+							}
+    						
+    					
+    					},
+    					
+    				
+    				},/*{
+    					field: 'statuss',
+    					title: 'Embed Code', 
+    					template:function(row)
+    					{
+    					
+    		 				var exp_id = row.id;
+    		 				var exp_name = row.experience;
+    						var r = "";
+    						 
+    						r+= '<button  id="myBtn"  dat-seg=""  onclick="javascript:embed(this)" data-ids="'+exp_id+'" data-expname="'+exp_name+'" class="btn btn-outline-brand btn-pill" >View</button>'
+    							return r;
+    					}
+    				},  {
+    					field: 'name',
+    					title: 'Created By',
+    				},*/{
+    					field: 'Actions',
+    					title: 'Actions',
+    					sortable: false,
+    					width: 110,
+    					overflow: 'visible',
+    					autoHide: false,
+    					template: function() {
+    						return '\
+    						<a <a href="/GeoReach?view=pages/experience-edit-'+pagetype+'.jsp&id='+experid+'" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">\
+    							<i class="la la-edit"></i>\
+    						</a>\
+    						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">\
+    							<i class="la la-trash"></i>\
+    						</a>\
+    					';
+    					},
+    				}],
+    		}); 
+}

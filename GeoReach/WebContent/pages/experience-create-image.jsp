@@ -83,6 +83,7 @@
 
 	window.addEventListener("load", function() {
 		selectIndex();
+		localStorage.setItem("exp_type", "image");
 	});
 	/* function cancelOperation() {
 	location.replace("/GeoReach/?view=pages/experience-create-image.jsp")

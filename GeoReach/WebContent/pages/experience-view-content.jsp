@@ -68,6 +68,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 				}
 			});
 		</script>
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
 		<!--end::Fonts -->
 
