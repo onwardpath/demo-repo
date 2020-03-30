@@ -33,6 +33,13 @@ private LinkedList<String> getTimeZone() throws SQLException {
 
 }
 %>
+<%
+String block_url=(String)session.getAttribute("block_url");  
+String exp_type=(String)session.getAttribute("exp_type"); 
+System.out.println("block_url="+block_url);
+System.out.println("exp_type="+exp_type);
+		 
+		 %>
 <style>
 .mr20{
 	margin-right :20px;
@@ -77,6 +84,8 @@ function remove(element, index){
 }
 function saveConfig(){
 	console.log(cfgDetailsObj)
+	var exp_type = localStorage.getItem("exp_type");
+	alert("exp_type"+exp_type)
 	var passStatus = true
 	var startDate = document.getElementById("kt_datepicker_1").value
 	var endDate = document.getElementById("kt_datepicker_2").value
@@ -103,6 +112,19 @@ function saveConfig(){
 	if(passStatus){
 		console.log("TimeZone value is ::"+document.getElementById("Timezonelist").value)
 		//console.log("inside passtatus check ::"+jQuery.isEmptyObject(cfgDetailsObj))
+		
+		if(exp_type == "block")
+		{
+			console.log("startdate value is ::"+document.getElementById("kt_datepicker_1").value)
+			console.log("startdate value is ::"+document.getElementById("kt_datepicker_2").value)
+			console.log("cfgDetailsObj Value is ::"+JSON.stringify(cfgDetailsObj));
+			document.getElementById("config-form").urlList.value=JSON.stringify(cfgDetailsObj);	
+			document.getElementById("config-form").method = "post";
+			document.getElementById("config-form").action = "ConfigController";
+			document.getElementById("config-form").submit();
+		}
+		else{
+			
 		if(jQuery.isEmptyObject(cfgDetailsObj)){
 			passStatus = false
 			swal.fire("Page Url should not be empty");
@@ -116,6 +138,7 @@ function saveConfig(){
 			document.getElementById("config-form").action = "ConfigController";
 			document.getElementById("config-form").submit();
 		}
+		}
 	}
 		
 	}
@@ -128,7 +151,21 @@ function toggleCheckbox(){
     }else{
     	$("#dateformation").hide();
     }
-}
+} 
+
+ document.addEventListener("DOMContentLoaded", () => {
+	var exp_type = localStorage.getItem("exp_type");
+	if(exp_type == "block")
+	{
+		
+	}
+	else
+	{
+	document.getElementById("show_block").style.display = "block";
+	}
+  }); 
+  
+
 </script>
 
 <!--begin::Content-->
@@ -139,6 +176,7 @@ function toggleCheckbox(){
 	String name = "";
 	String experience = "";
 	String organization = "";
+	String types ="";
 	
 	SegmentRepository segmentRepository = new SegmentRepository();
 	Map<Integer,String> segments = segmentRepository.getOrgSegments(org_id);
@@ -160,12 +198,21 @@ function toggleCheckbox(){
 			name = decoder[0].substring(decoder[0].indexOf("=")+1);			
 			experience = decoder[1].substring(decoder[0].indexOf("=")+1);			
 			organization = decoder[2].substring(decoder[0].indexOf("=")+1);
+		 	types = decoder[3].substring(decoder[0].indexOf("=")+1);
+			System.out.println("types="+types); 
 			
 		}
 		
+		/*  String block_url=(String)session.getAttribute("block_url");  
+		 System.out.println("block_url="+block_url); */
+		 
 		if (message.startsWith("Page"))
 			displayCode = true;
 		%>
+	
+		
+		
+		
 		<div class="row">
 		    <div class="col">
 		        <div class="alert alert-light alert-elevate fade show" role="alert">
@@ -230,7 +277,7 @@ function toggleCheckbox(){
 		<!--begin::Form-->
 		<form class="kt-form kt-form--label-right" id="dummy-form"> 
 			<div class="kt-portlet__body">
-																			 																
+				<div id="show_block" style="display:none;">											 																
 				<div class="form-group row">
 					<label class="col-form-label col-lg-3 col-sm-12">Page Address</label>
 						<div class="col-lg-4 col-md-9 col-sm-12">															
@@ -238,16 +285,7 @@ function toggleCheckbox(){
 							<span class="form-text text-muted">Enter the URL of the page that will display this experience</span>					
 						</div>
 				</div>
-			
-			<%-- <div class="form-group row" id="timezoneoption">
-				<label class="col-form-label col-lg-3 col-sm-12 ttc">Time Zone</label>
-				<div class="col-lg-4 col-md-9 col-sm-12">
-					<select id="dynamicselection" class=" ttc form-control form-control--fixed kt_selectpicker">
-							<%for (String id : timeZoneIds) {%>
-						<option class="ttc" value='<%=displayTimeZone(TimeZone.getTimeZone(id))%>'><%=displayTimeZone(TimeZone.getTimeZone(id))%></option><%}%>
-					</select>
-				</div>
-			</div> --%>
+		
 				
 				<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12"></label>
@@ -255,6 +293,7 @@ function toggleCheckbox(){
 						<button type="reset" class="btn btn-accent" onclick="javascript:preview()">Preview</button>																									
 						<button type="button" class="btn btn-accent" onclick="javascript:add()">Add</button>
 					</div>
+				</div>
 				</div>
 					<%-- Scheduling Experience --%>	
 				<div class="form-group row">
@@ -326,7 +365,10 @@ function toggleCheckbox(){
 							<div id="hidden-form" style="display: none;">																	
 								<input type="hidden" name="pageName" value="experience-create-enable.jsp">								
 								<input type="hidden" name="experience_id" value="<%=experience%>">
-								<input type="hidden" name="experience_name" value="<%=name%>">								
+								<input type="hidden" name="experience_name" value="<%=name%>">	
+								<input type="hidden" name="experience_type" value="<%=types%>">
+								
+						<%-- 		<input type="hidden" name="experience_url" value="<%=url%>"> --%>								
 								<input type="hidden" name="urlList">
 								<input type="hidden" name="startdate">
 								<input type="hidden" name="enddate">
