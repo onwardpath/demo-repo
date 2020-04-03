@@ -292,14 +292,21 @@ public class MatomoRepository {
 		String fq_domain = null; // fully qualified domain
 		final URL u = new URL(domain);
 		fq_domain = u.getHost();
-		if (u.getHost().contains(("www"))) {
+	    
+		boolean isUrlWithSubdomain = (getCharCount(fq_domain) == 2 ) ? true : false;
+		
+		if ((fq_domain.contains("www")) && isUrlWithSubdomain) {
 			root_domain = fq_domain.split("www.")[1];
-		} else {
+		}
+		else if(isUrlWithSubdomain)
+		{
 			int beginIndex = u.getHost().indexOf(".") + 1;
 			root_domain = fq_domain.substring(beginIndex, fq_domain.length());
 		}
+		else {
+			root_domain = fq_domain;
+		}
 		return root_domain;
-
 	}
 
 	/**
@@ -324,6 +331,28 @@ public class MatomoRepository {
 		prepStatement.close();
 		result.close();
 		return analytics_id;
+	}
+
+	/**
+	 *Get Char occurrences in the given String
+	 * 
+	 * @param inputString
+	 * @return int
+	 */
+
+	public int getCharCount(String inputString) {
+
+		char[] strArray = inputString.toCharArray();
+		int count = 0;
+
+		// checking each char of strArray
+		for (char c : strArray) {
+			char dot = '.';
+			if (dot == c) {
+				++count;
+			}
+		}
+		return count;
 	}
 
 	/**
