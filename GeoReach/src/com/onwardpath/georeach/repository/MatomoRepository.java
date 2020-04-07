@@ -293,7 +293,7 @@ public class MatomoRepository {
 		final URL u = new URL(domain);
 		fq_domain = u.getHost();
 	    
-		boolean isUrlWithSubdomain = (getCharCount(fq_domain) == 2 ) ? true : false;
+		boolean isUrlWithSubdomain = (getCharCount(fq_domain) >= 2 ) ? true : false;
 		
 		if ((fq_domain.contains("www")) && isUrlWithSubdomain) {
 			root_domain = fq_domain.split("www.")[1];
